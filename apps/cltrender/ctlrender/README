@@ -1,9 +1,0 @@
-
-This is a merge of the openexr_ctl and ctl projects. The 'openexr_ctl'
-project has become the openexr directory. Note that over time the utilities
-that were in those locations are getting moved *out* an into this top level
-directory.
-
-There will also be the addition of a number of sample ctl 'scripts' into
-this directory (which will start out quite confused until they are all
-sorted out and documented).
