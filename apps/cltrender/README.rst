@@ -68,7 +68,7 @@ Build tiff-3.8.2::
 
 Build ctlrender::
 
-	cd ~/iif-dev/apps/ctlrender/prereqs/ctlrender
+	cd ~/iif-dev/apps/ctlrender/src
 	./configure
 	make
 	sudo make install
@@ -135,7 +135,7 @@ Build tiff-3.8.2::
 
 Build ctlrender::
 
-	cd ~/iif-dev/apps/ctlrender/prereqs/ctlrender
+	cd ~/iif-dev/apps/ctlrender/src
 	./configure
 	make
 	sudo make install
