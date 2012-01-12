@@ -135,3 +135,33 @@ convertXYZtoRGB_h
     G = RGB[1];
     B = RGB[2];
 } 
+
+float
+clip
+	(float v)
+{
+  return min(v, 1.0);
+}
+
+float
+min
+	(float a,
+	 float b)
+{
+  if (a < b)
+    return a;
+  else
+    return b;
+}
+
+float max
+	(float a,
+	 float b)
+{
+  if (a > b)
+    return a;
+  else
+    return b;
+}
+
+
