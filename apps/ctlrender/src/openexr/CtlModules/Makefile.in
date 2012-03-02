@@ -213,15 +213,13 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 EXTRA_DIST = \
-	utilities.ctl \
-	transform_RRT.ctl \
-	transform_display_video.ctl
+	./utilities/*.ctl \
+	./rrt/*.ctl
 
 ctldatadir = $(sharedir)/ctl/modules
 ctldata_DATA = \
-	utilities.ctl \
-	transform_RRT.ctl \
-	transform_display_video.ctl
+	./utilities/*.ctl \
+	./rrt/*.ctl
 
 all: all-am
 
