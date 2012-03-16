@@ -7,7 +7,7 @@ from datetime import date
 from numpy import *
 
 # Globals
-IDT_maker_version = "0.06"
+IDT_maker_version = "0.07"
 
 nominalEI = 400.0
 blackSignal = 0.003907
@@ -64,12 +64,13 @@ def emitLogCInverseFunction(EI) :
 
 def emitHeader(myName, EI, CCT, logC) :
     print ""
-    if logC == "logC" :
+    if logC == "logc" :
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
         print "// ARRI ALEXA IDT for ALEXA linear files"
     print "//  with camera EI set to %d" % EI
-    print "//  and CCT of adopted white set to %dK" % CCT
+    if logC == "raw" :
+        print "//  and CCT of adopted white set to %dK" % CCT
     print "// Written by %s v%s on %s by %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"), getenv('USER'))
     print ""
 
@@ -91,7 +92,7 @@ def emitMain(EI, CCT, logC, ND) :
     print "\toutput varying float aOut)"
     print "{"
     print ""
-    if logC == "logC" :
+    if logC == "logc" :
         WG2A = array( [ (0.680206, 0.236137, 0.083658),
                         (0.085415, 1.017471, -0.102886),
                         (0.002057, -0.062563, 1.060506) ] );
@@ -151,10 +152,14 @@ if __name__ == '__main__':
         sys.exit(2)
 
     EI = float(sys.argv[1])
-    CCT = float(sys.argv[2])
-    logC = sys.argv[3]
+    logC = sys.argv[3].lower()
 
-    if logC.lower() != "logc" and logC.lower() != "raw" :
+    if logC == "raw" :
+        CCT = float(sys.argv[2])
+    else :
+        CCT = "ignored"
+
+    if logC != "logc" and logC != "raw" :
         usage(myName)
         sys.exit(2)
 
@@ -166,10 +171,10 @@ if __name__ == '__main__':
             usage(myName)
             sys.exit(2)
 
-    if logC.lower() == "logc" :
+    if logC == "logc" :
         emitHeader(myName, EI, CCT, logC)
         emitLogCInverseFunction(EI)
-    elif logC.lower() == "raw" :
+    elif logC == "raw" :
         emitHeader(myName, EI, CCT, logC)
         emitRawSupport(CCT)
     else :

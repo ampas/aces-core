@@ -7,7 +7,7 @@ from datetime import date
 from numpy import *
 
 # Globals
-IDT_maker_version = "0.04"
+IDT_maker_version = "0.05"
 
 nominalEI = 400.0
 blackSignal = 0.003907
@@ -63,7 +63,7 @@ def emitLogC2InverseFunction(EI) :
 
 def emitHeader(myName, EI, CCT, logC) :
     print ""
-    if logC == "logC" :
+    if logC == "logc" :
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
         print "// ARRI ALEXA IDT for ALEXA linear files"
@@ -91,7 +91,7 @@ def emitMain(EI, CCT, logC) :
     print "{"
     print ""
     M = getIDTMatrix(CCT)
-    if logC == "logC" :
+    if logC == "logc" :
         print "\tfloat r_lin = normalizedLogC2ToRelativeExposure(rIn);"
         print "\tfloat g_lin = normalizedLogC2ToRelativeExposure(gIn);"
         print "\tfloat b_lin = normalizedLogC2ToRelativeExposure(bIn);"
@@ -148,12 +148,12 @@ if __name__ == '__main__':
 
     EI = float(sys.argv[1])
     CCT = float(sys.argv[2])
-    logC = sys.argv[3]
+    logC = sys.argv[3].lower()
 
-    if logC.lower() == "logc" :
+    if logC == "logc" :
         emitHeader(myName, EI, CCT, logC)
         emitLogC2InverseFunction(EI)
-    elif logC.lower() == "raw" :
+    elif logC == "raw" :
         emitHeader(myName, EI, CCT, logC)
         emitRawSupport(CCT)
     else :
