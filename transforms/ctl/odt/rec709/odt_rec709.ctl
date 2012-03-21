@@ -124,13 +124,18 @@ void main
 	RGBo[1] = clip_0_to_1( RGBo[1] );
 	RGBo[2] = clip_0_to_1( RGBo[2] );
 
-	// ITU Proposal EOTF
-	const float gamma = 2.4;
-	float aa = pow( 1.0, ( 1.0 / gamma)) - pow( 0.0005, ( 1.0 / gamma));
-	float bb = pow( 0.0005, ( 1.0 / gamma));
+	// Per ITU-R BT.1886 EOTF
+	const float GAMMA = 2.4;
+	const float L_B = 0.000; 	// screen luminance for black
+	const float L_W = 1.0; 		// screen luminance for white
+		// Note: L_B and L_W may be modified to luminance of an actual CRT.
+		// Per RECOMMENDATION ITU-R BT.1886 - Appendix 1. L_B has been set to 0.0
+		// targeting a CRT with a contrast ratio of 2000:1.	
+	const float A = pow( pow( L_W, ( 1.0 / GAMMA)) - pow( L_B, ( 1.0 / GAMMA)), GAMMA);
+	const float B = pow( L_B, ( 1.0 / GAMMA)) / ( pow( L_W, ( 1.0 / GAMMA)) - pow( L_B, (1.0/GAMMA))); 
 
-	rOut = ( pow( RGBo[0], ( 1.0 / gamma)) - bb) / aa;
-	gOut = ( pow( RGBo[1], ( 1.0 / gamma)) - bb) / aa;
-	bOut = ( pow( RGBo[2], ( 1.0 / gamma)) - bb) / aa;
+	rOut = ( pow( RGBo[0],(1.0/GAMMA)) / A ) - B;
+	gOut = ( pow( RGBo[1],(1.0/GAMMA)) / A ) - B;
+	bOut = ( pow( RGBo[2],(1.0/GAMMA)) / A ) - B;	
 	aOut = aIn;
 }

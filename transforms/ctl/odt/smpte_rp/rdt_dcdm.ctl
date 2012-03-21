@@ -95,16 +95,16 @@ void main
 		float ACEStoXYZ[4][4] =  RGBtoXYZ( ACESChromaticities, 1.0);
 		float XYZ[3] = mult_f3_f44( rgbPostTonecurve, ACEStoXYZ);
 	   
-	// Clip	data to range zero to one	
-	XYZ[0] = clip_0_to_1( XYZ[0] );
-	XYZ[1] = clip_0_to_1( XYZ[1] );
-	XYZ[2] = clip_0_to_1( XYZ[2] );
+	// Clip	any negative numbers
+	if ( XYZ[0] < 0.0) XYZ[0] = 0.0;
+	if ( XYZ[1] < 0.0) XYZ[1] = 0.0;
+	if ( XYZ[2] < 0.0) XYZ[2] = 0.0;
 
 	// Gamma	
 	const float L = 48.0;  // L is the absolute luminance where Y = 1 in cd/m^2
 	const float gamma = 1.0/2.6;
-	rOut = pow( XYZ[0] * L / 52.37, gamma);
-	gOut = pow( XYZ[1] * L / 52.37, gamma);
-	bOut = pow( XYZ[2] * L / 52.37, gamma);
+	rOut = clip_0_to_1( pow( XYZ[0] * L / 52.37, gamma));
+	gOut = clip_0_to_1( pow( XYZ[1] * L / 52.37, gamma));
+	bOut = clip_0_to_1( pow( XYZ[2] * L / 52.37, gamma));
 	aOut = aIn;
 }
