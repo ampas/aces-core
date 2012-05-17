@@ -266,11 +266,11 @@ ratio_preserving_tonecurve_lut1D(
 	//
 	
 	const float NTH_POWER = 2.0;
-	const float TINY = 1e-12;
 
 	float normRGB = ( pow(rgb[0],NTH_POWER) + pow(rgb[1],NTH_POWER) + pow(rgb[2],NTH_POWER) ) /
 					( pow(rgb[0],NTH_POWER-1) + pow(rgb[1],NTH_POWER-1) + pow(rgb[2],NTH_POWER-1) );
-	if (normRGB <= 0.0) normRGB = TINY;
+	normRGB = max( normRGB, 1e-12);
+	
 	float normRGBo = interpolate1D( lut, normRGB );
 
 	rgbOut[0] = rgb[0] * normRGBo / normRGB;
@@ -278,34 +278,44 @@ ratio_preserving_tonecurve_lut1D(
 	rgbOut[2] = rgb[2] * normRGBo / normRGB;	
 }
 
+float determine_inv_sat( varying float rgb[3] , varying float norm)
+{
+	float min_chan = min( min( rgb[0], rgb[1]), rgb[2]);
+	float max_chan = max( max( rgb[0], rgb[1]), rgb[2]);
+
+	// When norm = mx, inv_sat = mn / mx.
+	float inv_sat = 1.0 - ( max_chan - min_chan) / max( norm, 1e-8);
+
+	// This is near 0 for saturated colors and 1 for neutrals.
+	return inv_sat;
+}
+
 void ratio_preserving_odt_tonecurve
 ( 	input varying float rgbIn[3],
 	output varying float rgbOut[3] 
 )
 {
-	//
-	// The "ratio preserving tonecurve" is used to avoid hue/chroma shifts. 
-	// It sends a norm through the tonecurve and scales the RGB values based on the output.
-	//
-
-	const float NTH_POWER = 2.0;
-	const float TINY = 1e-12;
-
-	float numerator = ( pow(rgbIn[0],NTH_POWER) + pow(rgbIn[1],NTH_POWER) + pow(rgbIn[2],NTH_POWER) );
-	float denominator = max( TINY, 
-							 ( pow(rgbIn[0],NTH_POWER-1) + 
-							   pow(rgbIn[1],NTH_POWER-1) + 
-							   pow(rgbIn[2],NTH_POWER-1)   
-							 )
-						   ); // use of max function to avoid divide by zero
-	float normRGB = numerator / denominator;
-	if (normRGB <= 0.0) normRGB = TINY;
+	// New norm is just max( RGB).
+	float normRGB = max( max( rgbIn[0], rgbIn[1]), rgbIn[2]);
+	normRGB = max( normRGB, 1e-8);  // avoid div by 0 below
 
 	float normRGBo = rdt_shaper_fwd( normRGB );
 
-	rgbOut[0] = rgbIn[0] * normRGBo / normRGB;
-	rgbOut[1] = rgbIn[1] * normRGBo / normRGB;
-	rgbOut[2] = rgbIn[2] * normRGBo / normRGB;	
+	// Apply ratio-preserving tone-curve.
+	rgbOut[0] = ( normRGBo / normRGB) * rgbIn[0];
+	rgbOut[1] = ( normRGBo / normRGB) * rgbIn[1];
+	rgbOut[2] = ( normRGBo / normRGB) * rgbIn[2];
+
+	// Note: rgbOut is roughly [0,1] since it is post tone-curve.
+	float inv_sat = determine_inv_sat( rgbOut, normRGBo);
+
+	// Note: Using pow reduces the rate of desaturation.
+	float d = inv_sat * pow( normRGBo, 3.);
+
+	// Desaturate low-chroma highlights towards a neutral with the same norm.
+	rgbOut[0] = ( 1. - d) * rgbOut[0] + d * normRGBo;
+	rgbOut[1] = ( 1. - d) * rgbOut[1] + d * normRGBo;
+	rgbOut[2] = ( 1. - d) * rgbOut[2] + d * normRGBo;
 }
 
 void smpteRange_to_fullRange
