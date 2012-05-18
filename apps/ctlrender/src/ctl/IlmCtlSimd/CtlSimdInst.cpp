@@ -654,8 +654,17 @@ SimdAssignInst::execute
     }
     else
     {
-	out.setVarying (false);
-	memcpy(out[0], in[0], _opTypeSize);
+		if( out.isVarying() )
+		{
+			for (int i = xcontext.regSize(); --i >= 0;)
+				if (mask[i])
+					memcpy(out[i], in[0], _opTypeSize);
+		}
+		else
+		{
+			out.setVarying (false);
+			memcpy(out[0], in[0], _opTypeSize);
+		}
     }
 
     xcontext.stack().pop (2);
