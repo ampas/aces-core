@@ -4,3 +4,10 @@
     * Test Images
     * ctlrender sample application for processing images through CTL transforms
     * ACES, ADX, and CTL documentation
+    
+**Version 0.1.1 (June 25, 2012):**
+    * Adds dw ratio preserving ODT tone curve
+    * Fixes possible underflow conditions in RRT and ODT CTL transforms
+    * Bug fix in ctlrender to avoid streaks in output images
+    * Adds reverse RRT and RDT splines
+    * Modifies RDT spline coefficients to tweak shadow reproduction
