@@ -56,11 +56,11 @@
 // This transform shall be used for a device calibrated to:
 //
 // Device Primaries : 
-// 		CIE 1931 chromaticities:		 x			  y			Y
-// 					   		   Red:    0.68        	0.32
-//                   		 Green:    0.265       	0.69
-//                     		  Blue:    0.15        	0.06
-//		                     White:    0.314 		0.351		48cd/m^2
+//         CIE 1931 chromaticities:      x            y           Y
+//                             Red:    0.68         0.32
+//                           Green:    0.265        0.69
+//                            Blue:    0.15         0.06
+//                           White:    0.314        0.351       48cd/m^2
 //
 // Display EOTF :
 //		Gamma: 2.6
