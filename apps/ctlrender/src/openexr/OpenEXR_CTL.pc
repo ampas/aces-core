@@ -1,0 +1,11 @@
+prefix=/usr/local/ctl-0.0
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+OpenEXR_includedir=${prefix}/include/OpenEXR
+
+Name: OpenEXR_CTL
+Description: Simplified OpenEXR interface to CTL
+Version: 1.0.1
+Libs: -L${libdir} -lIlmImfCtl -L/usr/local/ilmbase-1.0.1/lib  -L/usr/local/lib -L/usr/local/openexr-1.6.1/lib  -L/usr/local/ilmbase-1.0.1/lib  -L/usr/local/lib -L/usr/local/lib -L../../ctl/IlmCtl/.libs/ -L../../ctl/IlmCtlMath/.libs -L../../ctl/ilmCtlSimd/.libs -L../../ctl/IlmCtl/.libs/ -L../../ctl/IlmCtlMath/.libs -L../../ctl/ilmCtlSimd/.libs
+Cflags: -I../../ctl/IlmCtl/ -I../../ctl/IlmCtlMath -I../../ctl/IlmCtlSimd/ -D_THREAD_SAFE   -I/usr/local/ilmbase-1.0.1/include/OpenEXR  -I/usr/local/openexr-1.6.1/include/OpenEXR -I../../ctl/IlmCtl/ -I../../ctl/IlmCtlMath -I../../ctl/IlmCtlSimd/ -D_THREAD_SAFE  -I${OpenEXR_includedir}

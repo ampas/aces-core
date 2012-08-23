@@ -1,0 +1,10 @@
+
+The BarsColor.pdf is a postscript file containing the SMPTE HD bars, normalized
+to a 0.0 to 1.0 range (from -0.02 to 1.0). The original bars (Bars.ai) was
+saved as a PDF, and then the PDF hand edited to set the actual color values.
+
+Right now our test script doesn't deal with actually verifying the results, it
+just goes through and generates the test images.
+
+TODO: Get CTL scripts to handle conversion in and out of EXR so that can be
+tested.
