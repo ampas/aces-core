@@ -147,11 +147,11 @@ void determine_channel_order
 	// that all three values are <= zero and will return a very tiny
 	// number to avoid a divide by zero.
 	//
-
+	
 	low = min( min( rgb[0], rgb[1]), rgb[2]);
 	mid = max( max( min( rgb[0], rgb[1]), min( rgb[0], rgb[2])), min( rgb[1], rgb[2]));
 	hgh = max( max( rgb[0], rgb[1]), rgb[2]);
-	if (hgh == 0.0) hgh = 1e-12;
+	hgh = max( hgh, 1e-12);
 }
 // ================================================================= //
 
@@ -162,11 +162,12 @@ float determine_sat( varying float rgb[3] )
 	// This function determines the "saturation" of an input RGB triplet
 	// using a ratio of minimum to maximum.
 	//
-
+	
 	float min_chan = min( min( rgb[0], rgb[1]), rgb[2]);
 	float max_chan = max( max( rgb[0], rgb[1]), rgb[2]);
 	float mid_chan = max( max( min( rgb[0], rgb[1]), min( rgb[0], rgb[2])), min( rgb[1], rgb[2]));
-	if (max_chan == 0.0) max_chan = 1e-9;
+	max_chan = max( max_chan, 1e-9);
+	
 	return ( 1.0 - ( min_chan / max_chan) );
 }
 // ================================================================= //
@@ -224,17 +225,17 @@ void main (
     rgbPostTonecurve[2] = rrt_shaper_fwd(aces[2]);
 
 		// Clip negative values
-		if (rgbPostTonecurve[0] <= 0.0) rgbPostTonecurve[0] = 0.0;
-		if (rgbPostTonecurve[1] <= 0.0) rgbPostTonecurve[1] = 0.0;
-		if (rgbPostTonecurve[2] <= 0.0) rgbPostTonecurve[2] = 0.0;
+		rgbPostTonecurve[0] = max( rgbPostTonecurve[0], 0.0);
+		rgbPostTonecurve[1] = max( rgbPostTonecurve[1], 0.0);
+		rgbPostTonecurve[2] = max( rgbPostTonecurve[2], 0.0);
 	
 	/* --- RRT Matrix --- */
 		float rgbPostMatrix[3] = mult_f3_f33( rgbPostTonecurve, RRT_MTX );
 	
 		// Clip negative values
-		if (rgbPostMatrix[0] < 0.0) rgbPostMatrix[0] = 0.0;
-		if (rgbPostMatrix[1] < 0.0) rgbPostMatrix[1] = 0.0;
-		if (rgbPostMatrix[2] < 0.0) rgbPostMatrix[2] = 0.0;
+		rgbPostMatrix[0] = max( rgbPostMatrix[0], 0.0);
+		rgbPostMatrix[1] = max( rgbPostMatrix[1], 0.0);
+		rgbPostMatrix[2] = max( rgbPostMatrix[2], 0.0);
 	
 	/* --- RRT Hue Specific Adjustments --- */
 		// Determine ordering of channels
@@ -410,9 +411,9 @@ void main (
 		rgbPostSat = mult_f3_f33( rgbPostHueProcess, SatMatrix);
 
 		// Clip
-		if ( rgbPostSat[0] <= 0.0) rgbPostSat[0] = 0.0;
-		if ( rgbPostSat[1] <= 0.0) rgbPostSat[1] = 0.0;
-		if ( rgbPostSat[2] <= 0.0) rgbPostSat[2] = 0.0;
+		rgbPostSat[0] = max( rgbPostSat[0], 0.0);
+		rgbPostSat[1] = max( rgbPostSat[1], 0.0);
+		rgbPostSat[2] = max( rgbPostSat[2], 0.0);
 
 	// Output
 	rOut = rgbPostSat[0];
