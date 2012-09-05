@@ -62,6 +62,10 @@
 //                            Blue:    0.15         0.06
 //                           White:    0.314        0.351       48cd/m^2
 //
+// Assumed observer adapted white point:
+//         CIE 1931 chromaticity:        x            y
+//                                     0.32168      0.33767
+//
 // Display EOTF :
 //		Gamma: 2.6
 //		Offset: 0.0
