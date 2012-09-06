@@ -65,6 +65,13 @@
 //		of a motion picture theater.  This ODT makes no attempt to compensate for 
 //		viewing environment variables more typical of those associated with the home.
 //
+// By default this transform outputs full range code values. If smpte (legal) range code
+// values are desired the default can be overridden at runtime by setting the input 
+// variable smpteRangeOut equal to true.
+//
+// Example: 
+// ctlrender -ctl odt_rec709.ctl -param1 smpteRangeOut 1.0 oces.exr image709legal.tif
+//
 
 
 
@@ -98,7 +105,8 @@ void main
 	output varying float rOut,
 	output varying float gOut,
 	output varying float bOut,
-	output varying float aOut
+	output varying float aOut,
+	input uniform bool smpteRangeOut = false
 )
 {
 	float oces[3] = {rIn, gIn, bIn};
@@ -109,15 +117,15 @@ void main
 	
 	// Convert to Rec709 primaries
 		// RGB to XYZ
-		float ACEStoXYZ[4][4] =  RGBtoXYZ( ACESChromaticities, 1.0);
+		float ACEStoXYZ[4][4] = RGBtoXYZ( ACESChromaticities, 1.0);
 		float XYZ[3] = mult_f3_f44( rgbPostTonecurve, ACEStoXYZ);
 
-     	// Convert to D65
-     	XYZ = mult_f3_f33( XYZ, CAT);
-	   
-        // XYZ to Rec709
-        float XYZtoRec709[4][4] =  XYZtoRGB( rec709Chromaticities, 1.0);
-   		float RGBo[3] = mult_f3_f44( XYZ, XYZtoRec709);
+		// Chromatic adaptation to D65
+		XYZ = mult_f3_f33( XYZ, CAT);
+
+		// XYZ to Rec709
+		float XYZtoRec709[4][4] = XYZtoRGB( rec709Chromaticities, 1.0);
+		float RGBo[3] = mult_f3_f44( XYZ, XYZtoRec709);
 
 	// Clip	data to range zero to one	
 	RGBo[0] = clip_0_to_1( RGBo[0] );
@@ -138,4 +146,15 @@ void main
 	gOut = ( pow( RGBo[1],(1.0/GAMMA)) / A ) - B;
 	bOut = ( pow( RGBo[2],(1.0/GAMMA)) / A ) - B;	
 	aOut = aIn;
+	
+	// Scale to SMPTE range if 
+	if (smpteRangeOut == true) {
+	
+		float fullRange[3] = {rOut, gOut, bOut};
+		float smpteRange[3] = fullRange_to_smpteRange( fullRange );
+		
+		rOut = smpteRange[0];
+		gOut = smpteRange[1];
+		bOut = smpteRange[2];	
+	}	
 }
