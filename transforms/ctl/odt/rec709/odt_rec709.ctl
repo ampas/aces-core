@@ -55,6 +55,9 @@
 // reference OETF specified in Rec. ITU-R BT.1886 and primaries specified in 
 // Rec. ITU-R BT.709.
 //
+// The assumed observer adapted white point shall be the chromaticity coordinates 
+// specified for white in Rec. ITU-R BT.709.
+//
 // This transform shall be used with a device calibrated to match the primaries
 // specified Rec. ITU-R BT.709 and reference electro-optical transfer function 
 // specified in Rec. ITU-R BT.1886 where L = 100 cd/m^2 Lw = 1.0 and Lb = 0.0 .

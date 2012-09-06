@@ -56,6 +56,10 @@
 // This transform shall be used for a device calibrated to match the Digital Cinema
 // Reference Projector Specification outlined in SMPTE RP 431-2-2007.
 //
+// Assumed observer adapted white point:
+//         CIE 1931 chromaticity:        x            y
+//                                     0.32168      0.33767
+//
 // Viewing Environment:
 // 		Environment specified in SMPTE RP 431-2-2007
 //
