@@ -65,6 +65,13 @@
 //		of a motion picture theater.  This ODT makes no attempt to compensate for 
 //		viewing environment variables more typical of those associated with the home.
 //
+// By default this transform outputs full range code values. If smpte (legal) range code
+// values are desired the default can be overridden at runtime by setting the input 
+// variable smpteRangeOut equal to true.
+//
+// Example: 
+// ctlrender -ctl odt_rec709.ctl -param1 smpteRangeOut 1.0 oces.exr image709legal.tif
+//
 
 
 
@@ -98,7 +105,8 @@ void main
 	output varying float rOut,
 	output varying float gOut,
 	output varying float bOut,
-	output varying float aOut
+	output varying float aOut,
+	input uniform bool smpteRangeOut = false
 )
 {
 	float oces[3] = {rIn, gIn, bIn};
@@ -138,4 +146,14 @@ void main
 	gOut = ( pow( RGBo[1],(1.0/GAMMA)) / A ) - B;
 	bOut = ( pow( RGBo[2],(1.0/GAMMA)) / A ) - B;	
 	aOut = aIn;
+	
+	if (smpteRangeOut == true) {
+	
+		float fullRange[3] = {rOut, gOut, bOut};
+		float smpteRange[3] = fullRange_to_smpteRange( fullRange );
+		
+		rOut = smpteRange[0];
+		gOut = smpteRange[1];
+		bOut = smpteRange[2];	
+	}	
 }
