@@ -318,33 +318,33 @@ void ratio_preserving_odt_tonecurve
 	rgbOut[2] = ( 1. - d) * rgbOut[2] + d * normRGBo;
 }
 
-void smpteRange_to_fullRange
-( 	input varying float rgbIn[3],
-	output varying float rgbOut[3] 
-)
+float[3] smpteRange_to_fullRange( varying float rgbIn[3] )
 { 
 
 	const float REFWHITE = ( 940.0 / 1023.0);
 	const float REFBLACK = (  64.0 / 1023.0);
 	
+	float rgbOut[3];
 	rgbOut[0] = ( rgbIn[0] - REFBLACK) / ( REFWHITE - REFBLACK);
 	rgbOut[1] = ( rgbIn[1] - REFBLACK) / ( REFWHITE - REFBLACK);
 	rgbOut[2] = ( rgbIn[2] - REFBLACK) / ( REFWHITE - REFBLACK);
+	
+	return rgbOut;
 
 }
 
-void fullRange_to_smpteRange
-( 	input varying float rgbIn[3],
-	output varying float rgbOut[3] 
-)
+float[3] fullRange_to_smpteRange( varying float rgbIn[3] )
 { 
 
 	const float REFWHITE = ( 940.0 / 1023.0);
 	const float REFBLACK = (  64.0 / 1023.0);
 	
+	float rgbOut[3];
 	rgbOut[0] = rgbIn[0]  * ( REFWHITE - REFBLACK) + REFBLACK;
 	rgbOut[1] = rgbIn[1]  * ( REFWHITE - REFBLACK) + REFBLACK;
 	rgbOut[2] = rgbIn[2]  * ( REFWHITE - REFBLACK) + REFBLACK;
+	
+	return rgbOut;
 
 }
 
