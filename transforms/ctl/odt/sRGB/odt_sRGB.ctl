@@ -56,6 +56,9 @@
 // This transform shall be used with a device calibrated to match the reference computer
 // monitor specified in IEC 61966-2-1:1999. 
 //
+// The assumed observer adapted white point shall be the chromaticity coordinates 
+// specified for white in IEC 61966-2-1:1999.
+//
 // Viewing Environment:
 // 		Environment specified in SMPTE RP 431-2-2007
 //		Note: This environement is consistent with the viewing environment typical
