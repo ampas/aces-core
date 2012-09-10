@@ -344,3 +344,67 @@ float[3] fullRange_to_smpteRange( varying float rgbIn[3] )
 	return rgbOut;
 }
 
+float[3] xyY_to_XYZt( float xyY[3] )
+{
+
+	//
+	// Converts CIE XYZ to CIE x, y, and Y
+	//
+
+	float z = 1-xyY[0]-xyY[1];
+	
+	float XYZt[3];
+	XYZt[0] = xyY[0] / xyY[1] * xyY[2];
+	XYZt[1] = xyY[2];
+	XYZt[2] = z / xyY[1] * xyY[2];
+	
+	return XYZt;
+	
+}
+
+
+const float coneRespMatCAT02[3][3] = {
+{0.73280, -0.70360, 0.00300},
+{0.42960,  1.69750, 0.01360},
+{-0.16240, 0.00610, 0.98340}
+};
+
+const float coneRespMatBradford[3][3] = {
+{0.40024, -0.22630, 0.00000},
+{0.70760, 1.16532, 0.00000},
+{-0.08081, 0.04570, 0.91822}
+};
+
+
+float[3][3] calculate_cat_matrix( float src_xyY[3], 
+								  float des_xyY[3], 
+								  float coneRespMat[3][3] = coneRespMatCAT02)
+								  
+{
+
+	//
+	// Calculates and returns a 3x3 Von Kries Chromatic Adaptation Transform to transform
+	// from src_xyY to des_xyY using the cone response primaries defined by coneRespMat.  
+	// By default coneRespMat is set to coneRespMatCAT02 which are the cone primaires 
+	// defined in CIECAM02. The default coneRespMat can be overridden at runtime.  
+	// In most circumstances src_xyY[2] and des_xyY[2] should be equal to 1.0.
+	//
+
+	float src_XYZt[3] = xyY_to_XYZt( src_xyY );
+	float des_XYZt[3] = xyY_to_XYZt( des_xyY );
+	
+	float src_coneResp[3] = mult_f3_f33( src_XYZt, coneRespMat);
+	float des_coneResp[3] = mult_f3_f33( des_XYZt, coneRespMat);
+
+	float vkMat[3][3] = {
+	{ des_coneResp[0] / src_coneResp[0], 0.0, 0.0 },
+	{ 0.0, des_coneResp[1] / src_coneResp[1], 0.0 },
+	{ 0.0, 0.0, des_coneResp[2] / src_coneResp[2] }
+	};
+		
+	float cat_matrix[3][3] = mult_f33_f33( coneRespMat, transpose_f33( mult_f33_f33( transpose_f33( invert_f33( coneRespMat ) ), vkMat ) ) );
+	
+	return cat_matrix;
+	
+}
+
