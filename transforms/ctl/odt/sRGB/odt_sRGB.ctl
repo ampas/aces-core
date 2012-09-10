@@ -78,12 +78,9 @@ import "splines";
 
 
 /* ============ CONSTANTS ============ */
-const float CAT[3][3] = {
-	{0.98823, -0.00569, 0.00035},
-	{-0.00789, 0.99869, 0.00112},
-	{0.01676, 0.00667, 1.07808}
-};
-
+const float SRC_WHITE[3] = {ACESChromaticities.white[0], ACESChromaticities.white[1], 1.0};
+const float DEST_WHITE[3] = {rec709Chromaticities.white[0], rec709Chromaticities.white[1], 1.0};
+const float CAT[3][3] = calculate_cat_matrix( SRC_WHITE, DES_WHITE );
 
 
 
@@ -112,8 +109,8 @@ void main
 		float ACEStoXYZ[4][4] =  RGBtoXYZ( ACESChromaticities, 1.0);
 		float XYZ[3] = mult_f3_f44( rgbPostTonecurve, ACEStoXYZ);
 
-     	// Convert to D65
-     	XYZ = mult_f3_f33( XYZ, CAT);
+		// Chromatic adaptation from ACES White to Assumed Observer Adapted White
+		XYZ = mult_f3_f33( XYZ, CAT);
 	   
         // XYZ to Rec709
         float XYZtoRec709[4][4] =  XYZtoRGB( rec709Chromaticities, 1.0);
