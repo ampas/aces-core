@@ -4,7 +4,7 @@ EXTRA_DIST = \
 	./utilities/*.ctl \
 	./rrt/*.ctl
 
-ctldatadir = $(sharedir)/ctl/modules
+ctldatadir = $(datadir)/ctl/modules
 ctldata_DATA = \
 	./utilities/*.ctl \
 	./rrt/*.ctl
