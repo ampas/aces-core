@@ -90,7 +90,7 @@ import "splines";
 /* ============ CONSTANTS ============ */
 const float SRC_WHITE[3] = {ACESChromaticities.white[0], ACESChromaticities.white[1], 1.0};
 const float DEST_WHITE[3] = {rec709Chromaticities.white[0], rec709Chromaticities.white[1], 1.0};
-const float CAT[3][3] = calculate_cat_matrix( SRC_WHITE, DES_WHITE );
+const float CAT[3][3] = calculate_cat_matrix( SRC_WHITE, DEST_WHITE );
 
 
 

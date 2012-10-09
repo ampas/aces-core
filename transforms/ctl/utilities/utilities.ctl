@@ -348,7 +348,7 @@ float[3] xyY_to_XYZt( float xyY[3] )
 {
 
 	//
-	// Converts CIE XYZ to CIE x, y, and Y
+	// Converts CIE x, y, and Y to CIE XYZ tristimulus values
 	//
 
 	float z = 1-xyY[0]-xyY[1];
