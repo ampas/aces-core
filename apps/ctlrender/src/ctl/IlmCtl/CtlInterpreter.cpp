@@ -237,25 +237,52 @@ Interpreter::setModulePaths(const vector<string>& newModPaths)
 
 
 void
-Interpreter::loadModule (const string &moduleName) {
+Interpreter::loadModule (const string &moduleName, const string &fileName, const string &moduleSource)
+{
     debug ("Interpreter::loadModule (moduleName = " << moduleName << ")");
 
     Lock lock (_data->mutex);
-    loadModuleRecursive (moduleName);
+    loadModuleRecursive (moduleName, fileName, moduleSource);
 }
 
 void Interpreter::_loadModule(const std::string &moduleName,
-                              const std::string &fileName) {
-    ifstream file (fileName.c_str());
+                              const std::string &fileName,
+                              const std::string &moduleSource) {                              
+    // 
+    // set up the source code string for parsing.
+    // 
 
-    if (!file)
+    istream *input = 0;
+        
+    if (!moduleSource.empty())
     {
-	THROW_ERRNO ("Cannot load CTL module \"" << moduleName << "\". "
-		     "Opening file \"" << fileName << "\" for reading "
-		     "failed (%T).");
+        debug ("\tloading from source");
+        
+        stringstream *tmp_strm = new stringstream;
+        (*tmp_strm) << moduleSource;
+        input = tmp_strm;
     }
+    else
+    {
+        //
+        // Using the module search path, locate the file that contains the
+        // source code for the module.  Open the file.
+        //
+        ifstream *tmp_strm = new ifstream;
+        tmp_strm->open(fileName.c_str());
+        
+        if (!tmp_strm)
+        {
+	        THROW_ERRNO ("Cannot load CTL module \"" << moduleName << "\". "
+		         "Opening file \"" << fileName << "\" for reading "
+		         "failed (%T).");
+        }
 
-    debug ("\tloading from file \"" << fileName << "\"");
+        debug ("\tloading from file \"" << fileName << "\"");
+        input = tmp_strm;
+    }
+    
+    assert(input);
 
     Module *module = 0;
     LContext *lcontext = 0;
@@ -268,7 +295,7 @@ void Interpreter::_loadModule(const std::string &moduleName,
 
 	module = newModule (moduleName, fileName);	
 	_data->moduleSet.addModule (module);
-	lcontext = newLContext (file, module, _data->symtab);
+	lcontext = newLContext (*input, module, _data->symtab);
 	Parser parser (*lcontext, *this);
 
 	//
@@ -341,7 +368,7 @@ void Interpreter::loadFile(const std::string &fileName,
 }
 
 void
-Interpreter::loadModuleRecursive (const string &moduleName)
+Interpreter::loadModuleRecursive (const string &moduleName, const string &fileName, const string &moduleSource)
 {
     debug ("Interpreter::loadModuleRecursive "
 	   "(moduleName = " << moduleName << ")");
@@ -351,15 +378,10 @@ Interpreter::loadModuleRecursive (const string &moduleName)
 	debug ("\talready loaded");
 	return;
     }
+    
+    string realFileName = fileName.empty() ? findModule (moduleName) : fileName;
 
-    //
-    // Using the module search path, locate the file that contains the
-    // source code for the module.  Open the file.
-    //
-
-    string fileName = findModule (moduleName);
-
-	_loadModule(moduleName, fileName);
+	_loadModule(moduleName, realFileName, moduleSource);
 }
 
 bool
