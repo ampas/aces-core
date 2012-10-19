@@ -73,7 +73,7 @@ AM_PATH_PKGCONFIG(
    [ILMBASE_LIBS],
    [IlmBase],
    [OpenEXR],
-   [$LIB64_IF_EXISTS -L/usr/local/lib],
+   [$LIB64_IF_EXISTS -L$(libdir)],
    [-lImath -lHalf -lIex -lIlmThread],
    [ilmbase])
 
@@ -90,7 +90,7 @@ AM_PATH_PKGCONFIG(
    [OPENEXR_LIBS],
    [OpenEXR],
    [OpenEXR],
-   [$LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L/usr/local/lib],
+   [$LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L$(libdir)],
    [-lIlmImf -lImath $ILMBASE_LIBS -lIex -lHalf -lz],
    [openexr])
 ])
