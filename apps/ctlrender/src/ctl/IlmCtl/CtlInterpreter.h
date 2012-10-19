@@ -87,7 +87,9 @@ class Interpreter
     // Load a module, test if a given module has already been loaded
     //--------------------------------------------------------------
 
-    void		loadModule(const std::string &moduleName);
+    void		loadModule(const std::string &moduleName, 
+                           const std::string &fileName = "", 
+                           const std::string &moduleSource = "");
 	void        loadFile(const std::string &fileName,
 	                     const std::string &moduleName=std::string());
     bool		moduleIsLoaded (const std::string &moduleName) const;
@@ -161,7 +163,9 @@ class Interpreter
 				     const std::string &moduleName);
 
     void			loadModuleRecursive
-				    (const std::string &moduleName);
+				    (const std::string &moduleName, 
+                           const std::string &fileName = "", 
+                           const std::string &moduleSource = "");
 
     bool			moduleIsLoadedInternal
 				    (const std::string &moduleName) const;
@@ -178,7 +182,9 @@ class Interpreter
 				    (std::istream &file,
 				     Module *module,
 				     SymbolTable &symtab) const = 0;
-	void        _loadModule(const std::string &moduleName, const std::string &fileName);
+	void        _loadModule(const std::string &moduleName, 
+	                        const std::string &fileName,
+	                        const std::string &moduleSource = "");
 
     struct Data;
 
