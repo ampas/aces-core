@@ -305,67 +305,69 @@ SimdVariableNode::generateCode (LContext &lcontext)
 
     if (initialValue)
     {
-	SimdLContext &slcontext = static_cast <SimdLContext &> (lcontext);
+	    SimdLContext &slcontext = static_cast <SimdLContext &> (lcontext);
 	
-	SimdDataAddrPtr dataPtr = info->addr().cast<SimdDataAddr>();
-	SimdValueNodePtr valuePtr = initialValue.cast<SimdValueNode>();
+	    SimdDataAddrPtr dataPtr = info->addr().cast<SimdDataAddr>();
+	    SimdValueNodePtr valuePtr = initialValue.cast<SimdValueNode>();
 
-	if (assignInitialValue)
-	{
-	    //
-	    // Initial value is assigned to the variable.
-	    //
-
-	    if( valuePtr && valuePtr->type && dataPtr  && dataPtr->reg())
+	    if (assignInitialValue)
 	    {
-		
-		// get sizes & offsets of elements
-		SizeVector sizes;
-		SizeVector offsets;
-		DataTypePtr dataType = valuePtr->type;
-		dataType->coreSizes(0, sizes, offsets);
+	        //
+	        // Initial value is assigned to the variable.
+	        //
 
-		ExprNodeVector &elements = valuePtr->elements;
-		int numElements = elements.size();
-		assert((int)sizes.size() == numElements 
-		       && (int)offsets.size() == numElements);
-		assert(!dataPtr->reg()->isVarying());
+#if 0
+	        if( valuePtr && valuePtr->type && dataPtr  && dataPtr->reg())
+	        {
 		
-		char* dest = (*dataPtr->reg())[0];
+		        // get sizes & offsets of elements
+		        SizeVector sizes;
+		        SizeVector offsets;
+		        DataTypePtr dataType = valuePtr->type;
+		        dataType->coreSizes(0, sizes, offsets);
+
+		        ExprNodeVector &elements = valuePtr->elements;
+		        int numElements = elements.size();
+		        assert((int)sizes.size() == numElements 
+		               && (int)offsets.size() == numElements);
+		        assert(!dataPtr->reg()->isVarying());
 		
-		int eIndex = 0;
+		        char* dest = (*dataPtr->reg())[0];
+		
+		        int eIndex = 0;
 
-		valuePtr->castAndCopyRec(lcontext, dataType, eIndex, 
-					 dest, sizes, offsets);
+		        valuePtr->castAndCopyRec(lcontext, dataType, eIndex, 
+					         dest, sizes, offsets);
 
+	        }
+	        else
+#endif
+	        {
+		        slcontext.addInst (new SimdPushRefInst (info->addr(), lineNumber));
+		        initialValue->generateCode (lcontext);
+		        info->type()->generateCastFrom (initialValue, lcontext);
+
+		        info->type()->generateCode (this, lcontext);
+	        }
 	    }
 	    else
 	    {
-		slcontext.addInst (new SimdPushRefInst (info->addr(), lineNumber));
-		initialValue->generateCode (lcontext);
-		info->type()->generateCastFrom (initialValue, lcontext);
+	        //
+	        // Variable is initialized via side-effect.
+	        //
 
-		info->type()->generateCode (this, lcontext);
+	        initialValue->generateCode (lcontext);
+
+	        const SimdCallNode *call = 
+		    dynamic_cast <const SimdCallNode*>(initialValue.pointer());
+	        
+	        RcPtr<SimdVoidType> pv(new SimdVoidType());
+
+	        if (call == 0 || !call->returnsType (pv))
+	        {
+		        slcontext.addInst (new SimdPopInst (1, lineNumber));
+	        }
 	    }
-	}
-	else
-	{
-	    //
-	    // Variable is initialized via side-effect.
-	    //
-
-	    initialValue->generateCode (lcontext);
-
-	    const SimdCallNode *call = 
-		dynamic_cast <const SimdCallNode*>(initialValue.pointer());
-	    
-	    RcPtr<SimdVoidType> pv(new SimdVoidType());
-
-	    if (call == 0 || !call->returnsType (pv))
-	    {
-		slcontext.addInst (new SimdPopInst (1, lineNumber));
-	    }
-	}
     }
 }
 
@@ -1268,28 +1270,28 @@ SimdValueNode::castAndCopyRec(LContext &lcontext,
     //
     if( StructTypePtr structType = dataType.cast<StructType>())
     {
-	for(MemberVectorConstIterator it = structType->members().begin();
-	    it != structType->members().end();
-	    it++)
-	{
-	    castAndCopyRec(lcontext, it->type, eIndex, dest, sizes, offsets);
-	}
+	    for(MemberVectorConstIterator it = structType->members().begin();
+	        it != structType->members().end();
+	        it++)
+	    {
+	        castAndCopyRec(lcontext, it->type, eIndex, dest, sizes, offsets);
+	    }
     }
     else if( ArrayTypePtr arrayType = dataType.cast<ArrayType>())
     {
-	for (int i = 0; i < arrayType->size(); ++i)
-	{
-	    castAndCopyRec(lcontext, arrayType->elementType(), eIndex, 
-			   dest, sizes, offsets);
-	}
+	    for (int i = 0; i < arrayType->size(); ++i)
+	    {
+	        castAndCopyRec(lcontext, arrayType->elementType(), eIndex, 
+			       dest, sizes, offsets);
+	    }
     }
     else
     {
-	assert(eIndex < (int)elements.size());
-	LiteralNodePtr literal = elements[eIndex];
-	literal = dataType->castValue(lcontext, literal);
-	memcpy(dest+offsets[eIndex], literal->valuePtr(), sizes[eIndex]);
-	eIndex++;
+	    assert(eIndex < (int)elements.size());
+	    LiteralNodePtr literal = elements[eIndex];
+	    literal = dataType->castValue(lcontext, literal);
+	    memcpy(dest+offsets[eIndex], literal->valuePtr(), sizes[eIndex]);
+	    eIndex++;
     }
 }
 
