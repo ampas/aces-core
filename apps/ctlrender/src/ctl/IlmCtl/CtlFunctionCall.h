@@ -178,7 +178,7 @@ class FunctionArg: public TypeStorage {
     //-------------------------------------------------------------
 
     FunctionArg(const std::string &name,
-	            const FunctionCallPtr &func,
+	            FunctionCall* func,
 	            const DataTypePtr &type,
 	            bool varying);
 
@@ -189,7 +189,7 @@ class FunctionArg: public TypeStorage {
     // The FunctionCall object to which this FunctionArg belongs
     //----------------------------------------------------------
 
-    const FunctionCallPtr &	func () const		{return _func;}
+    const FunctionCall*	func () const		{return _func;}
 
 
     //-----------------------------------------------------------------
@@ -223,7 +223,7 @@ class FunctionArg: public TypeStorage {
     virtual void		setDefaultValue () = 0;
 
   private:
-    FunctionCallPtr		_func;
+    FunctionCall*		_func;
     bool                _varying;
 };
 

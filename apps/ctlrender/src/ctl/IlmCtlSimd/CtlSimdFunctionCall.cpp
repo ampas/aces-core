@@ -177,7 +177,7 @@ SimdFunctionCall::callFunction (size_t numSamples)
 
 SimdFunctionArg::SimdFunctionArg
     (const std::string &name,
-     const FunctionCallPtr &func,
+     FunctionCall* func,
      const DataTypePtr &type,
      bool varying,
      SimdReg *reg)
@@ -189,7 +189,7 @@ SimdFunctionArg::SimdFunctionArg
     // Find the register associated with the parameter default value
     string staticName = func->name() + "$" + name;
 
-    SimdFunctionCallPtr sfunc(func);
+    SimdFunctionCall* sfunc = static_cast<SimdFunctionCall*>(func);
     SymbolInfoPtr info = sfunc->symbols().lookupSymbol( staticName );
     if( info )
     {
@@ -248,9 +248,12 @@ SimdFunctionArg::setVarying(bool varying)
 }
 
 size_t SimdFunctionArg::elements(void) const {
-	SimdFunctionCallPtr fc(func());
-
-	return fc->xContext()->interpreter().maxSamples();
+	// reason for casting here is that _func is private to FunctionArg
+	// the public function func() returns a const FunctionCall*
+	// should func return non-const or should _func be promoted to protected?
+	return const_cast<SimdFunctionCall*>(
+	static_cast<const SimdFunctionCall*>(func())
+	)->xContext()->interpreter().maxSamples();
 }
 
 } // namespace Ctl
