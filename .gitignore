@@ -1,0 +1,26 @@
+# Shared objects
+*.so
+*.so.*
+*.dll
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Object files and Libraries
+*.o
+*.obj
+*.lo
+*.a
+*.la
+*.lib
+
+# Temp/Swap files
+*.swp
+thunbs.db
+*~
+*.bak
+*.log
+*.status
