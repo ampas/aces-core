@@ -108,6 +108,7 @@ SimdReg::SimdReg
 	{
 	    for( int i = 0; i < (int)regSize; i++ )
 	    {
+	    if( !mask[i] ) continue;
 		int ind = *(int *)(indReg[i]);
 		if( ind < 0 || ind >= (int)arraySize )
 		    throwIndexOutOfRange (ind, arraySize);
@@ -121,6 +122,7 @@ SimdReg::SimdReg
 	{
 	    for( int i = 0; i < (int)regSize; i++ )
 	    {
+	    if( !mask[i] ) continue;
 		int ind = *(int *)(indReg[i]);
 		if( ind < 0 || ind >= (int)arraySize )
 		    throwIndexOutOfRange (ind, arraySize);
