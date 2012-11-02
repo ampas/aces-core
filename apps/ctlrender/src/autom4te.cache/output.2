@@ -661,6 +661,7 @@ SED
 am__fastdepCC_FALSE
 am__fastdepCC_TRUE
 CCDEPMODE
+am__nodep
 AMDEPBACKSLASH
 AMDEP_FALSE
 AMDEP_TRUE
@@ -683,6 +684,7 @@ build_vendor
 build_cpu
 build
 LIBTOOL
+LIBTOOL_VERSION
 MAINT
 MAINTAINER_MODE_FALSE
 MAINTAINER_MODE_TRUE
@@ -2949,11 +2951,11 @@ MAKEINFO=${MAKEINFO-"${am_missing_run}makeinfo"}
 
 # We need awk for the "check" target.  The system "awk" is bad on
 # some platforms.
-# Always define AMTAR for backward compatibility.
+# Always define AMTAR for backward compatibility.  Yes, it's still used
+# in the wild :-(  We should find a proper way to deprecate it ...
+AMTAR='$${TAR-tar}'
 
-AMTAR=${AMTAR-"${am_missing_run}tar"}
-
-am__tar='${AMTAR} chof - "$$tardir"'; am__untar='${AMTAR} xf -'
+am__tar='$${TAR-tar} chof - "$$tardir"' am__untar='$${TAR-tar} xf -'
 
 
 
@@ -2981,6 +2983,12 @@ fi
 
   MAINT=$MAINTAINER_MODE_TRUE
   
+
+
+LIBTOOL_CURRENT=2
+LIBTOOL_REVISION=0
+LIBTOOL_AGE=0
+LIBTOOL_VERSION=$LIBTOOL_CURRENT:$LIBTOOL_REVISION:$LIBTOOL_AGE
 
 
 if test -z "${CFLAGS}"; then :
@@ -3212,6 +3220,7 @@ fi
 if test "x$enable_dependency_tracking" != xno; then
   am_depcomp="$ac_aux_dir/depcomp"
   AMDEPBACKSLASH='\'
+  am__nodep='_no'
 fi
  if test "x$enable_dependency_tracking" != xno; then
   AMDEP_TRUE=
@@ -4025,6 +4034,7 @@ else
   # instance it was reported that on HP-UX the gcc test will end up
   # making a dummy file named `D' -- because `-MD' means `put the output
   # in D'.
+  rm -rf conftest.dir
   mkdir conftest.dir
   # Copy depcomp to subdir because otherwise we won't find it if we're
   # using a relative directory.
@@ -4084,7 +4094,7 @@ else
 	break
       fi
       ;;
-    msvisualcpp | msvcmsys)
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
       # This compiler won't grok `-c -o', but also, the minuso test has
       # not run yet.  These depmodes are late enough in the game, and
       # so weak that their functioning should not be impacted.
@@ -11772,6 +11782,7 @@ else
   # instance it was reported that on HP-UX the gcc test will end up
   # making a dummy file named `D' -- because `-MD' means `put the output
   # in D'.
+  rm -rf conftest.dir
   mkdir conftest.dir
   # Copy depcomp to subdir because otherwise we won't find it if we're
   # using a relative directory.
@@ -11831,7 +11842,7 @@ else
 	break
       fi
       ;;
-    msvisualcpp | msvcmsys)
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
       # This compiler won't grok `-c -o', but also, the minuso test has
       # not run yet.  These depmodes are late enough in the game, and
       # so weak that their functioning should not be impacted.
@@ -15641,6 +15652,7 @@ else
   # instance it was reported that on HP-UX the gcc test will end up
   # making a dummy file named `D' -- because `-MD' means `put the output
   # in D'.
+  rm -rf conftest.dir
   mkdir conftest.dir
   # Copy depcomp to subdir because otherwise we won't find it if we're
   # using a relative directory.
@@ -15700,7 +15712,7 @@ else
 	break
       fi
       ;;
-    msvisualcpp | msvcmsys)
+    msvc7 | msvc7msys | msvisualcpp | msvcmsys)
       # This compiler won't grok `-c -o', but also, the minuso test has
       # not run yet.  These depmodes are late enough in the game, and
       # so weak that their functioning should not be impacted.
@@ -16177,7 +16189,7 @@ if test "x$test_prefix" != "xNONE" ; then
       TEST_CXXFLAGS="$TEST_CXXFLAGS -I$test_prefix/include/$inc_dir"
    done
    TEST_LDFLAGS="-L$test_prefix/lib"
-   TEST_LDFLAGS="$TEST_LDFLAGS $LIB64_IF_EXISTS -L/usr/local/lib"
+   TEST_LDFLAGS="$TEST_LDFLAGS $LIB64_IF_EXISTS -L$(libdir)"
    TEST_LIBS="-lImath -lHalf -lIex -lIlmThread"
 else
                            if test x$PKG_CONFIG != xno ; then
@@ -16207,7 +16219,7 @@ else
          do
              TEST_CXXFLAGS="$TEST_CXXFLAGS -I/usr/local/include/$inc_dir"
          done
-         TEST_LDFLAGS="$LIB64_IF_EXISTS -L/usr/local/lib"
+         TEST_LDFLAGS="$LIB64_IF_EXISTS -L$(libdir)"
       fi
       TEST_LIBS="-lImath -lHalf -lIex -lIlmThread"
    fi
@@ -16340,7 +16352,7 @@ if test "x$test_prefix" != "xNONE" ; then
       TEST_CXXFLAGS="$TEST_CXXFLAGS -I$test_prefix/include/$inc_dir"
    done
    TEST_LDFLAGS="-L$test_prefix/lib"
-   TEST_LDFLAGS="$TEST_LDFLAGS $LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L/usr/local/lib"
+   TEST_LDFLAGS="$TEST_LDFLAGS $LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L$(libdir)"
    TEST_LIBS="-lIlmImf -lImath $ILMBASE_LIBS -lIex -lHalf -lz"
 else
                            if test x$PKG_CONFIG != xno ; then
@@ -16370,7 +16382,7 @@ else
          do
              TEST_CXXFLAGS="$TEST_CXXFLAGS -I/usr/local/include/$inc_dir"
          done
-         TEST_LDFLAGS="$LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L/usr/local/lib"
+         TEST_LDFLAGS="$LIB64_IF_EXISTS $ILMBASE_LDFLAGS -L$(libdir)"
       fi
       TEST_LIBS="-lIlmImf -lImath $ILMBASE_LIBS -lIex -lHalf -lz"
    fi
@@ -17660,7 +17672,6 @@ Please re-run configure with these options:
     CXXFLAGS="$CXXFLAGS -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386"
       fi
 
-  CXXFLAGS="$CXXFLAGS -Wno-long-double"
   ;;
 esac
 
@@ -17680,7 +17691,7 @@ $as_echo "@%:@define HAVE_DARWIN 1" >>confdefs.h
 
 
 
-ac_config_files="$ac_config_files Makefile dpx/Makefile openexr/Makefile doc/Makefile ctl/Makefile ctl/CTL.pc ctl/IlmCtl/Makefile ctl/IlmCtlMath/Makefile ctl/IlmCtlMathTest/Makefile ctl/IlmCtlSimd/Makefile ctl/IlmCtlTest/Makefile openexr/CtlModules/Makefile openexr/IlmImfCtl/Makefile openexr/IlmImfCtlTest/Makefile util/Makefile util/ctlrender/Makefile util/ctldebug/Makefile vc/Makefile"
+ac_config_files="$ac_config_files Makefile dpx/Makefile openexr/Makefile doc/Makefile ctl/Makefile ctl/CTL.pc ctl/IlmCtl/Makefile ctl/IlmCtlMath/Makefile ctl/IlmCtlMathTest/Makefile ctl/IlmCtlSimd/Makefile ctl/IlmCtlTest/Makefile openexr/CtlModules/Makefile openexr/IlmImfCtl/Makefile openexr/IlmImfCtlTest/Makefile util/Makefile util/ctlrender/Makefile vc/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18834,7 +18845,6 @@ do
     "openexr/IlmImfCtlTest/Makefile") CONFIG_FILES="$CONFIG_FILES openexr/IlmImfCtlTest/Makefile" ;;
     "util/Makefile") CONFIG_FILES="$CONFIG_FILES util/Makefile" ;;
     "util/ctlrender/Makefile") CONFIG_FILES="$CONFIG_FILES util/ctlrender/Makefile" ;;
-    "util/ctldebug/Makefile") CONFIG_FILES="$CONFIG_FILES util/ctldebug/Makefile" ;;
     "vc/Makefile") CONFIG_FILES="$CONFIG_FILES vc/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
