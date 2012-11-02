@@ -95,7 +95,7 @@ class SimdFunctionArg: public FunctionArg
   public:
 
     SimdFunctionArg (const std::string &name,
-		     const FunctionCallPtr &func,
+		     FunctionCall* func,
 		     const DataTypePtr &type,
 		     bool varying,
 		     SimdReg *reg);

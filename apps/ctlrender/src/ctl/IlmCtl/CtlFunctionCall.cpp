@@ -123,7 +123,7 @@ FunctionCall::setReturnValue (const FunctionArgPtr &rval)
 
 FunctionArg::FunctionArg
     (const string &name,
-     const FunctionCallPtr &func,
+     FunctionCall* func,
      const DataTypePtr &type,
      bool varying)
 :
