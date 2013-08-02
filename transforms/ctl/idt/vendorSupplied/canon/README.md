@@ -1,0 +1,1 @@
+Canon Input Device Transform (IDT) files are published on the following website.http://usa.canon.com/cusa/professional/standard_display/aces

@@ -1,5 +1,0 @@
-
-This directory and its subdirectories contain the source code for ctlrender.
-ctlrender is a small application for applying one or more CTL modules to images
-or images sequences in openexr, dpx, and tiff format.  The application is
-capable of writing transformed images in openexr, dpx, and tiff format.
