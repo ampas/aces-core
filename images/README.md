@@ -87,10 +87,8 @@ To confirm your implementation of each transform:
   * **lmt/**
     * *SonyF35.StillLife_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *SonyF35.StillLife.exr*
     * *SonyF35.StillLife_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_lmt_pfe.exr* - `lmt_pfe.ctl` applied to *SonyF35.StillLife.exr*
     * *syntheticChart.01_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *syntheticChart.01.exr*
     * *syntheticChart.01_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *syntheticChart.01.exr*
-    * *syntheticChart.01_lmt_pfe.exr* - `lmt_pfe.ctl` applied to *syntheticChart.01.exr*
 
 **NOTE**: The following image files are included for the confirmation of transform implementations only.  
 ACESlog and ACESproxy image data is **NOT** intended to be written out to image files. See the ACESlog and ACESproxy documentation for more information.

@@ -18,8 +18,8 @@ import "utilities";
 
 
 // ACESproxy12 Parameters
-const float CVmin = 0.;
-const float CVmax = 4095.;
+const int CVmin = 0;
+const int CVmax = 4095;
 const float StepsPerStop = 200.;
 const float MidCVoffset = 1700.;
 const float MidLogOffset = -2.5;
@@ -40,9 +40,18 @@ void main
   float aces[3] = {rIn, gIn, bIn};
 
   int acesProxy[3];
-  acesProxy[0] = max(CVmin, min( CVmax,  ( log10( aces[0])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
-  acesProxy[1] = max(CVmin, min( CVmax,  ( log10( aces[1])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
-  acesProxy[2] = max(CVmin, min( CVmax,  ( log10( aces[2])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
+  if (aces[0] > 0.) 
+    acesProxy[0] = max(CVmin, min( CVmax,  ( log10( aces[0])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
+  else
+    acesProxy[0] = CVmin;
+  if (aces[1] > 0.)
+    acesProxy[1] = max(CVmin, min( CVmax,  ( log10( aces[1])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
+  else
+    acesProxy[1] = CVmin;  
+  if (aces[2] > 0.)
+    acesProxy[2] = max(CVmin, min( CVmax,  ( log10( aces[2])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
+  else
+    acesProxy[2] = CVmin;  
   
 
 

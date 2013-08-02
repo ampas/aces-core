@@ -447,6 +447,22 @@ float cubic_basis_shaper
 }
 
 
+float center_hue( float hue, float centerH)
+{
+  float hueCentered = hue - centerH;
+  if (hueCentered < -180.) hueCentered = hueCentered + 360.;
+  else if (hueCentered > 180.) hueCentered = hueCentered - 360.;
+  return hueCentered;
+}
+
+float uncenter_hue( float hueCentered, float centerH)
+{
+  float hue = hueCentered + centerH;
+  if (hue < 0.) hue = hue + 360.;
+  else if (hue > 360.) hue = hue - 360.;
+  return hue;
+}
+
 // Regions of hue and intensity are targeted using a cubic basis shaper 
 // function. The controls for the shape of this function are the center/peak 
 // (in degrees), and the full width (in degrees) at the base. Values in the 
@@ -455,18 +471,16 @@ float cubic_basis_shaper
 float[3] scale_C_at_H
 ( 
   float yab[3], 
-  float centerH,   // center of targeted hue region
-  float widthH,    // full-width at base of targeted hue region 
+  float centerH,   // center of targeted hue region (in degrees)
+  float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
   float ych[3] = yab_2_ych( yab);
 
-  float hue = ych[2] - centerH;
-  if (hue < -180.) hue = hue + 360.;
-  else if (hue > 180.) hue = hue - 360.;
+  float centeredHue = center_hue( ych[2], centerH);
 
-  float f_H = cubic_basis_shaper( hue, widthH);
+  float f_H = cubic_basis_shaper( centeredHue, widthH);
 
   float new_ych[3] = ych;
   new_ych[1] = ych[1] * (f_H * (percentC - 1.0) + 1.0);
@@ -477,18 +491,16 @@ float[3] scale_C_at_H
 float[3] scale_C_at_H_inv
 ( 
   float yab[3], 
-  float centerH,   // center of targeted hue region
-  float widthH,    // full-width at half maximum (FWHM) of targeted hue region 
+  float centerH,   // center of targeted hue region (in degrees)
+  float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
   float ych[3] = yab_2_ych( yab);
 
-  float hue = ych[2] - centerH;
-  if (hue < -180.) hue = hue + 360.;
-  else if (hue > 180.) hue = hue - 360.;
+  float centeredHue = center_hue( ych[2], centerH);
 
-  float f_H = cubic_basis_shaper( hue, widthH);
+  float f_H = cubic_basis_shaper( centeredHue, widthH);
         
   float new_ych[3] = ych;
   new_ych[1] = ych[1] * 1.0/(f_H * (percentC - 1.0) + 1.0);
