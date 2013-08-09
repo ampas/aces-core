@@ -1,6 +1,6 @@
 //
 // utilities-aces.ctl
-// v0.2
+// v0.2.1
 //
 // Functions used by ACES system transforms that are unlikely to be reused in 
 // algorithms outside of ACES.
@@ -35,7 +35,7 @@ const float RRT_KNOT_END = log10(ACESMAX);
 const float RRT_KNOT_SPAN = RRT_KNOT_END - RRT_KNOT_START;
 const float RRT_KNOT_INC = RRT_KNOT_SPAN / (RRT_KNOT_LEN - 1.);
 
-// These are the coefficients used for WGR5. Before RCv0.2, the number of coefs 
+// These are the coefficients used for WGR5. Before RCv0.2.1, the number of coefs 
 // may be reduced or the B-spline might be replaced with a function.
 const float DEFAULT_RRT_COEFS[23] = {
   -4.00000,
