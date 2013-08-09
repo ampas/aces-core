@@ -1,6 +1,6 @@
 // 
 // Inverse Output Device Transform to an RGB computer monitor
-// v0.2
+// v0.2.1
 //
 
 import "utilities";

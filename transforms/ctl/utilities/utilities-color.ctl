@@ -1,6 +1,6 @@
 //
 // utilities-color.ctl
-// v0.2
+// v0.2.1
 //
 // Color related constants and functions
 //

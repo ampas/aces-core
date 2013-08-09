@@ -1,3 +1,7 @@
+**Version 0.2.1 (August 9, 2013):**
+  * Temporarily removes DCDM ODT
+  * Renames RGB monitor ODT transforms to clarify intended usage (dcsim)
+
 **Version 0.2 (August 2, 2013):**
   * Updates RRT
   * Updates ODTs
