@@ -41,36 +41,27 @@ void main
   // Put input variables into a 3-element array (ACES)
   float aces[3] = {rIn, gIn, bIn};
 
-  // Adjust ACES values
-  float yab[3] = rgb_2_yab( aces);
+  // Adjust ACES values by scaling chroma in the red/magenta region
+  aces = scale_C_at_H( aces, center, width, percent);
 
-    // Scale chroma in red/magenta region
-    yab = scale_C_at_H( yab, center, width, percent);  
+  // Clamp negative ACES values
+  float acesClamp[3] = clamp_f3( aces, -0.05, HALF_POS_INF);
 
-  aces = yab_2_rgb( yab);
-  
   // Convert from ACES RGB encoding to rendering primaries RGB encoding
-  float oces[3];
-  if (yab[0] > 0.0) { // temp. hack to avoid issue that can occur when (Y < 0)
-    float rgbPre[3] = mult_f3_f44( aces, ACES_PRI_2_RENDERING_PRI_MAT);
+  float rgbPre[3] = mult_f3_f44( acesClamp, ACES_PRI_2_RENDERING_PRI_MAT);
 
-      // Apply the RRT tone scale independently to RGB
-      float rgbPost[3];
-      rgbPost[0] = rrt_tonescale_fwd( rgbPre[0]);
-      rgbPost[1] = rrt_tonescale_fwd( rgbPre[1]);
-      rgbPost[2] = rrt_tonescale_fwd( rgbPre[2]);
+    // Apply the RRT tone scale independently to RGB
+    float rgbPost[3];
+    rgbPost[0] = rrt_tonescale_fwd( rgbPre[0]);
+    rgbPost[1] = rrt_tonescale_fwd( rgbPre[1]);
+    rgbPost[2] = rrt_tonescale_fwd( rgbPre[2]);
 
-    // Restore the hue to the pre-tonescale hue
-    float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
+  // Restore the hue to the pre-tonescale hue
+  float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
 
-    // Convert from rendering primaries RGB encoding to OCES RGB encoding
-    oces = mult_f3_f44( rgbRestored, invert_f44(ACES_PRI_2_RENDERING_PRI_MAT));
-  } else {
-    oces[0] = 0.0001;     
-    oces[1] = 0.0001;    
-    oces[2] = 0.0001;
-  }
-    
+  // Convert from rendering primaries RGB encoding to OCES RGB encoding
+  float oces[3] = mult_f3_f44( rgbRestored, invert_f44(ACES_PRI_2_RENDERING_PRI_MAT));
+
   // Assign OCES-RGB to output variables (OCES)
   rOut = oces[0];
   gOut = oces[1];

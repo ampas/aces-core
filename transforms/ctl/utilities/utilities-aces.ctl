@@ -470,42 +470,62 @@ float uncenter_hue( float hueCentered, float centerH)
 // of the function get 0.0 adjustment.
 float[3] scale_C_at_H
 ( 
-  float yab[3], 
+  float rgb[3], 
   float centerH,   // center of targeted hue region (in degrees)
   float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
-  float ych[3] = yab_2_ych( yab);
+  float ych[3] = rgb_2_ych( rgb);
 
   float centeredHue = center_hue( ych[2], centerH);
 
   float f_H = cubic_basis_shaper( centeredHue, widthH);
 
-  float new_ych[3] = ych;
-  new_ych[1] = ych[1] * (f_H * (percentC - 1.0) + 1.0);
+  float new_rgb[3];
+  if (f_H > 0.0) {
+    // Scale chroma in red/magenta region
+    float new_ych[3] = ych;
+    new_ych[1] = ych[1] * (f_H * (percentC - 1.0) + 1.0);
+    new_rgb = ych_2_rgb( new_ych);
+  } else { 
+    // If not in affected hue region, just return original values
+    // This helps to avoid precision errors that can occur in the RGB->YAB->RGB 
+    // conversion
+    new_rgb = rgb; 
+  }
 
-  return ych_2_yab( new_ych);
+  return new_rgb;
 }
 
 float[3] scale_C_at_H_inv
 ( 
-  float yab[3], 
+  float rgb[3], 
   float centerH,   // center of targeted hue region (in degrees)
   float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
-  float ych[3] = yab_2_ych( yab);
+  float ych[3] = rgb_2_ych( rgb);
 
   float centeredHue = center_hue( ych[2], centerH);
 
   float f_H = cubic_basis_shaper( centeredHue, widthH);
-        
-  float new_ych[3] = ych;
-  new_ych[1] = ych[1] * 1.0/(f_H * (percentC - 1.0) + 1.0);
 
-  return ych_2_yab( new_ych);
+  float new_rgb[3];
+  if (f_H > 0.0) {
+    // Scale chroma in red/magenta region
+    float new_ych[3] = ych;
+    new_ych[1] = ych[1] * 1.0/(f_H * (percentC - 1.0) + 1.0);
+    new_rgb = ych_2_rgb( new_ych);
+  } else { 
+    // If not in affected hue region, just return original values
+    // This helps to avoid precision errors that can occur in the RGB->YAB->RGB 
+    // conversion
+    new_rgb = rgb; 
+  }
+
+  return new_rgb;
 }
 
 int[3] order3( float r, float g, float b)
