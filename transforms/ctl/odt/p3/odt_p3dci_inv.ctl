@@ -1,5 +1,5 @@
 // 
-// Inverse P3DCI ODT
+// Inverse P3DCI D60 simulation Output Device Transform
 // v0.2.1
 //
 
@@ -43,7 +43,6 @@ const float SCALE = (OUT_BP - OUT_WP) / (ODT_OCES_BP - ODT_OCES_WP);
 
 
 
-
 void main 
 (
   input varying float rIn, 
@@ -65,7 +64,7 @@ void main
   outputCV[2] = outputCV[2] * MAX_CV;
 
   // Inverse CCTF
-  float linearCV[3]; // in display primary RGB encoding
+  float linearCV[3]; /* in display primary RGB encoding */
   linearCV[0] = pow( outputCV[0] / CV_WHITE, DISPGAMMA);
   linearCV[1] = pow( outputCV[1] / CV_WHITE, DISPGAMMA);
   linearCV[2] = pow( outputCV[2] / CV_WHITE, DISPGAMMA);
@@ -74,7 +73,8 @@ void main
   float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
   
   // Convert CIE XYZ to rendering RGB
-  linearCV = mult_f3_f44( XYZ, XYZ_2_RENDERING_PRI_MAT); // in rendering primary RGB encoding
+  linearCV = mult_f3_f44( XYZ, XYZ_2_RENDERING_PRI_MAT);  
+    /* now in rendering primary RGB encoding */
   
   // Code value to luminance conversion. Scales CV 1.0 to the white point 
   // luminance, OUT_WP and CV 0.0 to OUT_BP.
@@ -88,6 +88,17 @@ void main
   rgbPre[0] = (offset_scaled[0] - BPC) / SCALE;
   rgbPre[1] = (offset_scaled[1] - BPC) / SCALE;
   rgbPre[2] = (offset_scaled[2] - BPC) / SCALE;
+
+  // Undo highlight roll-off and scaling
+  const float new_wht = 0.918;
+  const float roll_width = 0.5;
+  const float scale = 0.96;
+  rgbPre[0] = roll_white_rev( rgbPre[0] / scale / ODT_OCES_WP, 
+                              new_wht, roll_width) * ODT_OCES_WP;
+  rgbPre[1] = roll_white_rev( rgbPre[1] / scale / ODT_OCES_WP, 
+                              new_wht, roll_width) * ODT_OCES_WP;
+  rgbPre[2] = roll_white_rev( rgbPre[2] / scale / ODT_OCES_WP, 
+                              new_wht, roll_width) * ODT_OCES_WP;
 
     // Apply inverse tonescale independently to RGB
     float rgbPost[3];  

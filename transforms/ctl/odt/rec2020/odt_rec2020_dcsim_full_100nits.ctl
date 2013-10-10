@@ -1,5 +1,5 @@
 // 
-// Output Device Transform to UHDTV (Digital Cinema Simulation)
+// Output Device Transform to Rec2020 (D60 Simulation)
 // v0.2.1
 //
 
@@ -101,6 +101,12 @@ void main
 
   // Restore the hue to the pre-tonescale value
   float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
+
+  // Scale and clamp white to avoid casted highlights due to D60 simulation
+  const float scale = 0.955;
+  rgbRestored[0] = min(rgbRestored[0], ODT_OCES_WP) * scale;
+  rgbRestored[1] = min(rgbRestored[1], ODT_OCES_WP) * scale;
+  rgbRestored[2] = min(rgbRestored[2], ODT_OCES_WP) * scale;
 
   // Apply Black Point Compensation
   float offset_scaled[3];

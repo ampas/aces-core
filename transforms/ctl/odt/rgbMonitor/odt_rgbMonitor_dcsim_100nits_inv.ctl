@@ -1,5 +1,5 @@
 // 
-// Inverse Output Device Transform to an RGB computer monitor
+// Inverse Output Device Transform to an RGB computer monitor (D60 simulation)
 // v0.2.1
 //
 
@@ -87,11 +87,17 @@ void main
   rgbPre[1] = (offset_scaled[1] - BPC) / SCALE;
   rgbPre[2] = (offset_scaled[2] - BPC) / SCALE;
 
+  // Remove scaling done for D60 simulation
+  const float scale = 0.955;
+  rgbPre[0] = rgbPre[0] / scale;
+  rgbPre[1] = rgbPre[1] / scale;
+  rgbPre[2] = rgbPre[2] / scale;
+
     // Apply inverse tonescale independently to RGB
     float rgbPost[3];  
-    rgbPost[0] = odt_tonescale_rev( clamp(rgbPre[0],0.0,HALF_POS_INF));
-    rgbPost[1] = odt_tonescale_rev( clamp(rgbPre[1],0.0,HALF_POS_INF));
-    rgbPost[2] = odt_tonescale_rev( clamp(rgbPre[2],0.0,HALF_POS_INF));    
+    rgbPost[0] = odt_tonescale_rev( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_rev( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_rev( rgbPre[2]);    
 
   float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
 

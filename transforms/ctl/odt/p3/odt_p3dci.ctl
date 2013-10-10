@@ -1,5 +1,5 @@
 // 
-// Output Device Transform to P3DCI
+// Output Device Transform to P3DCI D60 Simulation
 // v0.2.1
 //
 
@@ -7,7 +7,8 @@
 // Summary :
 //  This transform is intended for mapping OCES onto a P3 digital cinema 
 //  projector that is calibrated to a DCI white point at 48 cd/m^2. The assumed 
-//  observer adapted white is D60, and the viewing environment is that of a dark //  theater. 
+//  observer adapted white is D60, and the viewing environment is that of a dark
+//  theater. 
 //
 // Device Primaries : 
 //  CIE 1931 chromaticities:  x         y         Y
@@ -93,6 +94,22 @@ void main
   // Restore the hue to the pre-tonescale value
   float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
 
+  // Roll off highlights to avoid need for as much darkening.
+  const float new_wht = 0.918;
+  const float roll_width = 0.5;
+  rgbRestored[0] = roll_white_fwd( rgbRestored[0] / ODT_OCES_WP, 
+                                   new_wht, roll_width) * ODT_OCES_WP;
+  rgbRestored[1] = roll_white_fwd( rgbRestored[1] / ODT_OCES_WP, 
+                                   new_wht, roll_width) * ODT_OCES_WP;
+  rgbRestored[2] = roll_white_fwd( rgbRestored[2] / ODT_OCES_WP, 
+                                   new_wht, roll_width) * ODT_OCES_WP;
+
+  // Clamp white to avoid casted highlights.
+  const float scale = 0.96;
+  rgbRestored[0] = min(rgbRestored[0], ODT_OCES_WP * new_wht) * scale;
+  rgbRestored[1] = min(rgbRestored[1], ODT_OCES_WP * new_wht) * scale;
+  rgbRestored[2] = min(rgbRestored[2], ODT_OCES_WP * new_wht) * scale;
+
   // Apply Black Point Compensation
   float offset_scaled[3];
   offset_scaled[0] = (SCALE * rgbRestored[0]) + BPC;
@@ -124,7 +141,7 @@ void main
   cctf[1] = CV_WHITE * pow( rgbOut[1], 1./DISPGAMMA);
   cctf[2] = CV_WHITE * pow( rgbOut[2], 1./DISPGAMMA);
 
-  float outputCV[3] = clamp_f3( cctf, 0., pow( 2, BITDEPTH)-1);
+  float outputCV[3] = clamp_f3( cctf, MIN_CV, MAX_CV);
   
   /*--- Cast outputCV to rOut, gOut, bOut ---*/
   // **NOTE**: The scaling step below is required when using ctlrender to 

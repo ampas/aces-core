@@ -561,3 +561,57 @@ float[3] restore_hue_dw3( float pre_tone[3], float post_tone[3])
 
    return out;
 }
+
+// Functions to compress highlights to allow the simulated white point w/out clipping.
+float roll_white_fwd( 
+    float in,      // color value to adjust (white scaled to around 1.0)
+    float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
+    float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)
+    )
+{
+    const float x0 = -1.0;
+    const float x1 = x0 + width;
+    const float y0 = -new_wht;
+    const float y1 = x1;
+    const float m1 = (x1 - x0);
+    const float a = y0 - y1 + m1;
+    const float b = 2 * ( y1 - y0) - m1;
+    const float c = y0;
+    const float t = (-in - x0) / (x1 - x0);
+    float out = 0.0;
+    if ( t < 0.0)
+        out = -(t * b + c);
+    else if ( t > 1.0)
+        out = in;
+    else
+        out = -(( t * a + b) * t + c);
+    return out;
+}
+
+float roll_white_rev( 
+    float in,      // color value to adjust (white scaled to around 1.0)
+    float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
+    float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)
+    )
+{
+    const float x0 = -1.0;
+    const float x1 = x0 + width;
+    const float y0 = -new_wht;
+    const float y1 = x1;
+    const float m1 = (x1 - x0);
+    const float a = y0 - y1 + m1;
+    const float b = 2. * ( y1 - y0) - m1;
+    float c = y0;
+    float out = 0.0;
+    if ( -in < y0)
+        out = -x0;
+    else if ( -in > y1)
+        out = in;
+    else {
+        c = c + in;
+        const float discrim = sqrt( b * b - 4. * a * c);
+        const float t = ( 2. * c) / ( -discrim - b);
+        out = -(( t * ( x1 - x0)) + x0);
+    }
+    return out;
+}
