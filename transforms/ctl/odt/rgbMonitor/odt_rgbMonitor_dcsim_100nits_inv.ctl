@@ -9,7 +9,7 @@ import "utilities-aces";
 /* ----- ODT Parameters ------ */
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
+const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(DISPLAY_PRI,1.0);
 
 const Chromaticities RENDERING_PRI = 
 {
@@ -19,7 +19,9 @@ const Chromaticities RENDERING_PRI =
   {0.32168, 0.33767}
 };
 const float XYZ_2_RENDERING_PRI_MAT[4][4] = XYZtoRGB(RENDERING_PRI,1.0);
-const float OCES_PRI_2_RENDERING_PRI_MAT[4][4] = mult_f44_f44( OCES_PRI_2_XYZ_MAT, XYZ_2_RENDERING_PRI_MAT);
+const float RENDERING_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(RENDERING_PRI,1.0);
+const float XYZ_2_OCES_PRI_MAT[4][4] = XYZtoRGB(ACES_PRI,1.0);
+const float RENDERING_PRI_2_OCES_MAT[4][4] = mult_f44_f44( RENDERING_PRI_2_XYZ_MAT, XYZ_2_OCES_PRI_MAT);
 
 // ODT parameters related to black point compensation (BPC) and encoding
 const float ODT_OCES_BP = 0.0016;
@@ -30,6 +32,8 @@ const float OUT_WP = 100.0;
 const unsigned int BITDEPTH = 8;
 const unsigned int CV_BLACK = 0;
 const unsigned int CV_WHITE = pow( 2, BITDEPTH) - 1;
+const unsigned int MIN_CV = 0;
+const unsigned int MAX_CV = pow( 2, BITDEPTH) - 1;
 
 // Derived BPC and scale parameters
 const float BPC = (ODT_OCES_BP * OUT_WP - ODT_OCES_WP * OUT_BP) / 
@@ -52,45 +56,47 @@ void main
   // Put input variables (display code values) into a 3-element vector
   float outputCV[3] = {rIn, gIn, bIn};
 
-  // This step converts 0-1 code values back to integers
-  outputCV = mult_f_f3( pow(2.,BITDEPTH)-1., outputCV);
+  // This step converts 0-1 normalized code values back to integral code values
+  outputCV[0] = outputCV[0] * MAX_CV;
+  outputCV[1] = outputCV[1] * MAX_CV;
+  outputCV[2] = outputCV[2] * MAX_CV;
 
   // Undo CCTF
     // moncurve_f with gamma of 2.4 and offset of 0.055 matches the EOTF found in IEC 61966-2-1:1999 (sRGB)
-  float tmp[3];
-  tmp[0] = moncurve_f( (outputCV[0] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
-  tmp[1] = moncurve_f( (outputCV[1] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
-  tmp[2] = moncurve_f( (outputCV[2] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
+  float linearCV[3];
+  linearCV[0] = moncurve_f( (outputCV[0] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
+  linearCV[1] = moncurve_f( (outputCV[1] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
+  linearCV[2] = moncurve_f( (outputCV[2] - CV_BLACK) / (CV_WHITE - CV_BLACK), 2.4, 0.055);
 
-  float offset_scaled[3];
-  offset_scaled[0] = tmp[0] * (OUT_WP - OUT_BP) + OUT_BP;
-  offset_scaled[1] = tmp[1] * (OUT_WP - OUT_BP) + OUT_BP;
-  offset_scaled[2] = tmp[2] * (OUT_WP - OUT_BP) + OUT_BP;
-    
-  // Undo black point compensation
-  float rgbOut[3];
-  rgbOut[0] = (offset_scaled[0] - BPC) / SCALE;
-  rgbOut[1] = (offset_scaled[1] - BPC) / SCALE;
-  rgbOut[2] = (offset_scaled[2] - BPC) / SCALE;
+  // Convert display primaries to CIE XYZ
+  float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
   
-  rgbOut = clamp_f3( rgbOut, 0., HALF_POS_INF);    
+  // Convert CIE XYZ to rendering RGB
+  linearCV = mult_f3_f44( XYZ, XYZ_2_RENDERING_PRI_MAT); // in rendering primary RGB encoding
+  
+  // Code value to luminance conversion. Scales CV 1.0 to the white point 
+  // luminance, OUT_WP and CV 0.0 to OUT_BP.
+  float offset_scaled[3];
+  offset_scaled[0] = linearCV[0] * (OUT_WP - OUT_BP) + OUT_BP;
+  offset_scaled[1] = linearCV[1] * (OUT_WP - OUT_BP) + OUT_BP;
+  offset_scaled[2] = linearCV[2] * (OUT_WP - OUT_BP) + OUT_BP;
 
-  // Display RGB to CIE XYZ
-  float XYZ[3] = mult_f3_f44( rgbOut, invert_f44(XYZ_2_DISPLAY_PRI_MAT));
+  // Undo black point compensation
+  float rgbPre[3];
+  rgbPre[0] = (offset_scaled[0] - BPC) / SCALE;
+  rgbPre[1] = (offset_scaled[1] - BPC) / SCALE;
+  rgbPre[2] = (offset_scaled[2] - BPC) / SCALE;
 
-  // CIE XYZ to OCES  
-  float rgbPost[3] = mult_f3_f44( XYZ, invert_f44(OCES_PRI_2_XYZ_MAT));
-
-  // OCES to rendering primaries
-  float rgbPre[3] = mult_f3_f44( rgbPost, OCES_PRI_2_RENDERING_PRI_MAT);
-  rgbPost[0] = odt_tonescale_rev( rgbPre[0]);
-  rgbPost[1] = odt_tonescale_rev( rgbPre[1]);
-  rgbPost[2] = odt_tonescale_rev( rgbPre[2]);    
+    // Apply inverse tonescale independently to RGB
+    float rgbPost[3];  
+    rgbPost[0] = odt_tonescale_rev( clamp(rgbPre[0],0.0,HALF_POS_INF));
+    rgbPost[1] = odt_tonescale_rev( clamp(rgbPre[1],0.0,HALF_POS_INF));
+    rgbPost[2] = odt_tonescale_rev( clamp(rgbPre[2],0.0,HALF_POS_INF));    
 
   float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
 
   // Rendering primaries to OCES
-  float oces[3] = mult_f3_f44( rgbRestored, invert_f44(OCES_PRI_2_RENDERING_PRI_MAT));
+  float oces[3] = mult_f3_f44( rgbRestored, RENDERING_PRI_2_OCES_MAT);
 
   rOut = oces[0];
   gOut = oces[1];
