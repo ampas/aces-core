@@ -1,6 +1,6 @@
 //
 // utilities-aces.ctl
-// v0.2.1
+// v0.2.2
 //
 // Functions used by ACES system transforms that are unlikely to be reused in 
 // algorithms outside of ACES.
@@ -470,42 +470,62 @@ float uncenter_hue( float hueCentered, float centerH)
 // of the function get 0.0 adjustment.
 float[3] scale_C_at_H
 ( 
-  float yab[3], 
+  float rgb[3], 
   float centerH,   // center of targeted hue region (in degrees)
   float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
-  float ych[3] = yab_2_ych( yab);
+  float ych[3] = rgb_2_ych( rgb);
 
   float centeredHue = center_hue( ych[2], centerH);
 
   float f_H = cubic_basis_shaper( centeredHue, widthH);
 
-  float new_ych[3] = ych;
-  new_ych[1] = ych[1] * (f_H * (percentC - 1.0) + 1.0);
+  float new_rgb[3];
+  if (f_H > 0.0) {
+    // Scale chroma in red/magenta region
+    float new_ych[3] = ych;
+    new_ych[1] = ych[1] * (f_H * (percentC - 1.0) + 1.0);
+    new_rgb = ych_2_rgb( new_ych);
+  } else { 
+    // If not in affected hue region, just return original values
+    // This helps to avoid precision errors that can occur in the RGB->YAB->RGB 
+    // conversion
+    new_rgb = rgb; 
+  }
 
-  return ych_2_yab( new_ych);
+  return new_rgb;
 }
 
 float[3] scale_C_at_H_inv
 ( 
-  float yab[3], 
+  float rgb[3], 
   float centerH,   // center of targeted hue region (in degrees)
   float widthH,    // full width at base of targeted hue region (in degrees)
   float percentC   // percentage of scale: 1.0 is no adjustment (i.e. 100%)
 )
 {
-  float ych[3] = yab_2_ych( yab);
+  float ych[3] = rgb_2_ych( rgb);
 
   float centeredHue = center_hue( ych[2], centerH);
 
   float f_H = cubic_basis_shaper( centeredHue, widthH);
-        
-  float new_ych[3] = ych;
-  new_ych[1] = ych[1] * 1.0/(f_H * (percentC - 1.0) + 1.0);
 
-  return ych_2_yab( new_ych);
+  float new_rgb[3];
+  if (f_H > 0.0) {
+    // Scale chroma in red/magenta region
+    float new_ych[3] = ych;
+    new_ych[1] = ych[1] * 1.0/(f_H * (percentC - 1.0) + 1.0);
+    new_rgb = ych_2_rgb( new_ych);
+  } else { 
+    // If not in affected hue region, just return original values
+    // This helps to avoid precision errors that can occur in the RGB->YAB->RGB 
+    // conversion
+    new_rgb = rgb; 
+  }
+
+  return new_rgb;
 }
 
 int[3] order3( float r, float g, float b)
@@ -560,4 +580,58 @@ float[3] restore_hue_dw3( float pre_tone[3], float post_tone[3])
    out[ inds[ 2] ] = post_tone[ inds[2] ];
 
    return out;
+}
+
+// Functions to compress highlights to allow the simulated white point w/out clipping.
+float roll_white_fwd( 
+    float in,      // color value to adjust (white scaled to around 1.0)
+    float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
+    float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)
+    )
+{
+    const float x0 = -1.0;
+    const float x1 = x0 + width;
+    const float y0 = -new_wht;
+    const float y1 = x1;
+    const float m1 = (x1 - x0);
+    const float a = y0 - y1 + m1;
+    const float b = 2 * ( y1 - y0) - m1;
+    const float c = y0;
+    const float t = (-in - x0) / (x1 - x0);
+    float out = 0.0;
+    if ( t < 0.0)
+        out = -(t * b + c);
+    else if ( t > 1.0)
+        out = in;
+    else
+        out = -(( t * a + b) * t + c);
+    return out;
+}
+
+float roll_white_rev( 
+    float in,      // color value to adjust (white scaled to around 1.0)
+    float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
+    float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)
+    )
+{
+    const float x0 = -1.0;
+    const float x1 = x0 + width;
+    const float y0 = -new_wht;
+    const float y1 = x1;
+    const float m1 = (x1 - x0);
+    const float a = y0 - y1 + m1;
+    const float b = 2. * ( y1 - y0) - m1;
+    float c = y0;
+    float out = 0.0;
+    if ( -in < y0)
+        out = -x0;
+    else if ( -in > y1)
+        out = in;
+    else {
+        c = c + in;
+        const float discrim = sqrt( b * b - 4. * a * c);
+        const float t = ( 2. * c) / ( -discrim - b);
+        out = -(( t * ( x1 - x0)) + x0);
+    }
+    return out;
 }

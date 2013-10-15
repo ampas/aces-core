@@ -1,6 +1,6 @@
 // 
 // Inverse Reference Rendering Transform (RRT)
-// v0.2.1
+// v0.2.2
 //
 
 import "utilities";
@@ -56,13 +56,8 @@ void main
   // Convert from rendering primaries RGB encoding to ACES RGB encoding
   float aces[3] = mult_f3_f44( rgbRestored, invert_f44(ACES_PRI_2_RENDERING_PRI_MAT));
 
-  // Adjust ACES values
-  float yab[3] = rgb_2_yab( aces);
-
-    // Scale chroma in red/magenta region
-    yab = scale_C_at_H_inv( yab, center, width, percent);
-
-  aces = yab_2_rgb( yab);
+  // Adjust ACES values by undoing chroma scaling in the red/magenta region
+  aces = scale_C_at_H_inv( aces, center, width, percent);
 
   // Assign ACES-RGB to output variables (ACES)
   rOut = aces[0];

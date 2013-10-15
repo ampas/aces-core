@@ -1,5 +1,5 @@
 // 
-// Inverse P3D60 ODT
+// Inverse DCDM ODT (X'Y'Z' to OCES)
 // v0.2.2
 //
 
@@ -7,10 +7,6 @@ import "utilities";
 import "utilities-aces";
 
 /* ----- ODT Parameters ------ */
-const Chromaticities DISPLAY_PRI = P3D60_PRI;
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(DISPLAY_PRI,1.0);
-
 const Chromaticities RENDERING_PRI = 
 {
   {0.73470, 0.26530},
@@ -43,7 +39,6 @@ const float SCALE = (OUT_BP - OUT_WP) / (ODT_OCES_BP - ODT_OCES_WP);
 
 
 
-
 void main 
 (
   input varying float rIn, 
@@ -59,23 +54,20 @@ void main
   // Put input variables (display code values) into a 3-element vector
   float outputCV[3] = {rIn, gIn, bIn};
 
-  // This step converts 0-1 normalized code values back to integral code values
+  // This step scales 0-1 normalized code values back to integral code values
   outputCV[0] = outputCV[0] * MAX_CV;
   outputCV[1] = outputCV[1] * MAX_CV;
   outputCV[2] = outputCV[2] * MAX_CV;
-
-  // Inverse CCTF
-  float linearCV[3]; // in display primary RGB encoding
-  linearCV[0] = pow( outputCV[0] / CV_WHITE, DISPGAMMA);
-  linearCV[1] = pow( outputCV[1] / CV_WHITE, DISPGAMMA);
-  linearCV[2] = pow( outputCV[2] / CV_WHITE, DISPGAMMA);
     
-  // Convert display primaries to CIE XYZ
-  float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
-  
-  // Convert CIE XYZ to rendering RGB
-  linearCV = mult_f3_f44( XYZ, XYZ_2_RENDERING_PRI_MAT); // in rendering primary RGB encoding
-  
+  // Inverse of DCDM color encoding
+  float XYZ[3];
+  XYZ[0] = 52.37/OUT_WP * pow( outputCV[0] / CV_WHITE, DISPGAMMA);
+  XYZ[1] = 52.37/OUT_WP * pow( outputCV[1] / CV_WHITE, DISPGAMMA);
+  XYZ[2] = 52.37/OUT_WP * pow( outputCV[2] / CV_WHITE, DISPGAMMA);
+
+  // Convert XYZ to rendering primaries RGB  
+  float linearCV[3] = mult_f3_f44( XYZ, XYZ_2_RENDERING_PRI_MAT);
+
   // Code value to luminance conversion. Scales CV 1.0 to the white point 
   // luminance, OUT_WP and CV 0.0 to OUT_BP.
   float offset_scaled[3];
