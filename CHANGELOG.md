@@ -1,3 +1,11 @@
+**Version 0.2.2 (October 15, 2013):**
+  * Restores DCDM ODT with bug fixes
+  * Adds a variant of the DCDM ODT that limits X'Y'Z' values to P3D60 gamut
+  * Relabels "dcsim" ODTs as "d60sim"
+  * Modifies highlight handling of "d60sim" ODTs to avoid chromaticity shifts in highlights
+  * Refactors ODTs for consistency and improved readability
+  * Fixes a bug in RRT that could occur when ACES triplets had a negative valued mean
+
 **Version 0.2.1 (August 9, 2013):**
   * Temporarily removes DCDM ODT
   * Renames RGB monitor ODT transforms to clarify intended usage (dcsim)

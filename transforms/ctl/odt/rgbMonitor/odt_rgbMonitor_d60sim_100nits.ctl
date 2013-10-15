@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to an RGB computer monitor (D60 simulation)
-// v0.2.1
+// v0.2.2
 //
 
 //

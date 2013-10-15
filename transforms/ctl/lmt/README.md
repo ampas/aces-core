@@ -35,7 +35,7 @@ The ACESv0.1.1 LMT was created to provide a means to recreate the look of the
 RRT/ODT system that shipped with v0.1.1 of the ACES system.  To create that LMT 
 a series of ACES values were processed through the v0.1.1 RRT and the v0.1.1 
 P3D60 ODT. The resulting P3 code values were then transformed through the 
-inverse v0.2.1 P3D60 ODT and v0.2.1 RRT to yield a corresponding set of ACES' 
+inverse v0.2.2 P3D60 ODT and v0.2.2 RRT to yield a corresponding set of ACES' 
 values. The original ACES values and the ACES' values were used to build a 3DLUT 
 mapping which serves as the ACESv0.1.1 LMT.  The following diagram illustrates 
 the process.
@@ -52,7 +52,7 @@ Generation of the LMT to ACESv0.1.1:
     :  ||  :      |--------|          |-------|           |
     :  \/  :      | Inverse|          |Inverse|           |
     : ACES':<-----| RRT    |<--OCES---| P3D60 |<----------| 
-    : - - -:      | v0.2.1 |          |  ODT  |   
+    : - - -:      | v0.2.2 |          |  ODT  |   
        ::         |--------|          |-------|        
        ::
        ::
@@ -62,7 +62,7 @@ Generation of the LMT to ACESv0.1.1:
                     \/
                 |--------|           |------|          |------|
                 | LMT to |           | RRT  |          | ODT  |
-      ACES ---->|  ACES  |---ACES'-->|v0.2.1|---OCES-->|v0.2.1|--> code values
+      ACES ---->|  ACES  |---ACES'-->|v0.2.2|---OCES-->|v0.2.2|--> code values
                 | v0.1.1 |           |------|          |------|
                 |--------|
 

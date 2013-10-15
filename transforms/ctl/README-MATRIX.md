@@ -135,7 +135,20 @@ Equivalent math:
     G_out =  0.0000000000 * R_in +  1.0889026272 * G_in + -0.0889026272 * B_in;
     B_out =  0.0000000000 * R_in + -0.0000000000 * G_in +  1.0000000000 * B_in;
 
+#### Rendering Primaries-to-XYZ Matrix ####
+In the code, matrix is created by:
 
+    const float RENDERING_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(RENDERING_PRI,1.0);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, RENDERING_PRI_2_XYZ_MAT);
+
+Equivalent math:
+
+    R_out =  0.8000516801 * R_in +  0.0000000000 * G_in +  0.1525943944 * B_in;
+    G_out =  0.2888984766 * R_in +  0.6687155292 * G_in +  0.0423859942 * B_in;
+    B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  1.0088251844 * B_in;
 
 
 #### XYZ-to-P3D60 Primaries Matrix ####
