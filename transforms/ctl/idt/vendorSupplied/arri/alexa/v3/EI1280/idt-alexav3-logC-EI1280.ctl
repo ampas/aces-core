@@ -1,7 +1,7 @@
 
 // ARRI ALEXA IDT for ALEXA logC files
 //  with camera EI set to 1280
-// Written by v3_IDT_maker.py v0.07 on Saturday 10 March 2012 by josephgoldstone
+// Written by v3_IDT_maker.py v0.08 on Wednesday 20 November 2013 by jgoldstone
 
 float
 normalizedLogCToRelativeExposure(float x) {

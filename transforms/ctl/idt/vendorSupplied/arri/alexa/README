@@ -2,8 +2,9 @@ The IDT maker package for the ARRI ALEXA camera includes the following files:
     README (this file)
     v2_IDT_maker.py
     v3_IDT_maker.py
-    alexa_aces_idt.txt
-    alexa_nd_1pt3_aces_idt.txt
+    AlexaParameters-2013-Nov-13
+      Alexa_aces_matrix.txt
+      Alexa-st-nd-aces_matrix.txt
     idt_maker_script.csh
 
 v2_IDT_maker.py generates IDTs appropriate for imagery produced with SUP 2.0 firmware loaded.
