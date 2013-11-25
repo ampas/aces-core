@@ -2,7 +2,7 @@
 // ARRI ALEXA IDT for ALEXA logC files
 //  with camera EI set to 200
 //  and CCT of adopted white set to 4700K
-// Written by v2_IDT_maker.py v0.05 on Saturday 10 March 2012 by josephgoldstone
+// Written by v2_IDT_maker.py v0.05 on Wednesday 20 November 2013 by jgoldstone
 
 float
 normalizedLogC2ToRelativeExposure(float x) {
@@ -27,9 +27,9 @@ void main
 	float g_lin = normalizedLogC2ToRelativeExposure(gIn);
 	float b_lin = normalizedLogC2ToRelativeExposure(bIn);
 
-	rOut = r_lin * 0.790584 + g_lin * 0.133665 + b_lin * 0.075751;
-	gOut = r_lin * 0.068954 + g_lin * 1.065978 + b_lin * -0.134932;
-	bOut = r_lin * 0.041900 + g_lin * -0.298330 + b_lin * 1.256430;
+	rOut = r_lin * 0.788969 + g_lin * 0.137209 + b_lin * 0.073821;
+	gOut = r_lin * 0.067712 + g_lin * 1.069232 + b_lin * -0.136944;
+	bOut = r_lin * 0.040314 + g_lin * -0.294560 + b_lin * 1.254246;
 	aOut = 1.0;
 
 }

@@ -68,7 +68,8 @@ def emitHeader(myName, EI, CCT, logC) :
     else :
         print "// ARRI ALEXA IDT for ALEXA linear files"
     print "//  with camera EI set to %d" % EI
-    print "//  and CCT of adopted white set to %dK" % CCT
+    if CCT != "ignored" :
+        print "//  and CCT of adopted white set to %dK" % CCT
     print "// Written by %s v%s on %s by %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"), getenv('USER'))
     print ""
 
@@ -118,7 +119,7 @@ def getIDTMatrix(cct) :
     '''
     Load video matrix coefficients and interpolate for CCT
     '''
-    alexaMatrixFile = pathInExecutableDir("alexa_aces_idt.txt")
+    alexaMatrixFile = pathInExecutableDir("AlexaParameters-2013-Nov-13/Alexa_aces_matrix.txt")
     mtab = loadtxt(alexaMatrixFile, skiprows=3)
     i = searchsorted(mtab[...,0], cct)
     if i == size(mtab, 0) - 1:
@@ -150,11 +151,10 @@ if __name__ == '__main__':
     CCT = float(sys.argv[2])
     logC = sys.argv[3].lower()
 
+    emitHeader(myName, EI, CCT, logC)
     if logC == "logc" :
-        emitHeader(myName, EI, CCT, logC)
         emitLogC2InverseFunction(EI)
     elif logC == "raw" :
-        emitHeader(myName, EI, CCT, logC)
         emitRawSupport(CCT)
     else :
         usage(myName)
