@@ -120,6 +120,24 @@ float log2(float x)
   return log(x) / log(2.);
 }
 
+int sign( float x)
+{
+	// Signum function:
+  //  sign(X) returns 1 if the element is greater than zero, 0 if it equals zero 
+  //  and -1 if it is less than zero
+
+	int y;
+	if (x < 0) { 
+		y = -1;
+	} else if (x > 0) {
+		y = 1;
+	} else {
+		y = 0;
+	}
+
+	return y;	
+}
+
 void print_f3( float m[ 3])
 {
    print( m[ 0], ",\t", m[ 1], ",\t", m[ 2], "\n");
