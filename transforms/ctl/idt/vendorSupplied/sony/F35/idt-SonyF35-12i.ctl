@@ -1,7 +1,7 @@
 
 
 //
-// IDT for 10-bit S-Log/S-Gamut Sony cameras
+// IDT for Sony F35 Cameras - 12 bits
 // Provided by Sony Electronics Corp.
 //
 
@@ -16,16 +16,31 @@ const float SGAMUT_TO_ACES_MTX[3][3] = {
 	{ 0.111968437, -0.026610548,  1.005253201 }
 };
 
+const float B = 256.;
+const float AB = 360.;
+const float W = 3760.;
+
 
 
 
 
 /* ============ SUBFUNCTIONS ============ */
-float SLog10_to_lin (
-	float SLog
+float SLog1_to_lin (
+	float SLog,
+	float b,
+	float ab,
+	float w
 )
 {
-	return (pow(10,((((SLog/4-16)/219)-0.616596-0.03)/0.432699))-0.037584)*0.9;
+	float lin;
+	
+	if (SLog >= ab)
+		lin = ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) * 0.9;
+	else if (SLog < ab) 
+		lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 5.) * 0.9;
+	
+	return lin;
+	
 }
 
 
@@ -47,19 +62,19 @@ main
 {
 	// Prepare input values based on application bit depth handling
 	float SLog[3];
-	SLog[0] = rIn * 1023.0;
-	SLog[1] = gIn * 1023.0;
-	SLog[2] = bIn * 1023.0;
+	SLog[0] = rIn * 4095.;
+	SLog[1] = gIn * 4095.;
+	SLog[2] = bIn * 4095.;
 
-	// 10-bit Sony S-log to linear S-gamut
+	// 12-bit Sony S-log to linear S-gamut
 	float lin[3];
-	lin[0] = SLog10_to_lin( SLog[0]);
-	lin[1] = SLog10_to_lin( SLog[1]);
-	lin[2] = SLog10_to_lin( SLog[2]);
-	
+	lin[0] = SLog1_to_lin( SLog[0], B, AB, W);
+	lin[1] = SLog1_to_lin( SLog[1], B, AB, W);
+	lin[2] = SLog1_to_lin( SLog[2], B, AB, W);
+
 	// S-Gamut to ACES matrix
 	float aces[3] = mult_f3_f33( lin, SGAMUT_TO_ACES_MTX);
-
+	
 	rOut = aces[0];
 	gOut = aces[1];
 	bOut = aces[2];
