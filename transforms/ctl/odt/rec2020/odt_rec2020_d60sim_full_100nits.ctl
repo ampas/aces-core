@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to Rec2020 (D60 simulation)
-// Working Group Release 6
+// v0.7
 //
 
 //

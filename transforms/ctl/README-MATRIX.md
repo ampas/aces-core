@@ -60,51 +60,6 @@ Note that the values of the matrix coefficients are rounded to 10 decimal places
 
 
 
-#### ACES-to-XYZ Matrix ####
-In the code, matrix is created by:
-
-    const float ACES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-
-and the operator would be:
-  
-    const float RGB_out[3] = mult_f3_f44( RGB_in, ACES_PRI_2_XYZ_MAT);
-
-Equivalent math:
-
-    R_out =  0.9525523959 * R_in +  0.0000000000 * G_in +  0.0000936786 * B_in;
-    G_out =  0.3439664498 * R_in +  0.7281660966 * G_in + -0.0721325464 * B_in;
-    B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  1.0088251844 * B_in;
-
-#### XYZ-to-Rendering Primaries Matrix ####
-In the code, matrix is created by:
-
-    const float XYZ_2_RENDERING_PRI_MAT[4][4] = XYZtoRGB(RENDERING_PRI,1.0);
-
-and the operator would be:
-  
-    const float RGB_out[3] = mult_f3_f44( RGB_in, XYZ_2_RENDERING_PRI_MAT);
-
-Equivalent math:
-
-    R_out =  1.2499192550 * R_in +  0.0000000000 * G_in + -0.1890621634 * B_in;
-    G_out = -0.5399901047 * R_in +  1.4954041836 * G_in +  0.0188489247 * B_in;
-    B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  0.9912520182 * B_in;
-
-#### ACES-to-Rendering Primaries Matrix ####
-In the code, matrix is created by:
-
-    const float ACES_PRI_2_RENDERING_PRI_MAT[4][4] = mult_f44_f44( ACES_PRI_2_XYZ_MAT, XYZ_2_RENDERING_PRI_MAT);
-
-and the operator would be:
-  
-    const float RGB_out[3] = mult_f3_f44( RGB_in, ACES_PRI_2_RENDERING_PRI_MAT);
-
-Equivalent math:
-
-    R_out =  1.1906135811 * R_in + -0.0000000000 * G_in + -0.1906135811 * B_in;
-    G_out =  0.0000000000 * R_in +  1.0889026272 * G_in + -0.0889026272 * B_in;
-    B_out =  0.0000000000 * R_in + -0.0000000000 * G_in +  1.0000000000 * B_in;
-
 #### OCES-to-XYZ Matrix ####
 In the code, matrix is created by:
 
@@ -120,37 +75,6 @@ Equivalent math:
     G_out =  0.3439664498 * R_in +  0.7281660966 * G_in + -0.0721325464 * B_in;
     B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  1.0088251844 * B_in;
 
-#### OCES-to-Rendering Primaries Matrix ####
-In the code, matrix is created by:
-
-    const float OCES_PRI_2_RENDERING_PRI_MAT[4][4] = mult_f44_f44( OCES_PRI_2_XYZ_MAT, XYZ_2_RENDERING_PRI_MAT);
-
-and the operator would be:
-  
-    const float RGB_out[3] = mult_f3_f44( RGB_in, OCES_PRI_2_RENDERING_PRI_MAT);
-
-Equivalent math:
-
-    R_out =  1.1906135811 * R_in + -0.0000000000 * G_in + -0.1906135811 * B_in;
-    G_out =  0.0000000000 * R_in +  1.0889026272 * G_in + -0.0889026272 * B_in;
-    B_out =  0.0000000000 * R_in + -0.0000000000 * G_in +  1.0000000000 * B_in;
-
-#### Rendering Primaries-to-XYZ Matrix ####
-In the code, matrix is created by:
-
-    const float RENDERING_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(RENDERING_PRI,1.0);
-
-and the operator would be:
-  
-    const float RGB_out[3] = mult_f3_f44( RGB_in, RENDERING_PRI_2_XYZ_MAT);
-
-Equivalent math:
-
-    R_out =  0.8000516801 * R_in +  0.0000000000 * G_in +  0.1525943944 * B_in;
-    G_out =  0.2888984766 * R_in +  0.6687155292 * G_in +  0.0423859942 * B_in;
-    B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  1.0088251844 * B_in;
-
-
 #### XYZ-to-P3D60 Primaries Matrix ####
 In the code, matrix is created by:
 
@@ -165,6 +89,21 @@ Equivalent math:
     R_out =  2.4027414142 * R_in + -0.8974841639 * G_in + -0.3880533700 * B_in;
     G_out = -0.8325796487 * R_in +  1.7692317536 * G_in +  0.0237127115 * B_in;
     B_out =  0.0388233815 * R_in + -0.0824996856 * G_in +  1.0363685997 * B_in;
+
+#### P3D60-to-XYZ Matrix ####
+In the code, matrix is created by:
+
+    const float P3D60_2_XYZ_MAT[4][4] = RGBtoXYZ(P3D60_PRI,1.0);
+
+and the operator would be:
+  
+    const float XYZ_out[3] = mult_f3_f44( RGB_in, P3D60_2_XYZ_PRI_MAT);
+
+Equivalent math:
+
+	X_out =  0.5049495342 * R_in +  0.2646814889 * G_in +  0.1830150515 * B_in;
+	Y_out =  0.2376233102 * R_in +  0.6891706692 * G_in +  0.0732060206 * B_in;
+	Z_out =  0.0000000000 * R_in +  0.0449459132 * G_in +  0.9638792711 * B_in;
 
 #### XYZ-to-P3DCI Primaries Matrix ####
 In the code, matrix is created by:
@@ -222,6 +161,6 @@ and the operator would be:
 
 Equivalent math:
 
-    X_out =  0.9872445042 * X_in + -0.0061028182 * Y_in +  0.0159344833 * Z_in;
-    Y_out = -0.0075844777 * X_in +  1.0018548519 * Y_in +  0.0053234903 * Z_in;
-    Z_out =  0.0030693210 * X_in + -0.0050907983 * Y_in +  1.0815907271 * Z_in;
+    X_out =  0.987224   * X_in + -0.00611327 * Y_in +  0.0159533  * Z_in;
+    Y_out = -0.00759836 * X_in +  1.00186    * Y_in +  0.00533002 * Z_in;
+    Z_out =  0.00307257 * X_in + -0.00509595 * Y_in +  1.08168    * Z_in;

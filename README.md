@@ -25,75 +25,19 @@ images, and documentation.
 
 ### Changes from Previous Releases ###
 
-__Reference Rendering Transform__
+*  Updates forward and inverse RRT
+*  Updates forward and inverse ODTs
+*  Updates the ARRI Alexa and Sony IDTs
+*  Fixes a typo in the ACES-to-ACESproxy10 transform
 
-The Reference Rendering Transform (RRT) included with this release has changed
-substantially from previous versions.  These changes greatly simplify the
-algorithm while also changing the default look of the images to something that
-is believed to be a better starting point for creative adjustments. 
-
-The algorithmic complexity of previous RRT versions prohibited the creation of a
-closed-form inverse.  This complicated the creation of custom looks that
-required an inverse RRT.  This package includes both forward and
-inverse RRT and ODTs enabling the creation of Look Modification Transforms
-(LMTs) using those transforms. Gamut coverage has been increased compared to
-previous versions in both OCES and the output display color spaces ensuring full
-compatibility with existing and future display devices.  Through the use of LMTs
-an infinite number of custom looks is now possible.
-
-Feedback on previous versions of the RRT indicated deficiencies in some highly
-saturated colors and a decreased ability to grade around the default look using
-common color grading tools.  Both these issues have been addressed with the
-version of the RRT included in this package.  As noted earlier, this alters the
-default look associated with the ACES system but an LMT has been provided for
-those who preferred the look associated with ACES v0.1.1.
-
-__Output Device Transforms__
-
-The form of the Output Device Transforms (ODTs) included with this release has
-changed from previous versions.  These ODTs better handle differences between
-display devices such as black point, white point, and gamut differences.  These
-changes represent the latest work from the ACES committee, however, work on ODTs
-is on-going and future improvements are expected.
-
-This package includes numerous ODTs not in the previous release.  See the
-comments in the CTL transforms located in [`transforms/ctl/odt`](./transforms/ctl/odt) for more details.
-
-__Look Modification Transforms__
-
-This version of the ACES developer resources package includes sample Look
-Modification Transforms (LMTs).  These LMTs are provided as proof-of-concept
-implementations.  See [`transforms/ctl/lmt/README.md`](./transforms/ctl/lmt/README.md) for more information.
-
-__Input Device Transforms__
-
-The Input Device Transforms (IDTs) included with this package have been moved to
-a subdirectory labeled `vendorSupplied`.  Additional camera IDTs are now
-available from that directory.  They are provided as part of this repository for
-convenience only.  Users should always contact the manufacturer directly to
-confirm they have the latest IDTs for their camera.  See
-[`transforms/ctl/idt/README.md`](./transforms/ctl/idt/README.md) for more information
-
-__ACESproxy and ACESlog__
-
-Two new encodings known as ACESproxy and ACESlog are now included with this
-package.  They are intended to enable consistent on-set preview and color
-grading of ACES images.  See the associated documents, images, and reference
-implementations for more details.
-
-__Package Contents Changes__
-
-The package contents has changed from previous releases.  All image and
-document binary files have been moved out of the git repository and are now
-hosted on dropbox.  This was done to avoid the git repository becoming
-unmanageably large.  The ctlrender application previously supplied as part of
-this package has now been moved to the official CTL git repository.
+For a detailed list of changes see the [CHANGELOG](../CHANGELOG.md).
 
 ### Versioning ###
  
 The links to the current and all past versions of the ACES Developer Resources
-can be found version controlled with the git source control management system
-and hosted on Github at https://github.com/ampas/aces-dev.
+can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
+
+Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
 
 ### Branch Structure ###
 

@@ -1,6 +1,6 @@
 // 
 // Inverse Reference Rendering Transform (RRT)
-// Working Group Release 6
+// v0.7
 //
 
 import "utilities";

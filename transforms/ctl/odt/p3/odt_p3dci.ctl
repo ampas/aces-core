@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to P3DCI D60 Simulation
-// Working Group Release 6
+// v0.7
 //
 
 //

@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to Rec709
-// Working Group Release 6
+// v0.7
 //
 
 //

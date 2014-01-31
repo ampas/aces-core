@@ -1,6 +1,6 @@
 // 
 // Inverse Rec709 Output Device Transform
-// Working Group Release 6
+// v0.7
 //
 
 

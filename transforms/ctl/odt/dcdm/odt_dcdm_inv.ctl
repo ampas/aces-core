@@ -1,6 +1,6 @@
 // 
 // Inverse DCDM ODT (X'Y'Z' to OCES)
-// Working Group Release 6
+// v0.7
 //
 
 

@@ -1,6 +1,6 @@
 // 
 // Inverse Output Device Transform to an RGB computer monitor (D60 simulation)
-// Working Group Release 6
+// v0.7
 //
 
 

@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to P3D60
-// Working Group Release 6
+// v0.7
 //
 
 //

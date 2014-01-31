@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to X'Y'Z'
-// Working Group Release 6
+// v0.7
 //
 
 // 

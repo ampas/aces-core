@@ -1,6 +1,6 @@
 // 
 // Inverse P3D60 ODT
-// Working Group Release 6
+// v0.7
 //
 
 

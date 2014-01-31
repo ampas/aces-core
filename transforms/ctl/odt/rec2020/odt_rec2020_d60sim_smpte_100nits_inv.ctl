@@ -1,6 +1,6 @@
 // 
 // Inverse Rec2020 Output Device Transform (D60 simulation)
-// Working Group Release 6
+// v0.7
 //
 
 
