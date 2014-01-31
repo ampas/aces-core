@@ -90,8 +90,10 @@ To confirm your implementation of each transform:
     * *syntheticChart.01_oces_from_rgbMonitor_d60sim_100nits_inv.exr* - `odt_rgbMonitor_d60sim_100nits_inv.ctl` applied to *syntheticChart.01_rgbMonitor_d60sim_100nits.tiff*
   * **lmt/**
     * *SonyF35.StillLife_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.@.ctl` applied to *SonyF35.StillLife.exr*
     * *SonyF35.StillLife_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *SonyF35.StillLife.exr*
     * *syntheticChart.01_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *syntheticChart.01.exr*
+    * *syntheticChart.01_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.2.ctl` applied to *syntheticChart.01.exr*
     * *syntheticChart.01_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *syntheticChart.01.exr*
 
 **NOTE**: The following image files are included for the confirmation of transform implementations only.  
