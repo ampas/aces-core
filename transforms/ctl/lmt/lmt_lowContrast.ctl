@@ -1,11 +1,10 @@
 
 //
 // LMT for lower default contrast 
-// v0.2.2
+// v0.7
 //
 
 import "utilities";
-import "utilities-aces";
 
 
 float logacesf_bl_2_aces( float logacesf)

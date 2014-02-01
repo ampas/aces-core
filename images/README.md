@@ -1,6 +1,10 @@
 ## Reference Images ##
 
-Reference, or "golden", images have been provided in order to help you verify your implementation of the reference color transformations. Each provided file is the output of one of the transforms included with the system. One pictorial, one synthetically generated test chart, and one file representative of a film scan have been provided.
+Reference, or "golden", images have been provided in order to help you verify 
+your implementation of the reference color transformations. Each provided file 
+is the output of one of the transforms included with the system. One pictorial, 
+one synthetically generated test chart, and one file representative of a film 
+scan have been provided.
 
 The reference images can be downloaded individually or as a zip file from: 
 <https://www.dropbox.com/sh/bwfrqgyt20gz4dp/XShJffwvXR>
@@ -18,7 +22,7 @@ To confirm your implementation of each transform:
     * *SonyF35.StillLife.dpx* - pictorial camera original file
   * **aces/**
     * *DigitalLAD.2048x1556.exr* - `adx10_to_aces.ctl` applied to *DigitalLAD.2048x1556.dpx*
-    * *SonyF35.StillLife.exr* - `S-log10_to_ACES.ctl` applied to *SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife.exr* - `idt-SonyF35-10i.ctl` applied to *SonyF35.StillLife.dpx*
     * *syntheticChart.01.exr* - synthetic ACES image
   * **oces/**
     * *SonyF35.StillLife_oces.exr* - `rrt.ctl` applied to *SonyF35.StillLife.exr*
@@ -90,8 +94,10 @@ To confirm your implementation of each transform:
     * *syntheticChart.01_oces_from_rgbMonitor_d60sim_100nits_inv.exr* - `odt_rgbMonitor_d60sim_100nits_inv.ctl` applied to *syntheticChart.01_rgbMonitor_d60sim_100nits.tiff*
   * **lmt/**
     * *SonyF35.StillLife_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.2.ctl` applied to *SonyF35.StillLife.exr*
     * *SonyF35.StillLife_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *SonyF35.StillLife.exr*
     * *syntheticChart.01_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *syntheticChart.01.exr*
+    * *syntheticChart.01_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.2.ctl` applied to *syntheticChart.01.exr*
     * *syntheticChart.01_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *syntheticChart.01.exr*
 
 **NOTE**: The following image files are included for the confirmation of transform implementations only.  

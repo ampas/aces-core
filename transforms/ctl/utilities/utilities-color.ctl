@@ -1,6 +1,6 @@
 //
 // utilities-color.ctl
-// v0.2.2
+// v0.7
 //
 // Color related constants and functions
 //
@@ -93,62 +93,46 @@ float[3] xyY_2_XYZ( input varying float xyY[3])
 }
 
 
-// Transformations between an RGB space, a "Yab" space, and a "YCH" space
-const float sqrt3over4 = 0.433012701892219;  // sqrt(3.)/4.
-const float RGB_2_YAB_MAT[3][3] = {
-  {1./3., 1./2., 0.0},
-  {1./3., -1./4.,  sqrt3over4},
-  {1./3., -1./4., -sqrt3over4}
-};
-
-float[3] rgb_2_yab( float rgb[3])
+// Transformations from RGB to other color representations
+float rgb_2_hue( float rgb[3]) 
 {
-  float yab[3] = mult_f3_f33( rgb, RGB_2_YAB_MAT);
+  // Returns a geometric hue angle in degrees (0-360) based on RGB values.
+  // For neutral colors, hue is undefined and the function will return a quiet NaN value.
+  float hue;
+  if (rgb[0] == rgb[1] && rgb[1] == rgb[2]) {
+    hue = FLT_NAN; // RGB triplets where RGB are equal have an undefined hue
+  } else {
+    hue = (180./M_PI) * atan2( sqrt(3)*(rgb[1]-rgb[2]), 2*rgb[0]-rgb[1]-rgb[2]);
+  }
+    
+  if (hue < 0.) hue = hue + 360.;
 
-  return yab;
+  return hue;
 }
 
-float[3] yab_2_rgb( float yab[3])
+float rgb_2_yc( float rgb[3], float ycRadiusWeight = 1.75)
 {
-  float rgb[3] = mult_f3_f33( yab, invert_f33(RGB_2_YAB_MAT));
+  // Converts RGB to a luminance proxy, here called YC
+  // YC is ~ Y + K * Chroma
+  // Constant YC is a cone-shaped surface in RGB space, with the tip on the 
+  // neutral axis, towards white.
+  // YC is normalized: RGB 1 1 1 maps to YC = 1
+  //
+  // ycRadiusWeight defaults to 1.75, although can be overridden in function 
+  // call to rgb_2_yc
+  // ycRadiusWeight = 1 -> YC for pure cyan, magenta, yellow == YC for neutral 
+  // of same value
+  // ycRadiusWeight = 2 -> YC for pure red, green, blue  == YC for  neutral of 
+  // same value.
 
-  return rgb;
+  float r = rgb[0]; 
+  float g = rgb[1]; 
+  float b = rgb[2];
+  
+  float chroma = sqrt(b*(b-g)+g*(g-r)+r*(r-b));
+
+  return ( b + g + r + ycRadiusWeight * chroma) / 3.;
 }
-
-float[3] yab_2_ych( float yab[3])
-{
-  float ych[3] = yab;
-
-  ych[1] = sqrt( pow( yab[1], 2.) + pow( yab[2], 2.) );
-
-  ych[2] = atan2( yab[2], yab[1] ) * (180.0 / M_PI);
-  if (ych[2] < 0.0) ych[2] = ych[2] + 360.;
-
-  return ych;
-}
-
-float[3] ych_2_yab( float ych[3] ) 
-{
-  float yab[3];
-  yab[0] = ych[0];
-
-  float h = ych[2] * (M_PI / 180.0);
-  yab[1] = ych[1]*cos(h);
-  yab[2] = ych[1]*sin(h);
-
-  return yab;
-}
-
-float[3] rgb_2_ych( float rgb[3]) 
-{
-  return yab_2_ych( rgb_2_yab( rgb));
-}
-
-float[3] ych_2_rgb( float ych[3]) 
-{
-  return yab_2_rgb( ych_2_yab( ych));
-}
-
 
 
 
@@ -167,8 +151,8 @@ const float CONE_RESP_MAT_CAT02[3][3] = {
 };
 
 float[3][3] calculate_cat_matrix
-  ( float src_xy[2],         // Chromaticity of source white
-    float des_xy[2],         // Chromaticity of destination white
+  ( float src_xy[2],         // x,y chromaticity of source white
+    float des_xy[2],         // x,y chromaticity of destination white
     float coneRespMat[3][3] = CONE_RESP_MAT_BRADFORD
   )
 {

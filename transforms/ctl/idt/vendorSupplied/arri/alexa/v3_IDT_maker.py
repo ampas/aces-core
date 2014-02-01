@@ -7,7 +7,7 @@ from datetime import date
 from numpy import *
 
 # Globals
-IDT_maker_version = "0.07"
+IDT_maker_version = "0.08"
 
 nominalEI = 400.0
 blackSignal = 0.003907
@@ -69,7 +69,7 @@ def emitHeader(myName, EI, CCT, logC) :
     else :
         print "// ARRI ALEXA IDT for ALEXA linear files"
     print "//  with camera EI set to %d" % EI
-    if logC == "raw" :
+    if CCT != "ignored" :
         print "//  and CCT of adopted white set to %dK" % CCT
     print "// Written by %s v%s on %s by %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"), getenv('USER'))
     print ""
@@ -93,6 +93,8 @@ def emitMain(EI, CCT, logC, ND) :
     print "{"
     print ""
     if logC == "logc" :
+        # chromatically adapt (using CAT02) from ALEXA WG primaries and D65 white point
+        # to ACES RGB primaries & ACES white point
         WG2A = array( [ (0.680206, 0.236137, 0.083658),
                         (0.085415, 1.017471, -0.102886),
                         (0.002057, -0.062563, 1.060506) ] );
@@ -123,7 +125,7 @@ def getIDTMatrix(cct, ND) :
     '''
     Load video matrix coefficients and interpolate for CCT
     '''
-    alexaMatrixFile = pathInExecutableDir("alexa_nd_1pt3_aces_idt.txt" if ND == "nd-1pt3" else "alexa_aces_idt.txt")
+    alexaMatrixFile = pathInExecutableDir("AlexaParameters-2013-Nov-13/Alexa-st-nd-aces_matrix.txt" if ND == "nd-1pt3" else "AlexaParameters-2013-Nov-13/Alexa_aces_matrix.txt")
     mtab = loadtxt(alexaMatrixFile, skiprows=3)
     i = searchsorted(mtab[...,0], cct)
     if i == size(mtab, 0) - 1:

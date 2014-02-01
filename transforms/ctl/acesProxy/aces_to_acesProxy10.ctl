@@ -47,7 +47,7 @@ void main
   if (aces[1] > 0.)
     acesProxy[1] = max(CVmin, min( CVmax,  ( log10( aces[1])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
   else
-    aces[1] = CVmin;  
+    acesProxy[1] = CVmin;  
   if (aces[2] > 0.)
     acesProxy[2] = max(CVmin, min( CVmax,  ( log10( aces[2])/(log10(2)) - MidLogOffset) * StepsPerStop + MidCVoffset ) ) + 0.5;
   else

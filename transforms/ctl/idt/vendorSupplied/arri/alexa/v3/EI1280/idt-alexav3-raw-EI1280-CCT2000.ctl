@@ -2,7 +2,7 @@
 // ARRI ALEXA IDT for ALEXA linear files
 //  with camera EI set to 1280
 //  and CCT of adopted white set to 2000K
-// Written by v3_IDT_maker.py v0.07 on Saturday 10 March 2012 by josephgoldstone
+// Written by v3_IDT_maker.py v0.08 on Wednesday 20 November 2013 by jgoldstone
 
 const float EI = 1280.0;
 const float black = 256.0 / 65535.0;
@@ -25,9 +25,9 @@ void main
 	float b_lin = (bIn - black) * exp_factor;
 
 	// convert to ACES primaries using CCT-dependent matrix
-	rOut = r_lin * 0.795933 + g_lin * 0.042336 + b_lin * 0.161731;
-	gOut = r_lin * -0.019505 + g_lin * 1.075681 + b_lin * -0.056176;
-	bOut = r_lin * 0.013338 + g_lin * -0.387268 + b_lin * 1.373929;
+	rOut = r_lin * 0.794897 + g_lin * 0.044675 + b_lin * 0.160428;
+	gOut = r_lin * -0.020296 + g_lin * 1.077981 + b_lin * -0.057685;
+	bOut = r_lin * 0.012145 + g_lin * -0.384829 + b_lin * 1.372683;
 	aOut = 1.0;
 
 }

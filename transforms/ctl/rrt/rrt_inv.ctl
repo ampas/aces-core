@@ -1,27 +1,12 @@
 // 
 // Inverse Reference Rendering Transform (RRT)
-// v0.2.2
+// v0.7
 //
 
 import "utilities";
-import "utilities-aces";
+import "transforms-common";
+import "rrt-transform-common";
 
-const Chromaticities RENDERING_PRI = 
-{
-  {0.73470, 0.26530},
-  {0.00000, 1.00000},
-  {0.12676, 0.03521},
-  {0.32168, 0.33767}
-};
-
-const float ACES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-const float XYZ_2_RENDERING_PRI_MAT[4][4] = XYZtoRGB(RENDERING_PRI,1.0);
-const float ACES_PRI_2_RENDERING_PRI_MAT[4][4] = mult_f44_f44( ACES_PRI_2_XYZ_MAT, XYZ_2_RENDERING_PRI_MAT);
-
-// Chroma scaling parameters
-const float center = 350.;    // center hue (in degrees)
-const float width = 140.;     // full base width (in degrees)
-const float percent = 0.83;   // percent scale (0-1)
 
 // Inverse Reference Rendering Transform (RRT)
 //   Input is OCES RGB (linearly encoded)
@@ -38,30 +23,50 @@ void main
   output varying float aOut
 )
 {
-  // Put input variables into a 3-element array (OCES)
-  float oces[3] = {rIn, gIn, bIn};
-
-  // Convert from OCES RGB encoding to rendering primaries RGB encoding
-  float rgbPre[3] = mult_f3_f44( oces, ACES_PRI_2_RENDERING_PRI_MAT);
-
-    // Apply the reverse of the RRT tone scale independently to RGB
+  /* --- Initialize a 3-element vector with input variables (OCES) --- */
+    float ocesOrig[3] = {rIn, gIn, bIn};
+    float oces[3] = {rIn, gIn, bIn};
+  
+  /* --- Apply the RRT tone scale independently to RGB --- */
     float rgbPost[3];
-    rgbPost[0] = rrt_tonescale_rev( rgbPre[0]);
-    rgbPost[1] = rrt_tonescale_rev( rgbPre[1]);
-    rgbPost[2] = rrt_tonescale_rev( rgbPre[2]);
+    rgbPost[0] = rrt_tonescale_rev( oces[0]);
+    rgbPost[1] = rrt_tonescale_rev( oces[1]);
+    rgbPost[2] = rrt_tonescale_rev( oces[2]);
 
-  // Restore the hue to the pre-tonescale hue
-  float rgbRestored[3] = restore_hue_dw3( rgbPre, rgbPost);
+    float aces[3] = restore_hue_dw3( ocesOrig, rgbPost);
+        
+  /* --- Red modifier --- */
+    float hue = rgb_2_hue( aces);
+    float centeredHue = center_hue( hue, RRT_RED_HUE);
+    float hueWeight = cubic_basis_shaper( centeredHue, RRT_RED_WIDTH);
 
-  // Convert from rendering primaries RGB encoding to ACES RGB encoding
-  float aces[3] = mult_f3_f44( rgbRestored, invert_f44(ACES_PRI_2_RENDERING_PRI_MAT));
+    float minChan;
+    if (centeredHue < 0) { // min_f3(aces) = aces[1] (i.e. magenta-red)
+      minChan = aces[1];
+    } else { // min_f3(aces) = aces[2] (i.e. yellow-red)
+      minChan = aces[2];
+    }
 
-  // Adjust ACES values by undoing chroma scaling in the red/magenta region
-  aces = scale_C_at_H_inv( aces, center, width, percent);
+    float a = hueWeight * (1. - RRT_RED_SCALE) - 1.;
+    float b = aces[0] - hueWeight * (RRT_RED_PIVOT + minChan) * (1. - RRT_RED_SCALE);
+    float c = hueWeight * RRT_RED_PIVOT * minChan * (1. - RRT_RED_SCALE);
 
-  // Assign ACES-RGB to output variables (ACES)
+    aces[0] = ( -b - sqrt( b * b - 4. * a * c)) / ( 2. * a);
+
+    aces = restore_hue_dw3( ocesOrig, aces);
+
+  /* --- Glow module --- */
+    float saturation = rgb_2_saturation( aces);
+    float ycOut = rgb_2_yc( aces);
+   	float s = sigmoid_shaper( (saturation - 0.4) / 0.2);
+   	float reducedGlow = 1. + glow_inv( ycOut, RRT_GLOW_GAIN * s, RRT_GLOW_MID);
+  	
+  	aces = mult_f_f3( ( reducedGlow), aces);
+
+  // Assign OCES-RGB to output variables (OCES)
   rOut = aces[0];
   gOut = aces[1];
   bOut = aces[2];
   aOut = aIn;
+
 }
