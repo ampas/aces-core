@@ -30,7 +30,7 @@ images, and documentation.
 *  Updates the ARRI Alexa and Sony IDTs
 *  Fixes a typo in the ACES-to-ACESproxy10 transform
 
-For a detailed list of changes see the [CHANGELOG](../CHANGELOG.md).
+For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md).
 
 ### Versioning ###
  
