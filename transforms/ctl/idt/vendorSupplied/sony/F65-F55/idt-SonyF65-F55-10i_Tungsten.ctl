@@ -18,7 +18,7 @@ const float SGAMUT_TUNG_TO_ACES_MTX[3][3] = {
 
 const float B = 64.;
 const float AB = 90.;
-const float W = 640.;
+const float W = 940.;
 
 
 
