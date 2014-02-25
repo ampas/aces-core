@@ -1,7 +1,7 @@
 
 //
 // LMT for lower default contrast 
-// v0.7
+// v0.7.1
 //
 
 import "utilities";
