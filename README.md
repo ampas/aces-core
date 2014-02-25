@@ -25,12 +25,16 @@ images, and documentation.
 
 ### Changes from Previous Releases ###
 
+**v0.7**
 *  Updates forward and inverse RRT
 *  Updates forward and inverse ODTs
 *  Updates the ARRI Alexa and Sony IDTs
 *  Fixes a typo in the ACES-to-ACESproxy10 transform
 
-For a detailed list of changes see the [CHANGELOG](../CHANGELOG.md).
+**v0.7.1**
+* Bug fixes
+
+For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md).
 
 ### Versioning ###
  

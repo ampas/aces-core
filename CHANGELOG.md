@@ -1,3 +1,8 @@
+**Version 0.7.1 (February 26, 2014):**
+  * Bug fixes:
+    * Corrects the value for a constant in the F65-F55 10-bit IDTs
+    * Corrects the forward Rec2020 ODTs which were applying the inverse tonescale
+
 **Version 0.7 (January 31, 2014):**
   * Updates RRT (forward and inverse):
     * Removal of rendering primaries to address a bug which can occur during exposure grading. Tone scale application is performed directly on ACES RGB.

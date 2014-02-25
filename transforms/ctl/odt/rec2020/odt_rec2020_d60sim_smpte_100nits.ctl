@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to Rec2020 (D60 simulation)
-// v0.7
+// v0.7.1
 //
 
 //
@@ -71,7 +71,7 @@ void main
     float oces[3] = { rIn, gIn, bIn};
 
   /* --- Apply hue-preserving tone scale with saturation preservation --- */
-    float rgbPost[3] = odt_tonescale_inv_f3( oces);
+    float rgbPost[3] = odt_tonescale_fwd_f3( oces);
 
   /* --- Apply black point compensation --- */  
     float linearCV[3] = bpc_cinema_fwd( rgbPost);
