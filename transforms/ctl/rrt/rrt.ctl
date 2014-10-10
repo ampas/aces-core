@@ -1,11 +1,13 @@
 // 
 // Reference Rendering Transform (RRT)
-// v0.7.1
+// WGR8
 //
+
 
 import "utilities";
 import "transforms-common";
 import "rrt-transform-common";
+
 
 
 // Reference Rendering Transform (RRT)
@@ -23,39 +25,33 @@ void main
   output varying float aOut
 )
 {
-  /* --- Initialize a 3-element vector with input variables (ACES) --- */
-    float acesOrig[3] = {rIn, gIn, bIn};
+  // --- Initialize a 3-element vector with input variables (ACES) --- //
     float aces[3] = {rIn, gIn, bIn};
-
-  /* --- Glow module --- */
-    float saturation = rgb_2_saturation( aces);
-    float ycIn = rgb_2_yc( aces);
-    float s = sigmoid_shaper( (saturation - 0.4) / 0.2);
-    float addedGlow = 1. + glow_fwd( ycIn, RRT_GLOW_GAIN * s, RRT_GLOW_MID);
-
-    aces = mult_f_f3( addedGlow, aces);
   
-  /* --- Red modifier --- */
+  // --- Red modifier --- //
+    float saturation = rgb_2_saturation( aces);
     float hue = rgb_2_hue( aces);
     float centeredHue = center_hue( hue, RRT_RED_HUE);
     float hueWeight = cubic_basis_shaper( centeredHue, RRT_RED_WIDTH);
 		
 	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
 
-	  aces = restore_hue_dw3( acesOrig, aces);
+  // --- Apply the tonescale independently in rendering-space RGB --- //
+    // ACES to RGB rendering space
+    float rgbPre[3] = mult_f3_f44( aces, ACES_2_RENDER_PRI_MAT);
 
-  /* --- Apply the RRT tone scale independently to RGB --- */
+    // Tonescale
     float rgbPost[3];
-    rgbPost[0] = rrt_tonescale_fwd( aces[0]);
-    rgbPost[1] = rrt_tonescale_fwd( aces[1]);
-    rgbPost[2] = rrt_tonescale_fwd( aces[2]);
+    rgbPost[0] = rrt_tonescale_fwd( rgbPre[0], RRT_COEFS);
+    rgbPost[1] = rrt_tonescale_fwd( rgbPre[1], RRT_COEFS);
+    rgbPost[2] = rrt_tonescale_fwd( rgbPre[2], RRT_COEFS);
 
-    // Restore the hue to the pre-tonescale hue
-    float oces[3] = restore_hue_dw3( aces, rgbPost);
+    // RGB rendering space back to OCES encoding
+    float rgbOces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
     
   // Assign OCES-RGB to output variables (OCES)
-  rOut = oces[0];
-  gOut = oces[1];
-  bOut = oces[2];
+  rOut = rgbOces[0];
+  gOut = rgbOces[1];
+  bOut = rgbOces[2];
   aOut = aIn;
 }

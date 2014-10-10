@@ -1,11 +1,9 @@
 //
 // rrt-transform-common.ctl
-// v0.7.1
 //
-// Contains functions and constants shared by forward and inverse RRT transforms 
-// This is primarily to avoid code redundancy. 
-// This structure also has the benefit of facilitating any updates to these
-// parameters or functions, if necessary.
+// WGR8
+//
+// Contains functions and constants shared by forward and inverse RRT transforms
 //
 
 
@@ -14,58 +12,57 @@ import "utilities-color";
 
 
 
-// ------- RRT constants
+// --- RRT constants --- //
 
-  // Neutral tone scale constants 
-  const float ACESMAX = HALF_MAX; // 65504.0
-  const float ACESMID = 0.18;     
-  const float ACESMIN = ACESMID * ACESMID / ACESMAX;  
-  const float OCESMAX = 10000.0;  // units of cd/m^2
-  const float OCESMID = 5.0;      // units of cd/m^2
-  const float OCESMIN = 0.0001;   // units of cd/m^2
+  // Tonescale
+    // Neutral tone scale constants 
+    const float ACESMAX = HALF_MAX; // 65504.0
+    const float ACESMID = 0.18;     
+    const float ACESMIN = ACESMID * ACESMID / ACESMAX;  
+    const float OCESMAX = 10000.0;  // units of cd/m^2
+    const float OCESMID = 4.8;      // units of cd/m^2
+    const float OCESMIN = 0.0001;   // units of cd/m^2
 
-  const int RRT_KNOT_LEN = 21;
-  const float RRT_KNOT_START = log10(ACESMIN);
-  const float RRT_KNOT_END = log10(ACESMAX);
-  const float RRT_KNOT_SPAN = RRT_KNOT_END - RRT_KNOT_START;
-  const float RRT_KNOT_INC = RRT_KNOT_SPAN / (RRT_KNOT_LEN - 1.);
+    const int RRT_KNOT_LEN = 9;
+    const float RRT_KNOT_START = log10(ACESMIN);
+    const float RRT_KNOT_END = log10(ACESMAX);
+    const float RRT_KNOT_SPAN = RRT_KNOT_END - RRT_KNOT_START;
+    const float RRT_KNOT_INC = RRT_KNOT_SPAN / (RRT_KNOT_LEN - 1.);
 
-  // These are the coefficients used for v0.7
-  const float RRT_COEFS[23] = {
-    -4.00000,
-    -4.00000,
-    -4.00000,
-    -3.95000,
-    -3.82000,
-    -3.54650,
-    -3.10000,
-    -2.46700,
-    -1.66000,
-    -0.73000,
-    0.24714,
-    1.15080,
-    1.96320,
-    2.63950,
-    3.15750,
-    3.51050,
-    3.71550,
-    3.85130,
-    3.92710,
-    3.96980,
-    4.00000,
-    4.00000,
-    4.00000
+    // These are the coefficients used for WGR8
+    const float RRT_COEFS[10] = {
+      -4.00000,
+      -4.00000,
+      -3.73000,
+      -2.82810,
+      -0.39620,
+      1.75868,
+      3.39250,
+      3.83710,
+      4.00000,
+      4.00000
+    };
+
+  // Rendering primaries
+  const Chromaticities RENDER_PRI = 
+  {
+    {0.70800, 0.29200},
+    {0.17000, 0.79700},
+    {0.13100, 0.04600},
+    {0.32168, 0.33767}
   };
 
-  // "Glow" module constants
-  const float RRT_GLOW_GAIN = 0.075;
-  const float RRT_GLOW_MID = 0.1;
+  const float ACES_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
+  const float XYZ_2_RENDER_PRI_MAT[4][4] = XYZtoRGB(RENDER_PRI,1.0);
+
+  const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
+  const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
 
   // Red modifier constants
-  const float RRT_RED_SCALE = 0.85;
+  const float RRT_RED_SCALE = 0.82;
   const float RRT_RED_PIVOT = 0.03;
   const float RRT_RED_HUE = 0.;
-  const float RRT_RED_WIDTH = 120.;
+  const float RRT_RED_WIDTH = 135.;
 
 
 // ------- Glow module functions
@@ -179,7 +176,7 @@ float uncenter_hue( float hueCentered, float centerH)
 float rrt_tonescale_fwd
   ( 
     varying float aces,                          // ACES value
-    varying float COEFS[23] = RRT_COEFS          // the control points
+    varying float COEFS[10] = RRT_COEFS          // the control points
   )
 {    
   // Check for negatives or zero before taking the log. If negative or zero,
@@ -223,34 +220,8 @@ float rrt_tonescale_fwd
     //         cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];
     //     } else if ( j == 7) {
     //         cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];
-    //     } else if ( j == 8) {
-    //         cf[ 0] = COEFS[8];  cf[ 1] = COEFS[9];  cf[ 2] = COEFS[10];
-    //     } else if ( j == 9) {
-    //         cf[ 0] = COEFS[9];  cf[ 1] = COEFS[10];  cf[ 2] = COEFS[11];
-    //     } else if ( j == 10) {
-    //         cf[ 0] = COEFS[10];  cf[ 1] = COEFS[11];  cf[ 2] = COEFS[12];
-    //     } else if ( j == 11) {
-    //         cf[ 0] = COEFS[11];  cf[ 1] = COEFS[12];  cf[ 2] = COEFS[13];
-    //     } else if ( j == 12) {
-    //         cf[ 0] = COEFS[12];  cf[ 1] = COEFS[13];  cf[ 2] = COEFS[14];
-    //     } else if ( j == 13) {
-    //         cf[ 0] = COEFS[13];  cf[ 1] = COEFS[14];  cf[ 2] = COEFS[15];
-    //     } else if ( j == 14) {
-    //         cf[ 0] = COEFS[14];  cf[ 1] = COEFS[15];  cf[ 2] = COEFS[16];
-    //     } else if ( j == 15) {
-    //         cf[ 0] = COEFS[15];  cf[ 1] = COEFS[16];  cf[ 2] = COEFS[17];
-    //     } else if ( j == 16) {
-    //         cf[ 0] = COEFS[16];  cf[ 1] = COEFS[17];  cf[ 2] = COEFS[18];
-    //     } else if ( j == 17) {
-    //         cf[ 0] = COEFS[17];  cf[ 1] = COEFS[18];  cf[ 2] = COEFS[19];
-    //     } else if ( j == 18) {
-    //         cf[ 0] = COEFS[18];  cf[ 1] = COEFS[19];  cf[ 2] = COEFS[20];
-    //     } else if ( j == 19) {
-    //         cf[ 0] = COEFS[19];  cf[ 1] = COEFS[20];  cf[ 2] = COEFS[21];
-    //     } else {
-    //         cf[ 0] = COEFS[20];  cf[ 1] = COEFS[21];  cf[ 2] = COEFS[22];
-    //     }
-
+    //     } 
+    
     float monomials[ 3] = { t * t, t, 1. };
     logOces = dot_f3_f3( monomials, mult_f3_f33( cf, M));
   }    
@@ -269,7 +240,7 @@ float rrt_tonescale_fwd
 float rrt_tonescale_rev
 ( 
   varying float oces,                          // OCES value
-  varying float COEFS[23] = RRT_COEFS          // the control points
+  varying float COEFS[10] = RRT_COEFS          // the control points
 )
 {
   // KNOT_Y is luminance of the spline at the knots.
@@ -305,32 +276,8 @@ float rrt_tonescale_rev
         cf[ 0] = COEFS[5];  cf[ 1] = COEFS[6];  cf[ 2] = COEFS[7];  j = 5;
     } else if ( logOces > KNOT_Y[ 6] && logOces <= KNOT_Y[ 7]) {
         cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];  j = 6;
-    } else if ( logOces > KNOT_Y[ 7] && logOces <= KNOT_Y[ 8]) {
+    } else  {
         cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];  j = 7;
-    } else if ( logOces > KNOT_Y[ 8] && logOces <= KNOT_Y[ 9]) {
-        cf[ 0] = COEFS[8];  cf[ 1] = COEFS[9];  cf[ 2] = COEFS[10];  j = 8;
-    } else if ( logOces > KNOT_Y[ 9] && logOces <= KNOT_Y[10]) {
-        cf[ 0] = COEFS[9];  cf[ 1] = COEFS[10];  cf[ 2] = COEFS[11];  j = 9;
-    } else if ( logOces > KNOT_Y[10] && logOces <= KNOT_Y[11]) {
-        cf[ 0] = COEFS[10];  cf[ 1] = COEFS[11];  cf[ 2] = COEFS[12];  j = 10;
-    } else if ( logOces > KNOT_Y[11] && logOces <= KNOT_Y[12]) {
-        cf[ 0] = COEFS[11];  cf[ 1] = COEFS[12];  cf[ 2] = COEFS[13];  j = 11;
-    } else if ( logOces > KNOT_Y[12] && logOces <= KNOT_Y[13]) {
-        cf[ 0] = COEFS[12];  cf[ 1] = COEFS[13];  cf[ 2] = COEFS[14];  j = 12;
-    } else if ( logOces > KNOT_Y[13] && logOces <= KNOT_Y[14]) {
-        cf[ 0] = COEFS[13];  cf[ 1] = COEFS[14];  cf[ 2] = COEFS[15];  j = 13;
-    } else if ( logOces > KNOT_Y[14] && logOces <= KNOT_Y[15]) {
-        cf[ 0] = COEFS[14];  cf[ 1] = COEFS[15];  cf[ 2] = COEFS[16];  j = 14;
-    } else if ( logOces > KNOT_Y[15] && logOces <= KNOT_Y[16]) {
-        cf[ 0] = COEFS[15];  cf[ 1] = COEFS[16];  cf[ 2] = COEFS[17];  j = 15;
-    } else if ( logOces > KNOT_Y[16] && logOces <= KNOT_Y[17]) {
-        cf[ 0] = COEFS[16];  cf[ 1] = COEFS[17];  cf[ 2] = COEFS[18];  j = 16;
-    } else if ( logOces > KNOT_Y[17] && logOces <= KNOT_Y[18]) {
-        cf[ 0] = COEFS[17];  cf[ 1] = COEFS[18];  cf[ 2] = COEFS[19];  j = 17;
-    } else if ( logOces > KNOT_Y[18] && logOces <= KNOT_Y[19]) {
-        cf[ 0] = COEFS[18];  cf[ 1] = COEFS[19];  cf[ 2] = COEFS[20];  j = 18;
-    } else {
-        cf[ 0] = COEFS[19];  cf[ 1] = COEFS[20];  cf[ 2] = COEFS[21];  j = 19;
     }
 
     const float tmp[ 3] = mult_f3_f33( cf, M);
