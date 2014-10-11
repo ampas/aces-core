@@ -29,41 +29,36 @@ const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_P
 
 
 
-const float DEFAULT_YMIN_ABS = 5.0;
+const float DEFAULT_YMIN_ABS = OCESMID;
 const float DEFAULT_YMAX_ABS = 48.0;
 const float DEFAULT_ODT_HI_SLOPE = 0.04;
-const float DEFAULT_ODT_COEFS[14] = { 
-  0.59886, 
-  0.80071, 
-  0.98498, 
-  1.14260, 
-  1.27700, 
-  1.38810, 
-  1.47380, 
-  1.53840, 
-  1.58360, 
-  1.61780, 
-  1.64350, 
-  1.66160, 
-  1.67765, 
-  1.68573 
+
+const float DEFAULT_ODT_COEFS[6] = { 
+	0.37358,
+	0.98891,
+	1.44330,
+	1.60290,
+	1.66893,
+	1.69355
 };
 
-const unsigned int ODT_KNOT_LEN = 13;
-const float ODT_KNOT_START = log10( rrt_tonescale_fwd(0.18) );
-const float ODT_KNOT_END = log10( rrt_tonescale_fwd(0.18*pow(2.,6.5)) );
-const float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
-const float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
+const unsigned int ODT_KNOT_LEN = 5;
 
 float odt_tonescale_fwd
-  ( // input is absolute luminance, output is absolute luminance
-    varying float oces,
-    varying float COEFS[14] = DEFAULT_ODT_COEFS,
-    varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
-    varying float lumMin = DEFAULT_YMIN_ABS,
-    varying float lumMax = DEFAULT_YMAX_ABS
-  )
+( // input is absolute luminance, output is absolute luminance
+  varying float oces,
+  varying float COEFS[6] = DEFAULT_ODT_COEFS,
+  varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
+  varying float lumMin = DEFAULT_YMIN_ABS,
+  varying float lumMax = DEFAULT_YMAX_ABS
+)
 {
+  float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
+  float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
+
+  float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
+  float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
+
   float ocesCheck = oces;
   if (ocesCheck < OCESMIN) ocesCheck = OCESMIN; 
     // Just a safety check to make sure no negative OCES values somehow got by
@@ -97,23 +92,7 @@ float odt_tonescale_fwd
     //         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];
     //     } else if ( j == 3) {
     //         cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];
-    //     } else if ( j == 4) {
-    //         cf[ 0] = COEFS[4];  cf[ 1] = COEFS[5];  cf[ 2] = COEFS[6];
-    //     } else if ( j == 5) {
-    //         cf[ 0] = COEFS[5];  cf[ 1] = COEFS[6];  cf[ 2] = COEFS[7];
-    //     } else if ( j == 6) {
-    //         cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];
-    //     } else if ( j == 7) {
-    //         cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];
-    //     } else if ( j == 8) {
-    //         cf[ 0] = COEFS[8];  cf[ 1] = COEFS[9];  cf[ 2] = COEFS[10];
-    //     } else if ( j == 9) {
-    //         cf[ 0] = COEFS[9];  cf[ 1] = COEFS[10];  cf[ 2] = COEFS[11];
-    //     } else if ( j == 10) {
-    //         cf[ 0] = COEFS[10];  cf[ 1] = COEFS[11];  cf[ 2] = COEFS[12];
-    //     } else {
-    //         cf[ 0] = COEFS[11];  cf[ 1] = COEFS[12];  cf[ 2] = COEFS[13];
-    //     }
+    //     } 
 
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
@@ -131,12 +110,18 @@ float odt_tonescale_fwd
 float odt_tonescale_rev
 ( // input is absolute luminance, output is absolute luminance
   varying float y,
-  varying float COEFS[14] = DEFAULT_ODT_COEFS,   // values of the B-spline control points
+  varying float COEFS[6] = DEFAULT_ODT_COEFS,   
   varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
   varying float lumMin = DEFAULT_YMIN_ABS,
   varying float lumMax = DEFAULT_YMAX_ABS
 )
 {
+  float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
+  float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
+
+  float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
+  float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
+
   // KNOT_Y is luminance of the spline at the knots.
   float KNOT_Y[ ODT_KNOT_LEN];
   for (int i = 0; i < ODT_KNOT_LEN; i = i+1) {
@@ -159,25 +144,9 @@ float odt_tonescale_rev
         cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];  j = 1;
     } else if ( logy > KNOT_Y[ 2] && logy <= KNOT_Y[ 3]) {
         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];  j = 2;
-    } else if ( logy > KNOT_Y[ 3] && logy <= KNOT_Y[ 4]) {
-        cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];  j = 3;
-    } else if ( logy > KNOT_Y[ 4] && logy <= KNOT_Y[ 5]) {
-        cf[ 0] = COEFS[4];  cf[ 1] = COEFS[5];  cf[ 2] = COEFS[6];  j = 4;
-    } else if ( logy > KNOT_Y[ 5] && logy <= KNOT_Y[ 6]) {
-        cf[ 0] = COEFS[5];  cf[ 1] = COEFS[6];  cf[ 2] = COEFS[7];  j = 5;
-    } else if ( logy > KNOT_Y[ 6] && logy <= KNOT_Y[ 7]) {
-        cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];  j = 6;
-    } else if ( logy > KNOT_Y[ 7] && logy <= KNOT_Y[ 8]) {
-        cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];  j = 7;
-    } else if ( logy > KNOT_Y[ 8] && logy <= KNOT_Y[ 9]) {
-        cf[ 0] = COEFS[8];  cf[ 1] = COEFS[9];  cf[ 2] = COEFS[10];  j = 8;
-    } else if ( logy > KNOT_Y[ 9] && logy <= KNOT_Y[10]) {
-        cf[ 0] = COEFS[9];  cf[ 1] = COEFS[10];  cf[ 2] = COEFS[11];  j = 9;
-    } else if ( logy > KNOT_Y[10] && logy <= KNOT_Y[11]) {
-        cf[ 0] = COEFS[10];  cf[ 1] = COEFS[11];  cf[ 2] = COEFS[12];  j = 10;
     } else {
-        cf[ 0] = COEFS[11];  cf[ 1] = COEFS[12];  cf[ 2] = COEFS[13];  j = 11;
-    }
+        cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];  j = 3;
+    } 
 
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
