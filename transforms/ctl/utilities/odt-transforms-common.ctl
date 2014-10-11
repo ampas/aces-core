@@ -14,17 +14,6 @@ import "rrt-transform-common";
 
 
 
-const float NP = 0.0; // blending parameter to control amount of artificial ODT 
-                      // saturation that is preserved
-// Note: With NP=0.0, the behavior of ODT tonescale application is the same as 
-// it was in previous ACES versions. However, there were several steps added
-// to the ODT tonescale application in work on v0.7. When NP=0.0, most of these 
-// additional steps become null ops. So, as a shortcut for developers, notes 
-// have been provided in the odt_tonescale functions to make clear the 
-// simplification that can be used as long as NP=0.0
-
-
-
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
 
 
@@ -163,117 +152,6 @@ float odt_tonescale_rev
   } 
   
   return pow10( logx);
-}
-
-
-
-/* --- A hue-preserving tone scale with variable saturation preservation --- */
-float[3] odt_tonescale_fwd_f3( float oces[3] )
-{
-
-// Note: With NP=0.0, as it is in v0.7, this entire function simplifies down to 
-// a simple 1-D tone scale application on R,G, and B independently, followed by 
-// a hue restore step. The simplified math would be as shown immediately below:
-//
-//     float[3] odt_tonescale_fwd_f3( float oces[3] )
-//     {
-//         float rgbPost[3];
-//         rgbPost[0] = odt_tonescale_fwd( oces[0]);
-//         rgbPost[1] = odt_tonescale_fwd( oces[1]);
-//         rgbPost[2] = odt_tonescale_fwd( oces[2]);
-// 
-//         // Restore the hue to the original value
-//         float rgbRestored[3] = restore_hue_dw3( oces, rgbPost);
-//     
-//         return rgbRestored;
-//     }
-
-    // Determine channel ordering (largest to smallest).
-    int inds[3] = order3( oces[0], oces[1], oces[2]);
-
-  /* Ratio-preserving tone scale "norm" value determined from OCES RGB */
-    // Establish a norm value.
-    float norm = oces[ inds[ 0]]; 
-
-    // Run norm value through the ODT tonescale.
-    float normOut = odt_tonescale_fwd( norm);
-
-  /* Adjust smallest channel to control saturation */
-    float rgbPre[3] = oces;
-
-    // Measure of saturation (1 = fully saturated).
-    float sat = rgb_2_saturation( oces);
-
-    // Measure of highlight compression (0 = no compression).
-    float highlightComp = 1. - pow( normOut / max( norm, TINY), NP);
-
-    // Reduce smallest channel of saturated colors to compensate for highlight roll-off.
-    rgbPre[ inds[ 2]] =  oces[ inds[ 2]] * ( 1.0 - sat * highlightComp);
-
-  /* Apply the ODT tone scale independently to each channel */
-    float rgbPostA[3];
-    rgbPostA[0] = odt_tonescale_fwd( rgbPre[0]);
-    rgbPostA[1] = odt_tonescale_fwd( rgbPre[1]);
-    rgbPostA[2] = odt_tonescale_fwd( rgbPre[2]);
-
-  // Restore the hue to the original value
-  float rgbRestored[3] = restore_hue_dw3( oces, rgbPostA);
-  
-  return rgbRestored;
-}
-
-float[3] odt_tonescale_inv_f3( float rgb[3])
-{
-
-// Note: With NP=0.0, as it is in v0.7, this entire function simplifies down to 
-// a simple 1-D tone scale application on R,G, and B independently, followed by 
-// a hue restore step. The simplified math would be as shown immediately below:
-//
-//     float[3] odt_tonescale_inv_f3( float rgb[3] )
-//     {
-//         float rgbPost[3];
-//         rgbPost[0] = odt_tonescale_rev( rgb[0]);
-//         rgbPost[1] = odt_tonescale_rev( rgb[1]);
-//         rgbPost[2] = odt_tonescale_rev( rgb[2]);
-// 
-//         // Restore the hue to the original value
-//         float oces[3] = restore_hue_dw3( rgb, rgbPost);
-//     
-//         return oces;
-//     }
-
-  /* Apply the inverse ODT tone scale independently to each channel */
-    float rgbPost[3];  
-    rgbPost[0] = odt_tonescale_rev( rgb[0]);
-    rgbPost[1] = odt_tonescale_rev( rgb[1]);
-    rgbPost[2] = odt_tonescale_rev( rgb[2]);
-
-    // Determine channel ordering (largest to smallest).
-    int inds[3] = order3( rgbPost[0], rgbPost[1], rgbPost[2]);
-
-  /* Ratio-preserving tone scale "norm" */
-    // Establish a norm value.
-    float norm = rgbPost[ inds[ 0]];
-
-    // Run norm value through the ODT tonescale.
-    float normOut = rgb[ inds[ 0]];
-
-    // Measure of highlight compression (0 = no compression).
-    float highlightComp = 1. - pow( normOut / max( norm, TINY), NP);
-
-  /* Invert adjustment to smallest channel */
-    float a = highlightComp / rgbPost[ inds[ 0]];
-    float b = 1. - highlightComp;
-    float c = -rgbPost[ inds[ 2]];
-
-    float d = sqrt( b * b - 4. * a * c);
-    float z = ( 2. * c) / min( -d - b, TINY);
-    rgbPost[ inds[ 2]] = z;
-
-  // Restore the hue to the original value
-  float oces[3] = restore_hue_dw3( rgb, rgbPost);
-
-  return oces;
 }
 
 
