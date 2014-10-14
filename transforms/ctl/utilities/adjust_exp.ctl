@@ -20,11 +20,11 @@ void main
   input varying float gIn,
   input varying float bIn,
   input varying float aIn,
-  input float expFactor[3] = {1.0, 1.0, 1.0},
   output varying float rOut,
   output varying float gOut,
   output varying float bOut,
-  output varying float aOut
+  output varying float aOut,
+  input float expFactor[3] = {1.0, 1.0, 1.0}
 )
 {
 	rOut = rIn * expFactor[0];
