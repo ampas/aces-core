@@ -45,15 +45,6 @@ import "odt-transforms-common";
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
-const float ODT_COEFS[6] = { 
-	0.37358,
-	0.98891,
-	1.44330,
-	1.60290,
-	1.66893,
-	1.69355
-};
-
 const float DISPGAMMA = 2.4; 
 const float L_W = 1.0;
 const float L_B = 0.0;
@@ -83,9 +74,9 @@ void main
 
     // Tonescale
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_fwd( rgbPre[0], ODT_COEFS);
-    rgbPost[1] = odt_tonescale_fwd( rgbPre[1], ODT_COEFS);
-    rgbPost[2] = odt_tonescale_fwd( rgbPre[2], ODT_COEFS);
+    rgbPost[0] = odt_tonescale_fwd( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_fwd( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_fwd( rgbPre[2]);
 
     // RGB rendering space back to OCES encoding
     rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
