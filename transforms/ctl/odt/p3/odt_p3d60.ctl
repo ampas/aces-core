@@ -93,13 +93,13 @@ void main
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
   
-  /* --- Encode linear code values with transfer function --- */
+  // --- Encode linear code values with transfer function --- //
     float outputCV[3];
     outputCV[0] = pow( linearCV[0], 1./DISPGAMMA);
     outputCV[1] = pow( linearCV[1], 1./DISPGAMMA);
     outputCV[2] = pow( linearCV[2], 1./DISPGAMMA);
   
-  /* --- Cast outputCV to rOut, gOut, bOut --- */
+  // --- Cast outputCV to rOut, gOut, bOut --- //
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

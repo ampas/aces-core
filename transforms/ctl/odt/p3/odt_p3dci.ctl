@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to P3DCI D60 Simulation
-// v0.7.1
+// WGR8
 //
 
 //
@@ -38,10 +38,18 @@ import "odt-transforms-common";
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = P3DCI_PRI;
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
+const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
 const float DISPGAMMA = 2.6; 
+
+const float ODT_COEFS[6] = { 
+	0.37358,
+	0.98891,
+	1.44330,
+	1.60290,
+	1.66893,
+	1.69355
+};
 
 // Rolloff white settings for P3DCI
 const float NEW_WHT = 0.918;
@@ -62,13 +70,23 @@ void main
   output varying float aOut
 )
 {
-  /* --- Initialize a 3-element vector with input variables (OCES) --- */
+  // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = { rIn, gIn, bIn};
 
-  /* --- Apply hue-preserving tone scale with saturation preservation --- */
-    float rgbPost[3] = odt_tonescale_fwd_f3( oces);
+  // --- Apply the tonescale independently in rendering-space RGB --- //
+    // OCES to RGB rendering space
+    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-  /* --- Apply black point compensation --- */  
+    // Tonescale
+    float rgbPost[3];
+    rgbPost[0] = odt_tonescale_fwd( rgbPre[0], ODT_COEFS);
+    rgbPost[1] = odt_tonescale_fwd( rgbPre[1], ODT_COEFS);
+    rgbPost[2] = odt_tonescale_fwd( rgbPre[2], ODT_COEFS);
+
+    // RGB rendering space back to OCES encoding
+    rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+  
+  // --- Apply black point compensation --- //
     float linearCV[3] = bpc_cinema_fwd( rgbPost);
 
   /* --- Compensate for different white point being darker  --- */
@@ -101,27 +119,24 @@ void main
     linearCV[1] = min( linearCV[1], NEW_WHT) * SCALE;
     linearCV[2] = min( linearCV[2], NEW_WHT) * SCALE;
 
-  /* --- Convert to display primary encoding --- */
+  // --- Convert to display primary encoding --- //
     // OCES RGB to CIE XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, OCES_PRI_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( linearCV, ACES_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  /* --- Handle out-of-gamut values --- */
+  // --- Handle out-of-gamut values --- //
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
-    float linearCVClamp[3] = clamp_f3( linearCV, 0., 1.);
-  
-    // Restore hue after clip operation ("smart-clip")
-    linearCV = restore_hue_dw3( linearCV, linearCVClamp);
+    linearCV = clamp_f3( linearCV, 0., 1.);
 
-  /* --- Encode linear code values with transfer function --- */
+  // --- Encode linear code values with transfer function --- //
     float outputCV[3];
     outputCV[0] = pow( linearCV[0], 1./DISPGAMMA);
     outputCV[1] = pow( linearCV[1], 1./DISPGAMMA);
     outputCV[2] = pow( linearCV[2], 1./DISPGAMMA);
   
-  /* --- Cast outputCV to rOut, gOut, bOut --- */
+  // --- Cast outputCV to rOut, gOut, bOut --- //
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];
