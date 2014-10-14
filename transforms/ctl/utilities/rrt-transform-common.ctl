@@ -9,7 +9,7 @@
 
 
 import "utilities-color";
-
+import "ipt-module";
 
 
 // --- RRT constants --- //
@@ -59,12 +59,18 @@ import "utilities-color";
   const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
   const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
 
+  // "Glow" module constants
+  const float RRT_GLOW_GAIN = 0.05;
+  const float RRT_GLOW_MID = 0.08;
+
   // Red modifier constants
   const float RRT_RED_SCALE = 0.82;
   const float RRT_RED_PIVOT = 0.03;
   const float RRT_RED_HUE = 0.;
   const float RRT_RED_WIDTH = 135.;
 
+  // Desaturation contant
+  const float GLOBAL_DESAT = 0.97;
 
 // ------- Glow module functions
 float glow_fwd( float ycIn, float glowGainIn, float glowMid)
@@ -172,6 +178,21 @@ float uncenter_hue( float hueCentered, float centerH)
 }
 
 
+// ------ Global saturation functions
+float[3] global_desaturation_inIPT( float incolor[3], float factor)
+{
+    float IPT[3]; 
+    float LCH[3];
+    float out[3];
+
+    IPT = aces_2_ipt(incolor);
+    LCH = ipt_2_lch( IPT );
+    LCH[1] = LCH[1] * factor;
+    IPT = lch_2_ipt(LCH);
+    out = ipt_2_aces(IPT);
+    return out;
+}
+
 
 // ------ Tone scale spline functions 
 float rrt_tonescale_fwd
@@ -196,7 +217,7 @@ float rrt_tonescale_fwd
     int j = knot_coord;
     float t = knot_coord - j;
 
-    float cf[ 3] = { COEFS[ j], COEFS[ j + 1], COEFS[ j + 2]};
+//     float cf[ 3] = { COEFS[ j], COEFS[ j + 1], COEFS[ j + 2]};
     // NOTE: If the running a version of CTL < 1.5, you may get an 
     // exception thrown error, usually accompanied by "Array index out of range" 
     // If you receive this error, it is recommended that you update to CTL v1.5, 
@@ -204,24 +225,24 @@ float rrt_tonescale_fwd
     // uncommenting the below, which is longer, but equivalent to, the above 
     // line of code.
     //
-    //     float cf[ 3];
-    //     if ( j <= 0) {
-    //         cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];
-    //     } else if ( j == 1) {
-    //         cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];
-    //     } else if ( j == 2) {
-    //         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];
-    //     } else if ( j == 3) {
-    //         cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];
-    //     } else if ( j == 4) {
-    //         cf[ 0] = COEFS[4];  cf[ 1] = COEFS[5];  cf[ 2] = COEFS[6];
-    //     } else if ( j == 5) {
-    //         cf[ 0] = COEFS[5];  cf[ 1] = COEFS[6];  cf[ 2] = COEFS[7];
-    //     } else if ( j == 6) {
-    //         cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];
-    //     } else if ( j == 7) {
-    //         cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];
-    //     } 
+    float cf[ 3];
+    if ( j <= 0) {
+        cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];
+    } else if ( j == 1) {
+        cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];
+    } else if ( j == 2) {
+        cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];
+    } else if ( j == 3) {
+        cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];
+    } else if ( j == 4) {
+        cf[ 0] = COEFS[4];  cf[ 1] = COEFS[5];  cf[ 2] = COEFS[6];
+    } else if ( j == 5) {
+        cf[ 0] = COEFS[5];  cf[ 1] = COEFS[6];  cf[ 2] = COEFS[7];
+    } else if ( j == 6) {
+        cf[ 0] = COEFS[6];  cf[ 1] = COEFS[7];  cf[ 2] = COEFS[8];
+    } else if ( j == 7) {
+        cf[ 0] = COEFS[7];  cf[ 1] = COEFS[8];  cf[ 2] = COEFS[9];
+    } 
     
     float monomials[ 3] = { t * t, t, 1. };
     logOces = dot_f3_f3( monomials, mult_f3_f33( cf, M));

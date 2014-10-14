@@ -59,6 +59,14 @@ void main
 
     aces[0] = ( -b - sqrt( b * b - 4. * a * c)) / ( 2. * a);
 
+  // --- Glow module --- //
+    float saturation = rgb_2_saturation( aces);
+    float ycOut = rgb_2_yc( aces);
+   	float s = sigmoid_shaper( (saturation - 0.4) / 0.2);
+   	float reducedGlow = 1. + glow_inv( ycOut, RRT_GLOW_GAIN * s, RRT_GLOW_MID);
+  	
+  	aces = mult_f_f3( ( reducedGlow), aces);
+
   // Assign ACES-RGB to output variables (ACES)
   rOut = aces[0];
   gOut = aces[1];

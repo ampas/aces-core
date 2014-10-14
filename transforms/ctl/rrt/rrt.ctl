@@ -28,13 +28,23 @@ void main
   // --- Initialize a 3-element vector with input variables (ACES) --- //
     float aces[3] = {rIn, gIn, bIn};
   
-  // --- Red modifier --- //
+  // --- Glow module --- //
     float saturation = rgb_2_saturation( aces);
+    float ycIn = rgb_2_yc( aces);
+    float s = sigmoid_shaper( (saturation - 0.4) / 0.2);
+    float addedGlow = 1. + glow_fwd( ycIn, RRT_GLOW_GAIN * s, RRT_GLOW_MID);
+
+    aces = mult_f_f3( addedGlow, aces);
+  
+  // --- Red modifier --- //
     float hue = rgb_2_hue( aces);
     float centeredHue = center_hue( hue, RRT_RED_HUE);
     float hueWeight = cubic_basis_shaper( centeredHue, RRT_RED_WIDTH);
 		
 	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
+
+  // --- Global desaturation --- //
+    aces = global_desaturation_inIPT( aces, GLOBAL_DESAT);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
     // ACES to RGB rendering space
