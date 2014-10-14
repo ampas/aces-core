@@ -89,7 +89,7 @@ void main
   // --- Apply black point compensation --- //
     float linearCV[3] = bpc_cinema_fwd( rgbPost);
 
-  /* --- Compensate for different white point being darker  --- */
+  // --- Compensate for different white point being darker  --- //
   // This adjustment is to correct an issue that exists in ODTs where the device 
   // is calibrated to a white chromaticity other than D60. In order to simulate 
   // D60 on such devices, unequal code values are sent to the display to achieve 
