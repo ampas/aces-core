@@ -1,12 +1,32 @@
 //
 // transforms-common.ctl
-// v0.7.1
+// WGR8
 //
 // Contains functions and constants shared by multiple forward and inverse 
 // transforms. This is primarily to avoid code redundancy, particularly in the 
 // ODTs. This structure also has the benefit of facilitating any updates to 
 // these parameters or functions, if necessary.
 //
+
+
+import "utilities-color";
+
+
+// Rendering primaries
+const Chromaticities RENDER_PRI = 
+{
+  {0.70800, 0.29200},
+  {0.17000, 0.79700},
+  {0.13100, 0.04600},
+  {0.32168, 0.33767}
+};
+
+const float ACES_2_XYZ_MAT[4][4] = RGBtoXYZ( ACES_PRI, 1.0);
+const float XYZ_2_ACES_MAT[4][4] = XYZtoRGB( ACES_PRI, 1.0);
+const float XYZ_2_RENDER_PRI_MAT[4][4] = XYZtoRGB( RENDER_PRI, 1.0);
+
+const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
+const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
 
 
 

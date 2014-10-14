@@ -1,6 +1,6 @@
 //
 // odt-transforms-common.ctl
-// v0.7.1
+// WGR8
 //
 // Contains functions and constants shared by forward and inverse ODT transforms 
 // This is primarily to avoid code redundancy.

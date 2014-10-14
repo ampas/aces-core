@@ -7,8 +7,6 @@
 //
 
 
-
-import "utilities-color";
 import "ipt-module";
 
 
@@ -42,22 +40,6 @@ import "ipt-module";
       4.00000,
       4.00000
     };
-
-  // Rendering primaries
-  const Chromaticities RENDER_PRI = 
-  {
-    {0.70800, 0.29200},
-    {0.17000, 0.79700},
-    {0.13100, 0.04600},
-    {0.32168, 0.33767}
-  };
-
-  const float ACES_2_XYZ_MAT[4][4] = RGBtoXYZ( ACES_PRI, 1.0);
-  const float XYZ_2_ACES_MAT[4][4] = XYZtoRGB( ACES_PRI, 1.0);
-  const float XYZ_2_RENDER_PRI_MAT[4][4] = XYZtoRGB( RENDER_PRI, 1.0);
-
-  const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
-  const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
 
   // "Glow" module constants
   const float RRT_GLOW_GAIN = 0.05;
