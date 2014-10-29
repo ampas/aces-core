@@ -47,7 +47,9 @@ void main
     aces = global_desaturation_inIPT( aces, GLOBAL_DESAT);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
-    // ACES to RGB rendering space
+    aces = clamp_f3( aces, 0., HALF_POS_INF);
+
+    // ACES to RGB rendering space    
     float rgbPre[3] = mult_f3_f44( aces, ACES_2_RENDER_PRI_MAT);
 
     // Tonescale
