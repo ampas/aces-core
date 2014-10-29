@@ -15,10 +15,10 @@ import "utilities-color";
 // Rendering primaries
 const Chromaticities RENDER_PRI = 
 {
-  {0.70800, 0.29200},
-  {0.17000, 0.79700},
-  {0.13100, 0.04600},
-  {0.32168, 0.33767}
+  {0.713,	0.293},
+  {0.165,	0.830},
+  {0.128,	0.044},
+  {0.32168,	0.33767}
 };
 
 const float ACES_2_XYZ_MAT[4][4] = RGBtoXYZ( ACES_PRI, 1.0);
