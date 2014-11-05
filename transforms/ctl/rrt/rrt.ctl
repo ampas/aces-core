@@ -44,6 +44,7 @@ void main
 	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
 
   // --- Global desaturation --- //
+    aces = clamp_f3( aces, 0., HALF_POS_INF);
     aces = global_desaturation_inIPT( aces, GLOBAL_DESAT);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
