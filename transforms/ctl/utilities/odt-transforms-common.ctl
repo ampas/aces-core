@@ -31,127 +31,217 @@ const float DEFAULT_ODT_COEFS[6] = {
 	1.69355
 };
 
-const unsigned int ODT_KNOT_LEN = 5;
+// const unsigned int ODT_KNOT_LEN = 5;
 
-float odt_tonescale_fwd
-( // input is absolute luminance, output is absolute luminance
-  varying float oces,
-  varying float COEFS[6] = DEFAULT_ODT_COEFS,
-  varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
-  varying float lumMin = DEFAULT_YMIN_ABS,
-  varying float lumMax = DEFAULT_YMAX_ABS
-)
-{
-  float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
-  float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
+// float odt_tonescale_fwd
+// ( // input is absolute luminance, output is absolute luminance
+//   varying float oces,
+//   varying float COEFS[6] = DEFAULT_ODT_COEFS,
+//   varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
+//   varying float lumMin = DEFAULT_YMIN_ABS,
+//   varying float lumMax = DEFAULT_YMAX_ABS
+// )
+// {
+//   float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
+//   float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
+// 
+//   float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
+//   float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
+// 
+//   float ocesCheck = oces;
+//   if (ocesCheck < OCESMIN) ocesCheck = OCESMIN; 
+//     // Just a safety check to make sure no negative OCES values somehow got by
+// 
+//   float logOces = log10( ocesCheck);
+// 
+//   float logy;
+//   float y;
+// 
+//   // For logOces values in the knot range, apply the B-spline shaper, b(x)
+//   if (( logOces > ODT_KNOT_START ) && ( logOces < ODT_KNOT_END)) {
+// 
+//     float knot_coord = (logOces - ODT_KNOT_START) / ODT_KNOT_SPAN * ( ODT_KNOT_LEN-1);
+//     int j = knot_coord;
+//     float t = knot_coord - j;
+// 
+//     float cf[ 3] = { COEFS[ j], COEFS[ j + 1], COEFS[ j + 2]};
+//     // NOTE: If the running a version of CTL < 1.5, you may get an 
+//     // exception thrown error, usually accompanied by "Array index out of range" 
+//     // If you receive this error, it is recommended that you update to CTL v1.5, 
+//     // which contains a number of important bug fixes. Otherwise, you may try 
+//     // uncommenting the below, which is longer, but equivalent to, the above 
+//     // line of code.
+//     //
+//     //     float cf[ 3];
+//     //     if ( j <= 0) {
+//     //         cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];
+//     //     } else if ( j == 1) {
+//     //         cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];
+//     //     } else if ( j == 2) {
+//     //         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];
+//     //     } else if ( j == 3) {
+//     //         cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];
+//     //     } 
+// 
+//     float monomials[ 3] = { t * t, t, 1. };
+//     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
+//   }    
+//   else if ( logOces <= ODT_KNOT_START) { 
+//       logy = logOces;
+//   }
+//   else if ( logOces >= ODT_KNOT_END) { 
+//       logy = logOces * hi_slope + (log10(lumMax) - hi_slope * ODT_KNOT_END);
+//   }
+// 
+//   return pow10(logy);
+// }
+// 
+// float odt_tonescale_rev
+// ( // input is absolute luminance, output is absolute luminance
+//   varying float y,
+//   varying float COEFS[6] = DEFAULT_ODT_COEFS,   
+//   varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
+//   varying float lumMin = DEFAULT_YMIN_ABS,
+//   varying float lumMax = DEFAULT_YMAX_ABS
+// )
+// {
+//   float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
+//   float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
+// 
+//   float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
+//   float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
+// 
+//   // KNOT_Y is luminance of the spline at the knots.
+//   float KNOT_Y[ ODT_KNOT_LEN];
+//   for (int i = 0; i < ODT_KNOT_LEN; i = i+1) {
+//     KNOT_Y[ i] = ( COEFS[i] + COEFS[i+1]) / 2.;
+//   };
+// 
+//   float logy = log10( y);
+// 
+//   float logx;
+//   if (logy <= KNOT_Y[0]) {
+//     logx = logy;
+//   } else if (logy >= KNOT_Y[ODT_KNOT_LEN-1]) {
+//     logx = ODT_KNOT_END;
+//   } else {  
+//     unsigned int j;
+//     float cf[ 3];
+//     if ( logy > KNOT_Y[ 0] && logy <= KNOT_Y[ 1]) {
+//         cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];  j = 0;
+//     } else if ( logy > KNOT_Y[ 1] && logy <= KNOT_Y[ 2]) {
+//         cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];  j = 1;
+//     } else if ( logy > KNOT_Y[ 2] && logy <= KNOT_Y[ 3]) {
+//         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];  j = 2;
+//     } else {
+//         cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];  j = 3;
+//     } 
+// 
+//     const float tmp[ 3] = mult_f3_f33( cf, M);
+// 
+//     float a = tmp[ 0];
+//     float b = tmp[ 1];
+//     float c = tmp[ 2];
+//     c = c - logy;
+// 
+//     const float d = sqrt( b * b - 4. * a * c);
+// 
+//     const float t = ( 2. * c) / ( -d - b);
+// 
+//     logx = ODT_KNOT_START + ( t + j) * ODT_KNOT_INC;
+//   } 
+//   
+//   return pow10( logx);
+// }
 
-  float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
-  float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
 
-  float ocesCheck = oces;
-  if (ocesCheck < OCESMIN) ocesCheck = OCESMIN; 
-    // Just a safety check to make sure no negative OCES values somehow got by
 
-  float logOces = log10( ocesCheck);
+const float ODT_COEFS_LOW[7] = {
+      -2.3188,
+      -2.3188,
+      -2.2048,
+      -1.6094,
+     -0.71512,
+      0.21312,
+       1.1494
+      };
+const float ODT_COEFS_HIGH[7] = {
+      0.43511,
+      0.92737,
+       1.3212,
+       1.5432,
+       1.6182,
+       1.6812,
+       1.6812
+       };
+const float ODT_XMAX = 1388.6;
+const float ODT_XMID = 4.8;
+const float ODT_XMIN = 0.0001;
+const float ODT_YMAX = 48.0;
+const float ODT_YMID = 4.8;
+const float ODT_YMIN = 0.0048;
 
-  float logy;
-  float y;
+float odt_tonescale_segmented_fwd
+  ( 
+    varying float in,
+    varying float COEFS_LOW[7] = ODT_COEFS_LOW,
+    varying float COEFS_HIGH[7] = ODT_COEFS_HIGH,
+    varying float XMAX = ODT_XMAX,
+    varying float XMID = ODT_XMID,
+    varying float XMIN = ODT_XMIN,
+    varying float YMAX = ODT_YMAX,
+    varying float YMID = ODT_YMID,
+    varying float YMIN = ODT_YMIN
+  )
+{    
+  const int N_KNOTS_LOW = 6;
+  const int N_KNOTS_HIGH = 6;
 
-  // For logOces values in the knot range, apply the B-spline shaper, b(x)
-  if (( logOces > ODT_KNOT_START ) && ( logOces < ODT_KNOT_END)) {
+  const float LO_SLOPE = 0.0;
+  const float HI_SLOPE = 0.0;
 
-    float knot_coord = (logOces - ODT_KNOT_START) / ODT_KNOT_SPAN * ( ODT_KNOT_LEN-1);
+  // Check for negatives or zero before taking the log. If negative or zero,
+  // set to ACESMIN.
+  float inCheck = in;
+  if (inCheck <= 0.0) inCheck = pow(2.,-14); 
+
+  float logIn = log10( inCheck);
+
+  float logOut;
+
+  // For log values in the lower knot range, apply the B-spline shaper, b(x)
+  if ( logIn < log10(XMIN) ) 
+  { 
+    logOut = logIn * LO_SLOPE + ( log10(YMIN) - LO_SLOPE * log10(XMIN) );
+  } 
+  else if (( logIn >= log10(XMIN) ) && ( logIn < log10(XMID) )) 
+  {
+    float knot_coord = (N_KNOTS_LOW-1) * (logIn-log10(XMIN))/(log10(XMID)-log10(XMIN));
     int j = knot_coord;
     float t = knot_coord - j;
 
-    float cf[ 3] = { COEFS[ j], COEFS[ j + 1], COEFS[ j + 2]};
-    // NOTE: If the running a version of CTL < 1.5, you may get an 
-    // exception thrown error, usually accompanied by "Array index out of range" 
-    // If you receive this error, it is recommended that you update to CTL v1.5, 
-    // which contains a number of important bug fixes. Otherwise, you may try 
-    // uncommenting the below, which is longer, but equivalent to, the above 
-    // line of code.
-    //
-    //     float cf[ 3];
-    //     if ( j <= 0) {
-    //         cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];
-    //     } else if ( j == 1) {
-    //         cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];
-    //     } else if ( j == 2) {
-    //         cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];
-    //     } else if ( j == 3) {
-    //         cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];
-    //     } 
+    float cf[ 3] = { COEFS_LOW[ j], COEFS_LOW[ j + 1], COEFS_LOW[ j + 2]};
+    
+    float monomials[ 3] = { t * t, t, 1. };
+    logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
+  }    
+  else if (( logIn >= log10(XMID) ) && ( logIn < log10(XMAX) )) 
+  {
+    float knot_coord = (N_KNOTS_HIGH-1) * (logIn-log10(XMID))/(log10(XMAX)-log10(XMID));
+    int j = knot_coord;
+    float t = knot_coord - j;
+
+    float cf[ 3] = { COEFS_HIGH[ j], COEFS_HIGH[ j + 1], COEFS_HIGH[ j + 2]}; 
 
     float monomials[ 3] = { t * t, t, 1. };
-    logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
-  }    
-  else if ( logOces <= ODT_KNOT_START) { 
-      logy = logOces;
-  }
-  else if ( logOces >= ODT_KNOT_END) { 
-      logy = logOces * hi_slope + (log10(lumMax) - hi_slope * ODT_KNOT_END);
-  }
-
-  return pow10(logy);
-}
-
-float odt_tonescale_rev
-( // input is absolute luminance, output is absolute luminance
-  varying float y,
-  varying float COEFS[6] = DEFAULT_ODT_COEFS,   
-  varying float hi_slope = DEFAULT_ODT_HI_SLOPE,
-  varying float lumMin = DEFAULT_YMIN_ABS,
-  varying float lumMax = DEFAULT_YMAX_ABS
-)
-{
-  float ODT_KNOT_START = log10( rrt_tonescale_fwd( 0.18, RRT_COEFS) );
-  float ODT_KNOT_END = log10( rrt_tonescale_fwd( 0.18*pow(2.,6.5), RRT_COEFS) );
-
-  float ODT_KNOT_SPAN = ODT_KNOT_END - ODT_KNOT_START;
-  float ODT_KNOT_INC = ODT_KNOT_SPAN / (ODT_KNOT_LEN - 1.);
-
-  // KNOT_Y is luminance of the spline at the knots.
-  float KNOT_Y[ ODT_KNOT_LEN];
-  for (int i = 0; i < ODT_KNOT_LEN; i = i+1) {
-    KNOT_Y[ i] = ( COEFS[i] + COEFS[i+1]) / 2.;
-  };
-
-  float logy = log10( y);
-
-  float logx;
-  if (logy <= KNOT_Y[0]) {
-    logx = logy;
-  } else if (logy >= KNOT_Y[ODT_KNOT_LEN-1]) {
-    logx = ODT_KNOT_END;
-  } else {  
-    unsigned int j;
-    float cf[ 3];
-    if ( logy > KNOT_Y[ 0] && logy <= KNOT_Y[ 1]) {
-        cf[ 0] = COEFS[0];  cf[ 1] = COEFS[1];  cf[ 2] = COEFS[2];  j = 0;
-    } else if ( logy > KNOT_Y[ 1] && logy <= KNOT_Y[ 2]) {
-        cf[ 0] = COEFS[1];  cf[ 1] = COEFS[2];  cf[ 2] = COEFS[3];  j = 1;
-    } else if ( logy > KNOT_Y[ 2] && logy <= KNOT_Y[ 3]) {
-        cf[ 0] = COEFS[2];  cf[ 1] = COEFS[3];  cf[ 2] = COEFS[4];  j = 2;
-    } else {
-        cf[ 0] = COEFS[3];  cf[ 1] = COEFS[4];  cf[ 2] = COEFS[5];  j = 3;
-    } 
-
-    const float tmp[ 3] = mult_f3_f33( cf, M);
-
-    float a = tmp[ 0];
-    float b = tmp[ 1];
-    float c = tmp[ 2];
-    c = c - logy;
-
-    const float d = sqrt( b * b - 4. * a * c);
-
-    const float t = ( 2. * c) / ( -d - b);
-
-    logx = ODT_KNOT_START + ( t + j) * ODT_KNOT_INC;
+    logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
   } 
-  
-  return pow10( logx);
+  else if ( logIn >= log10(XMAX) ) 
+  { 
+    logOut = logIn * HI_SLOPE + ( log10(YMAX) - HI_SLOPE * log10(XMAX));
+  }
+
+  return pow10(logOut);
 }
 
 

@@ -34,13 +34,16 @@ import "transforms-common";
 import "odt-transforms-common";
 
 
+float Y_2_linCV( float Y, float Ymax, float Ymin) 
+{
+  return (Y - Ymin) / (Ymax - Ymin);
+}
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = P3D60_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
 const float DISPGAMMA = 2.6; 
-
 
 
 void main 
@@ -64,15 +67,18 @@ void main
 
     // Tonescale
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_fwd( rgbPre[2]);
+    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
     // RGB rendering space back to OCES encoding
     rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-  
+    
   // --- Apply black point compensation --- //
-    float linearCV[3] = bpc_cinema_fwd( rgbPost);
+    float linearCV[3];
+    linearCV[0] = Y_2_linCV( rgbPost[0], 48.0, 0.0048);
+    linearCV[1] = Y_2_linCV( rgbPost[1], 48.0, 0.0048);
+    linearCV[2] = Y_2_linCV( rgbPost[2], 48.0, 0.0048);
 
   // --- Convert to display primary encoding --- //
     // OCES RGB to CIE XYZ
