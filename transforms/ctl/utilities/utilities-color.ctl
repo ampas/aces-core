@@ -264,3 +264,29 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
   float V = pow( max( L / a, 0.), 1./gamma) - b;
   return V;
 }
+
+float[3] smpteRange_to_fullRange( float rgbIn[3])
+{
+	const float REFBLACK = (  16. / 256.);
+	const float REFWHITE = ( 235. / 256.);
+	
+	float rgbOut[3];
+	rgbOut[0] = ( rgbIn[0] - REFBLACK) / ( REFWHITE - REFBLACK);
+	rgbOut[1] = ( rgbIn[1] - REFBLACK) / ( REFWHITE - REFBLACK);
+	rgbOut[2] = ( rgbIn[2] - REFBLACK) / ( REFWHITE - REFBLACK);
+
+  return rgbOut;
+}
+
+float[3] fullRange_to_smpteRange( float rgbIn[3])
+{
+	const float REFBLACK = (  16. / 256.);
+	const float REFWHITE = ( 235. / 256.);
+	
+	float rgbOut[3];
+	rgbOut[0] = rgbIn[0] * ( REFWHITE - REFBLACK) + REFBLACK;
+	rgbOut[1] = rgbIn[1] * ( REFWHITE - REFBLACK) + REFBLACK;
+	rgbOut[2] = rgbIn[2] * ( REFWHITE - REFBLACK) + REFBLACK;
+
+  return rgbOut;
+}
