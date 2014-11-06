@@ -17,24 +17,25 @@ import "rrt-transform-common";
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
 
 
-const float ODT_COEFS_LOW[7] = {
-    -2.3188,
-    -2.3188,
-    -2.2048,
-    -1.6094,
-    -0.71512,
-    0.21312,
-    1.1494
+const float ODT_COEFS_LOW[9] = {
+      -2.3188,
+      -2.3188,
+      -2.2614,
+      -2.0618,
+      -1.5918,
+      -0.9764,
+     -0.31832,
+      0.35613,
+       1.0064
 };
 
-const float ODT_COEFS_HIGH[7] = {
-    0.43511,
-    0.92737,
-    1.3212,
-    1.5432,
-    1.6182,
-    1.6812,
-    1.6812
+const float ODT_COEFS_HIGH[6] = {
+    0.37358,
+	0.98891,
+	1.44330,
+	1.6029,
+	1.66893,
+	1.69355
 };
 
 const float ODT_XMAX = 1388.6;
@@ -47,8 +48,8 @@ const float ODT_YMIN = 0.0048;
 float odt_tonescale_segmented_fwd
   ( 
     varying float in,
-    varying float COEFS_LOW[7] = ODT_COEFS_LOW,
-    varying float COEFS_HIGH[7] = ODT_COEFS_HIGH,
+    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
+    varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float XMAX = ODT_XMAX,
     varying float XMID = ODT_XMID,
     varying float XMIN = ODT_XMIN,
@@ -57,11 +58,11 @@ float odt_tonescale_segmented_fwd
     varying float YMIN = ODT_YMIN
   )
 {    
-  const int N_KNOTS_LOW = 6;
-  const int N_KNOTS_HIGH = 6;
+  const int N_KNOTS_LOW = 8;
+  const int N_KNOTS_HIGH = 5;
 
-  const float LO_SLOPE = 0.0;
-  const float HI_SLOPE = 0.0;
+  const float LO_SLOPE = 0.01;
+  const float HI_SLOPE = 0.04;
 
   // Check for negatives or zero before taking the log. If negative or zero,
   // set to ACESMIN.
