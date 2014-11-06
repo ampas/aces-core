@@ -10,21 +10,17 @@ import "transforms-common";
 import "odt-transforms-common";
 
 
+float linCV_2_Y( float linCV, float Ymax, float Ymin) 
+{
+  return linCV * (Ymax - Ymin) + Ymin;
+}
+
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = P3D60_PRI;
 const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
 
 const float DISPGAMMA = 2.6; 
-
-const float ODT_COEFS[6] = { 
-	0.37358,
-	0.98891,
-	1.44330,
-	1.60290,
-	1.66893,
-	1.69355
-};
 
 
 
@@ -56,8 +52,10 @@ void main
     // CIE XYZ to OCES RGB
     linearCV = mult_f3_f44( XYZ, XYZ_2_ACES_MAT);
   
-  // --- Apply inverse black point compensation --- //
-    float rgbPre[3] = bpc_cinema_inv( linearCV);
+    float rgbPre[3];
+    rgbPre[0] = linCV_2_Y( linearCV[0], 48.0, 0.0048);
+    rgbPre[1] = linCV_2_Y( linearCV[1], 48.0, 0.0048);
+    rgbPre[2] = linCV_2_Y( linearCV[2], 48.0, 0.0048);
   
   // --- Apply the tonescale independently in rendering-space RGB --- //
     // OCES to RGB rendering space
@@ -65,9 +63,9 @@ void main
 
     // Tonescale
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_rev( rgbPre[0], ODT_COEFS);
-    rgbPost[1] = odt_tonescale_rev( rgbPre[1], ODT_COEFS);
-    rgbPost[2] = odt_tonescale_rev( rgbPre[2], ODT_COEFS);
+    rgbPost[0] = odt_tonescale_segmented_rev( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_segmented_rev( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_segmented_rev( rgbPre[2]);
 
     // RGB rendering space back to OCES encoding
     float oces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
