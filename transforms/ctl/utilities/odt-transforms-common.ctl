@@ -18,24 +18,24 @@ const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_P
 
 
 const float ODT_COEFS_LOW[9] = {
-      -2.3188,
-      -2.3188,
-      -2.2614,
-      -2.0618,
-      -1.5918,
-      -0.9764,
-     -0.31832,
-      0.35613,
-       1.0064
+    -2.3188,
+    -2.3188,
+    -2.2614,
+    -2.0618,
+    -1.5918,
+    -0.9764,
+   -0.31832,
+    0.35613,
+     1.0064
 };
 
 const float ODT_COEFS_HIGH[6] = {
     0.37358,
-	0.98891,
-	1.44330,
-	1.6029,
-	1.66893,
-	1.69355
+    0.98891,
+    1.44330,
+    1.60290,
+    1.66893,
+    1.69355
 };
 
 const float ODT_XMAX = 1388.6;
@@ -45,11 +45,17 @@ const float ODT_YMAX = 48.0;
 const float ODT_YMID = 4.8;
 const float ODT_YMIN = 0.0048;
 
+const float ODT_LO_SLOPE = 0.01;
+const float ODT_HI_SLOPE = 0.04;
+
+
 float odt_tonescale_segmented_fwd
   ( 
     varying float in,
     varying float COEFS_LOW[9] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
+    varying float LO_SLOPE = ODT_LO_SLOPE,
+    varying float HI_SLOPE = ODT_HI_SLOPE,    
     varying float XMAX = ODT_XMAX,
     varying float XMID = ODT_XMID,
     varying float XMIN = ODT_XMIN,
@@ -108,6 +114,110 @@ float odt_tonescale_segmented_fwd
   return pow10(logOut);
 }
 
+
+float odt_tonescale_segmented_rev
+  ( 
+    varying float y,
+    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
+    varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
+    varying float LO_SLOPE = ODT_LO_SLOPE,
+    varying float HI_SLOPE = ODT_HI_SLOPE,    
+    varying float XMAX = ODT_XMAX,
+    varying float XMID = ODT_XMID,
+    varying float XMIN = ODT_XMIN,
+    varying float YMAX = ODT_YMAX,
+    varying float YMID = ODT_YMID,
+    varying float YMIN = ODT_YMIN
+  )
+{  
+  const int N_KNOTS_LOW = 8;
+  const int N_KNOTS_HIGH = 5;
+
+  const float KNOT_INC_LOW = (log10(XMID) - log10(XMIN)) / (N_KNOTS_LOW - 1.);
+  const float KNOT_INC_HIGH = (log10(XMAX) - log10(XMID)) / (N_KNOTS_HIGH - 1.);
+
+//   print( KNOT_INC_LOW, "\n");
+//   print( KNOT_INC_HIGH, "\n");
+  print( log10(YMAX), "\n");
+  
+  // KNOT_Y is luminance of the spline at each knot
+  float KNOT_Y_LOW[ N_KNOTS_LOW];
+  for (int i = 0; i < N_KNOTS_LOW; i = i+1) {
+    KNOT_Y_LOW[ i] = ( COEFS_LOW[i] + COEFS_LOW[i+1]) / 2.;
+  };
+
+  float KNOT_Y_HIGH[ N_KNOTS_HIGH];
+  for (int i = 0; i < N_KNOTS_HIGH; i = i+1) {
+    KNOT_Y_HIGH[ i] = ( COEFS_HIGH[i] + COEFS_HIGH[i+1]) / 2.;
+  };
+
+  float logy = log10( y);
+
+  float logx;
+  if (logy <= log10(YMIN)) {
+    logx = log10(XMIN);
+  } else if ( (logy > log10(YMIN)) && (logy <= log10(YMID)) ) {
+    unsigned int j;
+    float cf[ 3];
+    if ( logy > KNOT_Y_LOW[ 0] && logy <= KNOT_Y_LOW[ 1]) {
+        cf[ 0] = COEFS_LOW[0];  cf[ 1] = COEFS_LOW[1];  cf[ 2] = COEFS_LOW[2];  j = 0;
+    } else if ( logy > KNOT_Y_LOW[ 1] && logy <= KNOT_Y_LOW[ 2]) {
+        cf[ 0] = COEFS_LOW[1];  cf[ 1] = COEFS_LOW[2];  cf[ 2] = COEFS_LOW[3];  j = 1;
+    } else if ( logy > KNOT_Y_LOW[ 2] && logy <= KNOT_Y_LOW[ 3]) {
+        cf[ 0] = COEFS_LOW[2];  cf[ 1] = COEFS_LOW[3];  cf[ 2] = COEFS_LOW[4];  j = 2;
+    } else if ( logy > KNOT_Y_LOW[ 3] && logy <= KNOT_Y_LOW[ 4]) {
+        cf[ 0] = COEFS_LOW[3];  cf[ 1] = COEFS_LOW[4];  cf[ 2] = COEFS_LOW[5];  j = 3;
+    } else if ( logy > KNOT_Y_LOW[ 4] && logy <= KNOT_Y_LOW[ 5]) {
+        cf[ 0] = COEFS_LOW[4];  cf[ 1] = COEFS_LOW[5];  cf[ 2] = COEFS_LOW[6];  j = 4;
+    } else if ( logy > KNOT_Y_LOW[ 5] && logy <= KNOT_Y_LOW[ 6]) {
+        cf[ 0] = COEFS_LOW[5];  cf[ 1] = COEFS_LOW[6];  cf[ 2] = COEFS_LOW[7];  j = 5;
+    } else if ( logy > KNOT_Y_LOW[ 6] && logy <= KNOT_Y_LOW[ 7]) {
+        cf[ 0] = COEFS_LOW[6];  cf[ 1] = COEFS_LOW[7];  cf[ 2] = COEFS_LOW[8];  j = 6;
+    }
+    
+    const float tmp[ 3] = mult_f3_f33( cf, M);
+
+    float a = tmp[ 0];
+    float b = tmp[ 1];
+    float c = tmp[ 2];
+    c = c - logy;
+
+    const float d = sqrt( b * b - 4. * a * c);
+
+    const float t = ( 2. * c) / ( -d - b);
+
+    logx = log10(XMIN) + ( t + j) * KNOT_INC_LOW;
+  } else if ( (logy > log10(YMID)) && (logy <= log10(YMAX)) ) {
+    unsigned int j;
+    float cf[ 3];
+    if ( logy > KNOT_Y_HIGH[ 0] && logy <= KNOT_Y_HIGH[ 1]) {
+        cf[ 0] = COEFS_HIGH[0];  cf[ 1] = COEFS_HIGH[1];  cf[ 2] = COEFS_HIGH[2];  j = 0;
+    } else if ( logy > KNOT_Y_HIGH[ 1] && logy <= KNOT_Y_HIGH[ 2]) {
+        cf[ 0] = COEFS_HIGH[1];  cf[ 1] = COEFS_HIGH[2];  cf[ 2] = COEFS_HIGH[3];  j = 1;
+    } else if ( logy > KNOT_Y_HIGH[ 2] && logy <= KNOT_Y_HIGH[ 3]) {
+        cf[ 0] = COEFS_HIGH[2];  cf[ 1] = COEFS_HIGH[3];  cf[ 2] = COEFS_HIGH[4];  j = 2;
+    } else if ( logy > KNOT_Y_HIGH[ 3] && logy <= KNOT_Y_HIGH[ 4]) {
+        cf[ 0] = COEFS_HIGH[3];  cf[ 1] = COEFS_HIGH[4];  cf[ 2] = COEFS_HIGH[5];  j = 3;
+    } 
+    
+    const float tmp[ 3] = mult_f3_f33( cf, M);
+
+    float a = tmp[ 0];
+    float b = tmp[ 1];
+    float c = tmp[ 2];
+    c = c - logy;
+
+    const float d = sqrt( b * b - 4. * a * c);
+
+    const float t = ( 2. * c) / ( -d - b);
+
+    logx = log10(XMID) + ( t + j) * KNOT_INC_HIGH;
+  } else if ( logy > log10(YMAX) ) {
+    logx = log10(XMAX);
+  }
+  
+  return pow10( logx);
+}
 
 
 float[3] huePreservingClip_to_p3d60( float XYZ[3])
