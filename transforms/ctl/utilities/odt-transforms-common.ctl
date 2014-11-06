@@ -80,12 +80,12 @@ float odt_tonescale_segmented_fwd
   float logOut;
 
   // For log values in the lower knot range, apply the B-spline shaper, b(x)
-  if ( logIn < log10(XMIN) ) 
-  { 
+  if ( logIn < log10(XMIN) ) { 
+
     logOut = logIn * LO_SLOPE + ( log10(YMIN) - LO_SLOPE * log10(XMIN) );
-  } 
-  else if (( logIn >= log10(XMIN) ) && ( logIn < log10(XMID) )) 
-  {
+
+  } else if (( logIn >= log10(XMIN) ) && ( logIn < log10(XMID) )) {
+
     float knot_coord = (N_KNOTS_LOW-1) * (logIn-log10(XMIN))/(log10(XMID)-log10(XMIN));
     int j = knot_coord;
     float t = knot_coord - j;
@@ -94,9 +94,9 @@ float odt_tonescale_segmented_fwd
     
     float monomials[ 3] = { t * t, t, 1. };
     logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
-  }    
-  else if (( logIn >= log10(XMID) ) && ( logIn < log10(XMAX) )) 
-  {
+
+  } else if (( logIn >= log10(XMID) ) && ( logIn < log10(XMAX) )) {
+
     float knot_coord = (N_KNOTS_HIGH-1) * (logIn-log10(XMID))/(log10(XMAX)-log10(XMID));
     int j = knot_coord;
     float t = knot_coord - j;
@@ -105,10 +105,11 @@ float odt_tonescale_segmented_fwd
 
     float monomials[ 3] = { t * t, t, 1. };
     logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
-  } 
-  else if ( logIn >= log10(XMAX) ) 
-  { 
+
+  } else if ( logIn >= log10(XMAX) ) { 
+
     logOut = logIn * HI_SLOPE + ( log10(YMAX) - HI_SLOPE * log10(XMAX));
+
   }
 
   return pow10(logOut);
@@ -135,10 +136,6 @@ float odt_tonescale_segmented_rev
 
   const float KNOT_INC_LOW = (log10(XMID) - log10(XMIN)) / (N_KNOTS_LOW - 1.);
   const float KNOT_INC_HIGH = (log10(XMAX) - log10(XMID)) / (N_KNOTS_HIGH - 1.);
-
-//   print( KNOT_INC_LOW, "\n");
-//   print( KNOT_INC_HIGH, "\n");
-  print( log10(YMAX), "\n");
   
   // KNOT_Y is luminance of the spline at each knot
   float KNOT_Y_LOW[ N_KNOTS_LOW];
@@ -155,8 +152,11 @@ float odt_tonescale_segmented_rev
 
   float logx;
   if (logy <= log10(YMIN)) {
-    logx = log10(XMIN);
+
+    logx = (logy - ( log10(YMIN) - LO_SLOPE * log10(XMIN))) / LO_SLOPE;
+
   } else if ( (logy > log10(YMIN)) && (logy <= log10(YMID)) ) {
+
     unsigned int j;
     float cf[ 3];
     if ( logy > KNOT_Y_LOW[ 0] && logy <= KNOT_Y_LOW[ 1]) {
@@ -187,7 +187,9 @@ float odt_tonescale_segmented_rev
     const float t = ( 2. * c) / ( -d - b);
 
     logx = log10(XMIN) + ( t + j) * KNOT_INC_LOW;
+
   } else if ( (logy > log10(YMID)) && (logy <= log10(YMAX)) ) {
+
     unsigned int j;
     float cf[ 3];
     if ( logy > KNOT_Y_HIGH[ 0] && logy <= KNOT_Y_HIGH[ 1]) {
@@ -212,8 +214,11 @@ float odt_tonescale_segmented_rev
     const float t = ( 2. * c) / ( -d - b);
 
     logx = log10(XMID) + ( t + j) * KNOT_INC_HIGH;
+
   } else if ( logy > log10(YMAX) ) {
-    logx = log10(XMAX);
+
+    logx = (logy - ( log10(YMAX) - HI_SLOPE * log10(XMAX))) / HI_SLOPE;
+
   }
   
   return pow10( logx);
