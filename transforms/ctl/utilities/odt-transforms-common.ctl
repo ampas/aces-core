@@ -38,8 +38,8 @@ const float ODT_COEFS_HIGH[6] = {
     1.69355
 };
 
-const float ODT_XMAX = 1388.6;
-const float ODT_XMID = 4.8;
+const float ODT_XMAX = rrt_tonescale_fwd( 0.18*pow(2.,6.5) );
+const float ODT_XMID = rrt_tonescale_fwd( 0.18 );
 const float ODT_XMIN = 0.0001;
 const float ODT_YMAX = 48.0;
 const float ODT_YMID = 4.8;
@@ -48,10 +48,12 @@ const float ODT_YMIN = 0.0048;
 const float ODT_LO_SLOPE = 0.01;
 const float ODT_HI_SLOPE = 0.04;
 
+const int N_KNOTS_LOW = 8;
+const int N_KNOTS_HIGH = 5;
 
 float odt_tonescale_segmented_fwd
   ( 
-    varying float in,
+    varying float x,
     varying float COEFS_LOW[9] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float LO_SLOPE = ODT_LO_SLOPE,
@@ -64,55 +66,49 @@ float odt_tonescale_segmented_fwd
     varying float YMIN = ODT_YMIN
   )
 {    
-  const int N_KNOTS_LOW = 8;
-  const int N_KNOTS_HIGH = 5;
-
-  const float LO_SLOPE = 0.01;
-  const float HI_SLOPE = 0.04;
-
   // Check for negatives or zero before taking the log. If negative or zero,
   // set to ACESMIN.
-  float inCheck = in;
-  if (inCheck <= 0.0) inCheck = pow(2.,-14); 
+  float xCheck = x;
+  if (xCheck <= 0.0) xCheck = pow(2.,-14); 
 
-  float logIn = log10( inCheck);
+  float logx = log10( xCheck);
 
-  float logOut;
+  float logy;
 
   // For log values in the lower knot range, apply the B-spline shaper, b(x)
-  if ( logIn < log10(XMIN) ) { 
+  if ( logx <= log10(XMIN) ) { 
 
-    logOut = logIn * LO_SLOPE + ( log10(YMIN) - LO_SLOPE * log10(XMIN) );
+    logy = logx * LO_SLOPE + ( log10(YMIN) - LO_SLOPE * log10(XMIN) );
 
-  } else if (( logIn >= log10(XMIN) ) && ( logIn < log10(XMID) )) {
+  } else if (( logx > log10(XMIN) ) && ( logx < log10(XMID) )) {
 
-    float knot_coord = (N_KNOTS_LOW-1) * (logIn-log10(XMIN))/(log10(XMID)-log10(XMIN));
+    float knot_coord = (N_KNOTS_LOW-1) * (logx-log10(XMIN))/(log10(XMID)-log10(XMIN));
     int j = knot_coord;
     float t = knot_coord - j;
 
     float cf[ 3] = { COEFS_LOW[ j], COEFS_LOW[ j + 1], COEFS_LOW[ j + 2]};
     
     float monomials[ 3] = { t * t, t, 1. };
-    logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
+    logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
-  } else if (( logIn >= log10(XMID) ) && ( logIn < log10(XMAX) )) {
+  } else if (( logx >= log10(XMID) ) && ( logx < log10(XMAX) )) {
 
-    float knot_coord = (N_KNOTS_HIGH-1) * (logIn-log10(XMID))/(log10(XMAX)-log10(XMID));
+    float knot_coord = (N_KNOTS_HIGH-1) * (logx-log10(XMID))/(log10(XMAX)-log10(XMID));
     int j = knot_coord;
     float t = knot_coord - j;
 
     float cf[ 3] = { COEFS_HIGH[ j], COEFS_HIGH[ j + 1], COEFS_HIGH[ j + 2]}; 
 
     float monomials[ 3] = { t * t, t, 1. };
-    logOut = dot_f3_f3( monomials, mult_f3_f33( cf, M));
+    logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
-  } else if ( logIn >= log10(XMAX) ) { 
+  } else { //if ( logIn >= log10(XMAX) ) { 
 
-    logOut = logIn * HI_SLOPE + ( log10(YMAX) - HI_SLOPE * log10(XMAX));
+    logy = logx * HI_SLOPE + ( log10(YMAX) - HI_SLOPE * log10(XMAX) );
 
   }
 
-  return pow10(logOut);
+  return pow10(logy);
 }
 
 
@@ -131,9 +127,6 @@ float odt_tonescale_segmented_rev
     varying float YMIN = ODT_YMIN
   )
 {  
-  const int N_KNOTS_LOW = 8;
-  const int N_KNOTS_HIGH = 5;
-
   const float KNOT_INC_LOW = (log10(XMID) - log10(XMIN)) / (N_KNOTS_LOW - 1.);
   const float KNOT_INC_HIGH = (log10(XMAX) - log10(XMID)) / (N_KNOTS_HIGH - 1.);
   
@@ -188,7 +181,7 @@ float odt_tonescale_segmented_rev
 
     logx = log10(XMIN) + ( t + j) * KNOT_INC_LOW;
 
-  } else if ( (logy > log10(YMID)) && (logy <= log10(YMAX)) ) {
+  } else if ( (logy > log10(YMID)) && (logy < log10(YMAX)) ) {
 
     unsigned int j;
     float cf[ 3];
@@ -200,7 +193,7 @@ float odt_tonescale_segmented_rev
         cf[ 0] = COEFS_HIGH[2];  cf[ 1] = COEFS_HIGH[3];  cf[ 2] = COEFS_HIGH[4];  j = 2;
     } else if ( logy > KNOT_Y_HIGH[ 3] && logy <= KNOT_Y_HIGH[ 4]) {
         cf[ 0] = COEFS_HIGH[3];  cf[ 1] = COEFS_HIGH[4];  cf[ 2] = COEFS_HIGH[5];  j = 3;
-    } 
+    }
     
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
@@ -215,7 +208,7 @@ float odt_tonescale_segmented_rev
 
     logx = log10(XMID) + ( t + j) * KNOT_INC_HIGH;
 
-  } else if ( logy > log10(YMAX) ) {
+  } else { //if ( logy >= log10(YMAX) ) {
 
     logx = (logy - ( log10(YMAX) - HI_SLOPE * log10(XMAX))) / HI_SLOPE;
 
