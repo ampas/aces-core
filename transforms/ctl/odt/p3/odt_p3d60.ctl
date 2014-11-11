@@ -34,10 +34,6 @@ import "transforms-common";
 import "odt-transforms-common";
 
 
-float Y_2_linCV( float Y, float Ymax, float Ymin) 
-{
-  return (Y - Ymin) / (Ymax - Ymin);
-}
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = P3D60_PRI;

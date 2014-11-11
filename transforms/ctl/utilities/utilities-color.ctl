@@ -75,8 +75,10 @@ const Chromaticities RIMMROMM_PRI =
 float[3] XYZ_2_xyY( float XYZ[3])
 {  
   float xyY[3];
-  xyY[0] = XYZ[0] / (XYZ[0] + XYZ[1] + XYZ[2]);
-  xyY[1] = XYZ[1] / (XYZ[0] + XYZ[1] + XYZ[2]);  
+  float divisor = (XYZ[0] + XYZ[1] + XYZ[2]);
+  if (divisor == 0.) divisor = 1e-10;
+  xyY[0] = XYZ[0] / divisor;
+  xyY[1] = XYZ[1] / divisor;  
   xyY[2] = XYZ[1];
   
   return xyY;
@@ -84,11 +86,11 @@ float[3] XYZ_2_xyY( float XYZ[3])
 
 float[3] xyY_2_XYZ( input varying float xyY[3])
 {
-  float XYZ[3];  
-  XYZ[0] = xyY[0] * xyY[2] / xyY[1];
+  float XYZ[3];
+  XYZ[0] = xyY[0] * xyY[2] / max( xyY[1], 1e-10);
   XYZ[1] = xyY[2];  
-  XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / xyY[1];
-  
+  XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / max( xyY[1], 1e-10);
+
   return XYZ;
 }
 

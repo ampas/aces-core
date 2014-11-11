@@ -10,10 +10,6 @@ import "transforms-common";
 import "odt-transforms-common";
 
 
-float linCV_2_Y( float linCV, float Ymax, float Ymin) 
-{
-  return linCV * (Ymax - Ymin) + Ymin;
-}
 
 
 /* --- ODT Parameters --- */
@@ -90,7 +86,7 @@ print( "\n");
 // if (isinf_f( rgbPost[0])) rgbPost[0] = ODT_XMAX;
 
     // RGB rendering space back to OCES encoding
-    float oces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+    float oces[3] = rgbPost; //mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
 
 print( "oces = \n");
 print_f3( oces);

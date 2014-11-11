@@ -218,6 +218,17 @@ float odt_tonescale_segmented_rev
 }
 
 
+float Y_2_linCV( float Y, float Ymax, float Ymin) 
+{
+  return (Y - Ymin) / (Ymax - Ymin);
+}
+
+float linCV_2_Y( float linCV, float Ymax, float Ymin) 
+{
+  return linCV * (Ymax - Ymin) + Ymin;
+}
+
+
 float[3] huePreservingClip_to_p3d60( float XYZ[3])
 {
   // Converts CIE XYZ tristimulus values to P3D60, performs a "smart-clip" by 
