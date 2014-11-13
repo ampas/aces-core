@@ -17,6 +17,9 @@ const float DIM_SURROUND_GAMMA = 0.9811;
 const float ODT_SAT_FACTOR = 0.93;
 const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, RENDER_RGB2Y);
 
+// Target white and black points for cinema system tonescale
+const float CINEMA_WHITE = 48.0;
+const float CINEMA_BLACK = 0.0048; // CINEMA_WHITE / 10000.
 
 
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);

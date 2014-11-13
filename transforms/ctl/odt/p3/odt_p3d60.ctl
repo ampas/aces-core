@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to P3D60
-// WGR8
+// WGR8.5
 //
 
 //
@@ -57,28 +57,24 @@ void main
   // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = { rIn, gIn, bIn};
 
-  // --- Apply the tonescale independently in rendering-space RGB --- //
-    // OCES to RGB rendering space
+  // --- OCES to RGB rendering space --- //
     float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-    // Tonescale
+  // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
     rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
     rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
     rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
-    // RGB rendering space back to OCES encoding
-    rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-    
   // --- Apply black point compensation --- //
     float linearCV[3];
-    linearCV[0] = Y_2_linCV( rgbPost[0], 48.0, 0.0048);
-    linearCV[1] = Y_2_linCV( rgbPost[1], 48.0, 0.0048);
-    linearCV[2] = Y_2_linCV( rgbPost[2], 48.0, 0.0048);
+    linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
   // --- Convert to display primary encoding --- //
-    // OCES RGB to CIE XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, ACES_2_XYZ_MAT);
+    // Rendering space RGB to XYZ
+    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
