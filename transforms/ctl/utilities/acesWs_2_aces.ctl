@@ -1,3 +1,11 @@
+//
+// acesWs_2_aces.ctl
+// WGR8.5
+//
+// Converts from ACES Working Space primaries and ACESlog encoding (scaled for CDL) to ACES
+//
+
+
 import "utilities";
 import "utilities-color";
 

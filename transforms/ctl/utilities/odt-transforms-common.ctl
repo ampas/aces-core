@@ -1,11 +1,8 @@
 //
 // odt-transforms-common.ctl
-// WGR8
+// WGR8.5
 //
 // Contains functions and constants shared by forward and inverse ODT transforms 
-// This is primarily to avoid code redundancy.
-// This structure also has the benefit of facilitating any updates to these
-// parameters or functions, if necessary.
 //
 
 
@@ -83,23 +80,37 @@ float odt_tonescale_segmented_fwd
 
   float logy;
 
+//   print( "x: ", x, "\n");
+//   print( "XMID: ", rrt_tonescale_fwd( 0.18 ), "\n\n");
+// 
+//   print( "logx: ", logx, "\n");
+//   print( "log10(XMID): ", log10(rrt_tonescale_fwd( 0.18 )), "\n\n");
+  
   // For log values in the lower knot range, apply the B-spline shaper, b(x)
   if ( logx <= log10(XMIN) ) { 
+//   print( logx, " < ", log10(XMIN), "\n");
 
     logy = logx * LO_SLOPE + ( log10(YMIN) - LO_SLOPE * log10(XMIN) );
 
   } else if (( logx > log10(XMIN) ) && ( logx < log10(XMID) )) {
+//   print( logx, " > ", log10(XMIN), " && ", logx, " < ", log10(XMID), "\n");
 
+// if (logx == log10(XMID)) print("EQUAL\n");
     float knot_coord = (N_KNOTS_LOW-1) * (logx-log10(XMIN))/(log10(XMID)-log10(XMIN));
+// print( "num: ", (logx-log10(XMIN)), "\n");
+// print( "denom: ", (log10(XMID)-log10(XMIN)), "\n");
+// print( "factor: ", (logx-log10(XMIN))/(log10(XMID)-log10(XMIN)), "\n");
     int j = knot_coord;
     float t = knot_coord - j;
-
+// print( "j: ", j, "\n");
+// print( "t: ", t, "\n");
     float cf[ 3] = { COEFS_LOW[ j], COEFS_LOW[ j + 1], COEFS_LOW[ j + 2]};
     
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
   } else if (( logx >= log10(XMID) ) && ( logx < log10(XMAX) )) {
+//   print( logx, " >= ", log10(XMID), " && ", logx, " < ", log10(XMAX), "\n");
 
     float knot_coord = (N_KNOTS_HIGH-1) * (logx-log10(XMID))/(log10(XMAX)-log10(XMID));
     int j = knot_coord;
@@ -111,6 +122,7 @@ float odt_tonescale_segmented_fwd
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
   } else { //if ( logIn >= log10(XMAX) ) { 
+//   print( logx, " >= ", log10(XMAX), "\n");
 
     logy = logx * HI_SLOPE + ( log10(YMAX) - HI_SLOPE * log10(XMAX) );
 

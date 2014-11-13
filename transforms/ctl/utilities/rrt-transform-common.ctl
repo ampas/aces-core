@@ -1,6 +1,5 @@
 //
 // rrt-transform-common.ctl
-//
 // WGR8.5
 //
 // Contains functions and constants shared by forward and inverse RRT transforms

@@ -1,6 +1,6 @@
 //
 // utilities-color.ctl
-// WGR8
+// WGR8.5
 //
 // Color related constants and functions
 //
