@@ -70,15 +70,18 @@ void main
 
     // Tonescale
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_fwd( rgbPre[2]);
+    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
     // RGB rendering space back to OCES encoding
     rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-  
+    
   // --- Apply black point compensation --- //
-    float linearCV[3] = bpc_cinema_fwd( rgbPost);
+    float linearCV[3];
+    linearCV[0] = Y_2_linCV( rgbPost[0], 48.0, 0.0048);
+    linearCV[1] = Y_2_linCV( rgbPost[1], 48.0, 0.0048);
+    linearCV[2] = Y_2_linCV( rgbPost[2], 48.0, 0.0048);
 
   // --- Compensate for different white point being darker  --- //
   // This adjustment is to correct an issue that exists in ODTs where the device 
@@ -120,7 +123,7 @@ void main
   // --- Handle out-of-gamut values --- //
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
-
+  
   // --- Encode linear code values with transfer function --- //
     float outputCV[3];
     outputCV[0] = pow( linearCV[0], 1./DISPGAMMA);
