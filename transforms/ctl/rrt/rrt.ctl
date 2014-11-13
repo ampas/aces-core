@@ -1,6 +1,6 @@
 // 
 // Reference Rendering Transform (RRT)
-// WGR8
+// WGR8.5
 //
 
 
@@ -43,26 +43,23 @@ void main
 		
 	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
 
-  // --- Global desaturation --- //
+  // --- ACES to RGB rendering space --- //
     aces = clamp_f3( aces, 0., HALF_POS_INF);
-    aces = global_desaturation_inIPT( aces, GLOBAL_DESAT);
-
-  // --- Apply the tonescale independently in rendering-space RGB --- //
-    aces = clamp_f3( aces, 0., HALF_POS_INF);
-
-    // ACES to RGB rendering space    
     float rgbPre[3] = mult_f3_f44( aces, ACES_2_RENDER_PRI_MAT);
 
-    // Tonescale
+  // --- Global desaturation --- //
+    rgbPre = mult_f3_f33( rgbPre, RRT_SAT_MAT);
+
+  // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
     rgbPost[0] = rrt_tonescale_fwd( rgbPre[0], RRT_COEFS);
     rgbPost[1] = rrt_tonescale_fwd( rgbPre[1], RRT_COEFS);
     rgbPost[2] = rrt_tonescale_fwd( rgbPre[2], RRT_COEFS);
 
-    // RGB rendering space back to OCES encoding
+  // --- RGB rendering space to OCES encoding --- //
     float rgbOces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
     
-  // Assign OCES-RGB to output variables (OCES)
+  // Assign OCES RGB to output variables (OCES)
   rOut = rgbOces[0];
   gOut = rgbOces[1];
   bOut = rgbOces[2];

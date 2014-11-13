@@ -1,13 +1,11 @@
 //
 // rrt-transform-common.ctl
 //
-// WGR8
+// WGR8.5
 //
 // Contains functions and constants shared by forward and inverse RRT transforms
 //
 
-
-import "ipt-module";
 
 
 // --- RRT constants --- //
@@ -51,8 +49,12 @@ import "ipt-module";
   const float RRT_RED_HUE = 0.;
   const float RRT_RED_WIDTH = 135.;
 
-  // Desaturation contant
-  const float GLOBAL_DESAT = 0.97;
+  // Desaturation contants
+  const float RRT_SAT_FACTOR = 0.96;
+  const float RENDER_RGB2Y[3] = { RENDER_PRI_2_XYZ_MAT[0][1], 
+                                  RENDER_PRI_2_XYZ_MAT[1][1], 
+                                  RENDER_PRI_2_XYZ_MAT[2][1] };
+  const float RRT_SAT_MAT[3][3] = calc_sat_adjust_matrix( RRT_SAT_FACTOR, RENDER_RGB2Y);
 
 // ------- Glow module functions
 float glow_fwd( float ycIn, float glowGainIn, float glowMid)
@@ -159,21 +161,6 @@ float uncenter_hue( float hueCentered, float centerH)
   return hue;
 }
 
-
-// ------ Global saturation functions
-float[3] global_desaturation_inIPT( float incolor[3], float factor)
-{
-    float IPT[3]; 
-    float LCH[3];
-    float out[3];
-
-    IPT = aces_2_ipt(incolor);
-    LCH = ipt_2_lch( IPT );
-    LCH[1] = LCH[1] * factor;
-    IPT = lch_2_ipt(LCH);
-    out = ipt_2_aces(IPT);
-    return out;
-}
 
 
 // ------ Tone scale spline functions 
