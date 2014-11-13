@@ -13,6 +13,14 @@
 import "rrt-transform-common";
 
 
+// Gamma compensation factor
+const float DIM_SURROUND_GAMMA = 0.9811;
+
+// Saturation compensation factor
+const float ODT_SAT_FACTOR = 0.93;
+const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, RENDER_RGB2Y);
+
+
 
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
 
@@ -229,27 +237,15 @@ float linCV_2_Y( float linCV, float Ymax, float Ymin)
 }
 
 
-float[3] huePreservingClip_to_p3d60( float XYZ[3])
+float[3] darkSurround_to_dimSurround( float linearCV[3])
 {
-  // Converts CIE XYZ tristimulus values to P3D60, performs a "smart-clip" by 
-  // clamping to device primaries and performing a hue restore. The resulting P3
-  // code values are then converted back to CIE XYZ tristimulus values and 
-  // returned.
-  
-  const float XYZ_2_P3D60_PRI_MAT[4][4] = XYZtoRGB(P3D60_PRI,1.0);
-  const float P3D60_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(P3D60_PRI,1.0);
-  
-  // CIE XYZ to P3D60 primaries
-  float p3[3] = mult_f3_f44( XYZ, XYZ_2_P3D60_PRI_MAT);
+  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT); 
 
-  // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
-  float p3Clamp[3] = clamp_f3( p3, 0., 1.);
+  float xyY[3] = XYZ_2_xyY(XYZ);
+  xyY[2] = pow( xyY[2], DIM_SURROUND_GAMMA);
+  XYZ = xyY_2_XYZ(xyY);
 
-  // Restore hue after clip operation ("smart-clip")
-  p3 = restore_hue_dw3( p3, p3Clamp);
-
-  // P3D60 to CIE XYZ
-  return mult_f3_f44( p3, P3D60_PRI_2_XYZ_MAT);  
+  return mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
 }
 
 

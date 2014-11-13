@@ -29,6 +29,10 @@ const float RENDER_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( RENDER_PRI, 1.0);
 const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
 const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
 
+const float RENDER_RGB2Y[3] = { RENDER_PRI_2_XYZ_MAT[0][1], 
+                                RENDER_PRI_2_XYZ_MAT[1][1], 
+                                RENDER_PRI_2_XYZ_MAT[2][1] };
+
 
 
 const float TINY = 1e-10;

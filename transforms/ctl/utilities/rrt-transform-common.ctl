@@ -51,9 +51,6 @@
 
   // Desaturation contants
   const float RRT_SAT_FACTOR = 0.96;
-  const float RENDER_RGB2Y[3] = { RENDER_PRI_2_XYZ_MAT[0][1], 
-                                  RENDER_PRI_2_XYZ_MAT[1][1], 
-                                  RENDER_PRI_2_XYZ_MAT[2][1] };
   const float RRT_SAT_MAT[3][3] = calc_sat_adjust_matrix( RRT_SAT_FACTOR, RENDER_RGB2Y);
 
 // ------- Glow module functions
