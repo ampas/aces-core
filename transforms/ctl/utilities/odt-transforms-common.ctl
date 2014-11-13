@@ -25,7 +25,7 @@ const float CINEMA_BLACK = 0.0048; // CINEMA_WHITE / 10000.
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
 
 
-const float ODT_COEFS_LOW[9] = {
+const float ODT_COEFS_LOW[10] = {
     -2.3188,
     -2.3188,
     -2.2614,
@@ -34,6 +34,7 @@ const float ODT_COEFS_LOW[9] = {
     -0.9764,
    -0.31832,
     0.35613,
+     1.0064,
      1.0064
 };
 
@@ -62,7 +63,7 @@ const int N_KNOTS_HIGH = 5;
 float odt_tonescale_segmented_fwd
   ( 
     varying float x,
-    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
+    varying float COEFS_LOW[10] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float LO_SLOPE = ODT_LO_SLOPE,
     varying float HI_SLOPE = ODT_HI_SLOPE,    
@@ -138,7 +139,7 @@ float odt_tonescale_segmented_fwd
 float odt_tonescale_segmented_rev
   ( 
     varying float y,
-    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
+    varying float COEFS_LOW[10] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float LO_SLOPE = ODT_LO_SLOPE,
     varying float HI_SLOPE = ODT_HI_SLOPE,    
