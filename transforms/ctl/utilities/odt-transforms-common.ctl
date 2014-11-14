@@ -258,6 +258,7 @@ float[3] darkSurround_to_dimSurround( float linearCV[3])
   float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT); 
 
   float xyY[3] = XYZ_2_xyY(XYZ);
+  xyY[2] = clamp( xyY[2], 0., HALF_POS_INF);
   xyY[2] = pow( xyY[2], DIM_SURROUND_GAMMA);
   XYZ = xyY_2_XYZ(xyY);
 
