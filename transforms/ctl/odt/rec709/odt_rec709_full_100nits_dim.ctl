@@ -7,7 +7,7 @@
 // Summary :
 //  This transform is intended for mapping OCES onto a Rec.709 broadcast monitor
 //  that is calibrated to a D65 white point at 100 cd/m^2. The assumed observer 
-//  adapted white is D65, and the viewing environment is that of a dark theater. 
+//  adapted white is D65, and the viewing environment is a dim surround. 
 //
 // Device Primaries : 
 //  Primaries are those specified in Rec. ITU-R BT.709
@@ -26,11 +26,8 @@
 //                                     0.3217       0.329
 //
 // Viewing Environment:
-//  Environment specified in SMPTE RP 431-2-2007
-//   Note: This environment is consistent with the viewing environment typical
-//     of a motion picture theater. This ODT makes no attempt to compensate for 
-//     viewing environment variables more typical of those associated with the 
-//     home.
+//   This ODT has a compensation for viewing environment variables more typical 
+//   of those associated with video mastering.
 //
 
 
