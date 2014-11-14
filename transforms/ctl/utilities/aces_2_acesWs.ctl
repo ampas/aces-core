@@ -50,6 +50,8 @@ void main
 {
   float aces[3] = { rIn, gIn, bIn};
 
+  aces = clamp_f3( aces, 0.0, HALF_POS_INF);
+
   float acesWS[3] = mult_f3_f44( aces, ACES_2_ACESWS_MAT);
 
 	rOut = lin_2_acesLogScaled( acesWS[0]);
