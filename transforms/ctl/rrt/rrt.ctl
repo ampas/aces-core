@@ -56,7 +56,7 @@ void main
     rgbPost[1] = rrt_tonescale_fwd( rgbPre[1], RRT_COEFS);
     rgbPost[2] = rrt_tonescale_fwd( rgbPre[2], RRT_COEFS);
 
-  // --- RGB rendering space to OCES encoding --- //
+  // --- RGB rendering space to OCES --- //
     float rgbOces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
     
   // Assign OCES RGB to output variables (OCES)
