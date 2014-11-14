@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to an RGB computer monitor (D60 simulation)
-// WGR8
+// WGR8.5
 //
 
 //
@@ -50,7 +50,6 @@ import "odt-transforms-common";
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = REC709_PRI;
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
 const float DISPGAMMA = 2.4; 
@@ -74,23 +73,23 @@ void main
 )
 {
   // --- Initialize a 3-element vector with input variables (OCES) --- //
+  // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = { rIn, gIn, bIn};
 
-  // --- Apply the tonescale independently in rendering-space RGB --- //
-    // OCES to RGB rendering space
+  // --- OCES to RGB rendering space --- //
     float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-    // Tonescale
+  // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_fwd( rgbPre[2]);
+    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
+    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
+    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
-    // RGB rendering space back to OCES encoding
-    rgbPost = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-  
   // --- Apply black point compensation --- //
-    float linearCV[3] = bpc_cinema_fwd( rgbPost);
+    float linearCV[3];
+    linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
   // --- Compensate for different white point being darker  --- //
   // This adjustment is to correct an issue that exists in ODTs where the device 
@@ -113,7 +112,7 @@ void main
 
   // --- Convert to display primary encoding --- //
     // OCES RGB to CIE XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, ACES_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
