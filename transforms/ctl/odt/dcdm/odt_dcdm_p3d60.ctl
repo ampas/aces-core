@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to P3D60, encoded as X'Y'Z'
-// v0.7.1
+// WGR9
 //
 
 //
@@ -8,14 +8,13 @@
 //  This ODT encodes XYZ colorimetry that is gamut-limited to P3 primaries with 
 //  a D60 whitepoint. This has two advantages:
 // 
-//   1) "Gamut mapping" is controlled by the ODT (via a "smart-clip" that 
-//      preserves hue). Otherwise, the projector would be relied upon to handle 
-//      any values outside of the P3 gamut. In most devices, this is performed 
-//      using a simple clip, which does not necessarily preserve hue.   
-//      Furthermore, different projectors may handle out-of-gamut values 
-//      differently, which means that if out-of-gamut values were left to be 
-//      handled by the device, different image appearance could result on 
-//      different devices even though they have the same gamut.
+//   1) "Gamut mapping" is explicitly controlled by the ODT by clipping any XYZ 
+//      values that map outside of the P3 gamut. Without this step, it would be 
+//      left to the projector to handle any XYZ values outside of the P3 gamut. 
+//      In most devices, this is performed using a simple clip, but not always.   
+//      If out-of-gamut values are left to be handled by the device, different 
+//      image appearance could potentially result on different devices even 
+//      though they have the same gamut.
 //
 //   2) Assuming the content was graded (and approved) on a projector with a 
 //      P3D60 gamut, limiting the colors to that gamut assures there will be
@@ -45,7 +44,9 @@ import "odt-transforms-common";
 
 
 /* ----- ODT Parameters ------ */
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
+const Chromaticities DISPLAY_PRI = P3D60_PRI;
+const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
+const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
 
 const float DISPGAMMA = 2.6; 
 
@@ -63,32 +64,46 @@ void main
   output varying float aOut
 )
 {
-  /* --- Initialize a 3-element vector with input variables (OCES) --- */
-    float oces[3] = { rIn, gIn, bIn};
+{
+  // Initialize a 3-element vector with input variables (OCES)
+  float oces[3] = { rIn, gIn, bIn};
 
-  /* --- Apply hue-preserving tone scale with saturation preservation --- */
-    float rgbPost[3] = odt_tonescale_fwd_f3( oces);
+  // OCES to RGB rendering space
+  float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-  /* --- Apply black point compensation --- */  
-    float linearCV[3] = bpc_cinema_fwd( rgbPost);
+  // Apply the tonescale independently in rendering-space RGB
+  float rgbPost[3];
+  rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
+  rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
+  rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
-  /* --- Convert to display primary encoding --- */
-    // OCES RGB to CIE XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, OCES_PRI_2_XYZ_MAT);
+  // Apply black point compensation
+  float linearCV[3];
+  linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
+  linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
+  linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
-  /* --- Limit XYZ values to P3D60 gamut --- */
-    // Clip to P3 gamut using hue-preserving clip
-    XYZ = huePreservingClip_to_p3d60( XYZ);
-  
-  /* --- Encode linear code values with transfer function --- */
-    float outputCV[3];
-    outputCV[0] = pow( 48./52.37 * XYZ[0], 1./DISPGAMMA);
-    outputCV[1] = pow( 48./52.37 * XYZ[1], 1./DISPGAMMA);
-    outputCV[2] = pow( 48./52.37 * XYZ[2], 1./DISPGAMMA);
+  // Rendering space RGB to XYZ
+  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
     
-  /* --- Cast outputCV to rOut, gOut, bOut --- */
-    rOut = outputCV[0];
-    gOut = outputCV[1];
-    bOut = outputCV[2];
-    aOut = aIn;
+  // XYZ to P3D60    
+  float P3D60[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
+    
+  // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
+  P3D60 = clamp_f3( P3D60, 0., 1.);
+
+  // P3D60 to XYZ
+  XYZ = mult_f3_f44( P3D60, DISPLAY_PRI_2_XYZ_MAT);
+
+  // Encode linear code values with transfer function
+  float outputCV[3];
+  outputCV[0] = pow( 48./52.37 * XYZ[0], 1./DISPGAMMA);
+  outputCV[1] = pow( 48./52.37 * XYZ[1], 1./DISPGAMMA);
+  outputCV[2] = pow( 48./52.37 * XYZ[2], 1./DISPGAMMA);
+    
+  // Cast outputCV to rOut, gOut, bOut
+  rOut = outputCV[0];
+  gOut = outputCV[1];
+  bOut = outputCV[2];
+  aOut = aIn;
 }

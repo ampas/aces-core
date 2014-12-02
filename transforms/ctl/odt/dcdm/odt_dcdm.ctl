@@ -1,6 +1,6 @@
 // 
 // Output Device Transform to X'Y'Z'
-// v0.7.1
+// WGR9
 //
 
 // 
@@ -33,8 +33,6 @@ import "odt-transforms-common";
 
 
 /* --- ODT Parameters --- */
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
-
 const float DISPGAMMA = 2.6; 
 
 
@@ -51,33 +49,38 @@ void main
   output varying float aOut
 )
 {
-  /* --- Initialize a 3-element vector with input variables (OCES) --- */
-    float oces[3] = { rIn, gIn, bIn};
+  // Initialize a 3-element vector with input variables (OCES)
+  float oces[3] = { rIn, gIn, bIn};
 
-  /* --- Apply hue-preserving tone scale with saturation preservation --- */
-    float rgbPost[3] = odt_tonescale_fwd_f3( oces);
+  // OCES to RGB rendering space 
+  float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-  /* --- Apply black point compensation --- */  
-    float linearCV[3] = bpc_cinema_fwd( rgbPost);
+  // Apply the tonescale independently in rendering-space RGB
+  float rgbPost[3];
+  rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
+  rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
+  rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
 
-  /* --- Convert to display primary encoding --- */
-    // OCES RGB to CIE XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, OCES_PRI_2_XYZ_MAT);
+  // Apply black point compensation
+  float linearCV[3];
+  linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
+  linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
+  linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
-  /* --- Handle out-of-gamut values --- */
-    // There should not be any negative values but will clip just to ensure no 
-    // math errors occur with the gamma function in the encoding function.
-    XYZ = clamp_f3( XYZ, 0., 1.);
+  // Rendering space RGB to XYZ
+  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
 
-  /* --- Encode linear code values with transfer function --- */
-    float outputCV[3];
-    outputCV[0] = pow( 48./52.37 * XYZ[0], 1./DISPGAMMA);
-    outputCV[1] = pow( 48./52.37 * XYZ[1], 1./DISPGAMMA);
-    outputCV[2] = pow( 48./52.37 * XYZ[2], 1./DISPGAMMA);
+  // Handle out-of-gamut values
+  // There should not be any negative values but will clip just to ensure no 
+  // math errors occur with the gamma function in the EOTF
+  XYZ = clamp_f3( XYZ, 0., HALF_POS_INF);
+
+  // Encode linear code values with transfer function
+  float outputCV[3] = encode_dcdm( XYZ);
     
-  /* --- Cast outputCV to rOut, gOut, bOut --- */
-    rOut = outputCV[0];
-    gOut = outputCV[1];
-    bOut = outputCV[2];
-    aOut = aIn;
+  // Cast outputCV to rOut, gOut, bOut
+  rOut = outputCV[0];
+  gOut = outputCV[1];
+  bOut = outputCV[2];
+  aOut = aIn;
 }

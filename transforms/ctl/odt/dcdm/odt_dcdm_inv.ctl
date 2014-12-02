@@ -30,27 +30,33 @@ void main
   output varying float aOut
 )
 {
-  /* --- Initialize a 3-element vector with input variables (0-1 CV) --- */
-    float outputCV[3] = { rIn, gIn, bIn};
+  // Initialize a 3-element vector with input variables (0-1 CV)
+  float outputCV[3] = { rIn, gIn, bIn};
 
-  /* --- Decode with inverse transfer function --- */
-    float XYZ[3];
-    XYZ[0] = 52.37/48. * pow( outputCV[0], DISPGAMMA);
-    XYZ[1] = 52.37/48. * pow( outputCV[1], DISPGAMMA);
-    XYZ[2] = 52.37/48. * pow( outputCV[2], DISPGAMMA);
+  // Decode with inverse transfer function
+  float XYZ[3] = decode_dcdm( outputCV);
 
-  /* --- Convert CIE XYZ to OCES RGB encoding --- */
-  float linearCV[3] = mult_f3_f44( XYZ, XYZ_2_OCES_PRI_MAT);
-
-  /* --- Apply inverse black point compensation --- */  
-    float rgbPre[3] = bpc_cinema_inv( linearCV);
+  // CIE XYZ to rendering space RGB
+  float linearCV = mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
   
-  /* --- Apply inverse hue-preserving tone scale w/ sat preservation --- */
-    float oces[3] = odt_tonescale_inv_f3( rgbPre);
-  
-  /* --- Cast OCES to rOut, gOut, bOut --- */  
-    rOut = oces[0];
-    gOut = oces[1];
-    bOut = oces[2];
-    aOut = aIn;
+  // Scale code value to luminance
+  float rgbPre[3];
+  rgbPre[0] = linCV_2_Y( linearCV[0], 48.0, 0.0048);
+  rgbPre[1] = linCV_2_Y( linearCV[1], 48.0, 0.0048);
+  rgbPre[2] = linCV_2_Y( linearCV[2], 48.0, 0.0048);
+
+  // Apply the tonescale independently in rendering-space RGB
+  float rgbPost[3];
+  rgbPost[0] = odt_tonescale_segmented_rev( rgbPre[0]);
+  rgbPost[1] = odt_tonescale_segmented_rev( rgbPre[1]);
+  rgbPost[2] = odt_tonescale_segmented_rev( rgbPre[2]);
+
+  // Rendering space RGB to OCES
+  float oces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+
+  // Cast OCES to rOut, gOut, bOut
+  rOut = oces[0];
+  gOut = oces[1];
+  bOut = oces[2];
+  aOut = aIn;
 }
