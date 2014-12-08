@@ -19,23 +19,22 @@ const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, RENDER_R
 
 // Target white and black points for cinema system tonescale
 const float CINEMA_WHITE = 48.0;
-const float CINEMA_BLACK = 0.0048; // CINEMA_WHITE / 10000.
+const float CINEMA_BLACK = 0.02; // CINEMA_WHITE / 2400.
 
 
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
 
 
-const float ODT_COEFS_LOW[10] = {
-    -2.3188,
-    -2.3188,
-    -2.2614,
-    -2.0618,
-    -1.5918,
-    -0.9764,
-   -0.31832,
-    0.35613,
-     1.0064,
-     1.0064
+const float ODT_COEFS_LOW[9] = {
+    -1.69897,
+    -1.69897,
+    -1.45640,
+    -1.20410,
+    -0.83880,
+    -0.42800,
+    0.01868,
+    0.45572,
+    0.90676
 };
 
 const float ODT_COEFS_HIGH[6] = {
@@ -49,10 +48,10 @@ const float ODT_COEFS_HIGH[6] = {
 
 const float ODT_XMAX = rrt_tonescale_fwd( 0.18*pow(2.,6.5) );
 const float ODT_XMID = rrt_tonescale_fwd( 0.18 );
-const float ODT_XMIN = 0.0001;
+const float ODT_XMIN = rrt_tonescale_fwd( 0.18*pow(2.,-6.5) );
 const float ODT_YMAX = 48.0;
 const float ODT_YMID = 4.8;
-const float ODT_YMIN = 0.0048;
+const float ODT_YMIN = 0.02;
 
 const float ODT_LO_SLOPE = 0.01;
 const float ODT_HI_SLOPE = 0.04;
@@ -63,7 +62,7 @@ const int N_KNOTS_HIGH = 5;
 float odt_tonescale_segmented_fwd
   ( 
     varying float x,
-    varying float COEFS_LOW[10] = ODT_COEFS_LOW,
+    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float LO_SLOPE = ODT_LO_SLOPE,
     varying float HI_SLOPE = ODT_HI_SLOPE,    
@@ -124,7 +123,7 @@ float odt_tonescale_segmented_fwd
 float odt_tonescale_segmented_rev
   ( 
     varying float y,
-    varying float COEFS_LOW[10] = ODT_COEFS_LOW,
+    varying float COEFS_LOW[9] = ODT_COEFS_LOW,
     varying float COEFS_HIGH[6] = ODT_COEFS_HIGH,
     varying float LO_SLOPE = ODT_LO_SLOPE,
     varying float HI_SLOPE = ODT_HI_SLOPE,    
