@@ -141,15 +141,15 @@ float rgb_2_yc( float rgb[3], float ycRadiusWeight = 1.75)
 /* ---- Chromatic Adaptation ---- */
 
 const float CONE_RESP_MAT_BRADFORD[3][3] = {
-  {0.89510, -0.75020, 0.03890},
-  {0.26640, 1.71350, -0.06850},
-  {-0.16140, 0.03670, 1.02960}
+  { 0.89510, -0.75020,  0.03890},
+  { 0.26640,  1.71350, -0.06850},
+  {-0.16140,  0.03670,  1.02960}
 };
 
 const float CONE_RESP_MAT_CAT02[3][3] = {
-  {0.73280, -0.70360, 0.00300},
-  {0.42960, 1.69750, 0.01360},
-  {-0.16240, 0.00610, 0.98340}
+  { 0.73280, -0.70360,  0.00300},
+  { 0.42960,  1.69750,  0.01360},
+  {-0.16240,  0.00610,  0.98340}
 };
 
 float[3][3] calculate_cat_matrix
@@ -267,28 +267,40 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
   return V;
 }
 
-float[3] smpteRange_to_fullRange( float rgbIn[3])
+
+// SMPTE Range vs Full Range scaling formulas
+float smpteRange_to_fullRange( float in)
 {
 	const float REFBLACK = (  16. / 256.);
 	const float REFWHITE = ( 235. / 256.);
 	
+  return (( in - REFBLACK) / ( REFWHITE - REFBLACK));
+}
+
+float fullRange_to_smpteRange( float in)
+{
+	const float REFBLACK = (  16. / 256.);
+	const float REFWHITE = ( 235. / 256.);
+	
+	return ( in * ( REFWHITE - REFBLACK) + REFBLACK );
+}
+
+float[3] smpteRange_to_fullRange_f3( float rgbIn[3])
+{
 	float rgbOut[3];
-	rgbOut[0] = ( rgbIn[0] - REFBLACK) / ( REFWHITE - REFBLACK);
-	rgbOut[1] = ( rgbIn[1] - REFBLACK) / ( REFWHITE - REFBLACK);
-	rgbOut[2] = ( rgbIn[2] - REFBLACK) / ( REFWHITE - REFBLACK);
+	rgbOut[0] = smpteRange_to_fullRange( rgbIn[0]);
+	rgbOut[1] = smpteRange_to_fullRange( rgbIn[1]);
+	rgbOut[2] = smpteRange_to_fullRange( rgbIn[2]);
 
   return rgbOut;
 }
 
-float[3] fullRange_to_smpteRange( float rgbIn[3])
+float[3] fullRange_to_smpteRange_f3( float rgbIn[3])
 {
-	const float REFBLACK = (  16. / 256.);
-	const float REFWHITE = ( 235. / 256.);
-	
 	float rgbOut[3];
-	rgbOut[0] = rgbIn[0] * ( REFWHITE - REFBLACK) + REFBLACK;
-	rgbOut[1] = rgbIn[1] * ( REFWHITE - REFBLACK) + REFBLACK;
-	rgbOut[2] = rgbIn[2] * ( REFWHITE - REFBLACK) + REFBLACK;
+	rgbOut[0] = fullRange_to_smpteRange( rgbIn[0]);
+	rgbOut[1] = fullRange_to_smpteRange( rgbIn[1]);
+	rgbOut[2] = fullRange_to_smpteRange( rgbIn[2]);
 
   return rgbOut;
 }
@@ -313,4 +325,53 @@ float[3] dcdm_encode( float XYZ[3])
   XYZp[2] = pow( (48./52.37) * XYZ[2], 1./2.6);
   
   return XYZp;
+}
+
+
+// PQ formulas
+const float n = 0.15930176;
+const float m = 78.84375;
+const float c1 = 0.8359375;
+const float c2 = 18.8515625;
+const float c3 = 18.6875;
+const float encodeMax = 10000.;
+
+float PQ10K_fwd( float in)
+{
+  // encodes from luminance to code values
+  
+  float gRel = clamp( in/encodeMax, 0., 1.);
+
+  return pow((c1+c2*pow(gRel,n))/(1.0+c3*pow(gRel,n)), m);
+}
+
+float PQ10K_rev( float in)
+{
+  // decodes from code values to luminance
+  
+  return encodeMax*pow((pow(in,1./m)-c1) / (c2-c3*(pow(in,1./m))),1./n);
+}
+
+float[3] PQ10K_fwd_f3( float in[3])
+{
+  // encodes from luminance to code values
+  
+  float out[3];
+  out[0] = PQ10K_fwd( in[0]);
+  out[1] = PQ10K_fwd( in[1]);
+  out[2] = PQ10K_fwd( in[2]);
+
+  return out;
+}
+
+float[3] PQ10K_rev_f3( float in[3])
+{
+  // decodes from code values to luminance
+  
+  float out[3];
+  out[0] = PQ10K_rev( in[0]);
+  out[1] = PQ10K_rev( in[1]);
+  out[2] = PQ10K_rev( in[2]);
+
+  return out;
 }
