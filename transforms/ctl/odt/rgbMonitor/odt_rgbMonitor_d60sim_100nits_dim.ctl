@@ -1,6 +1,5 @@
 // 
-// Output Device Transform to an RGB computer monitor (D60 simulation)
-// WGR8.5
+// Output Device Transform - RGB computer monitor (D60 simulation)
 //
 
 //
@@ -13,8 +12,10 @@
 //  in IEC 61966-2-1:1999.
 // 
 //  The assumed observer adapted white is D60, and the viewing environment is 
-//  that of a dark theater. The monitor specified is intended to be more typical
-//  of those found in visual effects production.
+//  that of a dim surround. 
+//
+//  The monitor specified is intended to be more typical of those found in 
+//  visual effects production.
 //
 // Device Primaries : 
 //  Primaries are those specified in Rec. ITU-R BT.709
@@ -28,16 +29,16 @@
 //  The reference electro-optical transfer function specified in 
 //  IEC 61966-2-1:1999.
 //
+// Signal Range:
+//    This tranform outputs full range code values.
+//
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y
 //                                     0.32168      0.33767
 //
 // Viewing Environment:
-//  Environment specified in SMPTE RP 431-2-2007
-//   Note: This environment is consistent with the viewing environment typical
-//     of a motion picture theater. This ODT makes no attempt to compensate for 
-//     viewing environment variables more typical of those associated with the 
-//     home.
+//   This ODT has a compensation for viewing environment variables more typical 
+//   of those associated with video mastering.
 //
 
 
@@ -45,6 +46,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -53,8 +55,7 @@ const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
 const float DISPGAMMA = 2.4; 
-const float L_W = 1.0;
-const float L_B = 0.0;
+const float OFFSET = 0.55;
 
 const float SCALE = 0.955;
 
@@ -62,34 +63,32 @@ const float SCALE = 0.955;
 
 void main 
 (
-  input varying float rIn, 
-  input varying float gIn, 
-  input varying float bIn, 
-  input varying float aIn,
-  output varying float rOut,
-  output varying float gOut,
-  output varying float bOut,
-  output varying float aOut
+    input varying float rIn, 
+    input varying float gIn, 
+    input varying float bIn, 
+    input varying float aIn,
+    output varying float rOut,
+    output varying float gOut,
+    output varying float bOut,
+    output varying float aOut
 )
 {
-  // --- Initialize a 3-element vector with input variables (OCES) --- //
-  // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = { rIn, gIn, bIn};
 
-  // --- OCES to RGB rendering space --- //
+  // OCES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-  // --- Apply the tonescale independently in rendering-space RGB --- //
+  // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
+    rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
+    rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
+    rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // --- Apply black point compensation --- //
+  // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
-    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);    
 
   // --- Compensate for different white point being darker  --- //
   // This adjustment is to correct an issue that exists in ODTs where the device 
@@ -110,25 +109,30 @@ void main
     linearCV[1] = min( linearCV[1], 1.0) * SCALE;
     linearCV[2] = min( linearCV[2], 1.0) * SCALE;
 
-  // --- Convert to display primary encoding --- //
-    // OCES RGB to CIE XYZ
+  // Apply gamma adjustment to compensate for dim surround
+    linearCV = darkSurround_to_dimSurround( linearCV);
+
+  // Apply desaturation to compensate for luminance difference
+    linearCV = mult_f3_f33( linearCV, ODT_SAT_MAT);
+
+  // Convert to display primary encoding
+    // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  // --- Handle out-of-gamut values --- //
+  // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
   
-  // --- Encode linear code values with transfer function --- //
+  // Encode linear code values with transfer function
     float outputCV[3];
     // moncurve_r with gamma of 2.4 and offset of 0.055 matches the EOTF found in IEC 61966-2-1:1999 (sRGB)
-    outputCV[0] = moncurve_r( linearCV[0], 2.4, 0.055);
-    outputCV[1] = moncurve_r( linearCV[1], 2.4, 0.055);
-    outputCV[2] = moncurve_r( linearCV[2], 2.4, 0.055);
+    outputCV[0] = moncurve_r( linearCV[0], DISPGAMMA, OFFSET);
+    outputCV[1] = moncurve_r( linearCV[1], DISPGAMMA, OFFSET);
+    outputCV[2] = moncurve_r( linearCV[2], DISPGAMMA, OFFSET);
   
-  // --- Cast outputCV to rOut, gOut, bOut --- //
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];
