@@ -1,6 +1,5 @@
 // 
 // Output Device Transform to P3D60, encoded as X'Y'Z'
-// WGR9
 //
 
 //
@@ -54,56 +53,51 @@ const float DISPGAMMA = 2.6;
 
 void main 
 (
-  input varying float rIn, 
-  input varying float gIn, 
-  input varying float bIn, 
-  input varying float aIn,
-  output varying float rOut,
-  output varying float gOut,
-  output varying float bOut,
-  output varying float aOut
+    input varying float rIn, 
+    input varying float gIn, 
+    input varying float bIn, 
+    input varying float aIn,
+    output varying float rOut,
+    output varying float gOut,
+    output varying float bOut,
+    output varying float aOut
 )
 {
 {
-  // Initialize a 3-element vector with input variables (OCES)
-  float oces[3] = { rIn, gIn, bIn};
+    float oces[3] = { rIn, gIn, bIn};
 
   // OCES to RGB rendering space
-  float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
   // Apply the tonescale independently in rendering-space RGB
-  float rgbPost[3];
-  rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
-  rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
-  rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
+    float rgbPost[3];
+    rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
+    rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
+    rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // Apply black point compensation
-  float linearCV[3];
-  linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
-  linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
-  linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
+  // Scale luminance to linear code value
+    float linearCV[3];
+    linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
+    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
   // Rendering space RGB to XYZ
-  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
-    
+    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
+
   // XYZ to P3D60    
-  float P3D60[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
+    float P3D60[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
     
   // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
-  P3D60 = clamp_f3( P3D60, 0., 1.);
+    P3D60 = clamp_f3( P3D60, 0., 1.);
 
   // P3D60 to XYZ
-  XYZ = mult_f3_f44( P3D60, DISPLAY_PRI_2_XYZ_MAT);
+    XYZ = mult_f3_f44( P3D60, DISPLAY_PRI_2_XYZ_MAT);
 
   // Encode linear code values with transfer function
-  float outputCV[3];
-  outputCV[0] = pow( 48./52.37 * XYZ[0], 1./DISPGAMMA);
-  outputCV[1] = pow( 48./52.37 * XYZ[1], 1./DISPGAMMA);
-  outputCV[2] = pow( 48./52.37 * XYZ[2], 1./DISPGAMMA);
+    float outputCV[3] = encode_dcdm( XYZ);
     
-  // Cast outputCV to rOut, gOut, bOut
-  rOut = outputCV[0];
-  gOut = outputCV[1];
-  bOut = outputCV[2];
-  aOut = aIn;
+    rOut = outputCV[0];
+    gOut = outputCV[1];
+    bOut = outputCV[2];
+    aOut = aIn;
 }
