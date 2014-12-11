@@ -1,6 +1,5 @@
 // 
-// Output Device Transform to P3DCI D60 Simulation
-// WGR8.5
+// Output Device Transform - P3DCI (D60 Simulation)
 //
 
 //
@@ -33,6 +32,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -51,29 +51,28 @@ const float SCALE = 0.96;
 
 void main 
 (
-  input varying float rIn, 
-  input varying float gIn, 
-  input varying float bIn, 
-  input varying float aIn,
-  output varying float rOut,
-  output varying float gOut,
-  output varying float bOut,
-  output varying float aOut
+    input varying float rIn, 
+    input varying float gIn, 
+    input varying float bIn, 
+    input varying float aIn,
+    output varying float rOut,
+    output varying float gOut,
+    output varying float bOut,
+    output varying float aOut
 )
 {
-  // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = { rIn, gIn, bIn};
 
-  // --- OCES to RGB rendering space --- //
+  // OCES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-  // --- Apply the tonescale independently in rendering-space RGB --- //
+  // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
+    rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
+    rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
+    rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // --- Apply black point compensation --- //
+  // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
@@ -109,24 +108,20 @@ void main
     linearCV[1] = min( linearCV[1], NEW_WHT) * SCALE;
     linearCV[2] = min( linearCV[2], NEW_WHT) * SCALE;
 
-  // --- Convert to display primary encoding --- //
+  // Convert to display primary encoding
     // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  // --- Handle out-of-gamut values --- //
+  // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
   
-  // --- Encode linear code values with transfer function --- //
-    float outputCV[3];
-    outputCV[0] = pow( linearCV[0], 1./DISPGAMMA);
-    outputCV[1] = pow( linearCV[1], 1./DISPGAMMA);
-    outputCV[2] = pow( linearCV[2], 1./DISPGAMMA);
+  // Encode linear code values with transfer function
+    float outputCV[3] = pow_f3( linearCV, 1./ DISPGAMMA);
   
-  // --- Cast outputCV to rOut, gOut, bOut --- //
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

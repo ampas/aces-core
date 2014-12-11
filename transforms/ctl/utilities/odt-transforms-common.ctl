@@ -1,13 +1,17 @@
 //
 // odt-transforms-common.ctl
-// WGR8.5
 //
 // Contains functions and constants shared by forward and inverse ODT transforms 
 //
 
 
 
-import "rrt-transform-common";
+
+// Target white and black points for cinema system tonescale
+const float CINEMA_WHITE = 48.0;
+const float CINEMA_BLACK = 0.02; // CINEMA_WHITE / 2400.
+
+
 
 
 // Gamma compensation factor
@@ -17,9 +21,7 @@ const float DIM_SURROUND_GAMMA = 0.9811;
 const float ODT_SAT_FACTOR = 0.93;
 const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, RENDER_RGB2Y);
 
-// Target white and black points for cinema system tonescale
-const float CINEMA_WHITE = 48.0;
-const float CINEMA_BLACK = 0.02; // CINEMA_WHITE / 2400.
+
 
 
 const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
@@ -32,11 +34,11 @@ float Y_2_linCV( float Y, float Ymax, float Ymin)
   return (Y - Ymin) / (Ymax - Ymin);
 }
 
-
 float linCV_2_Y( float linCV, float Ymax, float Ymin) 
 {
   return linCV * (Ymax - Ymin) + Ymin;
 }
+
 
 
 float[3] darkSurround_to_dimSurround( float linearCV[3])
