@@ -28,10 +28,10 @@
 //
 
 
-
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -62,9 +62,9 @@ void main
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
-    rgbPost[0] = odt_tonescale_segmented_fwd( rgbPre[0]);
-    rgbPost[1] = odt_tonescale_segmented_fwd( rgbPre[1]);
-    rgbPost[2] = odt_tonescale_segmented_fwd( rgbPre[2]);
+    rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
+    rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
+    rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
   // --- Apply black point compensation --- //
     float linearCV[3];

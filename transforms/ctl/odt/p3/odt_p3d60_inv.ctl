@@ -8,6 +8,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -50,9 +51,9 @@ void main
   
   // --- Scale code value to luminance --- //
     float rgbPre[3];
-    rgbPre[0] = linCV_2_Y( linearCV[0], 48.0, 0.0048);
-    rgbPre[1] = linCV_2_Y( linearCV[1], 48.0, 0.0048);
-    rgbPre[2] = linCV_2_Y( linearCV[2], 48.0, 0.0048);
+    rgbPre[0] = linCV_2_Y( linearCV[0], CINEMA_WHITE, CINEMA_BLACK);
+    rgbPre[1] = linCV_2_Y( linearCV[1], CINEMA_WHITE, CINEMA_BLACK);
+    rgbPre[2] = linCV_2_Y( linearCV[2], CINEMA_WHITE, CINEMA_BLACK);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
