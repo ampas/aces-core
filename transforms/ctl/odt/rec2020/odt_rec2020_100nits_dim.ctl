@@ -49,7 +49,6 @@ import "tonescales";
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = REC2020_PRI;
-const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(ACES_PRI,1.0);
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
 const float DISPGAMMA = 2.4; 

@@ -11,8 +11,6 @@ import "odt-transforms-common";
 
 
 /* ----- ODT Parameters ------ */
-const float XYZ_2_OCES_PRI_MAT[4][4] = XYZtoRGB(ACES_PRI,1.0);
-
 const float DISPGAMMA = 2.6; 
 
 
