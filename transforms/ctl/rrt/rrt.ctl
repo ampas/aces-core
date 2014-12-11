@@ -13,6 +13,7 @@ import "rrt-transform-common";
 import "tonescales";
 
 
+
 void main 
 ( 
   input varying float rIn,
@@ -27,7 +28,6 @@ void main
 {
   // --- Initialize a 3-element vector with input variables (ACES) --- //
     float aces[3] = {rIn, gIn, bIn};
-//   print("\n\nACES:\t"); print_f3(aces);
 
   // --- Glow module --- //
     float saturation = rgb_2_saturation( aces);
@@ -45,38 +45,23 @@ void main
 	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
 
   // --- ACES to RGB rendering space --- //
-    aces = clamp_f3( aces, 0., HALF_POS_INF);  // avoids saturated negative colors from flipping positive
-
-//   print("\nacesAfterGlowAndRed:\t"); print_f3(aces);
+    aces = clamp_f3( aces, 0., HALF_POS_INF);  // avoids saturated negative colors from becoming positive in the matrix
 
     float rgbPre[3] = mult_f3_f44( aces, ACES_2_RENDER_PRI_MAT);
 
-//   print("\nrgbPre:\t"); print_f3(rgbPre);
-
     rgbPre = clamp_f3( rgbPre, 0., HALF_MAX);
-
-//   print("\nrgbPreClamp:\t"); print_f3(rgbPre);
 
   // --- Global desaturation --- //
     rgbPre = mult_f3_f33( rgbPre, RRT_SAT_MAT);
-
-//   print("\nrgbPreDesat:\t"); print_f3(rgbPre);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
     rgbPost[0] = segmented_spline_c5_fwd( rgbPre[0]);
     rgbPost[1] = segmented_spline_c5_fwd( rgbPre[1]);
     rgbPost[2] = segmented_spline_c5_fwd( rgbPre[2]);
-//     rgbPost[0] = rrt_tonescale_fwd( rgbPre[0]);
-//     rgbPost[1] = rrt_tonescale_fwd( rgbPre[1]);
-//     rgbPost[2] = rrt_tonescale_fwd( rgbPre[2]);
-
-//   print("\nrgbPost:\t"); print_f3(rgbPost);
 
   // --- RGB rendering space to OCES --- //
     float rgbOces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-
-//   print("\nOCES:\t"); print_f3(rgbOces);
     
   // Assign OCES RGB to output variables (OCES)
   rOut = rgbOces[0];

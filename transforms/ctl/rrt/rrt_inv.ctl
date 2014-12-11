@@ -1,18 +1,18 @@
 // 
 // Inverse Reference Rendering Transform (RRT)
-// WGR8
 //
+//   Input is OCES
+//   Output is ACES
+//
+
 
 
 import "utilities";
 import "transforms-common";
 import "rrt-transform-common";
+import "tonescales";
 
 
-
-// Inverse Reference Rendering Transform (RRT)
-//   Input is OCES RGB (linearly encoded)
-//   Output is ACES RGB (linearly encoded)
 void main 
 ( 
   input varying float rIn,
@@ -27,20 +27,26 @@ void main
 {
   // --- Initialize a 3-element vector with input variables (OCES) --- //
     float oces[3] = {rIn, gIn, bIn};
-  
-  // --- Apply the RRT tone scale independently to RGB --- //
-    // ACES to RGB rendering space
+
+  // --- OCES to RGB rendering space --- //
     float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
 
-    // Tonescale
+  // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
-    rgbPost[0] = rrt_tonescale_rev( rgbPre[0], RRT_COEFS);
-    rgbPost[1] = rrt_tonescale_rev( rgbPre[1], RRT_COEFS);
-    rgbPost[2] = rrt_tonescale_rev( rgbPre[2], RRT_COEFS);
+    rgbPost[0] = segmented_spline_c5_rev( rgbPre[0]);
+    rgbPost[1] = segmented_spline_c5_rev( rgbPre[1]);
+    rgbPost[2] = segmented_spline_c5_rev( rgbPre[2]);
 
-    // RGB rendering space back to ACES encoding
+  // --- Global desaturation --- //
+    rgbPost = mult_f3_f33( rgbPost, invert_f33(RRT_SAT_MAT));
+
+    rgbPost = clamp_f3( rgbPost, 0., HALF_MAX);
+
+  // --- RGB rendering space to ACES --- //
     float aces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
-        
+
+    aces = clamp_f3( aces, 0., HALF_MAX);
+
   // --- Red modifier --- //
     float hue = rgb_2_hue( aces);
     float centeredHue = center_hue( hue, RRT_RED_HUE);
@@ -67,10 +73,9 @@ void main
   	
   	aces = mult_f_f3( ( reducedGlow), aces);
 
-  // Assign ACES-RGB to output variables (ACES)
+  // Assign ACES RGB to output variables (ACES)
   rOut = aces[0];
   gOut = aces[1];
   bOut = aces[2];
   aOut = aIn;
-
 }
