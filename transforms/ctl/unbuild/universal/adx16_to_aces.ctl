@@ -3,14 +3,10 @@
 // 
 // Universal ADX16 to ACES Transform
 //
-// v0.7.1
-// 
 
 
 
-
-
-/* ============ CONSTANTS ============ */
+// ============ CONSTANTS ============ //
 const float CDD_TO_CID[3][3] = {
 	{0.75573, 0.05901, 0.16134},
 	{0.22197, 0.96928, 0.07406},
@@ -43,21 +39,21 @@ const float REF_PT = (7120.0 - 1520.0) / 8000.0 * (100.0 / 55.0) - log10(0.18);
 
 
 
-/* ============ Main Algorithm ============ */
 void main
-(   input varying float rIn,
-    input varying float gIn,
-    input varying float bIn,
-    input varying float aIn,
-    output varying float rOut,
-    output varying float gOut,
-    output varying float bOut,
-    output varying float aOut
+(
+  input varying float rIn,
+  input varying float gIn,
+  input varying float bIn,
+  input varying float aIn,
+  output varying float rOut,
+  output varying float gOut,
+  output varying float bOut,
+  output varying float aOut
 )
 {
 	// Prepare input values based on application bit depth handling
 	float adx[3];
-    adx[0] = rIn * 65535.0;
+  adx[0] = rIn * 65535.0;
 	adx[1] = gIn * 65535.0;
 	adx[2] = bIn * 65535.0;
 
