@@ -1,6 +1,5 @@
 // 
-// Inverse P3D60 ODT
-// WGR8
+// Inverse Output Device Transform - P3D60
 //
 
 

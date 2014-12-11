@@ -1,6 +1,5 @@
 // 
-// Inverse DCDM ODT (X'Y'Z' to OCES)
-// v0.7.1
+// Inverse Output Device Transform - DCDM (X'Y'Z')
 //
 
 

@@ -1,6 +1,5 @@
 // 
-// Output Device Transform to P3D60
-// WGR8.5
+// Output Device Transform - P3D60
 //
 
 //

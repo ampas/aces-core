@@ -1,5 +1,5 @@
 // 
-// Output Device Transform to P3D60, encoded as X'Y'Z'
+// Output Device Transform - DCDM (X'Y'Z'), limited to P3D60
 //
 
 //

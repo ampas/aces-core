@@ -1,5 +1,5 @@
 // 
-// Output Device Transform to X'Y'Z'
+// Output Device Transform - DCDM (X'Y'Z')
 //
 
 // 
