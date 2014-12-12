@@ -46,7 +46,7 @@ void main
     float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
   
     // CIE XYZ to rendering space RGB
-    linearCV = mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
+    linearCV = mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
 
   // Undo highlight roll-off and scaling
     linearCV[0] = roll_white_rev( linearCV[0] / SCALE, NEW_WHT, ROLL_WIDTH);
@@ -66,7 +66,7 @@ void main
     rgbPost[2] = segmented_spline_c9_rev( rgbPre[2]);
 
   // Rendering space RGB to OCES
-    float oces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+    float oces[3] = mult_f3_f44( rgbPost, AP1_2_AP0_MAT);
 
     rOut = oces[0];
     gOut = oces[1];

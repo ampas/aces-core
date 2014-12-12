@@ -72,7 +72,7 @@ void main
     float oces[3] = { rIn, gIn, bIn};
 
   // OCES to RGB rendering space
-    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
   // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
@@ -94,7 +94,7 @@ void main
     
   // Convert to display primary encoding
     // Rendering space RGB to XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
       // Apply CAT from ACES white point to assumed observer adapted white point
       XYZ = mult_f3_f33( XYZ, D60_2_D65_CAT);

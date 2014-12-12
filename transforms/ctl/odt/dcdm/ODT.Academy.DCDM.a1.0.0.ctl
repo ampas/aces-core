@@ -52,7 +52,7 @@ void main
     float oces[3] = { rIn, gIn, bIn};
 
   // OCES to RGB rendering space
-    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
   // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
@@ -67,7 +67,7 @@ void main
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
   // Rendering space RGB to XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
   // Handle out-of-gamut values
   // There should not be any negative values but will clip just to ensure no 

@@ -77,7 +77,7 @@ void main
     float oces[3] = { rIn, gIn, bIn};
 
   // OCES to RGB rendering space
-    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
   // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
@@ -112,7 +112,7 @@ void main
 
   // Convert to display primary encoding
     // Rendering space RGB to XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);

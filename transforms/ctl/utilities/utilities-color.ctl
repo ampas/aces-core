@@ -1,13 +1,12 @@
 //
 // utilities-color.ctl
-// WGR8.5
 //
 // Color related constants and functions
 //
 
 /* ---- Chromaticities of some common primary sets ---- */
 
-const Chromaticities ACES_PRI =
+const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
 {
   { 0.73470,  0.26530},
   { 0.00000,  1.00000},

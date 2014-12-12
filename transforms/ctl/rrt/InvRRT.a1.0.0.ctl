@@ -29,7 +29,7 @@ void main
     float oces[3] = {rIn, gIn, bIn};
 
   // --- OCES to RGB rendering space --- //
-    float rgbPre[3] = mult_f3_f44( oces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
   // --- Apply the tonescale independently in rendering-space RGB --- //
     float rgbPost[3];
@@ -43,7 +43,7 @@ void main
     rgbPost = clamp_f3( rgbPost, 0., HALF_MAX);
 
   // --- RGB rendering space to ACES --- //
-    float aces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+    float aces[3] = mult_f3_f44( rgbPost, AP1_2_AP0_MAT);
 
     aces = clamp_f3( aces, 0., HALF_MAX);
 

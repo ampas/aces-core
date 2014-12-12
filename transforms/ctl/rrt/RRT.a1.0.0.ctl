@@ -47,7 +47,7 @@ void main
   // --- ACES to RGB rendering space --- //
     aces = clamp_f3( aces, 0., HALF_POS_INF);  // avoids saturated negative colors from becoming positive in the matrix
 
-    float rgbPre[3] = mult_f3_f44( aces, ACES_2_RENDER_PRI_MAT);
+    float rgbPre[3] = mult_f3_f44( aces, AP0_2_AP1_MAT);
 
     rgbPre = clamp_f3( rgbPre, 0., HALF_MAX);
 
@@ -61,7 +61,7 @@ void main
     rgbPost[2] = segmented_spline_c5_fwd( rgbPre[2]);
 
   // --- RGB rendering space to OCES --- //
-    float rgbOces[3] = mult_f3_f44( rgbPost, RENDER_PRI_2_ACES_MAT);
+    float rgbOces[3] = mult_f3_f44( rgbPost, AP1_2_AP0_MAT);
     
   // Assign OCES RGB to output variables (OCES)
   rOut = rgbOces[0];

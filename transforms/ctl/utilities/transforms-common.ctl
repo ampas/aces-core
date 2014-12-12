@@ -9,8 +9,8 @@
 import "utilities-color";
 
 
-// Rendering primaries
-const Chromaticities RENDER_PRI = 
+
+const Chromaticities AP1 = 
 {
   {0.713,	0.293},
   {0.165,	0.830},
@@ -18,17 +18,18 @@ const Chromaticities RENDER_PRI =
   {0.32168,	0.33767}
 };
 
-const float ACES_2_XYZ_MAT[4][4] = RGBtoXYZ( ACES_PRI, 1.0);
-const float XYZ_2_ACES_MAT[4][4] = XYZtoRGB( ACES_PRI, 1.0);
-const float XYZ_2_RENDER_PRI_MAT[4][4] = XYZtoRGB( RENDER_PRI, 1.0);
-const float RENDER_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( RENDER_PRI, 1.0);
+const float AP0_2_XYZ_MAT[4][4] = RGBtoXYZ( AP0, 1.0);
+const float XYZ_2_AP0_MAT[4][4] = XYZtoRGB( AP0, 1.0);
 
-const float ACES_2_RENDER_PRI_MAT[4][4] = mult_f44_f44( ACES_2_XYZ_MAT, XYZ_2_RENDER_PRI_MAT);
-const float RENDER_PRI_2_ACES_MAT[4][4] = invert_f44( ACES_2_RENDER_PRI_MAT);
+const float AP1_2_XYZ_MAT[4][4] = RGBtoXYZ( AP1, 1.0);
+const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
 
-const float RENDER_RGB2Y[3] = { RENDER_PRI_2_XYZ_MAT[0][1], 
-                                RENDER_PRI_2_XYZ_MAT[1][1], 
-                                RENDER_PRI_2_XYZ_MAT[2][1] };
+const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
+const float AP1_2_ACES_MAT[4][4] = invert_f44( ACES_2_AP1_MAT);
+
+const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1], 
+                             AP1_2_XYZ_MAT[1][1], 
+                             AP1_2_XYZ_MAT[2][1] };
 
 
 

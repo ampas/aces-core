@@ -60,14 +60,14 @@ Note that the values of the matrix coefficients are rounded to 10 decimal places
 
 
 
-#### OCES-to-XYZ Matrix ####
+#### AP0-to-XYZ Matrix ####
 In the code, matrix is created by:
 
-    const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(OCES_PRI,1.0);
+    const float AP0_2_XYZ_MAT[4][4] = RGBtoXYZ(AP0,1.0);
 
 and the operator would be:
   
-    const float RGB_out[3] = mult_f3_f44( RGB_in, OCES_PRI_2_XYZ_MAT);
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP0_2_XYZ_MAT);
 
 Equivalent math:
 
