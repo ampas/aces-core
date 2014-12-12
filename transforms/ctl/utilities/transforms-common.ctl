@@ -38,6 +38,25 @@ const float TINY = 1e-10;
 
 
 
+float acesLog_to_lin( input varying float in)
+{
+  return pow(2.0, ((in*876.0+64.0-425.0)/50.0-2.5));
+}
+
+float lin_2_acesLog( input varying float in)
+{
+  float out;
+  if (in > 0)
+    out = ((log(in)/log(2.0)+2.5)*50.0+425.0);
+  else
+    out = 0.0;
+    
+  return (out-64.0)/876.0;
+}
+
+
+
+
 float rgb_2_saturation( float rgb[3])
 {
   return ( max( max_f3(rgb), TINY) - max( min_f3(rgb), TINY)) / max( max_f3(rgb), 1e-2);
