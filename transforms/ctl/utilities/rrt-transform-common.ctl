@@ -1,25 +1,27 @@
 //
 // rrt-transform-common.ctl
-// WGR8.5
 //
 // Contains functions and constants shared by forward and inverse RRT transforms
 //
 
 
 
-  // "Glow" module constants
-  const float RRT_GLOW_GAIN = 0.05;
-  const float RRT_GLOW_MID = 0.08;
+// "Glow" module constants
+const float RRT_GLOW_GAIN = 0.05;
+const float RRT_GLOW_MID = 0.08;
 
-  // Red modifier constants
-  const float RRT_RED_SCALE = 0.82;
-  const float RRT_RED_PIVOT = 0.03;
-  const float RRT_RED_HUE = 0.;
-  const float RRT_RED_WIDTH = 135.;
+// Red modifier constants
+const float RRT_RED_SCALE = 0.82;
+const float RRT_RED_PIVOT = 0.03;
+const float RRT_RED_HUE = 0.;
+const float RRT_RED_WIDTH = 135.;
 
-  // Desaturation contants
-  const float RRT_SAT_FACTOR = 0.96;
-  const float RRT_SAT_MAT[3][3] = calc_sat_adjust_matrix( RRT_SAT_FACTOR, RENDER_RGB2Y);
+// Desaturation contants
+const float RRT_SAT_FACTOR = 0.96;
+const float RRT_SAT_MAT[3][3] = calc_sat_adjust_matrix( RRT_SAT_FACTOR, RENDER_RGB2Y);
+
+
+
 
 // ------- Glow module functions
 float glow_fwd( float ycIn, float glowGainIn, float glowMid)
