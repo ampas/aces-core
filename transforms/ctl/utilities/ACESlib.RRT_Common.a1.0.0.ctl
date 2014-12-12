@@ -1,6 +1,4 @@
 //
-// rrt-transform-common.ctl
-//
 // Contains functions and constants shared by forward and inverse RRT transforms
 //
 

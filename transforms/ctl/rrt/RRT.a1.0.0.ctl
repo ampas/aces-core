@@ -7,10 +7,10 @@
 
 
 
-import "utilities";
-import "transforms-common";
-import "rrt-transform-common";
-import "tonescales";
+import "ACESlib.Utilities.a1.0.0";
+import "ACESlib.Transform_Common.a1.0.0";
+import "ACESlib.RRT_Common.a1.0.0";
+import "ACESlib.Tonescales.a1.0.0";
 
 
 

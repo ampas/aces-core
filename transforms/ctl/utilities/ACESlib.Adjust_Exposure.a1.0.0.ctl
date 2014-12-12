@@ -1,5 +1,4 @@
 
-
 // 
 // Adjust Exposure
 //
@@ -12,6 +11,7 @@
 //    To half the exposure (i.e. a 1 stop decrease):
 // ctlrender -ctl adjust_exp.ctl in.exr out.exr -param3 expFactor 0.5 0.5 0.5
 // 
+
 
 
 void main

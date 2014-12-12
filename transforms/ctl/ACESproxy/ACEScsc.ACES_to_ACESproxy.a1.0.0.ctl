@@ -11,7 +11,7 @@
 
 
 
-import "transforms-common";
+import "ACESlib.Transform_Common.a1.0.0";
 
 
 

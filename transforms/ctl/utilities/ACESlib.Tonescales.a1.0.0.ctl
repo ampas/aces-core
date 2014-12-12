@@ -1,6 +1,4 @@
-//
-// tonescales.ctl
-//
+
 
 
 // Textbook monomial to basis-function conversion matrix.

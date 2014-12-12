@@ -1,6 +1,4 @@
 //
-// odt-transforms-common.ctl
-//
 // Contains functions and constants shared by forward and inverse ODT transforms 
 //
 

@@ -21,10 +21,11 @@
 //
 
 
-import "utilities";
-import "transforms-common";
-import "odt-transforms-common";
-import "tonescales";
+
+import "ACESlib.Utilities.a1.0.0";
+import "ACESlib.Transform_Common.a1.0.0";
+import "ACESlib.ODT_Common.a1.0.0";
+import "ACESlib.Tonescales.a1.0.0";
 
 
 

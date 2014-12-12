@@ -1,12 +1,11 @@
 //
-// transforms-common.ctl
-//
 // Contains functions and constants shared by multiple forward and inverse 
 // transforms 
 //
 
 
-import "utilities-color";
+
+import "ACESlib.Utilities_Color.a1.0.0";
 
 
 
