@@ -28,6 +28,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -74,7 +75,7 @@ void main
     XYZ = clamp_f3( XYZ, 0., HALF_POS_INF);
 
   // Encode linear code values with transfer function
-    float outputCV[3] = encode_dcdm( XYZ);
+    float outputCV[3] = dcdm_encode( XYZ);
     
     rOut = outputCV[0];
     gOut = outputCV[1];

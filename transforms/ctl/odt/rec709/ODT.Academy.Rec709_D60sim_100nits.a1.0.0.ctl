@@ -129,7 +129,7 @@ void main
 
   // Default output is to SMPTE range
     if (fullRange == 0) {
-      outputCV = fullRange_to_smpteRange( outputCV);
+      outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 
     rOut = outputCV[0];

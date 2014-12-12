@@ -39,6 +39,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -62,7 +63,6 @@ void main
     output varying float bOut,
     output varying float aOut
 )
-{
 {
     float oces[3] = { rIn, gIn, bIn};
 
@@ -94,7 +94,7 @@ void main
     XYZ = mult_f3_f44( P3D60, DISPLAY_PRI_2_XYZ_MAT);
 
   // Encode linear code values with transfer function
-    float outputCV[3] = encode_dcdm( XYZ);
+    float outputCV[3] = dcdm_encode( XYZ);
     
     rOut = outputCV[0];
     gOut = outputCV[1];

@@ -39,7 +39,7 @@ void main
 
   // Default output is to SMPTE range
     if (fullRange == 0) {
-      outputCV = smpteRange_to_fullRange( outputCV);
+      outputCV = smpteRange_to_fullRange_f3( outputCV);
     }
 
   // Decode to linear code values with inverse transfer function

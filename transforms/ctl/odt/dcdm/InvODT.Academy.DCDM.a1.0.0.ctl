@@ -7,6 +7,7 @@
 import "utilities";
 import "transforms-common";
 import "odt-transforms-common";
+import "tonescales";
 
 
 
@@ -30,10 +31,10 @@ void main
     float outputCV[3] = { rIn, gIn, bIn};
 
   // Decode with inverse transfer function
-    float XYZ[3] = decode_dcdm( outputCV);
+    float XYZ[3] = dcdm_decode( outputCV);
 
   // CIE XYZ to rendering space RGB
-    float linearCV = mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
+    float linearCV[3] = mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
   
   // Scale code value to luminance
     float rgbPre[3];

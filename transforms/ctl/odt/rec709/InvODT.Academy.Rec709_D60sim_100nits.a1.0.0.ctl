@@ -33,14 +33,14 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input varying int fullrange = 0
+    input varying int fullRange = 0
 )
 {  
     float outputCV[3] = { rIn, gIn, bIn};
 
   // Default output is to SMPTE range
     if (fullRange == 0) {
-      outputCV = smpteRange_to_fullRange( outputCV);
+      outputCV = smpteRange_to_fullRange_f3( outputCV);
     }
 
   // Decode to linear code values with inverse transfer function

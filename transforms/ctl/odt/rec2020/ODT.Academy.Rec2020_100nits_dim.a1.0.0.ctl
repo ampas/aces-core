@@ -66,7 +66,7 @@ void main
     output varying float rOut,
     output varying float gOut,
     output varying float bOut,
-    output varying float aOut
+    output varying float aOut,
     input varying int fullRange = 0  
 )
 {
@@ -115,7 +115,7 @@ void main
 
   // Default output is to SMPTE range
     if (fullRange == 0) {
-      outputCV = fullRange_to_smpteRange( outputCV);
+      outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 
     rOut = outputCV[0];

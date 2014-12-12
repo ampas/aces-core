@@ -306,13 +306,16 @@ float[3] fullRange_to_smpteRange_f3( float rgbIn[3])
 }
 
 
-// SMPTE 431-2 defines the DCDM color decoding equations. The equations for the decoding of the encoded color information are the inverse of the encoding equations
-float[3] dcdm_decode( int XYZp[3])
+// SMPTE 431-2 defines the DCDM color encoding equations. 
+// The equations for the decoding of the encoded color information are the 
+// inverse of the encoding equations
+// Note: Here the 4095 12-bit scalar is not used since the output of CTL is 0-1.
+float[3] dcdm_decode( float XYZp[3])
 {
   float XYZ[3];
-  XYZ[0] = (52.37/48.0) * pow( XYZp[0]/4095., 2.6);  
-  XYZ[1] = (52.37/48.0) * pow( XYZp[1]/4095., 2.6);  
-  XYZ[2] = (52.37/48.0) * pow( XYZp[2]/4095., 2.6);  
+  XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);  
+  XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);  
+  XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);  
   
   return XYZ;
 }

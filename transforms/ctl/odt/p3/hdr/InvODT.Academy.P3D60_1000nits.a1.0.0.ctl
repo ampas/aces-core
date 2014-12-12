@@ -13,7 +13,7 @@ import "tonescales";
 
 /* --- ODT Parameters --- */
 const Chromaticities DISPLAY_PRI = P3D60_PRI;
-const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
+const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
 
 
 
