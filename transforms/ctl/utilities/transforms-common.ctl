@@ -56,6 +56,21 @@ float lin_2_acesLog( input varying float in)
 
 
 
+float lin_2_acesProxy( input varying float in)
+{
+  float out;
+  if (in > 0) 
+    out = clamp( ((log(in)/log(2.0)+2.5)*50.0+425.0), 64., 940.);
+  
+  return (out-64.0)/876.0;
+}
+
+float acesProxy_to_lin( input varying float in)
+{
+  return acesLog_to_lin( in);
+}
+
+
 
 float rgb_2_saturation( float rgb[3])
 {
