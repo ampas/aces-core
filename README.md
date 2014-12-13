@@ -1,122 +1,1 @@
-## Academy Color Encoding System Developer Resources ##
-
-The Academy Color Encoding System (ACES) is a set of components that facilitates
-a wide range of motion picture workflows while eliminating the ambiguity of
-today's file formats. The framework is designed to support both all digital and
-hybrid film-digital motion picture workflows.
-
-The basic ACES components are:
-
-* Color encoding and metric specifications, file format specifications, color
-transformations, and an open source reference implementation. 
-* A set of reference images and calibration targets for film scanners and
-recorders 
-* Documentation on the architecture and software tools
-
-This toolkit is intended to serve as a distribution mechanism for key components
-of the framework including the reference implementation transforms, reference
-images, and documentation.
-
-### Package Contents ###
- 
-* [`documents/`](./documents) - ACES related documents 
-* [`images/`](./images) - "golden" images created using the reference implementation transforms
-* [`transforms/`](./transforms) - ACES reference implementation transforms
-
-### Changes from Previous Releases ###
-
-This is ACESrelease 1.
-
-For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md).
-
-### Versioning ###
- 
-The links to the current and all past versions of the ACES Developer Resources
-can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
-
-Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
-
-### Branch Structure ###
-
-__Master Branch__
- 
-The current release version of ACES can always be found at the HEAD of the
-master branch.  Previous release versions are tagged and are also commits on the
-master.  The master branch contains no intermediate commits so all commits on
-the master branch are tagged and represent a release of ACES.
-
-__Dev Branch__
- 
-All commits between releases will be on the dev branch. Commits on the dev
-branch will be included in the next release version. Commits staged on the dev
-branch, but not yet merged into the master, should be considered non-critical. 
-All intermediate commits for a release will be staged on the dev branch before
-being merged into the master and tagged.
-
-__Hotfixes Branch__
- 
-In some cases it may be necessary to create a hotfixes branch.  The hotfixes
-branch will include important, but not fully tested, fixes for bugs found in a
-particular release.
-Hotfixes should only be implemented by developers if the bug they are intended
-to correct is encountered in the course of production and is deemed to be a
-barrier to using a particular ACES release.  Hotfixes, once fully tested, will
-be merged into dev branch, and ultimately the master.    
-
-## Prerequisites ##
-
-### Color Transformation Language ###
-
-Color Transformation Language (CTL) can be downloaded from
-https://github.com/ampas/CTL
-
-## License Terms for Academy Color Encoding System Components ##
-
-Academy Color Encoding System (ACES) software and tools are provided by the
-Academy under the following terms and conditions: A worldwide, royalty-free,
-non-exclusive right to copy, modify, create derivatives, and use, in source and
-binary forms, is hereby granted, subject to acceptance of this license.
-
-Copyright © 2013 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
-Portions contributed by others as indicated. All rights reserved.
-
-Performance of any of the aforementioned acts indicates acceptance to be bound
-by the following terms and conditions:
-
-* Copies of source code, in whole or in part, must retain the above copyright
-notice, this list of conditions and the Disclaimer of Warranty.
-
-* Use in binary form must retain the above copyright notice, this list of
-conditions and the Disclaimer of Warranty in the documentation and/or other
-materials provided with the distribution.
-
-* Nothing in this license shall be deemed to grant any rights to trademarks,
-copyrights, patents, trade secrets or any other intellectual property of
-A.M.P.A.S. or any contributors, except as expressly stated herein.
-
-* Neither the name "A.M.P.A.S." nor the name of any other contributors to this
-software may be used to endorse or promote products derivative of or based on
-this software without express prior written permission of A.M.P.A.S. or the
-contributors, as appropriate.
-
-This license shall be construed pursuant to the laws of the State of
-California, and any disputes related thereto shall be subject to the
-jurisdiction of the courts therein.
-
-Disclaimer of Warranty: THIS SOFTWARE IS PROVIDED BY A.M.P.A.S. AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
-NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL A.M.P.A.S., OR ANY
-CONTRIBUTORS OR DISTRIBUTORS, BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, RESITUTIONARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
-OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, THE ACADEMY SPECIFICALLY
-DISCLAIMS ANY REPRESENTATIONS OR WARRANTIES WHATSOEVER RELATED TO PATENT OR
-OTHER INTELLECTUAL PROPERTY RIGHTS IN THE ACADEMY COLOR ENCODING SYSTEM, OR
-APPLICATIONS THEREOF, HELD BY PARTIES OTHER THAN A.M.P.A.S.,WHETHER DISCLOSED OR
-UNDISCLOSED.
+# Release Notes - Working Group Release version 9 (WGR9) ### License Terms for Academy Color Encoding System Components ##Academy Color Encoding System (ACES) software and tools are provided by the Academy under the following terms and conditions: A worldwide, royalty-free, non-exclusive right to copy, modify, create derivatives, and use, in source and binary forms, is hereby granted, subject to acceptance of this license. Performance of any of the aforementioned acts indicates acceptance to be bound by the following terms and conditions:  * Copies of source code, in whole or in part, must retain the copyright notice   (below), this list of conditions and the Disclaimer of Warranty.  * Use in binary form must retain the copyright notice (below), this list of   conditions and the Disclaimer of Warranty in the documentation and/or other   materials provided with the distribution.  * Nothing in this license shall be deemed to grant any rights to trademarks,   copyrights, patents, trade secrets or any other intellectual property of   A.M.P.A.S. or any contributors, except as expressly stated herein.  * Neither the name "A.M.P.A.S." nor the name of any other contributors to this   software may be used to endorse or promote products derivative of or based on   this software without express prior written permission of A.M.P.A.S. or the   contributors, as appropriate.This license shall be construed pursuant to the laws of the State of California, and any disputes related thereto shall be subject to the jurisdiction of the courts therein.Copyright © 2014 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).Portions contributed by others as indicated. All rights reserved.Disclaimer of Warranty: THIS SOFTWARE IS PROVIDED BY A.M.P.A.S. AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT ARE DISCLAIMED. IN NO EVENT SHALL A.M.P.A.S., OR ANY CONTRIBUTORS OR DISTRIBUTORS, BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, RESITUTIONARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, THE ACADEMY SPECIFICALLY DISCLAIMS ANY REPRESENTATIONS OR WARRANTIES WHATSOEVER RELATED TO PATENT OR OTHER INTELLECTUAL PROPERTY RIGHTS IN THE ACADEMY COLOR ENCODING SYSTEM, OR APPLICATIONS THEREOF, HELD BY PARTIES OTHER THAN A.M.P.A.S.,WHETHER DISCLOSED OR UNDISCLOSED.## Summary ##Working Group Release 9 (WGR9) of the Academy Color Encoding System Developer Resources is intended for ACES Product Partners and Project Committee members to test key ACES transforms and review specification documents prior to their official release.  The transforms included in this package should be considered release candidates and may change before the official release of ACES Version 1.0.  ACES Product Partners and Project Committee members are encouraged to thoroughly test the included transforms and provide feedback to the Academy by emailing acesdev@oscars.org before December 17, 2014.  ACES Product Partners should make the transforms in this package available to key development partners and clients for testing purposes, but not publicly available in general product releases.The WGR9 transform changes address minor issues with the transforms included in WGR8.5 and prepare them for the ACES v1.0 release. WGR9 also includes a set of Output Device Transforms (ODTs) to support High Dynamic Range (HDR) display devices.As a reminder, WGR8.5 was focused on improving the color grading experience by updating the transforms and providing a recommendation for a color correction working space.The WGR 9 release further enhances the grading experience by updating the preliminary recommendations for a color correction working space (ACEScc, where “cc” is an abbreviation for “color correction”) and modifying the RRT and ODT tone scales to address specific issues encountered during testing.  These modifications were determined to improve the grading experience in DI and on-set.The WGR 9 release also includes modifications to the ODT tone scales.  They were modified to ensure device black could be achieved using on-set look management systems and DI color correction systems.  WGR 9 includes a slight modification of the RRT tone scale to allow for the use of b-splines in the HDR ODTs which are now included as part of the release package.Finally, WGR9 implements the System Versioning Specification developed by the ACES Containers and Metadata Working Group. Implementing this versioning system required the renaming of all CTL files, and will affect scripts and applications that directly access ACES CTL files. Please see the System Versioning Specification, which will be available in the documents folder.The WGR9 transforms are provided in CTL.  CTL and ctlrender can be downloaded from https://github.com/ampas/CTL/.  Specific areas of focused testing by ACES Product Partners should include:  * Color grading behavior and the ability to achieve a diverse range of creative looks  * Confirmation that your product's color modifying operations perform as expected using instrumentation such as a vectorscope and waveform monitor as well as through end-user testing  * Testing of the included color correction working space and comparison of this space to your preferred working space  * Testing of HDR ODTs  * Building implementations that match the reference CTL (cube building, language translation, etc.)  * Implementation assessment of the ACES System Versioning Specification in Partner applicationsThe transforms included should *not* be considered ready for "client-eyes" without your own private testing. In any case, please test the transforms included with production grade material.The CTL transforms also include comments related to the forthcoming simplification of terms and transform structure to help improve clarity and consistency in the user interface.  More details on the user interface considerations will be provided in a forthcoming separate document.3D-LUTs (cubes) have not been included with this working group release.  Cubes must be created with specific knowledge of the workflow, hardware, and software with which the cubes will be used.  3D-LUTs should be built and tested for their ability to accurately model the underlying function between the LUT nodes within the pipeline for which they have been created.  When building 3D-LUTs, careful attention should be paid to the accuracy of the interpolated values relative to the ground truth behavior of the underlying function between the nodes.  Some implementers have found that simple functions such as log2 and log10 work reasonably well as shaper LUTs.  In some cases it may be necessary for one or more 1D shaper LUTs, before and/or after the cube, to be optimized using a least squares model given knowledge of the underlying function and the interpolation method that will be used.  This may lead to shaper LUTs that vary per color and aren't exactly representable with elementary functions.  Please email acesdev@oscars.org if you require assistance with your specific implementation.## Changes ##WGR9 incorporates adjustments to address comments received since the last ACES Working Group Release (WGR8.5). The changes are:* Additional transforms, documents, and reference images are included in preparation for the ACES v1.0 release* Filenames have been updated to conform to the ACES system versioning specification* RRT    * The RRT tone scale has been modified to allow for the use of b-splines in the new HDR ODTs.  * ODTs    * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.    * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added    * Rec.709 ODTs now have a runtime flag for full range or legal range output.  The default is legal range.    * ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated* Miscellaneous code cleanups.  Removal of unused code## Notes on RRT version numbering ##RRT and ODT development is done in 3 stages. The stages are: Internal Development, Working Group Release, ACES system release. Each stage has a unique version number system and references to version numbers assigned in the previous stage should be avoided.* **Internal Development Builds**  Internal Development Builds are intended only for use by those directly involved in development of a particular internal development build of the RRT. Internal development builds are not intended for release outside of the Academy. Example internal development build numbers include UT2, UT3, v156, v160, v171, etc.* **Working Group Releases**  Working Group Releases are intended for testing by the entire Academy RRT Working Group, and with WGR9, the ACES Project Committee. Working Group Releases should be tested on real-world material, but should not be considered ready for "client eyes" without prior review.  Working Group Releases can be downloaded by RRT Working Group members from Basecamp. Feedback on Working Group Releases should be sent to acesdev@oscars.org. Example Working Group Release version numbers include WGR3.0, WGR4.0, WGR5.0, WGR8.0 etc. Please note that RRT versions DC2.2 and UT3.3 were released for industry trials prior to the adoption of the current naming system.* **ACES System Releases**  ACES System Releases are the official releases of the Academy Color Encoding System. ACES System Releases include all Academy provided components and documentation for the Academy Color Encoding System and are available for download from Github, which can be accessed via http://www.oscars.org/aces. Feedback on ACES system releases should be sent to acesdev@oscars.org. General questions should be directed to academyaces@googlegroups.com. Example ACES System Release version numbers include v0.1, v0.2, v0.7, v0.7.1, etc.
