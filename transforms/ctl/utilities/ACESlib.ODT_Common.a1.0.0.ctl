@@ -17,12 +17,12 @@ const float DIM_SURROUND_GAMMA = 0.9811;
 
 // Saturation compensation factor
 const float ODT_SAT_FACTOR = 0.93;
-const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, RENDER_RGB2Y);
+const float ODT_SAT_MAT[3][3] = calc_sat_adjust_matrix( ODT_SAT_FACTOR, AP1_RGB2Y);
 
 
 
 
-const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( ACES_PRI.white, REC709_PRI.white);
+const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( AP0.white, REC709_PRI.white);
 
 
 
@@ -41,26 +41,26 @@ float linCV_2_Y( float linCV, float Ymax, float Ymin)
 
 float[3] darkSurround_to_dimSurround( float linearCV[3])
 {
-  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT); 
+  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT); 
 
   float xyY[3] = XYZ_2_xyY(XYZ);
   xyY[2] = clamp( xyY[2], 0., HALF_POS_INF);
   xyY[2] = pow( xyY[2], DIM_SURROUND_GAMMA);
   XYZ = xyY_2_XYZ(xyY);
 
-  return mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
+  return mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
 }
 
 float[3] dimSurround_to_darkSurround( float linearCV[3])
 {
-  float XYZ[3] = mult_f3_f44( linearCV, RENDER_PRI_2_XYZ_MAT); 
+  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT); 
 
   float xyY[3] = XYZ_2_xyY(XYZ);
   xyY[2] = clamp( xyY[2], 0., HALF_POS_INF);
   xyY[2] = pow( xyY[2], 1./DIM_SURROUND_GAMMA);
   XYZ = xyY_2_XYZ(xyY);
 
-  return mult_f3_f44( XYZ, XYZ_2_RENDER_PRI_MAT);
+  return mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
 }
 
 

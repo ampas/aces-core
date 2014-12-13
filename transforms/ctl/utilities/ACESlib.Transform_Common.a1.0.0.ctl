@@ -24,7 +24,7 @@ const float AP1_2_XYZ_MAT[4][4] = RGBtoXYZ( AP1, 1.0);
 const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
 
 const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
-const float AP1_2_ACES_MAT[4][4] = invert_f44( ACES_2_AP1_MAT);
+const float AP1_2_AP0_MAT[4][4] = invert_f44( AP0_2_AP1_MAT);
 
 const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1], 
                              AP1_2_XYZ_MAT[1][1], 
@@ -39,14 +39,14 @@ const float TINY = 1e-10;
 
 float acesLog_to_lin( input varying float in)
 {
-  return pow(2.0, ((in*876.0+64.0-425.0)/50.0-2.5));
+  return pow(2.0, (in*876.0+64.0-425.0)/50.0-2.5 );
 }
 
-float lin_2_acesLog( input varying float in)
+float lin_to_acesLog( input varying float in)
 {
   float out;
   if (in > 0)
-    out = ((log(in)/log(2.0)+2.5)*50.0+425.0);
+    out = (log(in)/log(2.0)+2.5)*50.0+425.0;
   else
     out = 0.0;
     
@@ -55,7 +55,7 @@ float lin_2_acesLog( input varying float in)
 
 
 
-float lin_2_acesProxy( input varying float in)
+float lin_to_acesProxy( input varying float in)
 {
   float out;
   if (in > 0) 

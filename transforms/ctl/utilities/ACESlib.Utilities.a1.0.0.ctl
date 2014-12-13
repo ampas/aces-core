@@ -1,6 +1,4 @@
 //
-// utilities.ctl
-//
 // Generic functions that may be useful for writing CTL programs
 //
 
