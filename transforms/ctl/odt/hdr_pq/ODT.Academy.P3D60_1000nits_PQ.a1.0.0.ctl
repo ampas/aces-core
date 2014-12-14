@@ -69,21 +69,15 @@ void main
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1], ODT_1000nits);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2], ODT_1000nits);
 
-  // Scale luminance to linear code value
-    float linearCV[3];
-    linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
-    linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
-    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
-
   // Convert to display primary encoding
     // Rendering space RGB to XYZ
-    float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
+    float XYZ[3] = mult_f3_f44( rgbPost, AP1_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
-    linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
+    float rgb[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  // Encode linear code values with transfer function
-    float outputCV[3] = pq_r_f3( linearCV);
+  // Encode with PQ transfer function
+    float outputCV[3] = pq_r_f3( rgb);
   
     rOut = outputCV[0];
     gOut = outputCV[1];
