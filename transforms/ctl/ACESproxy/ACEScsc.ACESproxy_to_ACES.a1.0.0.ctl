@@ -1,18 +1,29 @@
 //
-// ACES Color Space Conversion - ACEScc to ACES
+// ACES Color Space Conversion - ACESproxy to ACES
 //
-// converts AP1 w/ ACESlog encoding to ACES2065-1 (AP0 w/ linear encoding)
+// converts ACESproxy (AP1 w/ ACESproxy encoding) to 
+//          ACES2065-1 (AP0 w/ linear encoding)
 //
 
-//
-// ** ACESproxy should not be written into a container file in actual 
-// implementations! **
-//
+// *-*-*-*-*-*-*-*-*
+// ACESproxy is intended to be a transient encoding used only for signal 
+// transmission in systems limited to 10- or 12-bit video signals.
+// ACESproxy is not intended for interchange, mastering finals, or archiving 
+// and as such should NOT be written into a container file in actual 
+// implementations! 
+// *-*-*-*-*-*-*-*-*
 
 
 
 import "ACESlib.Utilities.a1.0.0";
 import "ACESlib.Transform_Common.a1.0.0";
+
+
+
+float ACESproxy_to_lin( input varying float in)
+{
+  return pow( 2., (in-425.)/50. - 2.5);
+}
 
 
 

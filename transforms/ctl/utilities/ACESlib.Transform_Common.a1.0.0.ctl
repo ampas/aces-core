@@ -6,6 +6,7 @@
 
 
 import "ACESlib.Utilities_Color.a1.0.0";
+import "ACESlib.Utilities.a1.0.0";
 
 
 
@@ -37,37 +38,6 @@ const float TINY = 1e-10;
 
 
 
-float acesLog_to_lin( input varying float in)
-{
-  return pow(2.0, (in*876.0+64.0-425.0)/50.0-2.5 );
-}
-
-float lin_to_acesLog( input varying float in)
-{
-  float out;
-  if (in > 0)
-    out = (log(in)/log(2.0)+2.5)*50.0+425.0;
-  else
-    out = 0.0;
-    
-  return (out-64.0)/876.0;
-}
-
-
-
-float lin_to_acesProxy( input varying float in)
-{
-  float out;
-  if (in > 0) 
-    out = clamp( ((log(in)/log(2.0)+2.5)*50.0+425.0), 64., 940.);
-  
-  return (out-64.0)/876.0;
-}
-
-float acesProxy_to_lin( input varying float in)
-{
-  return acesLog_to_lin( in);
-}
 
 
 
