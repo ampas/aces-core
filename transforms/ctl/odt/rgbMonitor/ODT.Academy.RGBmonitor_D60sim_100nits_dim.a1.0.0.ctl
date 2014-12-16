@@ -55,7 +55,7 @@ const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
 const float DISPGAMMA = 2.4; 
-const float OFFSET = 0.55;
+const float OFFSET = 0.055;
 
 const float SCALE = 0.955;
 
