@@ -15,14 +15,16 @@
 
 
 
-import "ACESlib.Utilities.a1.0.0";
 import "ACESlib.Transform_Common.a1.0.0";
 
 
 
 float ACESproxy_to_lin( input varying float in)
 {
-  return pow( 2., (in-425.)/50. - 2.5);
+  float out;
+  
+  out = in*876.+64.;
+  return pow( 2., (out-425.)/50. - 2.5);
 }
 
 
@@ -40,9 +42,9 @@ void main
 )
 {
     float AP1_lin[3];
-    AP1_lin[0] = acesProxy_to_lin( rIn);
-    AP1_lin[1] = acesProxy_to_lin( gIn);
-    AP1_lin[2] = acesProxy_to_lin( bIn);
+    AP1_lin[0] = ACESproxy_to_lin( rIn);
+    AP1_lin[1] = ACESproxy_to_lin( gIn);
+    AP1_lin[2] = ACESproxy_to_lin( bIn);
 
     float aces[3] = mult_f3_f44( AP1_lin, AP1_2_AP0_MAT);
 
