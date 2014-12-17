@@ -75,6 +75,10 @@ void main
 
     // CIE XYZ to display primaries
     float rgb[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
+    
+  // Handle out-of-gamut values
+    // Clip values < 0 (i.e. projecting outside the display primaries)
+    rgb = clamp_f3( rgb, 0., HALF_POS_INF);    
 
   // Encode with PQ transfer function
     float outputCV[3] = pq_r_f3( rgb);
