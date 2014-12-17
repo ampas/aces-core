@@ -1,7 +1,7 @@
 
 
 //
-// IDT for Sony F35 Cameras - 12 bits
+// IDT for Sony Cameras - 12 bits
 // Provided by Sony Electronics Corp.
 //
 

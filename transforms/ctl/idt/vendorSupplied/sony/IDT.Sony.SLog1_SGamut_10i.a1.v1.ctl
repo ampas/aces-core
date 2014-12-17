@@ -1,7 +1,7 @@
 
 
 //
-// IDT for Sony F65 and F55 Cameras - 10 bits - Tungsten (3200K or 4300K)
+// IDT for Sony Cameras - 10 bits
 // Provided by Sony Electronics Corp.
 //
 
@@ -10,10 +10,10 @@
 
 
 /* ============ CONSTANTS ============ */
-const float SGAMUT_TUNG_TO_ACES_MTX[3][3] = {
-  { 1.0110238740,  0.1011994504,  0.0600766530},
-  {-0.1362526051,  0.9562196265, -0.1010185315},
-  { 0.1252287310, -0.0574190769,  1.0409418785}
+const float SGAMUT_TO_ACES_MTX[3][3] = {
+	{ 0.754338638,  0.021198141, -0.009756991 },
+	{ 0.133697046,  1.005410934,  0.004508563 },
+	{ 0.111968437, -0.026610548,  1.005253201 }
 };
 
 const float B = 64.;
@@ -25,7 +25,7 @@ const float W = 940.;
 
 
 /* ============ SUBFUNCTIONS ============ */
-float SLog2_to_lin (
+float SLog1_to_lin (
 	float SLog,
 	float b,
 	float ab,
@@ -35,9 +35,9 @@ float SLog2_to_lin (
 	float lin;
 	
 	if (SLog >= ab)
-		lin = ( 219. * ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) * 0.9;
+		lin = ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) * 0.9;
 	else if (SLog < ab) 
-		lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;
+		lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 5.) * 0.9;
 	
 	return lin;
 	
@@ -68,12 +68,12 @@ main
 
 	// 10-bit Sony S-log to linear S-gamut
 	float lin[3];
-	lin[0] = SLog2_to_lin( SLog[0], B, AB, W);
-	lin[1] = SLog2_to_lin( SLog[1], B, AB, W);
-	lin[2] = SLog2_to_lin( SLog[2], B, AB, W);
+	lin[0] = SLog1_to_lin( SLog[0], B, AB, W);
+	lin[1] = SLog1_to_lin( SLog[1], B, AB, W);
+	lin[2] = SLog1_to_lin( SLog[2], B, AB, W);
 	
 	// S-Gamut to ACES matrix
-	float aces[3] = mult_f3_f33( lin, SGAMUT_TUNG_TO_ACES_MTX);
+	float aces[3] = mult_f3_f33( lin, SGAMUT_TO_ACES_MTX);
 
 	rOut = aces[0];
 	gOut = aces[1];

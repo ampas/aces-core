@@ -1,7 +1,7 @@
 
 
 //
-// IDT for Sony F65 and F55 Cameras - 12 bits - Tungsten (3200K or 4300K)
+// IDT for Sony Cameras - 12 bits - Tungsten (3200K or 4300K)
 // Provided by Sony Electronics Corp.
 //
 

@@ -1,7 +1,7 @@
 
 
 //
-// IDT for Sony F65 and F55 Cameras - 12 bits - Daylight (5500K)
+// IDT for Sony Cameras - 10 bits - Tungsten (3200K or 4300K)
 // Provided by Sony Electronics Corp.
 //
 
@@ -10,15 +10,15 @@
 
 
 /* ============ CONSTANTS ============ */
-const float SGAMUT_DAYLIGHT_TO_ACES_MTX[3][3] = {
-  { 0.8764457030,  0.0774075345,  0.0573564351},
-  { 0.0145411681,  0.9529571767, -0.1151066335},
-  { 0.1090131290, -0.0303647111,  1.0577501984}
+const float SGAMUT_TUNG_TO_ACES_MTX[3][3] = {
+  { 1.0110238740,  0.1011994504,  0.0600766530},
+  {-0.1362526051,  0.9562196265, -0.1010185315},
+  { 0.1252287310, -0.0574190769,  1.0409418785}
 };
 
-const float B = 256.;
-const float AB = 360.;
-const float W = 3760.;
+const float B = 64.;
+const float AB = 90.;
+const float W = 940.;
 
 
 
@@ -62,19 +62,19 @@ main
 {
 	// Prepare input values based on application bit depth handling
 	float SLog[3];
-	SLog[0] = rIn * 4095.;
-	SLog[1] = gIn * 4095.;
-	SLog[2] = bIn * 4095.;
+	SLog[0] = rIn * 1023.;
+	SLog[1] = gIn * 1023.;
+	SLog[2] = bIn * 1023.;
 
-	// 12-bit Sony S-log to linear S-gamut
+	// 10-bit Sony S-log to linear S-gamut
 	float lin[3];
 	lin[0] = SLog2_to_lin( SLog[0], B, AB, W);
 	lin[1] = SLog2_to_lin( SLog[1], B, AB, W);
 	lin[2] = SLog2_to_lin( SLog[2], B, AB, W);
-
-	// S-Gamut to ACES matrix
-	float aces[3] = mult_f3_f33( lin, SGAMUT_DAYLIGHT_TO_ACES_MTX);
 	
+	// S-Gamut to ACES matrix
+	float aces[3] = mult_f3_f33( lin, SGAMUT_TUNG_TO_ACES_MTX);
+
 	rOut = aces[0];
 	gOut = aces[1];
 	bOut = aces[2];

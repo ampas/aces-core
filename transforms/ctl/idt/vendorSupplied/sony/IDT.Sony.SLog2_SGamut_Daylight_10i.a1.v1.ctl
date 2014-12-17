@@ -1,7 +1,7 @@
 
 
 //
-// IDT for Sony F65 and F55 Cameras - 10 bits - Daylight (5500K)
+// IDT for Sony Cameras - 10 bits - Daylight (5500K)
 // Provided by Sony Electronics Corp.
 //
 
