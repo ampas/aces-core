@@ -119,7 +119,37 @@ Equivalent math:
     R_out =  1.6410233797 * R_in + -0.3248032942 * G_in + -0.2364246952 * B_in;
     G_out = -0.6636628587 * R_in +  1.6153315917 * G_in +  0.0167563477 * B_in;
     B_out =  0.0117218943 * R_in + -0.0082844420 * G_in +  0.9883948585 * B_in;    
-    
+
+#### AP0-to-AP1 Matrix ####
+In the code, matrix is created by:
+
+    const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP0_2_AP1_MAT);
+
+Equivalent math:
+
+    R_out =  1.4514393161 * R_in + -0.2365107469 * G_in + -0.2149285693 * B_in;
+    G_out = -0.0765537734 * R_in +  1.1762296998 * G_in + -0.0996759264 * B_in;
+    B_out =  0.0083161484 * R_in + -0.0060324498 * G_in +  0.9977163014 * B_in;
+
+#### AP1-to-AP0 Matrix ####
+In the code, matrix is created by:
+
+    const float AP1_2_AP0_MAT[4][4] = mult_f44_f44( AP1_2_XYZ_MAT, XYZ_2_AP0_MAT);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP1_2_AP0_MAT);
+
+Equivalent math:
+
+    R_out =  0.6954522414 * R_in +  0.1406786965 * G_in +  0.1638690622 * B_in;
+    G_out =  0.0447945634 * R_in +  0.8596711185 * G_in +  0.0955343182 * B_in;
+    B_out = -0.0055258826 * R_in +  0.0040252103 * G_in +  1.0015006723 * B_in;
+
 #### XYZ-to-P3D60 Primaries Matrix ####
 In the code, matrix is created by:
 
