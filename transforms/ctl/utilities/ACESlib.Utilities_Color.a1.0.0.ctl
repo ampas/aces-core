@@ -20,6 +20,14 @@ const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
   { 0.32168,  0.33767}
 };
 
+const Chromaticities AP1 = // Working space and rendering primaries for ACES 1.0
+{
+  {0.713,	0.293},
+  {0.165,	0.830},
+  {0.128,	0.044},
+  {0.32168,	0.33767}
+};
+
 const Chromaticities REC709_PRI =
 {
   { 0.64000,  0.33000},

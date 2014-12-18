@@ -5,18 +5,9 @@
 
 
 
-import "ACESlib.Utilities_Color.a1.0.0";
 import "ACESlib.Utilities.a1.0.0";
 
 
-
-const Chromaticities AP1 = 
-{
-  {0.713,	0.293},
-  {0.165,	0.830},
-  {0.128,	0.044},
-  {0.32168,	0.33767}
-};
 
 const float AP0_2_XYZ_MAT[4][4] = RGBtoXYZ( AP0, 1.0);
 const float XYZ_2_AP0_MAT[4][4] = XYZtoRGB( AP0, 1.0);
@@ -34,10 +25,6 @@ const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1],
 
 
 const float TINY = 1e-10;
-
-
-
-
 
 
 
