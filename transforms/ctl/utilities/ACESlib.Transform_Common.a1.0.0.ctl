@@ -5,6 +5,7 @@
 
 
 
+import "ACESlib.Utilities_Color.a1.0.0";
 import "ACESlib.Utilities.a1.0.0";
 
 
@@ -16,7 +17,7 @@ const float AP1_2_XYZ_MAT[4][4] = RGBtoXYZ( AP1, 1.0);
 const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
 
 const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
-const float AP1_2_AP0_MAT[4][4] = invert_f44( AP0_2_AP1_MAT);
+const float AP1_2_AP0_MAT[4][4] = mult_f44_f44( AP1_2_XYZ_MAT, XYZ_2_AP0_MAT);
 
 const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1], 
                              AP1_2_XYZ_MAT[1][1], 
