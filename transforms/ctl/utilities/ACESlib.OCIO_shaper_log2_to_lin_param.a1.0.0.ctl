@@ -39,9 +39,8 @@ void main
 )
 
 {
-  const float scalar = 1.0;
-  rOut = log2_to_lin_32f( rIn / scalar, middleGrey, minExposure, maxExposure);
-  gOut = log2_to_lin_32f( gIn / scalar, middleGrey, minExposure, maxExposure);
-  bOut = log2_to_lin_32f( bIn / scalar, middleGrey, minExposure, maxExposure);
+  rOut = log2_to_lin_32f( rIn, middleGrey, minExposure, maxExposure);
+  gOut = log2_to_lin_32f( gIn, middleGrey, minExposure, maxExposure);
+  bOut = log2_to_lin_32f( bIn, middleGrey, minExposure, maxExposure);
   aOut = aIn;  
 }

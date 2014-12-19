@@ -40,16 +40,8 @@ void main
   output varying float aOut
 )
 {
-  float lin[3] = {rIn, gIn, bIn};
-
-  float log32f[3];
-  log32f[0] = lin_to_log2_32f( lin[0], middleGrey, minExposure, maxExposure);
-  log32f[1] = lin_to_log2_32f( lin[1], middleGrey, minExposure, maxExposure);
-  log32f[2] = lin_to_log2_32f( lin[2], middleGrey, minExposure, maxExposure);
-
-  const float scalar = 1.0;
-  rOut = log32f[0] / scalar;
-  gOut = log32f[1] / scalar;
-  bOut = log32f[2] / scalar;
+  rOut = lin_to_log2_32f( rIn, middleGrey, minExposure, maxExposure);
+  gOut = lin_to_log2_32f( gIn, middleGrey, minExposure, maxExposure);
+  bOut = lin_to_log2_32f( bIn, middleGrey, minExposure, maxExposure);
   aOut = aIn;  
 }
