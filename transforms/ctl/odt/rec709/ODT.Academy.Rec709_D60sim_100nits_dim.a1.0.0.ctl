@@ -6,7 +6,7 @@
 // Summary :
 //  This transform is intended for mapping OCES onto a Rec.709 broadcast monitor
 //  that is calibrated to a D65 white point at 100 cd/m^2. The assumed observer 
-//  adapted white is D60, and the viewing environment is that of a dark theater. 
+//  adapted white is D60, and the viewing environment is a dim surround. 
 //
 //  A possible use case for this transform would be cinema "soft-proofing".
 //
@@ -33,11 +33,8 @@
 //                                     0.32168      0.33767
 //
 // Viewing Environment:
-//  Environment specified in SMPTE RP 431-2-2007
-//   Note: This environment is consistent with the viewing environment typical
-//     of a motion picture theater. This ODT makes no attempt to compensate for 
-//     viewing environment variables more typical of those associated with the 
-//     home.
+//   This ODT has a compensation for viewing environment variables more typical 
+//   of those associated with video mastering.
 //
 
 
@@ -109,6 +106,9 @@ void main
     linearCV[0] = min( linearCV[0], 1.0) * SCALE;
     linearCV[1] = min( linearCV[1], 1.0) * SCALE;
     linearCV[2] = min( linearCV[2], 1.0) * SCALE;
+
+  // Apply gamma adjustment to compensate for dim surround
+    linearCV = darkSurround_to_dimSurround( linearCV);
 
   // Apply desaturation to compensate for luminance difference
     linearCV = mult_f3_f33( linearCV, ODT_SAT_MAT);
