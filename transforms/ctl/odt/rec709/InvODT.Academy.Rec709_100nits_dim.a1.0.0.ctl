@@ -31,13 +31,13 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input varying int fullRange = 0
+    input varying int legalRange = 0
 )
 {  
     float outputCV[3] = { rIn, gIn, bIn};
 
-  // Default output is to SMPTE range
-    if (fullRange == 0) {
+  // Default output is full range, check if legalRange param was set to true
+    if (legalRange == 1) {
       outputCV = smpteRange_to_fullRange_f3( outputCV);
     }
 

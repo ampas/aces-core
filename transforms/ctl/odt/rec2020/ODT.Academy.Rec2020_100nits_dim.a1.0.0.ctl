@@ -24,10 +24,10 @@
 //  Rec. ITU-R BT.1886.
 //
 // Signal Range:
-//    By default, this tranform outputs SMPTE "legal" range code values. If 
-//    instead a full range signal is desired, there is a runtime flag to output 
-//    full-range signal. In ctlrender, this can be achieved by appending 
-//    '-param1 fullRange 1' after the '-ctl odt.ctl' string.
+//    By default, this tranform outputs full range code values. If instead a 
+//    SMPTE "legal" signal is desired, there is a runtime flag to output 
+//    SMPTE legal signal. In ctlrender, this can be achieved by appending 
+//    '-param1 legalRange 1' after the '-ctl odt.ctl' string.
 //
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y
@@ -67,7 +67,7 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input varying int fullRange = 0  
+    input varying int legalRange = 0
 )
 {
     float oces[3] = { rIn, gIn, bIn};
@@ -113,8 +113,8 @@ void main
     outputCV[1] = bt1886_r( linearCV[1], DISPGAMMA, L_W, L_B);
     outputCV[2] = bt1886_r( linearCV[2], DISPGAMMA, L_W, L_B);
 
-  // Default output is to SMPTE range
-    if (fullRange == 0) {
+  // Default output is full range, check if legalRange param was set to true
+    if (legalRange == 1) {
       outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 
