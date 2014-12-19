@@ -28,7 +28,7 @@ void main
     float ACES[3] = mult_f3_f44( ACEScg, AP1_2_AP0_MAT);
 
     rOut = ACES[0];
-    gOut = ACES[0];
-    bOut = ACES[0];
+    gOut = ACES[1];
+    bOut = ACES[2];
     aOut = aIn;
 }
