@@ -22,7 +22,7 @@ float lin_to_ACEScc( input varying float in)
   float out;
 
   if (in <= 0)
-    out = -0.35828683;
+    out = -0.35828683; // =(log2( pow(2.,-15.)*0.5)+9.72)/17.52
   else if (in < pow(2.,-15.))
     out = (log2( pow(2.,-16.) + in * 0.5) + 9.72) / 17.52;
   else
@@ -45,11 +45,11 @@ void main
     output varying float aOut
 )
 {
-    float aces[3] = { rIn, gIn, bIn};
+    float ACES[3] = { rIn, gIn, bIn};
 
-    aces = clamp_f3( aces, 0.0, HALF_POS_INF);
+    ACES = clamp_f3( ACES, 0.0, HALF_POS_INF);
 
-    float ACEScc_lin[3] = mult_f3_f44( aces, AP0_2_AP1_MAT);
+    float ACEScc_lin[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 
     rOut = lin_to_ACEScc( ACEScc_lin[0]);
     gOut = lin_to_ACEScc( ACEScc_lin[1]);

@@ -21,7 +21,8 @@ float ACEScc_to_lin( input varying float in)
 {
   float out;
   
-  if (in < -0.3013698630)
+  // denormal transition (log2( pow(2.,-15.)*0.5)+9.72)/17.52
+  if (in < -0.3013698630) 
     out = ( pow( 2., in*17.52-9.72) - pow( 2.,-16.))*2.0;
   else 
     out = pow( 2., in*17.52-9.72);
@@ -48,10 +49,13 @@ void main
     ACEScc_lin[1] = ACEScc_to_lin( gIn);
     ACEScc_lin[2] = ACEScc_to_lin( bIn);
 
-    float aces[3] = mult_f3_f44( ACEScc_lin, AP1_2_AP0_MAT);
+    float ACES[3] = mult_f3_f44( ACEScc_lin, AP1_2_AP0_MAT);
 
-    rOut = aces[0];
-    gOut = aces[1];
-    bOut = aces[2];
+    // this clamp prevents ACEScc values > 1.4679962397 from producing NaNs
+    ACES = clamp_f3( ACES, HALF_NEG_INF, HALF_MAX);
+  
+    rOut = ACES[0];
+    gOut = ACES[1];
+    bOut = ACES[2];
     aOut = aIn;
 }
