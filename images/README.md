@@ -7,7 +7,7 @@ one synthetically generated test chart, and one file representative of a film
 scan have been provided.
 
 The reference images can be downloaded individually or as a zip file from: 
-<https://www.dropbox.com/sh/bwfrqgyt20gz4dp/XShJffwvXR>
+<https://www.dropbox.com/sh/lj9x6cyd5t56tha/AACmQNROIc2kNIg5e1snnhg2a?dl=0>
 
 
 ### Confirmation ###
@@ -15,101 +15,96 @@ To confirm your implementation of each transform:
 
   1. Use your implementation to process the "input" reference image appropriate to the transform being tested
   2. Compare the output from your implementation to the provided corresponding "output" reference image
+  
 
 ### Directory Structure ###
-  * **camOrig/**
+
+**NOTE**: The ACEScc and ACESproxy image files are included for the confirmation of transform implementations only.  
+ACEScc and ACESproxy image data is **NOT** intended to be written out to image files. See the ACEScc and ACESproxy documentation for more information.
+
+  * **camera/**
     * *DigitalLAD.2048x1556.dpx* - original file representative of a film scan
     * *SonyF35.StillLife.dpx* - pictorial camera original file
-  * **aces/**
-    * *DigitalLAD.2048x1556.exr* - `adx10_to_aces.ctl` applied to *DigitalLAD.2048x1556.dpx*
-    * *SonyF35.StillLife.exr* - `idt-SonyF35-10i.ctl` applied to *SonyF35.StillLife.dpx*
-    * *syntheticChart.01.exr* - synthetic ACES image
-  * **oces/**
-    * *SonyF35.StillLife_oces.exr* - `rrt.ctl` applied to *SonyF35.StillLife.exr*
-    * *syntheticChart.01_oces.exr* - `rrt.ctl` applied to *syntheticChart.01.exr*
-  * **odt/**
-    * *SonyF35.StillLife_dcdm_p3d60.tiff* - `odt_dcdm_p3d60.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_dcdm.tiff* - `odt_dcdm.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_p3d60.tiff* - `odt_p3d60.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_p3dci.tiff* - `odt_p3dci.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec709_d60sim_full_100nits.tiff* - `odt_rec709_d60sim_full_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec709_d60sim_smpte_100nits.tiff* - `odt_rec709_d60sim_smpte_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec709_full_100nits.tiff* - `odt_rec709_full_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec709_smpte_100nits.tiff* - `odt_rec709_smpte_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec2020_d60sim_full_100nits.tiff* - `odt_rec2020_d60sim_full_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec2020_d60sim_smpte_100nits.tiff* - `odt_rec2020_d60sim_smpte_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec2020_full_100nits.tiff* - `odt_rec2020_full_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rec2020_smpte_100nits.tiff* - `odt_rec2020_smpte_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *SonyF35.StillLife_rgbMonitor_d60sim_100nits.tiff* - `odt_rgbMonitor_d60sim_100nits.ctl` applied to *SonyF35.StillLife_oces.exr*
-    * *syntheticChart.01_dcdm_p3d60.tiff* - `odt_dcdm_p3d60.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_dcdm.tiff* - `odt_dcdm.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_p3d60.tiff* - `odt_p3d60.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_p3dci.tiff* - `odt_p3dci.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec709_d60sim_full_100nits.tiff* - `odt_rec709_d60sim_full_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec709_d60sim_smpte_100nits.tiff* - `odt_rec709_d60sim_smpte_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec709_full_100nits.tiff* - `odt_rec709_full_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec709_smpte_100nits.tiff* - `odt_rec709_smpte_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec2020_d60sim_full_100nits.tiff* - `odt_rec2020_d60sim_full_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec2020_d60sim_smpte_100nits.tiff* - `odt_rec2020_d60sim_smpte_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec2020_full_100nits.tiff* - `odt_rec2020_full_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rec2020_smpte_100nits.tiff* - `odt_rec2020_smpte_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-    * *syntheticChart.01_rgbMonitor_d60sim_100nits.tiff* - `odt_rgbMonitor_d60sim_100nits.ctl` applied to *syntheticChart.01_oces.exr*
-  * **aces_inv/**
-    * *SonyF35.StillLife_aces_from_rrt_inv.exr* - `rrt_inv.ctl` applied to `SonyF35.StillLife_oces.exr`
-    * *SonyF35.StillLife_aces_from_acesProxy10.exr* - `acesProxy10_to_aces.ctl` applied to *SonyF35.StillLife_acesProxy10.tiff*
-    * *SonyF35.StillLife_aces_from_acesProxy12.exr* - `acesProxy12_to_aces.ctl` applied to *SonyF35.StillLife_acesProxy12.tiff*
-    * *SonyF35.StillLife_aces_from_acesLog16i.exr* - `acesLog_to_aces.ctl` applied to *SonyF35.StillLife_acesLog16i.tiff*
-    * *SonyF35.StillLife_aces_from_acesLog32f.exr* - `acesLog_to_aces.ctl` applied to *SonyF35.StillLife_acesLog32f.tiff*
-    * *syntheticChart.01_aces_from_rrt_inv.exr* - `rrt_inv.ctl` applied to `syntheticChart.01_oces.exr`
-    * *syntheticChart.01_aces_from_acesProxy10.exr* - `acesProxy10_to_aces.ctl` applied to *syntheticChart.01_acesProxy10.tiff*
-    * *syntheticChart.01_aces_from_acesProxy12.exr* - `acesProxy12_to_aces.ctl` applied to *syntheticChart.01_acesProxy12.tiff*
-    * *syntheticChart.01_aces_from_acesLog16i.exr* - `acesLog_to_aces.ctl` applied to *syntheticChart.01_acesLog16i.tiff*
-    * *syntheticChart.01_aces_from_acesLog32f.exr* - `acesLog_to_aces.ctl` applied to *syntheticChart.01_acesLog32f.tiff*
-  * **oces_inv/**
-    * *SonyF35.StillLife_oces_from_dcdm_inv.tiff* - `odt_dcdm_inv.ctl` applied to *SonyF35.StillLife_dcdm.exr*
-    * *SonyF35.StillLife_oces_from_dcdm_p3d60_inv.tiff* - `odt_dcdm_inv.ctl` applied to *SonyF35.StillLife_dcdm_p3d60.exr*
-    * *SonyF35.StillLife_oces_from_p3d60_inv.exr* - `odt_p3d60_inv.ctl` applied to *SonyF35.StillLife_p3d60.tiff*
-    * *SonyF35.StillLife_oces_from_p3dci_inv.exr* - `odt_p3dci_inv.ctl` applied to *SonyF35.StillLife_p3dci.tiff*
-    * *SonyF35.StillLife_oces_from_rec709_d60sim_full_100nits_inv.exr* - `odt_rec709_d60sim_full_100nits_inv.ctl` applied to *SonyF35.StillLife_rec709_d60sim_full_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec709_d60sim_smpte_100nits_inv.exr* - `odt_rec709_d60sim_smpte_100nits_inv.ctl` applied to *SonyF35.StillLife_rec709_smpte_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec709_full_100nits.exr_inv* - `odt_rec709_full_100nits_inv.ctl` applied to *SonyF35.StillLife_rec709_full_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec709_smpte_100nits.exr_inv* - `odt_rec709_smpte_100nits_inv.ctl` applied to *SonyF35.StillLife_rec709_smpte_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec2020_d60sim_full_100nits_inv.exr* - `odt_rec2020_d60sim_full_100nits_inv.ctl` applied to *SonyF35.StillLife_rec2020_d60sim_full_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec2020_d60sim_smpte_100nits_inv.exr* - `odt_rec2020_d60sim_smpte_100nits_inv.ctl` applied to *SonyF35.StillLife_rec2020_d60sim_smpte_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec2020_full_100nits_inv.exr* - `odt_rec2020_full_100nits_inv.ctl` applied to *SonyF35.StillLife_rec2020_full_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rec2020_smpte_100nits_inv.exr* - `odt_rec2020_smpte_100nits_inv.ctl` applied to *SonyF35.StillLife_rec2020_smpte_100nits.tiff*
-    * *SonyF35.StillLife_oces_from_rgbMonitor_d60sim_100nits_inv.exr* - `odt_rgbMonitor_d60sim_100nits_inv.ctl` applied to *SonyF35.StillLife_rgbMonitor_d60sim_100nits.tiff*   
-    * *syntheticChart.01_oces_from_dcdm.tiff* - `odt_dcdm_inv.ctl` applied to *syntheticChart.01_dcdm.exr*
-    * *syntheticChart.01_oces_from_dcdm_p3d60.tiff* - `odt_dcdm_inv.ctl` applied to *syntheticChart.01_dcdm_p3d60.exr*
-    * *syntheticChart.01_oces_from_p3d60_inv.exr* - `odt_p3d60_inv.ctl` applied to *syntheticChart.01_p3d60.tiff*
-    * *syntheticChart.01_oces_from_p3dci_inv.exr* - `odt_p3dci_inv.ctl` applied to *syntheticChart.01_p3dci.tiff*
-    * *syntheticChart.01_oces_from_rec709_d60sim_full_100nits_inv.exr* - `odt_rec709_d60sim_full_100nits_inv.ctl` applied to *syntheticChart.01_rec709_d60sim_full_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec709_d60sim_smpte_100nits_inv.exr* - `odt_rec709_d60sim_smpte_100nits_inv.ctl` applied to *syntheticChart.01_rec709_d60sim_smpte_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec709_full_100nits_inv.exr* - `odt_rec709_full_100nits_inv.ctl` applied to *syntheticChart.01_rec709_full_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec709_smpte_100nits_inv.exr* - `odt_rec709_smpte_100nits_inv.ctl` applied to *syntheticChart.01_rec709_smpte_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec2020_d60sim_full_100nits_inv.exr* - `odt_rec2020_d60sim_full_100nits_inv.ctl` applied to *syntheticChart.01_rec2020_d60sim_full_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec2020_d60sim_smpte_100nits_inv.exr* - `odt_rec2020_d60sim_smpte_100nits_inv.ctl` applied to *syntheticChart.01_rec2020_d60sim_smpte_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec2020_full_100nits_inv.exr* - `odt_rec2020_full_100nits_inv.ctl` applied to *syntheticChart.01_rec2020_full_100nits.tiff*
-    * *syntheticChart.01_oces_from_rec2020_smpte_100nits_inv.exr* - `odt_rec2020_smpte_100nits_inv.ctl` applied to *syntheticChart.01_rec2020_smpte_100nits.tiff*
-    * *syntheticChart.01_oces_from_rgbMonitor_d60sim_100nits_inv.exr* - `odt_rgbMonitor_d60sim_100nits_inv.ctl` applied to *syntheticChart.01_rgbMonitor_d60sim_100nits.tiff*
-  * **lmt/**
-    * *SonyF35.StillLife_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.2.ctl` applied to *SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *SonyF35.StillLife.exr*
-    * *syntheticChart.01_lmt_aces_v0.1.1.exr* - `lmt_aces_v0.1.1.ctl` applied to *syntheticChart.01.exr*
-    * *syntheticChart.01_lmt_aces_v0.2.2.exr* - `lmt_aces_v0.2.2.ctl` applied to *syntheticChart.01.exr*
-    * *syntheticChart.01_lmt_lowContrast.exr* - `lmt_lowContrast.ctl` applied to *syntheticChart.01.exr*
-
-**NOTE**: The following image files are included for the confirmation of transform implementations only.  
-ACESlog and ACESproxy image data is **NOT** intended to be written out to image files. See the ACESlog and ACESproxy documentation for more information.
-
-  * **acesLog/**
-    * *SonyF35.StillLife_acesLog16i.tiff* - `aces_to_acesLog16i.ctl` applied to *SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_acesLog32f.tiff* - `aces_to_acesLog32f.ctl` applied to *SonyF35.StillLife.exr*
-    * *syntheticChart.01_acesLog16i.tiff* - `aces_to_acesLog16i.ctl` applied to *syntheticChart.01.exr*
-    * *syntheticChart.01_acesLog32f.tiff* - `aces_to_acesLog32f.ctl` applied to *syntheticChart.01.exr*
-  * **acesProxy/**
-    * *SonyF35.StillLife_acesProxy10.tiff* - `aces_to_acesProxy10.ctl` applied to *SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_acesProxy12.tiff* - `aces_to_acesProxy12.ctl` applied to *SonyF35.StillLife.exr*
-    * *syntheticChart.01_acesProxy10.tiff* - `aces_to_acesProxy10.ctl` applied to *syntheticChart.01.exr*
-    * *syntheticChart.01_acesProxy12.tiff* - `aces_to_acesProxy12.ctl` applied to *syntheticChart.01.exr*
+    * *syntheticChart.01.exr* - a synthetic test chart    
+  * **ACES/**
+    * *DigitalLAD.2048x1556.exr* - `ACEScsc.ADX10_to_ACES.a1.0.0.ctl` applied to *camera/DigitalLAD.2048x1556.dpx*
+    * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.dpx*
+    * *syntheticChart.01.exr* - `ACESlib.Unity.a1.0.0.ctl` applied to *camera/syntheticChart.01.exr*
+  * **ACEScc/**
+    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *syntheticChart.01.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.0.ctl` applied to *ACES/syntheticChart.01.exr*
+  * **ACEScg/**
+    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScg.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *syntheticChart.01.exr* - `ACEScsc.ACES_to_ACEScg.a1.0.0.ctl` applied to *ACES/syntheticChart.01.exr*
+  * **ACESproxy/**
+    * *SonyF35.StillLife_ACESproxy10i.exr* - `ACEScsc.ACES_to_ACESproxy10i.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife_ACESproxy12i.exr* - `ACEScsc.ACES_to_ACESproxy12i.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *syntheticChart_ACESproxy10i.01.exr* - `ACEScsc.ACES_to_ACESproxy10i.a1.0.0.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart_ACESproxy12i.01.exr* - `ACEScsc.ACES_to_ACESproxy12i.a1.0.0.ctl` applied to *ACES/syntheticChart.01.exr*
+  * **InvACES/**
+    * *SonyF35.StillLife_from_ACEScc.exr* - `ACEScsc.ACEScc_to_ACES.a1.0.0.ctl` applied to *ACEScc/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_from_ACEScc.exr* - `ACEScsc.ACEScg_to_ACES.a1.0.0.ctl` applied to *ACEScg/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_from_ACESproxy10i.exr* - `ACEScsc.ACESproxy10i_to_ACES.a1.0.0.ctl` applied to *ACESproxy/SonyF35.StillLife_ACESproxy10i.exr*
+    * *SonyF35.StillLife_from_ACESproxy12i.exr* - `ACEScsc.ACESproxy12i_to_ACES.a1.0.0.ctl` applied to *ACESproxy/SonyF35.StillLife_ACESproxy12i.exr*
+    * *SonyF35.StillLife_from_InvRRT.exr* - `InvRRT.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*
+    * *syntheticChart.01_from_ACEScc.exr* - `ACEScsc.ACEScc_to_ACES.a1.0.0.ctl` applied to *ACEScc/syntheticChart.01.exr*
+    * *syntheticChart.01_from_ACEScc.exr* - `ACEScsc.ACEScg_to_ACES.a1.0.0.ctl` applied to *ACEScg/syntheticChart.01.exr*
+    * *syntheticChart.01_from_ACESproxy10i.exr* - `ACEScsc.ACESproxy10i_to_ACES.a1.0.0.ctl` applied to *ACESproxy/syntheticChart.01_ACESproxy10i.exr*
+    * *syntheticChart.01_from_ACESproxy12i.exr* - `ACEScsc.ACESproxy12i_to_ACES.a1.0.0.ctl` applied to *ACESproxy/syntheticChart.01_ACESproxy12i.exr*
+    * *syntheticChart.01_from_InvRRT.exr* - `InvRRT.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*
+  * **InvOCES/**
+    * *SonyF35.StillLife_from_ODT.Academy.DCDM_P3D60.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.DCDM_P3D60.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.DCDM.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.DCDM.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.P3D60_48nits.exr* - `InvODT.Academy.P3D60_48nits.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.P3D60_48nits.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.P3D60_PQ_1000nits.exr* - `InvODT.Academy.P3D60_PQ_1000nits.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.P3D60_PQ_1000nits.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.P3D60_PQ_2000nits.exr* - `InvODT.Academy.P3D60_PQ_2000nits.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.P3D60_PQ_2000nits.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.P3D60_PQ_4000nits.exr* - `InvODT.Academy.P3D60_PQ_4000nits.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.P3D60_PQ_4000nits.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.P3DCI_48nits.exr* - `InvODT.Academy.P3DCI_48nits.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.P3DCI_48nits.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.Rec709_100nits_dim.exr* - `InvODT.Academy.Rec709_100nits_dim.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.Rec709_100nits_dim.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.Rec709_D60sim_100nits_dim.exr* - `InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.Rec709_D60sim_100nits_dim.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.Rec2020_100nits_dim.exr* - `InvODT.Academy.Rec2020_100nits_dim.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.Rec2020_100nits_dim.tiff*
+    * *SonyF35.StillLife_from_ODT.Academy.RGBmonitor_D60sim_100nits_dim.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/SonyF35.StillLife_ODT.Academy.RGBmonitor_D60sim_100nits_dim.tiff*
+    * *syntheticChart.01_from_ODT.Academy.DCDM_P3D60.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.DCDM_P3D60.tiff*
+    * *syntheticChart.01_from_ODT.Academy.DCDM.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.DCDM.tiff*
+    * *syntheticChart.01_from_ODT.Academy.P3D60_48nits.exr* - `InvODT.Academy.P3D60_48nits.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.P3D60_48nits.tiff*
+    * *syntheticChart.01_from_ODT.Academy.P3D60_PQ_1000nits.exr* - `InvODT.Academy.P3D60_PQ_1000nits.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.P3D60_PQ_1000nits.tiff*
+    * *syntheticChart.01_from_ODT.Academy.P3D60_PQ_2000nits.exr* - `InvODT.Academy.P3D60_PQ_2000nits.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.P3D60_PQ_2000nits.tiff*
+    * *syntheticChart.01_from_ODT.Academy.P3D60_PQ_4000nits.exr* - `InvODT.Academy.P3D60_PQ_4000nits.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.P3D60_PQ_4000nits.tiff*
+    * *syntheticChart.01_from_ODT.Academy.P3DCI_48nits.exr* - `InvODT.Academy.P3DCI_48nits.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.P3DCI_48nits.tiff*
+    * *syntheticChart.01_from_ODT.Academy.Rec709_100nits_dim.exr* - `InvODT.Academy.Rec709_100nits_dim.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.Rec709_100nits_dim.tiff*
+    * *syntheticChart.01_from_ODT.Academy.Rec709_D60sim_100nits_dim.exr* - `InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.Rec709_D60sim_100nits_dim.tiff*
+    * *syntheticChart.01_from_ODT.Academy.Rec2020_100nits_dim.exr* - `InvODT.Academy.Rec2020_100nits_dim.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.Rec2020_100nits_dim.tiff*
+    * *syntheticChart.01_from_ODT.Academy.RGBmonitor_D60sim_100nits_dim.exr* - `InvODT.Academy.DCDM.a1.0.0.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.RGBmonitor_D60sim_100nits_dim.tiff*
+  * **LMT/**
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *syntheticChart.01_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.0.ctl` applied to *ACES/syntheticChart.01.dpx*
+    * *syntheticChart.01_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.0.ctl` applied to *ACES/syntheticChart.01.dpx*
+    * *syntheticChart.01_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.0.ctl` applied to *ACES/syntheticChart.01.dpx*
+  * **OCES/**
+    * *SonyF35.StillLife.exr* - `RRT.a1.0.0.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *syntheticChart.01_oces.exr* - `RRT.a1.0.0.ctl` applied to *ACES/syntheticChart.01.exr*
+  * **ODT/**
+    * *SonyF35.StillLife_ODT.Academy.DCDM_P3D60.tiff* - `ODT.Academy.DCDM_P3D60.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ODT.Academy.DCDM.tiff* - `ODT.Academy.DCDM.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.P3D60_48nits.tiff* - `ODT.Academy.P3D60_48nits.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.P3D60_PQ_1000nits.tiff* - `ODT.Academy.P3D60_PQ_1000nits.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.P3D60_PQ_2000nits.tiff* - `ODT.Academy.P3D60_PQ_2000nits.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.P3D60_PQ_4000nits.tiff* - `ODT.Academy.P3D60_PQ_4000nits.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.P3DCI_48nits.tiff* - `ODT.Academy.P3DCI_48nits.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.Rec709_100nits_dim.tiff* - `ODT.Academy.Rec709_100nits_dim.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.Rec709_D60sim_100nits_dim.tiff* - `ODT.Academy.Rec709_D60sim_100nits_dim.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.Rec2020_100nits_dim.tiff* - `ODT.Academy.Rec2020_100nits_dim.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *SonyF35.StillLife_ODT.Academy.RGBmonitor_D60sim_100nits_dim.tiff* - `ODT.Academy.RGBmonitor_D60sim_100nits_dim.a1.0.0.ctl` applied to *OCES/SonyF35.StillLife.exr*    
+    * *syntheticChart.01_ODT.Academy.DCDM_P3D60.tiff* - `ODT.Academy.DCDM_P3D60.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*
+    * *syntheticChart.01_ODT.Academy.DCDM.tiff* - `ODT.Academy.DCDM.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.P3D60_48nits.tiff* - `ODT.Academy.P3D60_48nits.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.P3D60_PQ_1000nits.tiff* - `ODT.Academy.P3D60_PQ_1000nits.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.P3D60_PQ_2000nits.tiff* - `ODT.Academy.P3D60_PQ_2000nits.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.P3D60_PQ_4000nits.tiff* - `ODT.Academy.P3D60_PQ_4000nits.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.P3DCI_48nits.tiff* - `ODT.Academy.P3DCI_48nits.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.Rec709_100nits_dim.tiff* - `ODT.Academy.Rec709_100nits_dim.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.Rec709_D60sim_100nits_dim.tiff* - `ODT.Academy.Rec709_D60sim_100nits_dim.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.Rec2020_100nits_dim.tiff* - `ODT.Academy.Rec2020_100nits_dim.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ODT.Academy.RGBmonitor_D60sim_100nits_dim.tiff* - `ODT.Academy.RGBmonitor_D60sim_100nits_dim.a1.0.0.ctl` applied to *OCES/syntheticChart.01.exr*    

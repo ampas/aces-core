@@ -62,16 +62,26 @@ def emitLogCInverseFunction(EI) :
     print "}"
     print ""
 
-def emitHeader(myName, EI, CCT, logC) :
+def emitHeader(myName, EI, CCT, logC, ND) :
     print ""
     if logC == "logc" :
+        print "// <ACEStransformID>IDT.ARRI.Alexa-v3-logC-EI%d.a1.v1</ACEStransformID>" % EI
+        print "// <ACESuserName>ACES 1.0 Input - ARRI V3 LogC (EI%d)</ACESuserName>" % EI
+        print ""
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
+        if ND == "nd-1pt3" : 
+            print "// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d-ND1pt3.a1.v1</ACEStransformID>" % (EI,CCT)
+            print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK, ND1.3)</ACESuserName>" % (EI,CCT)
+        else :
+            print "// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
+            print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK)</ACESuserName>" % (EI,CCT)
+        print ""
         print "// ARRI ALEXA IDT for ALEXA linear files"
     print "//  with camera EI set to %d" % EI
     if CCT != "ignored" :
         print "//  and CCT of adopted white set to %dK" % CCT
-    print "// Written by %s v%s on %s by %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"), getenv('USER'))
+    print "// Written by %s v%s on %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"))
     print ""
 
 def emitRawSupport(CCT) :
@@ -174,10 +184,10 @@ if __name__ == '__main__':
             sys.exit(2)
 
     if logC == "logc" :
-        emitHeader(myName, EI, CCT, logC)
+        emitHeader(myName, EI, CCT, logC, ND)
         emitLogCInverseFunction(EI)
     elif logC == "raw" :
-        emitHeader(myName, EI, CCT, logC)
+        emitHeader(myName, EI, CCT, logC, ND)
         emitRawSupport(CCT)
     else :
         usage(myName)

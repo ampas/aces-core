@@ -13,20 +13,20 @@ foreach v (2 3)
     foreach ei (${eis})
 	mkdir -p -v ${root}/v${v}/EI${ei}
 	foreach wb (${wbs})
-		python v${v}_IDT_maker.py ${ei} ${wb} raw > ${root}/v${v}/EI${ei}/idt-alexav${v}-raw-EI${ei}-CCT${wb}.ctl
+		python v${v}_IDT_maker.py ${ei} ${wb} raw > ${root}/v${v}/EI${ei}/IDT.ARRI.Alexa-v${v}-raw-EI${ei}-CCT${wb}.a1.v1.ctl
 		if (${v} == 3) then
-		    python v${v}_IDT_maker.py ${ei} ${wb} raw nd1pt3 > ${root}/v${v}/EI${ei}/idt-alexav${v}-raw-EI${ei}-CCT${wb}-ND1pt3.ctl
+		    python v${v}_IDT_maker.py ${ei} ${wb} raw nd-1pt3 > ${root}/v${v}/EI${ei}/IDT.ARRI.Alexa-v${v}-raw-EI${ei}-CCT${wb}-ND1pt3.a1.v1.ctl
 		endif
 	end
 	if ($v == 2) then
 	    # V2 LogC was still CCT-dependent
 	    foreach wb (${wbs})
-		python v2_IDT_maker.py ${ei} ${wb} logc > ${root}/v2/EI${ei}/idt-alexav2-logC-EI${ei}-CCT${wb}.ctl
+		python v${v}_IDT_maker.py ${ei} ${wb} logc > ${root}/v${v}/EI${ei}/IDT.ARRI.Alexa-v${v}-logC-EI${ei}-CCT${wb}.a1.v1.ctl
 	    end
 	else
 	    # V3 LogC IDT for a given EI is the same no matter what the CCT
 	    # and LogC IDT pays no attention to ND 1.3 because presumably that was dealt with
-	    python v3_IDT_maker.py ${ei} ignore_this logc > ${root}/v3/EI${ei}/idt-alexav3-logC-EI${ei}.ctl
+	    python v${v}_IDT_maker.py ${ei} ignore_this logc > ${root}/v${v}/EI${ei}/IDT.ARRI.Alexa-v${v}-logC-EI${ei}.a1.v1.ctl
 	endif
     end
 end

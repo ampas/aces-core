@@ -60,14 +60,14 @@ Note that the values of the matrix coefficients are rounded to 10 decimal places
 
 
 
-#### OCES-to-XYZ Matrix ####
+#### AP0-to-XYZ Matrix ####
 In the code, matrix is created by:
 
-    const float OCES_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(OCES_PRI,1.0);
+    const float AP0_2_XYZ_MAT[4][4] = RGBtoXYZ( AP0, 1.0);
 
 and the operator would be:
   
-    const float RGB_out[3] = mult_f3_f44( RGB_in, OCES_PRI_2_XYZ_MAT);
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP0_2_XYZ_MAT);
 
 Equivalent math:
 
@@ -75,10 +75,85 @@ Equivalent math:
     G_out =  0.3439664498 * R_in +  0.7281660966 * G_in + -0.0721325464 * B_in;
     B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  1.0088251844 * B_in;
 
+#### XYZ-to-AP0 Matrix ####
+In the code, matrix is created by:
+
+    const float XYZ_2_AP0_MAT[4][4] = XYZtoRGB( AP0, 1.0);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, XYZ_2_AP0_MAT);
+
+Equivalent math:
+
+    R_out =  1.0498110175 * R_in +  0.0000000000 * G_in + -0.0000974845 * B_in;
+    G_out = -0.4959030231 * R_in +  1.3733130458 * G_in +  0.0982400361 * B_in;
+    B_out =  0.0000000000 * R_in +  0.0000000000 * G_in +  0.9912520182 * B_in;
+    
+#### AP1-to-XYZ Matrix ####
+In the code, matrix is created by:
+
+    const float AP1_2_XYZ_MAT[4][4] = RGBtoXYZ( AP1, 1.0);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP1_2_XYZ_MAT);
+
+Equivalent math:
+
+    R_out =  0.6624541811 * R_in +  0.1340042065 * G_in +  0.1561876870 * B_in;
+    G_out =  0.2722287168 * R_in +  0.6740817658 * G_in +  0.0536895174 * B_in;
+    B_out = -0.0055746495 * R_in +  0.0040607335 * G_in +  1.0103391003 * B_in;
+
+#### XYZ-to-AP1 Matrix ####
+In the code, matrix is created by:
+
+    const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, XYZ_2_AP1_MAT);
+
+Equivalent math:
+
+    R_out =  1.6410233797 * R_in + -0.3248032942 * G_in + -0.2364246952 * B_in;
+    G_out = -0.6636628587 * R_in +  1.6153315917 * G_in +  0.0167563477 * B_in;
+    B_out =  0.0117218943 * R_in + -0.0082844420 * G_in +  0.9883948585 * B_in;    
+
+#### AP0-to-AP1 Matrix ####
+In the code, matrix is created by:
+
+    const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP0_2_AP1_MAT);
+
+Equivalent math:
+
+    R_out =  1.4514393161 * R_in + -0.2365107469 * G_in + -0.2149285693 * B_in;
+    G_out = -0.0765537734 * R_in +  1.1762296998 * G_in + -0.0996759264 * B_in;
+    B_out =  0.0083161484 * R_in + -0.0060324498 * G_in +  0.9977163014 * B_in;
+
+#### AP1-to-AP0 Matrix ####
+In the code, matrix is created by:
+
+    const float AP1_2_AP0_MAT[4][4] = mult_f44_f44( AP1_2_XYZ_MAT, XYZ_2_AP0_MAT);
+
+and the operator would be:
+  
+    const float RGB_out[3] = mult_f3_f44( RGB_in, AP1_2_AP0_MAT);
+
+Equivalent math:
+
+    R_out =  0.6954522414 * R_in +  0.1406786965 * G_in +  0.1638690622 * B_in;
+    G_out =  0.0447945634 * R_in +  0.8596711185 * G_in +  0.0955343182 * B_in;
+    B_out = -0.0055258826 * R_in +  0.0040252103 * G_in +  1.0015006723 * B_in;
+
 #### XYZ-to-P3D60 Primaries Matrix ####
 In the code, matrix is created by:
 
-    const float XYZ_2_P3D60_PRI_MAT[4][4] = XYZtoRGB(P3D60_PRI,1.0);
+    const float XYZ_2_P3D60_PRI_MAT[4][4] = XYZtoRGB( P3D60_PRI, 1.0);
 
 and the operator would be:
   
@@ -93,7 +168,7 @@ Equivalent math:
 #### P3D60-to-XYZ Matrix ####
 In the code, matrix is created by:
 
-    const float P3D60_2_XYZ_MAT[4][4] = RGBtoXYZ(P3D60_PRI,1.0);
+    const float P3D60_2_XYZ_MAT[4][4] = RGBtoXYZ( P3D60_PRI, 1.0);
 
 and the operator would be:
   
@@ -108,7 +183,7 @@ Equivalent math:
 #### XYZ-to-P3DCI Primaries Matrix ####
 In the code, matrix is created by:
 
-    const float XYZ_2_P3DCI_PRI_MAT[4][4] = XYZtoRGB(P3DCI_PRI,1.0);
+    const float XYZ_2_P3DCI_PRI_MAT[4][4] = XYZtoRGB( P3DCI_PRI, 1.0);
 
 and the operator would be:
   
@@ -123,7 +198,7 @@ Equivalent math:
 #### XYZ-to-REC709 Primaries Matrix ####
 In the code, matrix is created by:
 
-    const float XYZ_2_REC709_PRI_MAT[4][4] = XYZtoRGB(REC709_PRI,1.0);
+    const float XYZ_2_REC709_PRI_MAT[4][4] = XYZtoRGB( REC709_PRI, 1.0);
 
 and the operator would be:
   
@@ -138,7 +213,7 @@ Equivalent math:
 #### XYZ-to-REC2020 Primaries Matrix ####
 In the code, matrix is created by:
 
-    const float XYZ_2_REC2020_PRI_MAT[4][4] = XYZtoRGB(REC2020_PRI,1.0);
+    const float XYZ_2_REC2020_PRI_MAT[4][4] = XYZtoRGB( REC2020_PRI, 1.0);
 
 and the operator would be:
   

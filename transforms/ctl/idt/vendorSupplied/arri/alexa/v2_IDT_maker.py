@@ -64,13 +64,19 @@ def emitLogC2InverseFunction(EI) :
 def emitHeader(myName, EI, CCT, logC) :
     print ""
     if logC == "logc" :
+        print "// <ACEStransformID>IDT.ARRI.Alexa-v2-logC-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
+        print "// <ACESuserName>ACES 1.0 Input - ARRI V2 LogC (EI%d, %dK)</ACESuserName>" % (EI,CCT)
+        print ""
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
+        print "// <ACEStransformID>IDT.ARRI.Alexa-v2-raw-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
+        print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK)</ACESuserName>" % (EI,CCT)
+        print ""
         print "// ARRI ALEXA IDT for ALEXA linear files"
     print "//  with camera EI set to %d" % EI
     if CCT != "ignored" :
         print "//  and CCT of adopted white set to %dK" % CCT
-    print "// Written by %s v%s on %s by %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"), getenv('USER'))
+    print "// Written by %s v%s on %s" % (myName, IDT_maker_version, date.today().strftime("%A %d %B %Y"))
     print ""
 
 def emitRawSupport(CCT) :

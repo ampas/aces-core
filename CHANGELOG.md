@@ -1,3 +1,26 @@
+**Version 1.0 (December 20, 2014):**
+  * Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
+  * Filenames have been updated to conform to the ACES System Versioning Specification
+  * RRT     
+      * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.  
+      * The global desaturation is now applied in RGB space prior to the RRT tone scale.  This was done to improve the overall look of the images based on end-user feedback.
+    * The red modifier and glow module variables have been modified.  This was done to improve the overall look of the images based on end-user feedback. 
+      * A clip of negative values has been added prior to the application of the 3x3 matrix that converts ACES to the rendering primaries. This is added to avoid an error that can occur with negative and saturated ACES values turning positive and saturated.
+    * The RRT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail. 
+    * The output luminance of an 18% scene reflector was moved from 5.0 nits to 4.8 nits to slightly darken the overall image in response to end-user feedback.     
+      * The hue restore function has been removed to improve grading behavior and address rare instances where image noise could be enhanced.
+      * The RRT tone scale has been modified to allow for the use of b-splines in the new HDR ODTs.
+  * ODTs
+      * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.
+    * The ODT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail.
+    * The hue restore and smart-clip functions have been removed to improve grading behavior and address rare instances where image noise could be enhanced.
+      * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.
+      * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added
+      * Rec.709 ODTs now have a runtime flag for full range or legal range output. The default is full range.
+  * ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated
+  * Miscellaneous code cleanups. Removal of unused code
+
+  
 **Version 0.7.1 (February 26, 2014):**
   * Bug fixes:
     * Corrects the value for a constant in the F65-F55 10-bit IDTs
@@ -50,7 +73,6 @@
   * Modifies RDT spline coefficients to tweak shadow reproduction
 
 **Version 0.1 (March 1, 2012):**
-  * Initial Release
   * Transforms including RRT
   * Test Images
   * ctlrender sample application for processing images through CTL transforms

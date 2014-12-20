@@ -2,7 +2,7 @@
 
 The Academy Color Encoding System (ACES) is a set of components that facilitates
 a wide range of motion picture workflows while eliminating the ambiguity of
-today's file formats. The framework is designed to support both all digital and
+legacy file formats. The system is designed to support both all-digital and
 hybrid film-digital motion picture workflows.
 
 The basic ACES components are:
@@ -11,30 +11,47 @@ The basic ACES components are:
 transformations, and an open source reference implementation. 
 * A set of reference images and calibration targets for film scanners and
 recorders 
-* Documentation on the architecture and software tools
+* Documentation on the system and software tools
 
 This toolkit is intended to serve as a distribution mechanism for key components
-of the framework including the reference implementation transforms, reference
+of the system, including the reference implementation transforms, reference
 images, and documentation.
 
 ### Package Contents ###
  
-* [`documents/`](./documents) - ACES related documents 
+* [`documents/`](./documents) – ACES-related documents 
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
 
 ### Changes from Previous Releases ###
 
-**v0.7**
-*  Updates forward and inverse RRT
-*  Updates forward and inverse ODTs
-*  Updates the ARRI Alexa and Sony IDTs
-*  Fixes a typo in the ACES-to-ACESproxy10 transform
+* Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
+* Filenames have been updated to conform to the ACES System Versioning Specification
+* RRT     
+    * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.  
+    * The global desaturation is now applied in RGB space prior to the RRT tone scale.  This was done to improve the overall look of the images based on end-user feedback.
+    
+    * The red modifier and glow module variables have been modified.  This was done to improve the overall look of the images based on end-user feedback. 
+    * A clip of negative values has been added prior to the application of the 3x3 matrix that converts ACES to the rendering primaries. This is added to avoid an error that can occur with negative and saturated ACES values turning positive and saturated.
+    
+    * The RRT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail. 
+    
+    * The output luminance of an 18% scene reflector was moved from 5.0 nits to 4.8 nits to slightly darken the overall image in response to end-user feedback.     
+    * The hue restore function has been removed to improve grading behavior and address rare instances where image noise could be enhanced.
+    * The RRT tone scale has been modified to allow for the use of b-splines in the new HDR ODTs.
+* ODTs
+    * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.
+    
+    * The ODT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail.
+    
+    * The hue restore and smart-clip functions have been removed to improve grading behavior and address rare instances where image noise could be enhanced.
+    * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.
+    * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added
+    * Rec.709 ODTs now have a runtime flag for full range or legal range output. The default is full range.
+* ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated
+* Miscellaneous code cleanups. Removal of unused code
 
-**v0.7.1**
-* Bug fixes
-
-For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md).
+For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 
 ### Versioning ###
  
@@ -42,6 +59,8 @@ The links to the current and all past versions of the ACES Developer Resources
 can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
 
 Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
+
+Individual files now conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
 
 ### Branch Structure ###
 
@@ -84,7 +103,7 @@ Academy under the following terms and conditions: A worldwide, royalty-free,
 non-exclusive right to copy, modify, create derivatives, and use, in source and
 binary forms, is hereby granted, subject to acceptance of this license.
 
-Copyright © 2013 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
+Copyright 2014 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
 Portions contributed by others as indicated. All rights reserved.
 
 Performance of any of the aforementioned acts indicates acceptance to be bound
