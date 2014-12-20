@@ -1,8 +1,7 @@
 ## IMPORTANT ##
- 
-ACES related documents can be downloaded from :
 
-[http://j.mp/1zNHhdo](http://j.mp/1zNHhdo)
+ACES related documents are available as a [ZIP](http://j.mp/1CeRcLd)
+(Download begins immediately)
 
 #### International Standards ####
 
