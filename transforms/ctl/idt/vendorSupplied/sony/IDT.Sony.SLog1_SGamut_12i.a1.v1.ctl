@@ -1,4 +1,6 @@
 
+// <ACEStransformID>IDT.Sony.SLog1_SGamut_12i.a1.v1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Input - Sony SLog1</ACESuserName>
 
 //
 // IDT for Sony Cameras - 12 bits
@@ -25,7 +27,8 @@ const float W = 3760.;
 
 
 /* ============ SUBFUNCTIONS ============ */
-float SLog1_to_lin (
+float SLog1_to_lin 
+(
 	float SLog,
 	float b,
 	float ab,
@@ -48,9 +51,9 @@ float SLog1_to_lin (
 
 
 /* ============ Main Algorithm ============ */
-void
-main
-(   input varying float rIn,
+void main
+(
+    input varying float rIn,
     input varying float gIn,
     input varying float bIn,
     input varying float aIn,

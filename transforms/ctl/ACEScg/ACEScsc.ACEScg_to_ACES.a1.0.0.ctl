@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ACEScsc.ACEScg_to_ACES.a1.0.0</ACEStransformID>
+// <ACESuserName>ACEScg to ACES2065-1</ACESuserName>
+
 //
 // ACES Color Space Conversion - ACEScg to ACES
 //

@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ACEScsc.ACESproxy10i_to_ACES.a1.0.0</ACEStransformID>
+// <ACESuserName>ACESproxy to ACES2065-1</ACESuserName>
+
 //
 // ACES Color Space Conversion - ACESproxy (12-bit) to ACES
 //
