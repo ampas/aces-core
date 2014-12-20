@@ -3,7 +3,7 @@
 // <ACESuserName>ACES 1.0 Output - P3-D60 PQ (4000 nits)</ACESuserName>
 
 // 
-// Output Device Transform - P3D60 (1000 cd/m^2)
+// Output Device Transform - P3D60 (4000 cd/m^2)
 //
 
 //

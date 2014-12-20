@@ -1,6 +1,6 @@
 
-// <ACEStransformID></ACEStransformID>
-// <ACESuserName></ACESuserName>
+// <ACEStransformID>ODT.Academy.DCDM.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - DCDM</ACESuserName>
 
 // 
 // Output Device Transform - DCDM (X'Y'Z')
