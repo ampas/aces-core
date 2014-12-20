@@ -8,7 +8,8 @@
 // converts ACES2065-1 (AP0 w/ linear encoding) to 
 //          ACESproxy (AP1 w/ ACESproxy encoding)
 //
-// This transform follows the formulas from section 4.3 in S-2013-001
+// This transform follows the formulas from S-2013-001. Please refer to the 
+// aforementioned document for the exact math and a table of reference values.
 //
  
 // *-*-*-*-*-*-*-*-*
@@ -17,17 +18,8 @@
 // ACESproxy is not intended for interchange, mastering finals, or archiving 
 // and as such should NOT be written into a container file in actual 
 // implementations! 
-// 
-//
-// For verification purposes only, ACESproxy was written into 16-bit integral 
-// point file (specifically, a 16-bit TIFF).
-//
-//   ctlrender -ctl ACEScsc.ACES_to_ACESproxy10i.a1.0.0.ctl aces.exr acesProxy10i.tiff -format tiff16
-//
-// ** ACESproxy should not be written into a container file in actual 
-// implementations! **
-// 
 // *-*-*-*-*-*-*-*-*
+
 
 
 import "ACESlib.Transform_Common.a1.0.0";

@@ -8,6 +8,9 @@
 // converts ACESproxy (AP1 w/ ACESproxy encoding) to 
 //          ACES2065-1 (AP0 w/ linear encoding)
 //
+// This transform follows the formulas from S-2013-001. Please refer to the 
+// aforementioned document for the exact math and a table of reference values.
+//
 
 // *-*-*-*-*-*-*-*-*
 // ACESproxy is intended to be a transient encoding used only for signal 
@@ -15,16 +18,6 @@
 // ACESproxy is not intended for interchange, mastering finals, or archiving 
 // and as such should NOT be written into a container file in actual 
 // implementations! 
-// 
-//
-// For verification purposes, ACESproxy10 is assumed to be in a 16-bit integral 
-// file (specifically, a 16-bit TIFF).
-//
-//   ctlrender -ctl ACEScsc.ACESproxy10i_to_ACES.a1.0.0.ctl acesProxy10i.tiff aces.exr -format aces
-//
-// ** ACESproxy should not be written into a container file in actual 
-// implementations! **
-// 
 // *-*-*-*-*-*-*-*-*
 
 
