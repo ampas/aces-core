@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ODT.Academy.DCDM_P3D60.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - DCDM (P3 gamut clip)</ACESuserName>
+
 // 
 // Output Device Transform - DCDM (X'Y'Z'), limited to P3D60
 //

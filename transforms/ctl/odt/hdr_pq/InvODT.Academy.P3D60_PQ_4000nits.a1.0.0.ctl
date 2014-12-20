@@ -1,3 +1,7 @@
+
+// <ACEStransformID>InvODT.Academy.P3D60_PQ_4000nits.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Inverse Output - P3-D60 PQ (4000 nits)</ACESuserName>
+
 // 
 // Inverse Output Device Transform - P3D60 (4000 cd/m^2)
 //
