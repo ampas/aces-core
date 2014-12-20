@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ODT.Academy.Rec2020_100nits_dim.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - Rec.2020</ACESuserName>
+
 // 
 // Output Device Transform - Rec2020
 //

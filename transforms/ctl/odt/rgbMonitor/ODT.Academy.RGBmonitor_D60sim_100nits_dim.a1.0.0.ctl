@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ODT.Academy.RGBmonitor_D60sim_100nits_dim.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - sRGB (D60 sim.)</ACESuserName>
+
 // 
 // Output Device Transform - RGB computer monitor (D60 simulation)
 //

@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ODT.Academy.P3DCI_48nits.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - P3-DCI</ACESuserName>
+
 // 
 // Output Device Transform - P3DCI (D60 Simulation)
 //

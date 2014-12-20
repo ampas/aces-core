@@ -1,3 +1,7 @@
+
+// <ACEStransformID>ODT.Academy.P3D60_48nits.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - P3-D60</ACESuserName>
+
 // 
 // Output Device Transform - P3D60
 //

@@ -1,4 +1,6 @@
 
+// <ACEStransformID>OCIO_shaper_log2_to_lin_param.a1.0.0</ACEStransformID>
+
 // 
 // Generic transform from log base-2 encoding to linear
 // 

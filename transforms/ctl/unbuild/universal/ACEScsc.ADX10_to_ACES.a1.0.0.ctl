@@ -1,4 +1,6 @@
 
+// <ACEStransformID>ACEScsc.ADX10_to_ACES.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Input - ADX10</ACESuserName>
 
 // 
 // Universal ADX10 to ACES Transform

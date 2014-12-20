@@ -1,3 +1,7 @@
+
+// <ACEStransformID>InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.0</ACEStransformID>
+// <ACESuserName>ACES 1.0 Inverse Output - Rec.709 (D60 sim.)</ACESuserName>
+
 // 
 // Inverse Output Device Transform - Rec709 (D60 simulation)
 //
@@ -55,6 +59,12 @@ void main
   
     // CIE XYZ to rendering space RGB
     linearCV = mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
+
+  // Undo desaturation to compensate for luminance difference
+    linearCV = mult_f3_f33( linearCV, invert_f33( ODT_SAT_MAT));
+
+  // Undo gamma adjustment to compensate for dim surround
+    linearCV = dimSurround_to_darkSurround( linearCV);
 
   // Undo scaling done for D60 simulation
     linearCV[0] = linearCV[0] / SCALE;
