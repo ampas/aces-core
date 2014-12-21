@@ -1,11 +1,11 @@
 ## IMPORTANT ##
 
-ACES related documents are available as a [ZIP](http://j.mp/1CeRcLd)
-(Download begins immediately)
+ACES-related documents are available here:
+[Documents](https://www.dropbox.com/sh/vipmm388m6wsn2w/AAA0tq_fNrzr_oZuZbQ9oSmNa?dl=0)
 
 #### International Standards ####
 
-Some ACES related documents are only available as international standards and therefore can not be distributed via the link above. Informative notes on the international standards are provided in the included Technical Bulletins. The following is a list of ACES standards documents:
+Some ACES-related documents are only available as international standards and therefore can not be distributed via the link above. Informative notes on the international standards are provided in the included Technical Bulletins. The following is a list of ACES standards documents:
 
 * SMPTE ST 2065-1:2012 - Academy Color Encoding Specification (ACES)
 * SMPTE ST 2065-2:2012 - Academy Printing Density (APD) — Spectral Responsivities, Reference Measurement Device and Spectral Calculation 
