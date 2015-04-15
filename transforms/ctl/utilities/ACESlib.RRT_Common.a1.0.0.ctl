@@ -84,7 +84,7 @@ float cubic_basis_shaper
                      w/4.,
                      w/2. };
   
-  float y;
+  float y = 0;
   if ((x > knots[0]) && (x < knots[4])) {  
     float knot_coord = (x - knots[0]) * 4./w;  
     int j = knot_coord;
