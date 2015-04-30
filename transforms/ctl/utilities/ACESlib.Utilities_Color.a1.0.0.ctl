@@ -25,10 +25,10 @@ const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
 
 const Chromaticities AP1 = // Working space and rendering primaries for ACES 1.0
 {
-  {0.713,	0.293},
-  {0.165,	0.830},
-  {0.128,	0.044},
-  {0.32168,	0.33767}
+  {0.713,   0.293},
+  {0.165,   0.830},
+  {0.128,   0.044},
+  {0.32168, 0.33767}
 };
 
 const Chromaticities REC709_PRI =
@@ -287,38 +287,38 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
 // SMPTE Range vs Full Range scaling formulas
 float smpteRange_to_fullRange( float in)
 {
-	const float REFBLACK = (  16. / 256.);
-	const float REFWHITE = ( 235. / 256.);
-	
-  return (( in - REFBLACK) / ( REFWHITE - REFBLACK));
+    const float REFBLACK = (  16. / 256.);
+    const float REFWHITE = ( 235. / 256.);
+
+    return (( in - REFBLACK) / ( REFWHITE - REFBLACK));
 }
 
 float fullRange_to_smpteRange( float in)
 {
-	const float REFBLACK = (  16. / 256.);
-	const float REFWHITE = ( 235. / 256.);
-	
-	return ( in * ( REFWHITE - REFBLACK) + REFBLACK );
+    const float REFBLACK = (  16. / 256.);
+    const float REFWHITE = ( 235. / 256.);
+
+    return ( in * ( REFWHITE - REFBLACK) + REFBLACK );
 }
 
 float[3] smpteRange_to_fullRange_f3( float rgbIn[3])
 {
-	float rgbOut[3];
-	rgbOut[0] = smpteRange_to_fullRange( rgbIn[0]);
-	rgbOut[1] = smpteRange_to_fullRange( rgbIn[1]);
-	rgbOut[2] = smpteRange_to_fullRange( rgbIn[2]);
+    float rgbOut[3];
+    rgbOut[0] = smpteRange_to_fullRange( rgbIn[0]);
+    rgbOut[1] = smpteRange_to_fullRange( rgbIn[1]);
+    rgbOut[2] = smpteRange_to_fullRange( rgbIn[2]);
 
-  return rgbOut;
+    return rgbOut;
 }
 
 float[3] fullRange_to_smpteRange_f3( float rgbIn[3])
 {
-	float rgbOut[3];
-	rgbOut[0] = fullRange_to_smpteRange( rgbIn[0]);
-	rgbOut[1] = fullRange_to_smpteRange( rgbIn[1]);
-	rgbOut[2] = fullRange_to_smpteRange( rgbIn[2]);
+    float rgbOut[3];
+    rgbOut[0] = fullRange_to_smpteRange( rgbIn[0]);
+    rgbOut[1] = fullRange_to_smpteRange( rgbIn[1]);
+    rgbOut[2] = fullRange_to_smpteRange( rgbIn[2]);
 
-  return rgbOut;
+    return rgbOut;
 }
 
 
@@ -328,22 +328,22 @@ float[3] fullRange_to_smpteRange_f3( float rgbIn[3])
 // Note: Here the 4095 12-bit scalar is not used since the output of CTL is 0-1.
 float[3] dcdm_decode( float XYZp[3])
 {
-  float XYZ[3];
-  XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);  
-  XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);  
-  XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);  
-  
-  return XYZ;
+    float XYZ[3];
+    XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);  
+    XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);  
+    XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);  
+
+    return XYZ;
 }
 
 float[3] dcdm_encode( float XYZ[3])
 {
-  float XYZp[3];
-  XYZp[0] = pow( (48./52.37) * XYZ[0], 1./2.6);
-  XYZp[1] = pow( (48./52.37) * XYZ[1], 1./2.6);
-  XYZp[2] = pow( (48./52.37) * XYZ[2], 1./2.6);
-  
-  return XYZp;
+    float XYZp[3];
+    XYZp[0] = pow( (48./52.37) * XYZ[0], 1./2.6);
+    XYZp[1] = pow( (48./52.37) * XYZ[1], 1./2.6);
+    XYZp[2] = pow( (48./52.37) * XYZ[2], 1./2.6);
+
+    return XYZp;
 }
 
 

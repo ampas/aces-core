@@ -29,8 +29,8 @@ void main
   input float expFactor[3] = {1.0, 1.0, 1.0}
 )
 {
-	rOut = rIn * expFactor[0];
-	gOut = gIn * expFactor[1];
-	bOut = bIn * expFactor[2];
-	aOut = aIn;
+    rOut = rIn * expFactor[0];
+    gOut = gIn * expFactor[1];
+    bOut = bIn * expFactor[2];
+    aOut = aIn;
 }

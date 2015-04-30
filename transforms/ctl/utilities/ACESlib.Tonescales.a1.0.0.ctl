@@ -95,7 +95,7 @@ float segmented_spline_c5_fwd
     // } else if ( j == 2) {
     //     cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];
     // } 
-        
+
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
@@ -177,7 +177,7 @@ float segmented_spline_c5_rev
     } else if ( logy > KNOT_Y_LOW[ 2] && logy <= KNOT_Y_LOW[ 3]) {
         cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];  j = 2;
     } 
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -202,7 +202,7 @@ float segmented_spline_c5_rev
     } else if ( logy > KNOT_Y_HIGH[ 2] && logy <= KNOT_Y_HIGH[ 3]) {
         cf[ 0] = C.coefsHigh[2];  cf[ 1] = C.coefsHigh[3];  cf[ 2] = C.coefsHigh[4];  j = 2;
     } 
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -221,7 +221,7 @@ float segmented_spline_c5_rev
     logx = log10(C.maxPoint.x);
 
   }
-  
+
   return pow10( logx);
 
 }
@@ -302,7 +302,7 @@ float segmented_spline_c9_fwd
     varying float x,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{    
+{
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
@@ -400,7 +400,7 @@ float segmented_spline_c9_rev
     varying float y,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{  
+{
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
@@ -444,7 +444,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_LOW[ 6] && logy <= KNOT_Y_LOW[ 7]) {
         cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];  j = 6;
     }
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -477,7 +477,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_HIGH[ 6] && logy <= KNOT_Y_HIGH[ 7]) {
         cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];  j = 6;
     }
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -496,6 +496,6 @@ float segmented_spline_c9_rev
     logx = log10(C.maxPoint.x);
 
   }
-  
+
   return pow10( logx);
 }

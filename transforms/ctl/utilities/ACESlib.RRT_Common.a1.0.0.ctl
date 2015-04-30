@@ -42,27 +42,27 @@ float glow_fwd( float ycIn, float glowGainIn, float glowMid)
 
 float glow_inv( float ycOut, float glowGainIn, float glowMid)
 {
-     float glowGainOut;
+    float glowGainOut;
 
-     if (ycOut <= ((1 + glowGainIn) * 2./3. * glowMid)) {
-       glowGainOut = -glowGainIn / (1 + glowGainIn);
-     } else if ( ycOut >= (2. * glowMid)) {
-       glowGainOut = 0.;
-     } else {
-       glowGainOut = glowGainIn * (glowMid / ycOut - 1./2.) / (glowGainIn / 2. - 1.);
-     }
+    if (ycOut <= ((1 + glowGainIn) * 2./3. * glowMid)) {
+    glowGainOut = -glowGainIn / (1 + glowGainIn);
+    } else if ( ycOut >= (2. * glowMid)) {
+    glowGainOut = 0.;
+    } else {
+    glowGainOut = glowGainIn * (glowMid / ycOut - 1./2.) / (glowGainIn / 2. - 1.);
+    }
 
-     return glowGainOut;
+    return glowGainOut;
 }
 
 float sigmoid_shaper( float x)
 {
-	// Sigmoid function in the range 0 to 1 spanning -2 to +2.
+    // Sigmoid function in the range 0 to 1 spanning -2 to +2.
 
-	float t = max( 1. - fabs( x / 2.), 0.);
-	float y = 1. + sign(x) * (1. - t * t);
-	
-	return y / 2.;
+    float t = max( 1. - fabs( x / 2.), 0.);
+    float y = 1. + sign(x) * (1. - t * t);
+
+    return y / 2.;
 }
 
 

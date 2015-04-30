@@ -39,13 +39,13 @@ void main
     float addedGlow = 1. + glow_fwd( ycIn, RRT_GLOW_GAIN * s, RRT_GLOW_MID);
 
     aces = mult_f_f3( addedGlow, aces);
-  
+
   // --- Red modifier --- //
     float hue = rgb_2_hue( aces);
     float centeredHue = center_hue( hue, RRT_RED_HUE);
     float hueWeight = cubic_basis_shaper( centeredHue, RRT_RED_WIDTH);
-		
-	  aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
+
+    aces[0] = aces[0] + hueWeight * saturation * (RRT_RED_PIVOT - aces[0]) * (1. - RRT_RED_SCALE);
 
   // --- ACES to RGB rendering space --- //
     aces = clamp_f3( aces, 0., HALF_POS_INF);  // avoids saturated negative colors from becoming positive in the matrix
@@ -65,10 +65,10 @@ void main
 
   // --- RGB rendering space to OCES --- //
     float rgbOces[3] = mult_f3_f44( rgbPost, AP1_2_AP0_MAT);
-    
+
   // Assign OCES RGB to output variables (OCES)
-  rOut = rgbOces[0];
-  gOut = rgbOces[1];
-  bOut = rgbOces[2];
-  aOut = aIn;
+    rOut = rgbOces[0];
+    gOut = rgbOces[1];
+    bOut = rgbOces[2];
+    aOut = aIn;
 }
