@@ -68,8 +68,20 @@ void main
 
     float ACESproxy_lin[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 
-    rOut = lin_to_ACESproxy( ACESproxy_lin[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    gOut = lin_to_ACESproxy( ACESproxy_lin[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    bOut = lin_to_ACESproxy( ACESproxy_lin[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    int ACESproxy[3];
+    ACESproxy[0] = lin_to_ACESproxy( ACESproxy_lin[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    ACESproxy[1] = lin_to_ACESproxy( ACESproxy_lin[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    ACESproxy[2] = lin_to_ACESproxy( ACESproxy_lin[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
+
+    // Prepare output values based on application bit depth handling
+    //  NOTE: This step is required for use with ctlrender. 
+    //  ctlrender scales the output values from the CTL transformation that are 
+    //  between 0.0-1.0 to the bit depth of the output file. For the reference //  images provided with the ACES Release, the ACESproxy files are written 
+    //  into a 16-bit TIFF file, and so will be multiplied by 65535 when 
+    //  writing ACES-to-ACESproxy (EXR to TIFF16). Therefore, it is important to 
+    //  scale the output of the transform into the range 0.0-1.0 
+    rOut = ACESproxy[0] / 4095.;
+    gOut = ACESproxy[1] / 4095.;
+    bOut = ACESproxy[2] / 4095.;
     aOut = aIn;
 }

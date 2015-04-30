@@ -35,7 +35,7 @@ const int CVmax = 3760;
 
 float ACESproxy_to_lin
 ( 
-  input varying float in,
+  input varying int in,
   input varying float StepsPerStop,
   input varying float MidCVoffset,
   input varying float CVmin,
@@ -59,10 +59,24 @@ void main
     output varying float aOut
 )
 {
+    // Prepare input values based on application bit depth handling
+    //  NOTE: This step is required for use with ctlrender. 
+    //  ctlrender scales input values from the bit depth of the input file to 
+    //  the range 0.0-1.0. For the reference images provided with the ACES 
+    //  Release, the ACESproxy files are written into a 16-bit TIFF file, and so 
+    //  will be divided by 65535 by ctlrender, resulting in values ranged 
+    //  0.0-1.0 going into this CTL transformation. Therefore, it is important 
+    //  to first scale the 0.0-1.0 ranged values to integer values appropriate 
+    //  for the ACESproxy-to-linear function.
+    int ACESproxy[3];
+    ACESproxy[0] = rIn * 4095.0;
+    ACESproxy[1] = gIn * 4095.0;
+    ACESproxy[2] = bIn * 4095.0;
+
     float AP1_lin[3];
-    AP1_lin[0] = ACESproxy_to_lin( rIn, StepsPerStop, MidCVoffset, CVmin, CVmax);
-    AP1_lin[1] = ACESproxy_to_lin( gIn, StepsPerStop, MidCVoffset, CVmin, CVmax);
-    AP1_lin[2] = ACESproxy_to_lin( bIn, StepsPerStop, MidCVoffset, CVmin, CVmax);
+    AP1_lin[0] = ACESproxy_to_lin( ACESproxy[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    AP1_lin[1] = ACESproxy_to_lin( ACESproxy[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    AP1_lin[2] = ACESproxy_to_lin( ACESproxy[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
 
     float ACES[3] = mult_f3_f44( AP1_lin, AP1_2_AP0_MAT);
 
