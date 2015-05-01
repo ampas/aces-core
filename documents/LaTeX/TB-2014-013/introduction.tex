@@ -1,0 +1,10 @@
+% This file contains the content for the Introduction
+\unnumberedformat	    % Change formatting to that of "Introduction" section
+\chapter{Introduction} 	% Do not modify section title
+%% Modify below this line %%
+
+The majority of products that implemented pre-release ACES adopted an approach that combined the RRT and ODT into a single transform. This makes sense since the output of the RRT (OCES) is not useful for end-users. However, some products do have a need for a more modular approach. In particular, it is useful to have one transform that has both ACES rendering components (from the RRT and ODT) that outputs the desired display colorimetry followed by a simple transform that converts that colorimetry into display code values. 
+
+The ACES User Experience Working Group is developing an alternate UX proposal for products that wish to structure their viewing pipeline using this approach. This is useful for those wanting to implement ACES in products that also need to support ICC monitor profiles. It is also useful since it allows the configuration of the viewing pipeline to be done from two smaller menus rather than one long menu.
+
+This work is put forward for consideration as a possible recommended approach for a future ACES release.

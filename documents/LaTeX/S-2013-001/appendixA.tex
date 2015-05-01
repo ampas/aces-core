@@ -1,0 +1,14 @@
+\appendixchapter{Viewing of ACESproxy images}{i}
+\label{appendixA}
+
+As a part of the ACES system, images encoded in ACESproxy form are intended to be decoded into ACES values and viewed using the Reference Rendering Transform (RRT) and an Output Device Transform (ODT) appropriate for an intended viewing device.
+
+Without such a transform in place, viewed ACESproxy images will appear dim, severely low in contrast and desaturated. However, directly viewing the unrendered log-encoded images is sometimes useful, for example while looking at the wide range of captured image data in the highlights and shadows that are preserved in the ACES system. 
+
+ACESproxy has been designed to place scene details into the SMPTE ``legal-range'' of video systems. Scene detail from about 7 stops under mid-gray to 10 stops over mid-gray should be visible within normal legal-range monitor setups. No rescaling of the device output signal should be needed for direct viewing, but is required before applying color grading transforms as described in Appendix \ref{appendixC}.
+
+The ACESproxy encoding allows an amount of `headroom' beyond the current dynamic range capabilities of digital motion picture cameras, and it is expected that the range of exposed highlight values seen on a waveform monitor will be lower on a monitor’s scale than the corresponding range that would be shown if other forms of log encoding were used.
+
+Specific knowledge of the dynamic range of a camera system and its output encoding can be used to determine the maximum value that will appear on a waveform monitor indicating an exposure has reached full saturation of the sensor.
+
+On a waveform monitor displaying ACESproxy values in IRE units, a gray card representing an 18\% reflectance would appear at a level of 41\% IRE under a normal exposure assumption. A perfect white reflector under the same conditions would appear at 55\% IRE. A camera which reaches sensor saturation at 7 stops  above 18\% reflectance would not show any values above 81\% IRE.

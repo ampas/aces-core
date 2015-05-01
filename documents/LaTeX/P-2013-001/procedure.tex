@@ -1,0 +1,307 @@
+% This file contains the content for the Procedure
+\regularsectionformat
+\chapter{Recommended procedure for IDT creation}
+%% Modify below this line %%
+
+\label{chap:procedure}
+
+The core of a digital camera system IDT is the 3x3 matrix by which radiometrically linear camera RGB code values are transformed to produce ACES RGB relative exposure values. This procedure describes the derivation of such a matrix.
+
+To have fully followed the recommendations given in this document, IDT authors should provide an IDT for daylight and an IDT for tungsten illumination sources. The daylight illumination source should have the spectral power distribution of CIE Standard Illuminant D55; the tungsten illumination source, ISO 7589 Studio Tungsten.
+
+\note{All references to CIE XYZ tristimulus values in this recommendation refer to colorimetric coordinates defined with respect to the CIE 1931 XYZ color space and the CIE 1931 2$^\circ$ Standard Colorimetric Observer.}
+
+\section{Selection and Weighting of Training Data}
+The quality of an IDT constructed as per this recommendation will depend heavily on the diversity and distribution of the set of spectral radiances used in IDT matrix optimization. Training spectra selection should attempt to sample the entire space of real-world scene spectra. Particularly important scene spectra, such as memory color spectra, may be weighted more heavily than colors rarely found in everyday life.
+
+Training spectra should represent in situ stimuli if possible: the training spectrum representing a blade of grass illuminated by sunlight should be representative of that blade of grass in the context of surrounding leaves of grass, rather than in isolation on a laboratory slide, since very few motion pictures feature grass examined under a microscope. Only a small part of the reflected light from a single blade of grass is a first-bounce reflection of sunlight; the larger part of the illumination of a blade of grass in production photography will bounce off of or pass through neighboring blades of grass.
+
+\section{Assumptions and prerequisites}
+This procedure is appropriate when the IDT manufacturer desires to implement some form of neutral chromaticity difference compensation. It presumes the following information is available to the IDT manufacturer before applying the procedure:
+
+\begin{itemize}
+	\item	A set of training spectra against which the IDT matrix will be optimized, expressed either as spectral radiances, or as spectral reflectances which can be multiplied with the spectral power distribution of the scene adopted white to form spectral radiances.
+	\item	The spectral power distribution of the scene adopted white.
+	\item	A neutral chromaticity difference compensation strategy when the scene adopted white chromaticity differs from that of ACES neutrals.
+	\item	A transform from camera system image data code values to three-channel radiometrically linear image data.
+	\item	The spectral responsivities of the digital camera system for which the IDT is being created.
+	\item	A transform from CIE XYZ colorimetry into an error minimization color space.
+	\item	The error metric (cost function) that will be minimized, and any weights that will be applied differentially to the training spectra.
+\end{itemize}
+
+The sampling bounds and sampling interval of the spectra for the scene adopted white, for the RICD spectral responsivities, for the camera system spectral responsivities and for the training spectra are assumed to be the same so that mathematical operations can be performed without ambiguity. In addition, the procedure presumes the IDT author has access to software capable of mathematical operations including vector and matrix algebra, linear regression and minimization with user-defined cost functions.
+
+\section{Symbols}
+\label{sec:symbols}
+In the table and equations below, lower case italic letters ($m$) represent scalars, lower case bold face letters ($\mathbf{h}$) represent vectors, and upper case bold face letters ($\mathbf{M}$) represent matrices.
+
+{\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{|l|l|X|}
+	\hline
+	\bfseries{Symbol} & \bfseries{Domain} & \bfseries{Description} \\ \hline
+	$m$ & $\Re$ & Number of samples in spectral data. \\ \hline
+	$n$ & $\Re$ & Number of training spectra. \\ \hline
+	$\mathbf{C}$ & $\Re^{m\times3}$ & Spectral responsivities of camera system (with channel gain differences maintained). \\ \hline
+	$\big(\mathbf{r}_{i}\big)^{n}_{i=1}$ & $\Re^m$ & Spectral reflectances of training spectra. \\ \hline
+	$\big(\mathbf{t}_{i}\big)^{n}_{i=1}$ & $\Re^m$ & Spectral radiances of training spectra. \\ \hline
+	$\big(\mathbf{x}_{i}\big)^{n}_{i=1}$ & $\Re^3$ & CIE XYZ tristimulus values of training spectra. \\ \hline
+	$\big(\mathbf{d}_{i}\big)^{n}_{i=1}$ & $\Re^3$ & Native color encoding of the camera system response values of training spectra. \\ \hline
+	$\big(\mathbf{v}_{i}\big)^{n}_{i=1}$ & $\Re^3$ & Scaled white-balanced radiometrically linear camera system response values for training spectra. \\ \hline
+	$\mathbf{h}_s$ & $\Re^m$ & Spectral power distribution of scene illumination source. \\ \hline
+	$\mathbf{w}_s$ & $\Re^3$ & CIE XYZ tristimulus values of the scene illumination source. \\ \hline
+	$\mathbf{h}_w$ & $\Re^m$ & Spectral power distribution of scene adopted white. \\ \hline	
+	$\mathbf{w}_w$ & $\Re^3$ & CIE XYZ tristimulus values of the scene adopted white. \\ \hline
+	$\mathbf{M}$ & $\Re^{3\times3}$ & Matrix converting ACES RGB relative exposure values to CIE XYZ tristimulus values. \\ \hline
+	$\mathbf{w}$ & $\Re^3$ & CIE XYZ tristimulus values of ACES unity neutral. \\ \hline
+	$\mathbf{X}$ & $\Re^{m\times3}$ & CIE 1931 2$^\circ$ Standard Observer color matching functions. $\mathbf{X}_\mathrm{Y}$ is the spectral luminous efficiency function. \\ \hline
+	$\mathbf{b}$ & $\Re^3$ & Camera system white balancing and scaling factors. \\ \hline
+	$\mathbf{B}$ & $\Re^{3\times3}$ & Matrix converting white-balanced scaled camera system RGB response values to ACES RGB relative exposure values. \\ \hline
+	$\mathbf{A}_{Bradford}$ & $\Re^{3\times3}$ & Bradford matrix for chromatic adaptation, with value \\
+	& & 
+		$\begin{bmatrix*}[r]
+			0.8950 & 0.2664 & -0.1614 \\
+			-0.7502 & 1.7135 & 0.0367 \\
+			0.0389 & -0.0685 & 1.0296 
+		\end{bmatrix*}$ \\ \hline
+	$\mathbf{A}_{CAT02}$ & $\Re^{3\times3}$ & CAT02 matrix for chromatic adaptation, with value \\
+	& &
+		$\begin{bmatrix*}[r]
+			0.7328 & 0.4296 & -0.1624 \\
+			-0.7036 & 1.6975 & 0.0061 \\
+			0.0030 & 0.0136 & 0.9834 
+		\end{bmatrix*}$ \\ \hline
+	$\mathbf{A}_{re-illum}$ & $\Re^{3\times3}$ & Example matrix for re-illumination\footnote{Both the contents of this matrix and the method by which it is calculated may be protected by patent(s) including but not limited to U.S. Patent No. 7,298,892 (Inventors: Spaulding, Kevin E.; Woolfe, Geoffrey J.; and Giorgianni, Edward J.).}, with value \\
+	& &
+		$\begin{bmatrix*}[r]
+			1.6160 & -0.3591 & -0.2569 \\
+			-0.9542 & 1.8731 & 0.0811 \\
+			0.0170 & -0.0333 & 1.0163 
+		\end{bmatrix*}$ \\ \hline
+\end{tabularx}
+}
+
+\section{Functions}
+\label{sec:functions}
+In the table and equations below, functions are indicated by a (possibly subscripted) lower case letter or word, followed by comma-separated arguments enclosed in parentheses. Arguments represented by italic lower case letters are scalars, those represented by lower case bold face letters are vectors, and those represented by upper case bold face letters are matrices.
+
+\begin{tabularx}{\textwidth}{|l|l|X|}
+	\hline
+	\bfseries{Function} & \bfseries{Domain} & \bfseries{Description} \\ \hline
+	$\mathrm{f_{CAM}}(\mathbf{x}, \mathbf{w})$ & $\Re^3\rightarrow\Re^3$ & Return color appearance correlates for tristimulus values $\mathbf{x}$ under adopted white $\mathbf{w}$ suited for measurement of color difference. \\ \hline
+	$\min(\mathbf{v})$ & $\Re^m\rightarrow\Re$ & Return the minimum element of vector $\mathbf{v}$. \\ \hline
+	$\gamma(\mathbf{c})$ & $\Re^3\rightarrow\Re^3$ & Decode camera image data code values $\mathbf{c}$ to normalized radiometrically linear camera system exposures. \\ \hline
+	$\psi(\mathbf{A}, \mathbf{w})$ & $\Re^3\rightarrow\Re^3$ & Create a re-illumination matrix which transforms tristimulus values to an alternative color space using matrix $\mathbf{A}$, multiplies transformed values by the reciprocal of transformed white $\mathbf{w}$, and inverse transforms the scaled transformed values to their original color space using the inverse of matrix $\mathbf{A}$. \\
+	& & $\psi(\mathbf{A}, \mathbf{w})=\mathbf{A}^{-1} \begin{bmatrix*}
+			\rho & 0 & 0 \\
+			0 & \gamma & 0 \\
+			0 & 0 & \beta 
+		\end{bmatrix*}\mathbf{A}$ \\
+	& & with \\
+	& & $\begin{bmatrix*}
+			\rho \\
+			\gamma \\
+			\beta 
+		\end{bmatrix*} = \dfrac{1}{\mathbf{Aw}}$ \\ \hline	
+	$\phi(\mathbf{A}, \mathbf{w_1}, \mathbf{w_2})$ & $\Re^3\rightarrow\Re^3$ & Create a chromatic adaptation matrix which transforms tristimulus values to an alternative color space using matrix $\mathbf{A}$, scales transformed values by ratio of transformed white $\mathbf{w_2}$ to transformed white $\mathbf{w_1}$, and inverse transforms the scaled transformed values to their original color space using the inverse of matrix $\mathbf{A}$. \\
+	& & $\phi(\mathbf{A}, \mathbf{w_1}, \mathbf{w_2})=\mathbf{A}^{-1} \begin{bmatrix*}
+			\rho & 0 & 0 \\
+			0 & \gamma & 0 \\
+			0 & 0 & \beta 
+		\end{bmatrix*}\mathbf{A}$ \\
+	& & with \\
+	& & $\begin{bmatrix*}
+			\rho \\
+			\gamma \\
+			\beta 
+		\end{bmatrix*} = \dfrac{\mathbf{Aw}_2}{\mathbf{Aw}_1}$ \\
+	& & For equal whites, $\phi$ shall be the identity function: \\
+	& & $\mathbf{w}_1=\mathbf{w}_2\Rightarrow\phi(\mathbf{A}, \mathbf{w_1}, \mathbf{w_2})=\mathbf{I}$ \\ \hline	
+	$\min(\mathbf{v})$ & $\Re^m\rightarrow\Re$ & Return the minimum element of vector $\mathbf{v}$. \\ \hline
+	$\mathrm{clip}(\mathbf{v})$ & $\Re^m\rightarrow\Re^m$ & Clip channel values in vector $\mathbf{v}$ to [1, 1, 1], or extrapolate the channels clipped on capture from the unclipped channels. \\ \hline
+\end{tabularx}
+
+\section{Operations}
+\label{sec:operations}
+In the table and equations below, lower case italic letters ($m$) represent scalars, lower case bold face letters ($\mathbf{h}$) represent vectors, and upper case bold face letters ($\mathbf{M}$) represent matrices.
+
+
+\begin{tabularx}{\textwidth}{|l|l|X|}
+	\hline
+	\bfseries{Operation} & \bfseries{Domain} & \bfseries{Description} \\ \hline
+	$\mathbf{v} + \mathbf{w}$ & $\Re^m\rightarrow\Re^m$ & Element-wise addition of vectors in $\Re^m$. \\ \hline
+	$\mathbf{v} * \mathbf{w}$ & $\Re^m\rightarrow\Re^m$ & Element-wise multiplication of vectors in $\Re^m$. \\ \hline
+	$\mathbf{v} / \mathbf{w}$ & $\Re^m\rightarrow\Re^m$ & Element-wise division of vectors in $\Re^m$, $w_i>0$. \\ \hline
+	$\mathbf{v}\mathbf{w}$ & $\Re^m\rightarrow\Re$ & Dot product of vectors in $\Re^m$, $\mathbf{vw}=\displaystyle\sum_{i}^{m} v_iw_i$. \\ \hline
+	$\mathbf{M}\mathbf{v}$ & $\Re^{nxm},\Re^m\rightarrow\Re^m$ & Matrix-vector multiplication $\mathbf{v}\ni\Re^m$, $\mathbf{M}\ni\Re^{nxm}$. \\ \hline
+	$\mathbf{M}_{\mathrm{T}}$ & $\Re^{nxm}\rightarrow\Re^{mxn}$ & Transposition of matrix $\mathbf{M}$. \\ \hline
+\end{tabularx}
+
+\section{Constant symbol values}
+\subsection{Compute CIE XYZ tristimulus values of the ACES unity neutral}
+The CIE XYZ tristimulus values $\mathbf{w}$ of the ACES unity neutral will be the same for all IDTs, as the elements involved in its computation do not include scene- or camera-system-specific data; the values are computed by post-multiplication of $\mathbf{M}$ (the ACES RGB to CIE XYZ conversion matrix defined in Section 4.1.1 of the ACES document) by the ACES unity neutral:
+
+$\mathbf{M} =
+    \begin{bmatrix*}[r]
+		0.9525523959 & 0 & 0.0000936786 \\
+		0.3439664498 & 0.7281660966 & -0.0721325464 \\
+		0 & 0 & 1.0088251844
+    \end{bmatrix*}$
+
+$\mathbf{w} =\mathbf{M}\begin{bmatrix} 1 \\ 1 \\ 1 \\ \end{bmatrix}$
+
+\section{Computation}
+\subsection{Compute (if required) spectral radiances of illuminated training spectral reflectances}
+\label{sec:compstart}
+When the training colors $\mathbf{t}_i$ are expressed as spectral radiances, they may be used directly in the equations below. When they are expressed as spectral reflectances $\mathbf{r}_i$ under a scene adopted white with spectral power distribution $\mathbf{h}_w$ the resulting spectral radiances are calculated as 
+
+$\mathbf{t}_i = \mathbf{h}_w*\mathbf{r}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of training colors spectral radiances}
+The training color CIE XYZ tristimulus values are calculated as 
+
+$\mathbf{x}_i=\mathbf{X}^{\mathrm{T}}\mathbf{t}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of scene adopted white}
+The scene adopted white CIE XYZ tristimulus values are calculated as 
+
+$\mathbf{w}_w=\mathbf{X}^{\mathrm{T}}\mathbf{h}_w$
+
+\subsection{Adjust training color CIE XYZ tristimulus values to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity}
+\label{sec:chromaticadaptation}
+Unless the scene adopted white happens to have the chromaticity of ACES neutrals (which have the chromaticity of CIE Standard Illuminant D60), some transformation is required to map the scaled white-balanced camera system response values that would result from the capture of the scene adopted white to the ACES unity neutral.
+
+The training color CIE XYZ values are transformed to a balancing color space, scaled, then transformed back to CIE XYZ. When this balancing color space is structured around the cone responses of the human visual system (HVS), the scaling transform models chromatic adaptation; when the balancing color space is one of a class of color spaces particularly optimized for color adjustment, the scaling models re-illumination.
+
+
+Three possible matrices representing a white balance transform are given in this section. The first and second model chromatic adaptation. The third models re-illumination.
+
+\subsubsection{Alternatives 1 and 2: chromatic adaptation}
+The training color CIE XYZ values are chromatically adapted such that neutral reflectors illuminated by the scene adopted white are encoded with the chromaticities of ACES neutrals. Two matrices are provided in this document, one defining the Bradford chromatic adaptation transform, and one defining the CAT02 transform.
+
+$\mathbf{x}'_i = \phi(\mathbf{A}_{Bradford},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$ or $\mathbf{x}'_i = \phi(\mathbf{A}_{\mathit{CAT02}},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$
+
+
+\subsubsection{Alternative 3: re-illuminate white-balanced ACES RGB relative exposure values for ACES neutral chromaticity}
+The training color CIE XYZ values are scaled such that the scene adopted white CIE XYZ values are mapped to the ACES unity neutral CIE XYZ values and the white-balanced camera system exposure values are left unchanged.
+
+$\mathbf{x}'_i = \phi(\mathbf{A}_{re-illum},\mathbf{w}_w)\mathbf{x}_i$
+
+\subsection{Compute camera system white balance factors}
+The camera system white balance factors map and normalize the linearized camera system responses corresponding to the capture of a perfect reflecting diffuser illuminated by the scene adopted white to camera system RGB values [1, 1, 1].
+
+$\mathbf{b}=\dfrac{1}{\mathbf{C}^{\mathrm{T}}\mathbf{h}_w}$
+
+\subsection{Compute white-balanced linearized camera system response values of training \\*colors}
+The camera system spectral responsivity functions are post-multiplied by the training spectral radiances and scaled by the camera system white balance factors to produce the white-balanced, linearized, and normalized camera system response values for the set of training colors.
+
+$\mathbf{v}_i=\mathbf{b}*\mathbf{C}^{\mathrm{T}}\mathbf{t}_i$
+
+\subsection{Create initial values for the unoptimized IDT matrix entries}
+\label{sec:compmat}
+The matrix $\mathbf{B}$ is made up of 6 free parameters $\big(\beta_i\big)^{6}_{i=1}$.
+
+$   \mathbf{B} =
+    \begin{bmatrix}
+		\beta_1 & \beta_2 & 1-\beta_1-\beta_2 \\
+		\beta_3 & \beta_4 & 1-\beta_3-\beta_4 \\
+		\beta_5 & \beta_6 & 1-\beta_5-\beta_6
+    \end{bmatrix}$
+
+Although other methods are possible, this document recommends the use of linear regression between the ACES RGB relative exposure values $\mathbf{x}'_i$ calculated in Section 4.7.3 and the white balanced camera system response values for the training colors $\mathbf{v}_i$ determined in Section 4.7.6.
+
+The constraint that each row of matrix entries sums to unity can be formulated into the regression\footnote{Finlayson and Drew: White-point preserving color correction, Proceedings of the Fifth Color Imaging Conference, 1997.} or can be enforced by scaling the parameters obtained from unconstrained regression (although the latter gives only an approximation of the true solution).
+
+\subsection{Select a cost function for error minimization}
+\label{sec:compcostfn}
+The cost function sums the distances between the target values and the transformed camera system response values after both sets of values have been transformed to a suitable color appearance space. The merit function is
+
+$\chi^2=\displaystyle\sum_{i}^{n}\begin{Vmatrix}\mathbf{f}_{\mathrm{CAM}}(\mathbf{x}'_i,\mathbf{w})-\mathbf{f}_{\mathrm{CAM}}(\mathbf{MBv}_i,\mathbf{w})\end{Vmatrix}$
+ 
+Choices for a suitable color appearance space for $\mathbf{f}_{\mathrm{CAM}}$ include
+
+\begin{itemize}
+	\item Nonlinear, neutral preserving RGB
+	\item CIE L*u*v*
+	\item CIE L*a*b*
+	\item CIECAM
+
+\end{itemize}
+
+\note{Other color spaces may also be used.}
+
+\note{More complex cost functions may also be used to weight the importance of particular training spectra, or to weight particular aspects of the approximation of the RICD's capture of training spectra (hue angle, luminance, colorfulness) more heavily than others, or in other ways chosen by the IDT author.}
+
+\subsection{Find final matrix values minimizing cost function}
+\label{sec:compend}
+An iterative algorithm is used to minimize the cost function with respect to the parameters $\beta$. Existing implementations of this IDT calculation use the nonlinear least squares regression from MATLAB's Optimization Toolbox, or the \textbf{\texttt{optim}} function in R, or the \textbf{\texttt{FindMinimum}} function in Mathematica.
+
+
+\subsection{Application}
+\label{sec:application}
+The IDT converts image data to ACES RGB relative exposure values $\mathbf{a}$ as follows:
+
+
+$\mathbf{a} = k \mathbf{B} \mathrm{clip}\left(\dfrac{\mathbf{b}*\gamma(\mathbf{d})}{\min(\mathbf{b})}\right)$
+
+where $\gamma$, $\mathbf{b}$, $\min()$, clip$()$ and $\mathbf{B}$ are as defined in Sections \ref{sec:symbols} and \ref{sec:functions}; $\mathbf{d}$ is an image data code value vector; and $k$ is the factor that results in a nominally ``18\% gray'' object in the scene producing ACES values [0.18, 0.18, 0.18].
+
+
+\subsubsection{Application using CTL}
+A CTL function taking a normalized linear camera system RGB code value and returning an ACES RGB relative exposure value could be implemented as follows:
+
+\cleardoublepage
+\begin{lstlisting}
+// D200 IDT
+// D55 illuminant
+// camSPECS-measured D200 spec sens
+// Woolfe/Spaulding/Giorgianni space for reconciliation of
+// scene adopted white chromaticity and ACES neutral chromaticity
+// (cf. U.S. Patent No. 7,298,892).
+
+float
+min(float a, float b) {
+  if (a < b)
+    return a;
+  else
+    return b;
+}
+
+float
+clip(float v) {
+  return min(v, 1.0);
+}
+
+void
+main
+(   input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
+    input varying float aIn,
+    output varying float rOut,
+    output varying float gOut,
+    output varying float bOut,
+    output varying float aOut)
+{
+
+const float b[] = { 0.00102373, 0.000570585, 0.000797976 };
+
+const float B[][] = { {  0.674849,    0.231105,  0.0940463 },
+                      {  0.0431725,   1.06981,  -0.112982  },
+                      {  0.0312748,  -0.151054,  1.11978   } };
+
+const float min_b = min(b[0], min(b[1], b[2]));
+const float e_max = 1.0;
+const float k     = 1.0;
+
+float clippedRGB[3];
+clippedRGB [0] = clip((b[0] * rIn) / (min_b * e_max));
+clippedRGB [1] = clip((b[1] * gIn) / (min_b * e_max));
+clippedRGB [2] = clip((b[2] * bIn) / (min_b * e_max));
+
+rOut = k * (B[0][0] * clippedRGB[0] + B[0][1] * clippedRGB[1] + B[0][2] * clippedRGB[2]);
+gOut = k * (B[1][0] * clippedRGB[0] + B[1][1] * clippedRGB[1] + B[1][2] * clippedRGB[2]);
+bOut = k * (B[2][0] * clippedRGB[0] + B[2][1] * clippedRGB[1] + B[2][2] * clippedRGB[2]);
+
+}
+\end{lstlisting}
+

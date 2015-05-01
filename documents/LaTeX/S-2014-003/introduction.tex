@@ -1,0 +1,12 @@
+% This file contains the content for the Introduction
+\unnumberedformat	    % Change formatting to that of "Introduction" section
+\chapter{Introduction} 	% Do not modify section title
+%% Modify below this line %%
+
+The Academy Color Encoding Specification (ACES) defines a common color encoding method using half-precision floating point values corresponding to linear exposure values encoded relative to a fixed set of extended-gamut RGB primaries. Many digital-intermediate color grading systems have been engineered assuming image data with primaries similar to the grading display and a logarithmic relationship between relative scene exposures and image code values.
+
+This document describes a 32-bit single precision floating-point logarithm encoding of ACES known as ACEScc.
+
+Logarithmic encoding of ACES for use in 10-bit and 12-bit integer systems is known as ACESproxy and is specified in a separate document, ``Academy S-2013-001.'' ACEScc provides compatibility for color grading systems with on-set look metadata generated using the ACESproxy specification. Both encodings use the same color primaries. ACESproxy has a restricted range of values; the minimum and maximum ACES values that can be represented in ACESproxy correspond to a range between 0.0 and 1.0 of ACEScc encoding. ACEScc, however, uses values above 1.0 and below 0.0 to encode the entire range of ACES values. ACEScc values should not be clamped except as part of color correction needed to produce a desired artistic intent.
+
+There is no image file container format specified for use with ACEScc as the encoding is intended to be transient and internal to software or hardware systems, and is specifically not intended for interchange or archiving.

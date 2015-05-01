@@ -1,0 +1,6 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Filtering the available View Transforms}
+
+Metadata is now added to the ACES transforms which include a unique transform identifier. Additionally, metadata could be added to Display Transforms to include the IDs of the View Transforms for which they are authored. For example, a digital cinema projector and an HDR monitor will be authored using different View Transforms. For a typical Display Transform, this will be a list of 1-2 View Transforms. For example, in the case of a broadcast monitor there are two: one for video mastering mode and another for simulating the D60 white point of the cinema mode (e.g. for on-set use). So once the Display Transform has been selected, the application should filter the list of ACES View Transforms to only the appropriate ones (usually just 1-2).

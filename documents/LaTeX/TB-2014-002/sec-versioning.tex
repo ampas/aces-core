@@ -1,0 +1,37 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Versioning}
+
+Anyone who has followed the rapid development of digital cinema technology is familiar with the fact that manufacturers regularly revise their color science as the state of their technology advances. For example, several of the leading digital camera manufacturers are already at version 3 or higher of their color science. As may be seen in the products that support their SDKs, each has their own method of indicating version choices.
+
+Likewise, given the challenges in developing a color management framework that meets the needs of all parts of the industry, it is expected that version 1 of ACES will not be the last. By provisioning for this eventuality now, it is hoped that some amount of confusion may be lessened in the future.
+
+Furthermore, it is anticipated that many products will want to support the pre-release ACES versions for some additional period of time to support users with projects created with the pre-release transforms.
+
+Therefore, the ACES UX design needs to clearly identify which version of ACES is being used and the method should be as similar as possible amongst implementations.
+
+Each of the components of ACES will be versioned and there is also a version assigned to each ACES Release (consisting of transforms, specifications, and guidelines). See ``Academy S-2014-002, Academy Color Encoding System -- Versioning System'' for further details.
+
+The ACES components have version numbers with major, minor, and (in some cases) patch components. Product manufacturers should keep in mind that end-users will not be familiar with the detailed semantics of ACES versioning and should take care to show an appropriate level of detail. All components built for a given ACES System version must be compatible with each other. Therefore, in some contexts it may be desirable to only show the major, or major and minor, parts of the version.
+
+\section{Guidelines}
+\subsection{Display of ACES Release version}
+Users should be shown the ACES Release version being used in the product. At a minimum this should also be used in the name of the ACES Output Transforms.
+
+The suggested end-user string for the first official ACES Release is ``ACES 1.0.''
+
+The suggested end-user strings for pre-release versions of ACES are ``ACES 0.1,'' ``ACES 0.2,'' and ``ACES 0.7.''
+
+\subsection{Use of appropriate default versions}
+For new work, the current version of ACES should be the default. It is suggested that products somehow structure the UX so that users are guided to select transforms for the current version, e.g., by filtering the transform options so that users ``see the current version first.'' 
+
+When loading work based on earlier platform releases, the transforms for that release should continue to be used.
+
+\subsection{Availability of earlier ACES Releases}
+Products should allow users to access all of the ACES Releases. For example, even after ACES 3.0 comes out, users should still be able to use ACES 1.x and ACES 2.x transforms. This may (and, in fact, should) require more work from the user than accessing the current version.
+
+Support for the pre-release versions of ACES is suggested but optional.
+
+\subsection{Display of ACES Transform Identifier}
+Products should provide a way for users to see the ACES Transform Identifier string associated with a transform they have selected via the UI (see \autoref{sec:uid1} and \autoref{sec:uid2}).

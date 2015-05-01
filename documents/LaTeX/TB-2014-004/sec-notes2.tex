@@ -1,0 +1,45 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Notes on Appendix A}
+
+Those referring to S-2008-001 -- Annex B (contained in this document's Appendix \ref{appendixA}) may encounter some difficulty in trying to reproduce the tabular list of ACES RGB relative exposure values that the RICD would produce for an 18\% neutral reflecting diffuser, a perfect reflecting diffuser and a ColorChecker\textregistered chart, all illuminated by a CIE Standard Illuminant D60 source.
+
+As written, the equations in S-2008-001 -- Annex B do not factor in the RICD camera flare that amounts to 0.5\% of the capture values of a perfect reflecting diffuser. Without the augmentation of flare, followed by the scale factor, values computed with the provided equations will be slightly off from those provided in the table.
+ 
+Therefore, the full computation steps necessary to calculate ACES RICD relative exposure values that match those provided in the S-2008-001 Annex B table are clarified as follows:
+
+\begin{quote}
+Calculation of the values in the table listing stimulus and ACES RGB used the following elements:
+	
+\begin{itemize}
+	\item the published CIE Standard Illuminant D60 spectral power distribution
+	\item the area-normalized RICD spectral sensitivities from Annex C
+	\item red, green and blue scale factors $k_r$, $k_g$ and $k_b$ which white-balance those area-normalized RICD spectral sensitivities for CIE Standard Illuminant D60
+	\item hypothetical 18\% and 100\% neutral reflectors
+	\item the measured reflectances of the patches on a particular ColorChecker chart
+	\item camera flare amounting to 0.5\% of the capture values of a perfect reflecting diffuser	
+\end{itemize}
+
+The scale factors applied to the RICD spectral sensitivity curves are each the reciprocal of the scalar product of that curve and the illuminant. These scale factors $k_r$, $k_g$ and $k_b$ are calculated as follows:
+
+
+\begin{center}
+$k_r=\dfrac{1}{(I\cdot{S_r})},\quad k_g=\dfrac{1}{(I\cdot{S_g})},\quad k_b=\dfrac{1}{(I\cdot{S_b})},$	
+\end{center}
+
+where $I$ represents the illuminant and $S_r$, $S_g$ and $S_b$ represent the area-normalized spectral sensitivities from Annex C.
+
+Once these scale factors have been determined, the ACES relative exposure values $E_r$, $E_g$ and $E_b$ are calculated as
+
+\begin{floatequ}
+\begin{gather}
+E_r=S\left(\displaystyle\sum_\lambda IRS_{r_\lambda}+0.005\right), \quad\quad E_g=S\left(\displaystyle\sum_\lambda IRS_{g_\lambda}+0.005\right),\\
+E_b=S\left(\displaystyle\sum_\lambda IRS_{b_\lambda}+0.005\right)
+\end{gather} 
+\end{floatequ}
+\vspace{-20pt}
+
+where (as before) $I$ represents the illuminant and $S_r$, $S_g$ and $S_b$ represent the area-normalized spectral sensitivities from Annex C, where $R$ represents the spectral reflectance of the object being captured, and where $S=\frac{0.18}{(0.18+0.005)}$, the flare factor from S-2008-001 4.1.1.
+
+\end{quote}

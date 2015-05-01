@@ -1,0 +1,75 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Selecting input transforms}
+
+This section contains guidelines for selecting ACES Input Transforms. Please note that the term IDT (Input Device Transform) is also used here since it is familiar to product manufacturers, however it is important to note that this is an engineering rather than an end-user term.
+
+\section{Challenges}
+The number of manufacturers of digital cinema cameras continues to expand and each product seems to have developed its own set of UX conventions. The goal of these guidelines is not to make all camera vendors use the same set of options for their camera. Rather, it is to make the process of selecting the ACES Input Transforms for a given camera as similar as possible in the products that use those transforms.
+
+For example, if one camera manufacturer makes IDTs that vary based on exposure index (EI), and another manufacturer makes IDTs based on whether daylight or tungsten was used (but doesn’t care about which EI was used), it is not our goal (nor would it be feasible) to get the manufacturers to all agree to use the same set of options.
+
+Another important aspect to consider is that there is a tension between ease-of-use and completeness. On the one hand, products should make it possible for users to use any available IDT. On the other hand, given the increasing number of manufacturers, the fact that a single camera may have dozens of IDTs associated with its various parameter settings, that manufacturers regularly introduce new ``color science versions'' which may apply to new and old cameras, and the fact that the current crop of camera models gets refreshed regularly, there will soon be hundreds of IDTs available.
+
+For users to trust in the ACES platform, they must be able to load the IDT needed for their given camera. However, for ACES to be easy to use, the user must not be overwhelmed with menus that have hundreds of different transforms. Hence product designers must somehow find a way to make their implementations both complete and yet easy to use.
+
+Please note that as part of the ACES support effort, we plan to request that Product Partners create and publish an FAQ as a PDF that is formatted similarly (among all Product Partners of a particular category of product) to help end-users understand how a particular manufacturer is handling naming conventions and/or set-ups. These would be available on the ACES website to make it easier for users to get up and running on any particular piece of equipment.
+
+\section{Naming of transforms}
+In order to reduce ``differences for no reason,'' the transforms will contain metadata for a suggested ``user friendly'' name for use in product user interfaces (UIs). However, given the fact that ACES-compliant products will serve many different types of user and each have their own UI requirements (e.g. length of strings), it is not realistic to mandate usage of specific transform name strings. Hence, use of the proposed names is highly recommended but not mandatory.
+
+However, one common user complaint about current pre-release ACES implementations is that it is often difficult to know if they are selecting the same transform in two different products since they are named differently.
+
+``Academy S-2014-002, Academy Color Encoding System -- Versioning System'' is a separate document describing the process of generating versioned unique names for color transforms. Although these are human-readable, they may be too long and technical for use as the primary name in many product UIs. However this transform identifier string is the most precise way for users to confirm the ``true identity'' of a given transform (i.e. the exact CTL file that was used by the manufacturer to implement a given transform).
+
+\section{Transform metadata}
+The CTL files included in an ACES system release will contain two metadata strings that are intended for use in products:
+
+User-friendly Transform Name -- This is the string that is recommended for use in menus, etc. in a product user interface. Some hypothetical user-friendly names are:
+
+\begin{itemize}
+	\item ACES 1.0 Input - ARRI LogC v3 (EI800)
+	\item ACES 1.0 Look - ACES 1.0 to 0.7 emulation
+	\item ACES 1.0 Output - P3-D60
+\end{itemize}
+
+The user-friendly transform name consists of a prefix followed by a specific name. Products may shorten the prefix if the type of transform is clear from the context.
+
+ACES Transform Identifier (or ``Transform ID'') -- This is a versioned unique name which is fully described in Academy S-2014-002. Some hypothetical example transform identifiers are:
+
+\begin{itemize} 
+	\item IDT.ARRI.Alexa-logC-v3-EI800.a1.v1
+	\item LMT.Academy.ACES\_0\_7\_1.a1.0.0
+	\item ODT.Academy.P3D60\_48nits.a1.0.0	
+\end{itemize}
+
+
+\section{Guidelines}
+\subsection{Naming of menus}
+The string ``Input Transform'' (or simply ``Input'' if ``Transform'' is clear from the context) is suggested for the menu used to select IDTs. 
+
+\subsection{Naming of transforms}
+Products are free to choose the ``user friendly'' name for transforms. It is highly recommended to use (or at least base) the string on the user-friendly name metadata included in the released transforms. 
+
+\subsection{Unique identification of transforms} \label{sec:uid1}
+Products should make it possible for users to see the official transform identifier string associated with a transform. As this is a technical string, it is reasonable to put this somewhere separate from the user-friendly name (e.g., in an ``Advanced Info'' dialog box). The transform identifier may be referred to as the ``Transform ID.''
+
+\subsection{Assigning appropriate default transforms}
+In many cases, there will be information available to the product that could guide the selection of the IDT. For example, it may be an ACES clip-level metadata file, there may be other color space metadata in the image file, or the media could be in a format specific to a given camera. Where appropriate, products should attempt to simplify the user experience by selecting an appropriate Input Transform. However, since metadata unfortunately is often wrong, users should be given a way to over-ride any automatic transform selection.
+
+\subsection{Device-specific input hierarchies}
+Creators of IDTs should publish their transforms using a directory structure that provides guidance on how products should organize the presentation of these transforms to end-users. The names of the directories should be chosen carefully for suitability in products.
+
+Products which allow users to select Input Transforms should organize the transforms using some type of hierarchical user interface metaphor to make the process of finding Input Transforms as similar as possible between products. The naming of the hierarchy should correspond to the intent of the IDT creator.
+
+\subsection{Completeness}
+Products should enable users to select any of the IDTs included in the Academy releases.
+
+\subsection{Ease-of-use}
+Products should arrange their user experience in such a way that the user is not overwhelmed by needing to select from overly long lists of transforms. One method for doing this is to have both easy and advanced modes. Another method is to present a short list of the most likely transforms but also provide a way for the user to browse to find older, less common, or more specialized transforms. (This set of suggestions is intended to be illustrative rather than exhaustive.)
+
+\subsection{Handling other inputs}
+The typical IDTs are transforms for digital cinema cameras and film scanners. However, it is important that products allow users to convert from other color spaces into ACES, even though there may not be an Academy-supplied IDT for it. For example, it is often useful to be able to convert scene-referred data encoded using the Rec. 709 primaries into ACES.
+
+A more complicated example is the important case of importing display-referred media via an inverse Output Transform.

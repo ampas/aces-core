@@ -1,0 +1,199 @@
+\appendixchapter{XML Schema}{n}
+\label{appendixA}
+
+\lstset{frame=none}
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema targetNamespace="urn:NATAS:AMPAS:LUT:v2.0" 
+    xmlns="http://www.oscars.org/aces/ref/CLFschema_v2.0" 
+    xmlns:lut="urn:NATAS:AMPAS:LUT:v2.0" 
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified">
+
+<!--  Process List definition  -->
+    <element name="ProcessList" type="lut:ProcessListType"/>
+
+    <complexType name="ProcessListType">
+        <sequence>
+            <element name="Description" type="string" minOccurs="0" 
+                maxOccurs="unbounded"/>
+            <element name="InputDescriptor" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="OutputDescriptor" type="string" minOccurs="0" maxOccurs="1"/>
+            <element ref="lut:InfoType" minOccurs="1" maxOccurs="1"/>
+            <element ref="lut:ProcessNode" minOccurs="1" maxOccurs="unbounded"/>
+        </sequence>
+        <attribute name="id" type="anyURI" use="required"/>
+        <attribute name="name" type="string" use="optional"/>
+        <attribute name="compatibleCLFversion" type="string" use="required"/>
+        <attribute name="inverseOf" type="string" use="optional"/>
+    </complexType>
+
+<!--  Info element definition  -->
+    <element name="Info" type="lut:InfoType"/>
+
+    <complexType name="InfoType">
+        <sequence>
+            <element name="AppRelease" type="string" minOccurs="0" maxOccurs="1"/>
+            <element ref="lut:CalibrationInfoType" minOccurs="0" maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+<!--  Info element definition  -->
+    <element name="CalibrationInfo" type="lut:CalibrationInfoType"/>
+
+    <complexType name="CalibrationInfoType">
+        <sequence>
+            <element name="DisplayDeviceSerialNum" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+            <element name="DisplayDeviceHostName" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+            <element name="OperatorName" type="string" minOccurs="0" maxOccurs="1"/>
+            <element name="CalibrationDateTime" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+            <element name="MeasurementProbe" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+            <element name="CalibrationSoftwareName" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+            <element name="CalibrationSoftwareVersion" type="string" minOccurs="0" 
+                maxOccurs="1"/>
+        </sequence>
+    </complexType>
+
+    <!--  ProcessNode definition  -->
+    <element name="ProcessNode" type="lut:ProcessNodeType"/>
+
+    <complexType name="ProcessNodeType" abstract="true">
+        <sequence>
+            <element name="Description" type="string" minOccurs="0" 
+                maxOccurs="unbounded"/>
+        </sequence>
+        <attribute name="id" type="anyURI" use="optional"/>
+        <attribute name="name" type="string" use="optional"/>
+        <attribute name="inBitDepth" type="lut:bitDepthType" use="required"/>
+        <attribute name="outBitDepth" type="lut:bitDepthType" use="required"/>
+    </complexType>
+
+    <!--  ProcessNode: LUT1D definition  -->
+    <element name="LUT1D" type="lut:LUT1DType" substitutionGroup="lut:ProcessNode"/>
+
+    <complexType name="LUT1DType">
+        <complexContent>
+            <extension base="lut:ProcessNodeType">
+                <sequence>
+                    <element name="IndexMap" type="lut:IndexMapType" minOccurs="0" 
+                        maxOccurs="3"/>
+                    <element name="Array" type="lut:ArrayType" minOccurs="1" 
+                        maxOccurs="1"/>
+                </sequence>
+                <attribute name="interpolation" type="string" use="optional"/>
+                <attribute name="rawHalfs" type="string" use="optional"/>
+                <attribute name="halfDomain" type="string" use="optional"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+
+    <!--  ProcessNode: LUT3D definition  -->
+    <element name="LUT3D" type="lut:LUT3DType" substitutionGroup="lut:ProcessNode"/>
+
+    <complexType name="LUT3DType">
+        <complexContent>
+            <extension base="lut:ProcessNodeType">
+                <sequence>
+                    <element name="IndexMap" type="lut:IndexMapType" minOccurs="0" 
+                        maxOccurs="3"/>
+                    <element name="Array" type="lut:ArrayType" minOccurs="1" 
+                        maxOccurs="1"/>
+                </sequence>
+                <attribute name="interpolation" type="string" use="optional"/>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <!--  ProcessNode: Range definition  -->
+    <element name="Range" type="lut:RangeType" substitutionGroup="lut:ProcessNode"/>
+
+    <complexType name="RangeType">
+        <complexContent>
+        <extension base="lut:ProcessNodeType">
+            <sequence>
+                <element name="minValueIn" type="float" minOccurs="0" maxOccurs="1"/>
+                <element name="maxValueIn" type="float" minOccurs="0" maxOccurs="1"/>
+                <element name="minValueOut" type="float" minOccurs="0" maxOccurs="1"/>
+                <element name="maxValueOut" type="float" minOccurs="0" maxOccurs="1"/>
+            </sequence>
+           <attribute name="style" type="string" use="optional"/>
+        </extension>
+        </complexContent>
+    </complexType>
+
+    <!--  ProcessNode: Matrix definition  -->
+    <element name="Matrix" type="lut:MatrixType" substitutionGroup="lut:ProcessNode"/>
+
+    <complexType name="MatrixType">
+        <complexContent>
+            <extension base="lut:ProcessNodeType">
+                <sequence>
+                    <element name="Array" type="lut:ArrayType" minOccurs="1" 
+                        maxOccurs="1"/>
+                </sequence>
+            </extension>
+        </complexContent>
+    </complexType>
+
+    <complexType name="ArrayType">
+        <simpleContent>
+            <extension base="lut:floatListType">
+                <attribute name="dim" type="lut:dimType" use="optional"/>
+            </extension>
+        </simpleContent>
+    </complexType>
+
+    <complexType name="IndexMapType">
+        <simpleContent>
+        <extension base="lut:indexMapItemsType">
+            <attribute name="dim" type="lut:dimType" use="optional"/>
+        </extension>
+        </simpleContent>
+    </complexType>
+
+    <simpleType name="indexMapItemsType">
+        <restriction base="lut:indexMapItemListType">
+            <minLength value="2"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="indexMapItemListType">
+        <list>
+           <simpleType>
+                <restriction base="string">
+                    <pattern value="[0-9]+(\.[0-9]+)?@[0-9]+(\.[0-9]+)?"/>
+                </restriction>
+           </simpleType>
+           </list>
+    </simpleType>
+
+    <simpleType name="floatListType">
+        <list itemType="float"/>
+    </simpleType>
+
+    <simpleType name="dimType">
+        <restriction base="lut:positiveIntegerListType">
+            <minLength value="1"/>
+        </restriction>
+    </simpleType>
+
+    <simpleType name="positiveIntegerListType">
+        <list itemType="positiveInteger"/>
+    </simpleType>
+
+    <simpleType name="bitDepthType">
+        <restriction base="string">
+            <pattern value="[0-9]+[fi]"/>
+        </restriction>
+    </simpleType>
+
+</schema>
+\end{lstlisting}
+

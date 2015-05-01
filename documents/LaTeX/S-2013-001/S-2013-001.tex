@@ -1,0 +1,45 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+\RequirePackage{dcolumn}
+\newcolumntype{d}[1]{D{.}{.}{#1}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+% Set Document Details
+\doctype{spec} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{ACESproxy -- An Integer Log Encoding \\*of ACES Image Data}
+\altdocname{ACESproxy -- An Integer Log Encoding of ACES Image Data}
+\docnumber{S-2013-001}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{2.0.1}
+\docdate{April 24, 2015}
+\summary{
+This specification defines integer encoding and decoding functions for the Academy Color Encoding System (ACES). The Academy Color Encoding Specification (ACES) defines a half-precision floating-point color encoding method using a fixed set of RGB primaries. To transport and process ACES compatible images in systems that only support integer data types, this specification defines logarithmic 10-bit and 12-bit integer encodings in a smaller color space known as ACESproxy and specifies functions for conversion of this encoding to and from the floating-point encoding.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{introduction}
+
+\input{scope}
+\input{references}
+\input{termsanddefs} \newpage
+
+\input{specification}
+
+\begin{appendices}
+    \input{appendixA}
+    \input{appendixB}
+    \input{appendixC}
+    \input{appendixD}
+\end{appendices}
+
+\end{document}

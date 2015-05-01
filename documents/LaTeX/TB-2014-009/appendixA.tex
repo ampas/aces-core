@@ -1,0 +1,75 @@
+\appendixchapter{Example ACESclip File XML}{i}
+\label{appendixA}
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<aces:ACESmetadata xmlns:aces="http://www.oscars.org/aces/ref/acesmetadata">
+<ContainerFormatVersion>1.0</ContainerFormatVersion>
+<UUID type="urn:uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6"/>
+<ModificationTime>2014-11-24T10:20:13-8:00</ModificationTime>
+<aces:Info>
+    <Application version="2014">Vendor_ACESmaker v3</Application>
+    <Comment>Day 1 Camera A: Indoors at Area 51</Comment>
+</aces:Info>
+<aces:ClipID>
+    <ClipName>A0001B0003FX</ClipName>
+    <Source_MediaID>A0001</Source_MediaID>
+    <ClipDate>2014-11-20T12:24:13-8:00</ClipDate>
+</aces:ClipID>
+<aces:Config>
+    <ACESrelease_Version>1.0</ACESrelease_Version>
+    <Timestamp>2014-11-29T23:55:13-8:00</Timestamp>
+    <aces:InputTransformList status="applied">
+        <aces:IDTref TransformID="IDT.Sony.Slog2.v1">
+            <LinkTransform>Slog2toACES.clf</LinkTransform>
+        </aces:IDTref>
+        <aces:GradeRef status="preview">
+            <Convert_to_WorkSpace TransformID="ACEScsc.ACES_to_ACEScc.a1"/>
+            <ColorDecisionList>
+                <InputDescriptor>ACEScc</InputDescriptor>
+                <ASC_CDL id="cc01234" inBitDepth="16f" outBitDepth="16f">
+                    <SOPNode>
+                        <Description>not a real example</Description>
+                        <Slope>1.0000 1.0000 0.800000</Slope>
+                        <Offset>0.0000 0.0000 0.000000</Offset>
+                        <Power>1.0000 1.0000 1.000000</Power>
+                    </SOPNode>
+                    <SatNode>
+                        <Saturation>0.9</Saturation>
+                    </SatNode>
+                </ASC_CDL>
+            </ColorDecisionList>
+            <Convert_from_WorkSpace { TransformID="ACEScc_to_ACES.a1"/>
+        </aces:GradeRef>
+        <LinkInputTransformList>F65presetgrade_seq4.clf</LinkInputTransformList>
+    </aces:InputTransformList>
+    <aces:PreviewTransformList status="preview">
+        <aces:LMTref TransformID="LMT.Vendor.Locon.v1.ctl">
+            <LinkTransform>f34d4fae-7dec-11d0-a765-00a0c91e6bf6</LinkTransform>
+        </aces:LMTref>
+            <aces:RRTref TransformID="RRT.Academy.a1"/>
+        <aces:ODTref TransformID="ODT.Academy.Rec709_100nits_dim.a1">
+            <LinkTransform>lut1023.clf</LinkTransform>
+        </aces:ODTref>
+        <LinkPreviewTransformList>V1_LMTlocon.clf</LinkPreviewTransformList>
+    <aces:PreviewTransformList>
+</aces:Config>
+
+<aces:TransformLibrary>
+    <ProcessList id="urn:uuid:f34d4fae-7dec-11d0-a765-00a0c91e6bf6">
+        <Description>Sample 3DLUT for an LMT</Description>
+        <InputDescriptor>ACES</InputDescriptor>
+        <OutputDescriptor>ACES</OutputDescriptor>
+        <LUT3D id="lmt_prodv2" name="LMT sequence 1 day exterior" 
+                interpolation="tetrahedral" inBitDepth="16f" outBitDepth="12i">
+            <Description>LMT Test File</Description>
+            <Array dim="33 33 33 3">
+                0    0    0
+                1    1    1
+                [...data omitted]
+            </Array>
+        </LUT3D>
+    </ProcessList>
+</aces:TransformLibrary>
+</aces:ACESmetadata>
+\end{lstlisting}
