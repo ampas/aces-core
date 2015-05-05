@@ -1,10 +1,12 @@
 ## IMPORTANT ##
 
-The most recent versions of ACES documents can be downloaded as PDFs using the links in this README or directly from the ACES website.
+The links below point to the current versions of the ACES technical documentation. 
 
-This documentation may be updated frequently.  If you have previously downloaded the documentation please refer to the [ACES Documentation Manifest](http://j.mp/docsmanifest) to ensure you have the latest version.
+Git is used to version control the LaTeX source for the documents, which is hosted here on Github. Thus, any updates to the documents will be visible through git commits. The PDFs generated from the most up-to-date LaTeX source are linked to below and from the ACES website.
 
-Github is used to version control the LaTeX source for the documents. The PDFs generated from the LaTeX are hosted on Dropbox. Any updates to the documents will be visible as commits and via the Revision History at the beginning of each document.
+These documents may be updated updated frequently in order to incorporate developer feedback, so please check the [ACES Documentation Manifest](http://j.mp/docsmanifest) to ensure you have the latest versions before finalizing your ACES implementation.
+
+Please report any issues related to the documentation to acessupport@oscars.org.
 
 #### Academy Documents ####
 
