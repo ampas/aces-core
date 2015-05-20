@@ -196,7 +196,7 @@ float[3][3] calculate_cat_matrix
       { 0.0, 0.0, des_coneResp[2] / src_coneResp[2] }
   };
 
-  float cat_matrix[3][3] = mult_f33_f33( coneRespMat, transpose_f33( mult_f33_f33( transpose_f33( invert_f33( coneRespMat ) ), vkMat ) ) );
+  float cat_matrix[3][3] = mult_f33_f33( coneRespMat, mult_f33_f33( vkMat, invert_f33( coneRespMat ) ) );
 
   return cat_matrix;
 }
