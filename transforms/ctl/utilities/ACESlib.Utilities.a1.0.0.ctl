@@ -105,13 +105,13 @@ float[3] log10_f3( float a[3])
 
 float round(float x)
 {
-  float x1;
-
+  int x1;
+ 
   if (x < 0.0)
-    x1 = floor( x - 0.5);
+    x1 = x - 0.5;
   else
-    x1 = floor( x + 0.5);
-
+    x1 = x + 0.5;
+ 
   return x1;
 }
 
