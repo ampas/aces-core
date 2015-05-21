@@ -36,11 +36,11 @@ $output = \dfrac{input-inValue[i]}{inValue[i+1]-inValue[i]} \times (outValue[j+1
 \term{Tetrahedral Interpolation}
 This is a type of interpolation for 3D LUTs in which the color space is subdivided by tetrahedra arranged to cover the entire 3D volume.  There are multiple ways to subdivide this space, however for color processing, this specification uses the form where each cube is split along the main (and usually neutral) diagonal into 6 tetrahedra.
 
-\term{IndexMap definition}
-The mapping of input code values to indexes of the table is modifiable allowing for remapping the range of applicable input values, changing the spacing of the input sampling function, and reshaping of the index function for lookups into the LUT   An IndexMap in its simplest form allows the definition of the range of input and output floating-point values that are normalized to 0 to 1.0 for accessing a 1DLUT or a 3DLUT. This extension to the LUT format is fully described in Appendix C. The IndexMap is primarily intended for improved implementation of floating-point LUTs and is not necessary for integer LUTs.
+\term{\texttt{IndexMap} definition}
+The mapping of input code values to indexes of the table is modifiable allowing for remapping the range of applicable input values, changing the spacing of the input sampling function, and reshaping of the index function for lookups into the LUT. An \texttt{IndexMap} in its simplest form allows the definition of the range of input and output floating-point values that are normalized to 0 to 1.0 for accessing a 1DLUT or a 3DLUT. This extension to the LUT format is fully described in Appendix C. The \texttt{IndexMap} is primarily intended for improved implementation of floating-point LUTs and is not necessary for integer LUTs.
 
 \term{1D LUT definition}
-A color transform using a 1D LUT has as input a 1-component color value from which it finds the nearest index position whose $inValue$ is less than or equal to the implicit input values for the table. The transform algorithm then calculates the output value by interpolation between outValue entries in the table. A 1DLUT shall be applied equally to all channels in a 3-component color calculation.
+A color transform using a 1D LUT has as input a 1-component color value from which it finds the nearest index position whose $inValue$ is less than or equal to the implicit input values for the table. The transform algorithm then calculates the output value by interpolation between $outValue$ entries in the table. A 1DLUT shall be applied equally to all channels in a 3-component color calculation.
 
 \term{3by1D LUT definition}
 A 3by1DLUT is a particular case of a 1DLUT in which a 3-component pixel is the input value, and each component is looked up separately in its own 1DLUT which may differ from each other.

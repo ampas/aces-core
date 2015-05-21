@@ -39,18 +39,8 @@ index & inValue & outValue \\\hline
 \end{center}
 
 
-%Element:
-%\begin{xmlfields}
-%    \xmlitem[IndexMap][required] A LUT3D can have one or three IndexMaps. If there are three IndexMaps, they are in the RGB order. If only one IndexMap is present, it is applied to all three color components. (see IndexMap element below for more details)
-%
-%\end{xmlfields}
-% 
-%1DLUT
-%Element: 
-%IndexMap:  Table that maps input values to index positions of the LUT1D’s Array. A LUT1D can have one or three IndexMaps for the 1D LUT and 3by1D LUT cases, respectively. In a 3by1D LUT for RGB, the first IndexMap corresponds to R, the second IndexMap to G, the third IndexMap to B.
-
 \subsection*{XML Example}
-As an example of an IndexMap, in a 5 position LUT1D with 10-bit input values, the IndexMap could be the following:
+As an example of an \texttt{IndexMap}, in a 5 position LUT1D with 10-bit input values, the IndexMap could be the following:
 
 \lstinline!<IndexMap dim=5> 60@0  301@1  542@2  782@3  1023@4 </IndexMap>!
 

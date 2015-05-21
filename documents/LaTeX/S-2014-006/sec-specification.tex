@@ -24,7 +24,7 @@ The system described in this document assumes that the transform engine performs
 
 Each \texttt{ProcessNode} must indicate for its input and output whether the pixel values are floats or integers, and must also specify the bit depth. In software applications, it is assumed that all processing is performed in floating point and the indication of an integer value represents normalized values (e.g. 10 bit integer represents values from 0.0 to 1.0).
 
-\note{See \autoref{sec:implementation} for notes on floating point processing}
+\note{See \autoref{sec:implementation} for notes on floating point processing.}
 
 The input format of each node must be matched by the output format of the previous node in the processing chain. Conversion of values between floating-point and integer ranges must be explicitly performed within a \texttt{ProcessNode}. Conversions between integer and floating-point ranges can be made explicit either in the LUT array output, or with a special \texttt{Range} node. Floating-point values may require handling large ranges of values, and so the \texttt{Range} node is provided for the designer of transforms so that floating-point values may have their ranges altered before feeding into the next node of the list.
 
