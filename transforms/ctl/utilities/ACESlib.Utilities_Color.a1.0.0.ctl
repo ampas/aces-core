@@ -287,16 +287,16 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
 // SMPTE Range vs Full Range scaling formulas
 float smpteRange_to_fullRange( float in)
 {
-    const float REFBLACK = (  16. / 256.);
-    const float REFWHITE = ( 235. / 256.);
+    const float REFBLACK = (  64. / 1023.);
+    const float REFWHITE = ( 940. / 1023.);
 
     return (( in - REFBLACK) / ( REFWHITE - REFBLACK));
 }
 
 float fullRange_to_smpteRange( float in)
 {
-    const float REFBLACK = (  16. / 256.);
-    const float REFWHITE = ( 235. / 256.);
+    const float REFBLACK = (  64. / 1023.);
+    const float REFWHITE = ( 940. / 1023.);
 
     return ( in * ( REFWHITE - REFBLACK) + REFBLACK );
 }
