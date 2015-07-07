@@ -87,8 +87,8 @@ void main
     // Convert Relative Exposure values to ACES values
     float aces[3] = mult_f3_f33( exp, EXP_TO_ACES);
 
-// rOut = aces[0];
-// gOut = aces[1];
+	rOut = aces[0];
+	gOut = aces[1];
     bOut = aces[2];
     aOut = aIn;
 }
