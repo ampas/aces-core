@@ -20,7 +20,7 @@
 //              Red:          0.64      0.33
 //              Green:        0.3       0.6
 //              Blue:         0.15      0.06
-//              White:        0.3217    0.329     100 cd/m^2
+//              White:        0.3127    0.329     100 cd/m^2
 //
 // Display EOTF :
 //  The reference electro-optical transfer function specified in 
