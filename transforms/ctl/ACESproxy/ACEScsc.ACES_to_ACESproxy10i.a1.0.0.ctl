@@ -42,10 +42,10 @@ int lin_to_ACESproxy
   input varying float CVmax
 )
 {
-  if (in < pow(2.,(in-MidCVoffset)/StepsPerStop)-2.5) 
+  if (in <= pow(2., -9.72))
     return CVmin;
   else
-    return max( CVmin, min( CVmax,( log2(in) + 2.5) * StepsPerStop + MidCVoffset)) + 0.5;
+    return max( CVmin, min( CVmax, round( (log2(in) + 2.5) * StepsPerStop + MidCVoffset)));
 }
 
 
@@ -64,7 +64,8 @@ void main
 {
     float ACES[3] = { rIn, gIn, bIn};
 
-    ACES = clamp_f3( ACES, 0.0, HALF_POS_INF);
+	// Pre-clamp: This clamp serves to avoid large negative ACES values from potentially folding over to large positive values when multiplied through the AP0-to-AP1 matrix. This is usually not an issue in real camera images.
+    ACES = clamp_f3( ACES, 0.0, HALF_POS_INF); 
 
     float ACESproxy_lin[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 

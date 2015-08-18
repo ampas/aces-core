@@ -19,8 +19,8 @@ struct SplineMapPoint
 
 struct SegmentedSplineParams_c5
 {
-  float coefsLow[5];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
-  float coefsHigh[5];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
+  float coefsLow[6];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
+  float coefsHigh[6];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
   SplineMapPoint minPoint; // {luminance, luminance} linear extension below this
   SplineMapPoint midPoint; // {luminance, luminance} 
   SplineMapPoint maxPoint; // {luminance, luminance} linear extension above this
@@ -30,8 +30,8 @@ struct SegmentedSplineParams_c5
 
 struct SegmentedSplineParams_c9
 {
-  float coefsLow[9];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
-  float coefsHigh[9];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
+  float coefsLow[10];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
+  float coefsHigh[10];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
   SplineMapPoint minPoint; // {luminance, luminance} linear extension below this
   SplineMapPoint midPoint; // {luminance, luminance} 
   SplineMapPoint maxPoint; // {luminance, luminance} linear extension above this
@@ -42,10 +42,10 @@ struct SegmentedSplineParams_c9
 
 const SegmentedSplineParams_c5 RRT_PARAMS =
 {
-  // coefsLow[5]
-  { -4.0000000000, -4.0000000000, -3.1573765773, -0.4852499958, 1.8477324706 },
-  // coefsHigh[5]
-  { -0.7185482425, 2.0810307172, 3.6681241237, 4.0000000000, 4.0000000000 },
+  // coefsLow[6]
+  { -4.0000000000, -4.0000000000, -3.1573765773, -0.4852499958, 1.8477324706, 1.8477324706 },
+  // coefsHigh[6]
+  { -0.7185482425, 2.0810307172, 3.6681241237, 4.0000000000, 4.0000000000, 4.0000000000 },
   { 0.18*pow(2.,-15), 0.0001},    // minPoint
   { 0.18,                4.8},    // midPoint  
   { 0.18*pow(2., 18), 10000.},    // maxPoint
@@ -64,9 +64,12 @@ float segmented_spline_c5_fwd
   const int N_KNOTS_HIGH = 4;
 
   // Check for negatives or zero before taking the log. If negative or zero,
-  // set to HALF_MIN.
-  float logx = log10( max(x, HALF_MIN )); 
-  
+  // set to ACESMIN.
+  float xCheck = x;
+  if (xCheck <= pow(2., -14.)) xCheck = pow(2., -14.); 
+
+  float logx = log10( xCheck);
+
   float logy;
 
   if ( logx <= log10(C.minPoint.x) ) { 
@@ -94,8 +97,16 @@ float segmented_spline_c5_fwd
     //     cf[ 0] = C.coefsLow[1];  cf[ 1] = C.coefsLow[2];  cf[ 2] = C.coefsLow[3];
     // } else if ( j == 2) {
     //     cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];
+    // } else if ( j == 3) {
+    //     cf[ 0] = C.coefsLow[3];  cf[ 1] = C.coefsLow[4];  cf[ 2] = C.coefsLow[5];
+    // } else if ( j == 4) {
+    //     cf[ 0] = C.coefsLow[4];  cf[ 1] = C.coefsLow[5];  cf[ 2] = C.coefsLow[6];
+    // } else if ( j == 5) {
+    //     cf[ 0] = C.coefsLow[5];  cf[ 1] = C.coefsLow[6];  cf[ 2] = C.coefsLow[7];
+    // } else if ( j == 6) {
+    //     cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];
     // } 
-
+    
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
@@ -120,6 +131,14 @@ float segmented_spline_c5_fwd
     //     cf[ 0] = C.coefsHigh[1];  cf[ 1] = C.coefsHigh[2];  cf[ 2] = C.coefsHigh[3];
     // } else if ( j == 2) {
     //     cf[ 0] = C.coefsHigh[2];  cf[ 1] = C.coefsHigh[3];  cf[ 2] = C.coefsHigh[4];
+    // } else if ( j == 3) {
+    //     cf[ 0] = C.coefsHigh[3];  cf[ 1] = C.coefsHigh[4];  cf[ 2] = C.coefsHigh[5];
+    // } else if ( j == 4) {
+    //     cf[ 0] = C.coefsHigh[4];  cf[ 1] = C.coefsHigh[5];  cf[ 2] = C.coefsHigh[6];
+    // } else if ( j == 5) {
+    //     cf[ 0] = C.coefsHigh[5];  cf[ 1] = C.coefsHigh[6];  cf[ 2] = C.coefsHigh[7];
+    // } else if ( j == 6) {
+    //     cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];
     // } 
 
     float monomials[ 3] = { t * t, t, 1. };
@@ -177,7 +196,7 @@ float segmented_spline_c5_rev
     } else if ( logy > KNOT_Y_LOW[ 2] && logy <= KNOT_Y_LOW[ 3]) {
         cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];  j = 2;
     } 
-
+    
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -202,7 +221,7 @@ float segmented_spline_c5_rev
     } else if ( logy > KNOT_Y_HIGH[ 2] && logy <= KNOT_Y_HIGH[ 3]) {
         cf[ 0] = C.coefsHigh[2];  cf[ 1] = C.coefsHigh[3];  cf[ 2] = C.coefsHigh[4];  j = 2;
     } 
-
+    
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -221,7 +240,7 @@ float segmented_spline_c5_rev
     logx = log10(C.maxPoint.x);
 
   }
-
+  
   return pow10( logx);
 
 }
@@ -233,10 +252,10 @@ float segmented_spline_c5_rev
 
 const SegmentedSplineParams_c9 ODT_48nits =
 {
-  // coefsLow[9]
-  { -1.6989700043, -1.6989700043, -1.4779000000, -1.2291000000, -0.8648000000, -0.4480000000, 0.0051800000, 0.4511080334, 0.9113744414 },
-  // coefsHigh[9]
-  { 0.5154386965, 0.8470437783, 1.1358000000, 1.3802000000, 1.5197000000, 1.5985000000, 1.6467000000, 1.6746091357, 1.6878733390 },
+  // coefsLow[10]
+  { -1.6989700043, -1.6989700043, -1.4779000000, -1.2291000000, -0.8648000000, -0.4480000000, 0.0051800000, 0.4511080334, 0.9113744414, 0.9113744414},
+  // coefsHigh[10]
+  { 0.5154386965, 0.8470437783, 1.1358000000, 1.3802000000, 1.5197000000, 1.5985000000, 1.6467000000, 1.6746091357, 1.6878733390, 1.6878733390 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-6.5) ),  0.02},    // minPoint
   {segmented_spline_c5_fwd( 0.18 ),                4.8},    // midPoint  
   {segmented_spline_c5_fwd( 0.18*pow(2.,6.5) ),   48.0},    // maxPoint
@@ -246,10 +265,10 @@ const SegmentedSplineParams_c9 ODT_48nits =
 
 const SegmentedSplineParams_c9 ODT_1000nits =
 {
-  // coefsLow[9]
-  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799 },
-  // coefsHigh[9]
-  { 0.8089132070, 1.1910867930, 1.5683000000, 1.9483000000, 2.3083000000, 2.6384000000, 2.8595000000, 2.9872608805, 3.0127391195 },
+  // coefsLow[10]
+  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799, 1.2911865799 },
+  // coefsHigh[10]
+  { 0.8089132070, 1.1910867930, 1.5683000000, 1.9483000000, 2.3083000000, 2.6384000000, 2.8595000000, 2.9872608805, 3.0127391195, 3.0127391195 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ),  0.005},    // minPoint
   {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
   {segmented_spline_c5_fwd( 0.18*pow(2.,10.) ),  1000.0},    // maxPoint
@@ -259,10 +278,10 @@ const SegmentedSplineParams_c9 ODT_1000nits =
 
 const SegmentedSplineParams_c9 ODT_2000nits =
 {
-  // coefsLow[9]
-  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799 },
-  // coefsHigh[9]
-  { 0.8019952042, 1.1980047958, 1.5943000000, 1.9973000000, 2.3783000000, 2.7684000000, 3.0515000000, 3.2746293562, 3.3274306351 },
+  // coefsLow[10]
+  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799, 1.2911865799 },
+  // coefsHigh[10]
+  { 0.8019952042, 1.1980047958, 1.5943000000, 1.9973000000, 2.3783000000, 2.7684000000, 3.0515000000, 3.2746293562, 3.3274306351, 3.3274306351 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ),  0.005},    // minPoint
   {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
   {segmented_spline_c5_fwd( 0.18*pow(2.,11.) ),  2000.0},    // maxPoint
@@ -272,10 +291,10 @@ const SegmentedSplineParams_c9 ODT_2000nits =
 
 const SegmentedSplineParams_c9 ODT_4000nits =
 {
-  // coefsLow[9]
-  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799 },
-  // coefsHigh[9]
-  { 0.7973186613, 1.2026813387, 1.6093000000, 2.0108000000, 2.4148000000, 2.8179000000, 3.1725000000, 3.5344995451, 3.6696204376 },
+  // coefsLow[10]
+  { -2.3010299957, -2.3010299957, -1.9312000000, -1.5205000000, -1.0578000000, -0.4668000000, 0.1193800000, 0.7088134201, 1.2911865799, 1.2911865799 },
+  // coefsHigh[10]
+  { 0.7973186613, 1.2026813387, 1.6093000000, 2.0108000000, 2.4148000000, 2.8179000000, 3.1725000000, 3.5344995451, 3.6696204376, 3.6696204376 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ),  0.005},    // minPoint
   {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
   {segmented_spline_c5_fwd( 0.18*pow(2.,12.) ),  4000.0},    // maxPoint
@@ -302,14 +321,17 @@ float segmented_spline_c9_fwd
     varying float x,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{
+{    
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
   // Check for negatives or zero before taking the log. If negative or zero,
-  // set to HALF_MIN.
-  float logx = log10( max(x, HALF_MIN )); 
-  
+  // set to OCESMIN.
+  float xCheck = x;
+  if (xCheck <= 1e-4) xCheck = 1e-4; 
+
+  float logx = log10( xCheck);
+
   float logy;
 
   if ( logx <= log10(C.minPoint.x) ) { 
@@ -400,7 +422,7 @@ float segmented_spline_c9_rev
     varying float y,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{
+{  
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
@@ -444,7 +466,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_LOW[ 6] && logy <= KNOT_Y_LOW[ 7]) {
         cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];  j = 6;
     }
-
+    
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -477,7 +499,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_HIGH[ 6] && logy <= KNOT_Y_HIGH[ 7]) {
         cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];  j = 6;
     }
-
+    
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -496,6 +518,6 @@ float segmented_spline_c9_rev
     logx = log10(C.maxPoint.x);
 
   }
-
+  
   return pow10( logx);
 }

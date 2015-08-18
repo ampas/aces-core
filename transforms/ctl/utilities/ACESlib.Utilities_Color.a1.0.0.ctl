@@ -196,7 +196,7 @@ float[3][3] calculate_cat_matrix
       { 0.0, 0.0, des_coneResp[2] / src_coneResp[2] }
   };
 
-  float cat_matrix[3][3] = mult_f33_f33( coneRespMat, transpose_f33( mult_f33_f33( transpose_f33( invert_f33( coneRespMat ) ), vkMat ) ) );
+  float cat_matrix[3][3] = mult_f33_f33( coneRespMat, mult_f33_f33( vkMat, invert_f33( coneRespMat ) ) );
 
   return cat_matrix;
 }
@@ -287,16 +287,16 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
 // SMPTE Range vs Full Range scaling formulas
 float smpteRange_to_fullRange( float in)
 {
-    const float REFBLACK = (  16. / 256.);
-    const float REFWHITE = ( 235. / 256.);
+    const float REFBLACK = (  64. / 1023.);
+    const float REFWHITE = ( 940. / 1023.);
 
     return (( in - REFBLACK) / ( REFWHITE - REFBLACK));
 }
 
 float fullRange_to_smpteRange( float in)
 {
-    const float REFBLACK = (  16. / 256.);
-    const float REFWHITE = ( 235. / 256.);
+    const float REFBLACK = (  64. / 1023.);
+    const float REFWHITE = ( 940. / 1023.);
 
     return ( in * ( REFWHITE - REFBLACK) + REFBLACK );
 }
