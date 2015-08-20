@@ -10,7 +10,15 @@
 
 // Target white and black points for cinema system tonescale
 const float CINEMA_WHITE = 48.0;
-const float CINEMA_BLACK = 0.02; // CINEMA_WHITE / 2400.
+const float CINEMA_BLACK = pow10(log10(0.02)); // CINEMA_WHITE / 2400. 
+    // CINEMA_BLACK is defined in this roundabout manner in order to be exactly equal to 
+    // the result returned by the cinema 48-nit ODT tonescale.
+    // Though the min point of the tonescale is designed to return 0.02, the tonescale is 
+    // applied in log-log space, which loses precision on the antilog. The tonescale 
+    // return value is passed into Y_2_linCV, where CINEMA_BLACK is subtracted. If 
+    // CINEMA_BLACK is defined as simply 0.02, then the return value of this subfunction
+    // is very, very small but not equal to 0, and attaining a CV of 0 is then impossible.
+    // For all intents and purposes, CINEMA_BLACK=0.02.
 
 
 
