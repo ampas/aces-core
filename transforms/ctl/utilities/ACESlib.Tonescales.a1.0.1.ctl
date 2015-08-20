@@ -64,11 +64,8 @@ float segmented_spline_c5_fwd
   const int N_KNOTS_HIGH = 4;
 
   // Check for negatives or zero before taking the log. If negative or zero,
-  // set to ACESMIN.
-  float xCheck = x;
-  if (xCheck <= pow(2., -14.)) xCheck = pow(2., -14.); 
-
-  float logx = log10( xCheck);
+  // set to HALF_MIN.
+  float logx = log10( max(x, HALF_MIN )); 
 
   float logy;
 
@@ -326,11 +323,8 @@ float segmented_spline_c9_fwd
   const int N_KNOTS_HIGH = 8;
 
   // Check for negatives or zero before taking the log. If negative or zero,
-  // set to OCESMIN.
-  float xCheck = x;
-  if (xCheck <= 1e-4) xCheck = 1e-4; 
-
-  float logx = log10( xCheck);
+  // set to HALF_MIN.
+  float logx = log10( max(x, HALF_MIN )); 
 
   float logy;
 
