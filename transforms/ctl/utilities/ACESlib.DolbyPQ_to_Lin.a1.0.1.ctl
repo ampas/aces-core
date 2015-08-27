@@ -1,11 +1,15 @@
 
-// <ACEStransformID>ACESlib.DolbyPQ_to_Lin.a1.0.1.ctl</ACEStransformID>
+// <ACEStransformID>ACESlib.ST2048_to_Lin.a1.0.1.ctl</ACEStransformID>
 
 // 
-// Generic transform from Dolby PQ to linear
+// Generic transform from SMPTE ST2048 to linear
 // 
 
-import "ACESlib.Transform_Common.a1.0.1";
+
+
+import "ACESlib.Utilities_Color.a1.0.1";
+
+
 
 void main
 (
@@ -19,8 +23,8 @@ void main
   output varying float aOut
 )
 {
-  rOut = pq_f( rIn );
-  gOut = pq_f( gIn );
-  bOut = pq_f( bIn );
+  rOut = ST2048_2_Y( rIn );
+  gOut = ST2048_2_Y( gIn );
+  bOut = ST2048_2_Y( bIn );
   aOut = aIn;  
 }

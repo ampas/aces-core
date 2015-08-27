@@ -5,7 +5,11 @@
 // Generic transform from an OCIOshaper encoding to linear
 // 
 
-import "ACESlib.Transform_Common.a1.0.1";
+
+
+import "ACESlib.Utilities_Color.a1.0.1";
+
+
 
 void main
 (
@@ -27,8 +31,8 @@ void main
   float maxLinear = pow(2.0, maxExposure) * middleGrey;
   float scale = (maxLinear - minLinear) / PQ_max;
 
-  rOut = pq_f( rIn )*scale + minLinear;
-  gOut = pq_f( gIn )*scale + minLinear;
-  bOut = pq_f( bIn )*scale + minLinear;
+  rOut = ST2048_2_Y( rIn )*scale + minLinear;
+  gOut = ST2048_2_Y( gIn )*scale + minLinear;
+  bOut = ST2048_2_Y( bIn )*scale + minLinear;
   aOut = aIn;  
 }

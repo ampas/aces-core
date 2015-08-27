@@ -363,7 +363,7 @@ const float pq_C = 10000.0;
 // Note that this is in float, and assumes normalization from 0 - 1
 // (0 - pq_C for linear) and does not handle the integer coding in the Annex 
 // sections of SMPTE ST 2084-2014
-float pq_f( float N )
+float ST2048_2_Y( float N )
 {
   // Note that this does NOT handle any of the signal range
   // considerations from 2084 - this assumes full range (0 - 1)
@@ -380,7 +380,8 @@ float pq_f( float N )
 // Note that this is in float, and assumes normalization from 0 - 1
 // (0 - pq_C for linear) and does not handle the integer coding in the Annex 
 // sections of SMPTE ST 2084-2014
-float pq_r( float C )
+float Y_2_ST2048( float C )
+//pq_r
 {
   // Note that this does NOT handle any of the signal range
   // considerations from 2084 - this returns full range (0 - 1)
@@ -391,26 +392,26 @@ float pq_r( float C )
   return N;
 }
 
-float[3] pq_r_f3( float in[3])
+float[3] Y_2_ST2048_f3( float in[3])
 {
   // converts from linear cd/m^2 to PQ code values
   
   float out[3];
-  out[0] = pq_r( in[0]);
-  out[1] = pq_r( in[1]);
-  out[2] = pq_r( in[2]);
+  out[0] = Y_2_ST2048( in[0]);
+  out[1] = Y_2_ST2048( in[1]);
+  out[2] = Y_2_ST2048( in[2]);
 
   return out;
 }
 
-float[3] pq_f_f3( float in[3])
+float[3] ST2048_2_Y_f3( float in[3])
 {
   // converts from PQ code values to linear cd/m^2
   
   float out[3];
-  out[0] = pq_f( in[0]);
-  out[1] = pq_f( in[1]);
-  out[2] = pq_f( in[2]);
+  out[0] = ST2048_2_Y( in[0]);
+  out[1] = ST2048_2_Y( in[1]);
+  out[2] = ST2048_2_Y( in[2]);
 
   return out;
 }

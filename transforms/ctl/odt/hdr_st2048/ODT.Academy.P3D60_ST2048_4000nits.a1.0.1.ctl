@@ -1,6 +1,6 @@
 
-// <ACEStransformID>ODT.Academy.P3D60_PQ_4000nits.a1.0.1</ACEStransformID>
-// <ACESuserName>ACES 1.0 Output - P3-D60 PQ (4000 nits)</ACESuserName>
+// <ACEStransformID>ODT.Academy.P3D60_ST2048_4000nits.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - P3-D60 ST2048 (4000 nits)</ACESuserName>
 
 // 
 // Output Device Transform - P3D60 (4000 cd/m^2)
@@ -84,8 +84,8 @@ void main
     // Clip values < 0 (i.e. projecting outside the display primaries)
     rgb = clamp_f3( rgb, 0., HALF_POS_INF);    
 
-  // Encode with PQ transfer function
-    float outputCV[3] = pq_r_f3( rgb);
+  // Encode with ST2048 transfer function
+    float outputCV[3] = Y_2_ST2048_f3( rgb);
   
     rOut = outputCV[0];
     gOut = outputCV[1];
