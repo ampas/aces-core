@@ -28,7 +28,7 @@
 //  Rec. ITU-R BT.1886.
 //
 // Signal Range:
-//    By default, this tranform outputs full range code values. If instead a 
+//    By default, this transform outputs full range code values. If instead a 
 //    SMPTE "legal" signal is desired, there is a runtime flag to output 
 //    SMPTE legal signal. In ctlrender, this can be achieved by appending 
 //    '-param1 legalRange 1' after the '-ctl odt.ctl' string.
