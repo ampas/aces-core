@@ -53,7 +53,7 @@ ACESccLin $R$, $G$, and $B$ values shall be converted to ACEScc values using Equ
 \begin{equation} 
     ACEScc = \left\{ 
     \begin{array}{l l }
-        \dfrac{\left(\log_{2}(2^{-15} \times 0.5) + 9.72\right)}{17.52};    & \quad ACESccLin \leq 0 \\[10pt]
+        \dfrac{\left(\log_{2}(2^{-16}) + 9.72\right)}{17.52};    & \quad ACESccLin \leq 0 \\[10pt]
         \dfrac{\left(\log_{2}(2^{-16} + ACESccLin \times 0.5) + 9.72\right)}{17.52};        & \quad ACESccLin < 2^{-15} \\[10pt]
         \dfrac{\left(\log_{2}(ACESccLin) + 9.72\right)}{17.52}; & \quad ACESccLin \geq 2^{-15} \\    
     \end{array} \right.
