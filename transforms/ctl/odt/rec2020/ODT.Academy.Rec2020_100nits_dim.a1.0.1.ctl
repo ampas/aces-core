@@ -21,7 +21,7 @@
 //              Red:          0.708     0.292
 //              Green:        0.17      0.797
 //              Blue:         0.131     0.046
-//              White:        0.3217    0.329     100 cd/m^2
+//              White:        0.3127    0.329     100 cd/m^2
 //
 // Display EOTF :
 //  The reference electro-optical transfer function specified in 
@@ -35,7 +35,7 @@
 //
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y
-//                                     0.3217       0.329
+//                                     0.3127       0.329
 //
 // Viewing Environment:
 //   This ODT has a compensation for viewing environment variables more typical 
