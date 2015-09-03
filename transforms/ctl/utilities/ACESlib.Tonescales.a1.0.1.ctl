@@ -175,7 +175,7 @@ float segmented_spline_c5_rev
     KNOT_Y_HIGH[ i] = ( C.coefsHigh[i] + C.coefsHigh[i+1]) / 2.;
   };
 
-  float logy = log10( y);
+  float logy = log10( max(y,1e-10));
 
   float logx;
   if (logy <= log10(C.minPoint.y)) {
@@ -434,7 +434,7 @@ float segmented_spline_c9_rev
     KNOT_Y_HIGH[ i] = ( C.coefsHigh[i] + C.coefsHigh[i+1]) / 2.;
   };
 
-  float logy = log10( y);
+  float logy = log10( max( y, 1e-10));
 
   float logx;
   if (logy <= log10(C.minPoint.y)) {
