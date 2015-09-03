@@ -34,7 +34,7 @@
 //
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y
-//                                     0.3217       0.329
+//                                     0.3127       0.329
 //
 // Viewing Environment:
 //   This ODT has a compensation for viewing environment variables more typical 
