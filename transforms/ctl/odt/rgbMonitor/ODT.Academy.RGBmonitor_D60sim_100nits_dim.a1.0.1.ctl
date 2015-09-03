@@ -34,7 +34,7 @@
 //  IEC 61966-2-1:1999.
 //
 // Signal Range:
-//    This tranform outputs full range code values.
+//    This transform outputs full range code values.
 //
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y

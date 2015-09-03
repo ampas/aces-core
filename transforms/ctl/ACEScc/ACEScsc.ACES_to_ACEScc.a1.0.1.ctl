@@ -26,7 +26,7 @@ import "ACESlib.Transform_Common.a1.0.1";
 float lin_to_ACEScc( input varying float in)
 {
   if (in <= 0)
-    return -0.35828683; // =(log2( pow(2.,-15.)*0.5)+9.72)/17.52
+    return -0.3584474886; // =(log2( pow(2.,-16.))+9.72)/17.52
   else if (in < pow(2.,-15.))
     return (log2( pow(2.,-16.) + in * 0.5) + 9.72) / 17.52;
   else // (in >= pow(2.,-15))
