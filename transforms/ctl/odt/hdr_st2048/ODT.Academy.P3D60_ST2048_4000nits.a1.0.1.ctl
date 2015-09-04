@@ -19,8 +19,6 @@
 //              Blue:         0.15      0.06
 //              White:        0.32168   0.33767   4000 cd/m^2
 //
-//  Also assumes a black level of 0.005 cd/m^2
-//
 // Display EOTF :
 //  The reference electro-optical transfer function specified in SMPTE ST 
 //  2084-2014. This transform makes no attempt to address the Annex functions 
@@ -72,6 +70,9 @@ void main
     rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0], ODT_4000nits);
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1], ODT_4000nits);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2], ODT_4000nits);
+
+  // Subtract small offset to allow for a code value of 0
+  	rgbPost = add_f_f3( -pow10(-4.4550166483), rgbPost);
 
   // Convert to display primary encoding
     // Rendering space RGB to XYZ
