@@ -1,0 +1,24 @@
+% This file contains the content for the Introduction
+\unnumberedformat	    % Change formatting to that of "Introduction" section
+\chapter{Introduction} 	% Do not modify section title
+%% Modify below this line %%
+
+Color Look Up Tables (hereafter just referred to as LUTs) are a common method for transforming color values from one set of codes to another, and also for quickly providing results of a computation using interpolation between precomputed values.  
+
+Recent advances in color management systems have led to an increasingly important role for LUTs in production workflows.  LUTs are in common usage for device calibration, bit depth conversion, print film simulation, color space transformations, and on-set look modification. With a large number of product developers providing software and hardware solutions for LUTs, there is an explosion of unique vendor-specific LUT file formats, which are often only trivially different from each other.
+
+Recognizing a need to reduce the complexity of interchanging LUTs files, the Science and Technology Council of the Academy of Motion Pictures Arts and Sciences and the Technology Committee of the American Society of Cinematographers sponsored a project to bring together interested parties from production, post-production, and product developers to agree upon a common LUT file format.  This document is the result of those discussions.
+
+In their earliest implementation, LUTs were designed into hardware to generate red, green, and blue values for a display from a limited set of bit codes.  Recent implementations see LUTs used in many parts of a pipeline in both hardware devices and software applications.  LUTs are often pipeline specific and device dependent.  The Common LUT File format is a mechanism for exchanging the data contained in these LUTs and expects the designer, user, and application(s) to properly apply the LUTs within an application for the correct part of a pipeline.
+
+All applications that use LUTs have a software or hardware ‘transform engine’ that digitally processes a stream of pixel code values.  The code values represent colors in some color space which may be device-dependent or which is defined in image metadata.  For each pixel color, the transform engine calculates the results of a transform and outputs a new pixel color.  Defining a method for exchanging these color transforms in a text file is the purpose of this document.
+
+Saving a single LUT into a file to send to another part of production working on the same content is expected to be the most common use of the common LUT file format.
+
+Since color space manipulation is also an essential part of designing color transformations, matrices and other color processing elements are also supported.  In addition, the format is extensible so that additional color transformations may be added later while maintaining backwards compatibility.  
+
+The Common LUT File format is an XML text file that can contain single or multiple color transforms represented as matrices, LUTs, or other color processing elements.  A LUT designer can create an XML list containing multiple transforms which are ``daisy chained'' together to achieve an end result: the output result of the first transform is used as input to the second transform which then calculates another output that is fed to the next transform, and so on.
+
+Only a small set of common color transforms can be saved in the file format.  This document sometimes uses the word LUT as a general stand-in for any of the color transforms that can be represented within the XML schema.
+
+As this document is intended both as a specification and a guide for implementation, it contains a fair amount of complexity for what is a straightforward proposition: saving arrays of numbers in an XML text file.  This document assumes the reader has knowledge of LUT creation, color transforms and XML, and therefore the information in the document rarely provides tutorial information.

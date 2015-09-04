@@ -1,0 +1,147 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of "Introduction" section
+%% Modify below this line %%
+\chapter{Specification}
+
+\section{Naming conventions}
+The logarithmic encoding of ACES specified in \autoref{sec:ACEScc} shall be known as ACEScc.
+
+\section{Color component value encoding}
+ACEScc values are encoded as 32-bit floating-point numbers. This floating-point encoding uses 32 bits per component as described in IEEE P754.
+
+\section{Color space chromaticities}
+\label{sec:colorspace}
+ACEScc uses a different set of primaries than ACES RGB primaries defined in SMPTE ST 2065-1. The CIE 1931 colorimetry of the ACEScc RGB primaries and white are specified below.
+
+\subsection{Color primaries}
+The RGB primaries chromaticity values, known as AP1, shall be those found in \autoref{table:AP1rgb}.
+
+\begin{center}
+\begin{tabularx}{4.5in}{XlllXll}
+        & R       & G       & B       & & CIE x & CIE y \\ \hline
+Red     & 1.00000 & 0.00000 & 0.00000 & & 0.713 & 0.293 \\
+Green   & 0.00000 & 1.00000 & 0.00000 & & 0.165 & 0.830 \\
+Blue    & 0.00000 & 0.00000 & 1.00000 & & 0.128 & 0.044 \\
+\end{tabularx}
+\captionof{table}{ACEScc RGB primaries chromaticity values}    
+\label{table:AP1rgb}
+\end{center}
+
+\subsection{White Point}
+The white point shall be that found in \autoref{table:AP1w}.
+
+\begin{center}
+\begin{tabularx}{4.5in}{XlllXll}
+        & R       & G       & B       & & CIE x & CIE y \\ \hline
+White   & 1.00000 & 1.00000 & 1.00000 & & 0.32168 & 0.33767 \\
+\end{tabularx}
+\captionof{table}{ACES RGB white point chromaticity values}    
+\label{table:AP1w}
+\end{center}
+
+\newpage
+\section{ACEScc}
+\label{sec:ACEScc}
+The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and ACEScc.
+
+\subsection{Encoding Function}
+ACES $R$, $G$, and $B$ values shall be converted to ACESccLin $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+
+ACESccLin $R$, $G$, and $B$ values shall be converted to ACEScc values using Equation \ref{eq:ACESccLin2ACEScc}.
+
+\begin{floatequ} 
+\begin{equation} 
+    ACEScc = \left\{ 
+    \begin{array}{l l }
+        \dfrac{\left(\log_{2}(2^{-16}) + 9.72\right)}{17.52};    & \quad ACESccLin \leq 0 \\[10pt]
+        \dfrac{\left(\log_{2}(2^{-16} + ACESccLin \times 0.5) + 9.72\right)}{17.52};        & \quad ACESccLin < 2^{-15} \\[10pt]
+        \dfrac{\left(\log_{2}(ACESccLin) + 9.72\right)}{17.52}; & \quad ACESccLin \geq 2^{-15} \\    
+    \end{array} \right.
+\end{equation}
+\caption{ACESccLin to ACEScc}
+\label{eq:ACESccLin2ACEScc}
+\end{floatequ}
+
+\note{Equation \ref{eq:ACES2ACESccLin} shows the relationship between ACES $R$, $G$, and $B$ values and ACESccLin $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
+
+\begin{floatequ} 
+\begin{gather}
+    \begin{bmatrix}
+        R_{ACESccLin}\\
+        G_{ACESccLin}\\
+        B_{ACESccLin}
+    \end{bmatrix}
+    =
+    TRA_{1}
+    \cdot
+    \begin{bmatrix}
+        R_{ACES}\\
+        G_{ACES}\\
+        B_{ACES}
+    \end{bmatrix} \\
+    \\
+    TRA_{1} =
+    \begin{bmatrix*}[r]
+        1.4514393161 & -0.2365107469 & -0.2149285693 \\
+       -0.0765537734 &  1.1762296998 & -0.0996759264 \\
+        0.0083161484 & -0.0060324498 &  0.9977163014 \\
+    \end{bmatrix*} \\
+    \\
+    TRA_{1} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
+\end{gather}
+\caption{ACES to ACESccLin}
+\label{eq:ACES2ACESccLin}
+\end{floatequ}
+
+\note{Clipping ACES values below 0 in the above function is not required. Implementers are encouraged to encode negative values or take care when clipping color outside the ACEScc gamut. See Appendix \ref{appendixA} for details.}
+
+\subsection{Decoding Function}
+ACEScc $R$, $G$, and $B$ values shall be converted to ACESccLin values using Equation \ref{eq:ACEScc2ACESccLin}.
+
+\begin{floatequ} 
+\begin{equation}
+\resizebox{\textwidth}{!}{$
+    ACESccLin = \left\{ 
+    \begin{aligned}
+        &\left(2^{(ACEScc \times 17.52-9.72)}-2.0^{-16}\right)\times2.0;& ACEScc& \leq \dfrac{(9.72-15)}{17.52} \\[10pt]
+        &2^{(ACEScc \times 17.52-9.72)}; & \small \dfrac{(9.72-15)}{17.52} \leq ACEScc& < \dfrac{\log_{2}(65504)+9.72}{17.52} \\[10pt]
+        &65504; & ACEScc& \geq \dfrac{\log_{2}(65504)+9.72}{17.52} \\    
+    \end{aligned} \right.
+$}
+\end{equation}
+\caption{ACEScc to ACESccLin}
+\label{eq:ACEScc2ACESccLin}
+\end{floatequ}
+
+ACESccLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+
+\note{Equation \ref{eq:ACESccLin2ACES} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScc $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
+
+\begin{floatequ} 
+\begin{gather}
+    \begin{bmatrix}
+        R_{ACES}\\
+        G_{ACES}\\
+        B_{ACES}
+    \end{bmatrix}
+    =
+    TRA_{2}
+    \cdot
+    \begin{bmatrix}
+        R_{ACESccLin}\\
+        G_{ACESccLin}\\
+        B_{ACESccLin}
+    \end{bmatrix} \\
+    \\
+    TRA_{2} =
+    \begin{bmatrix*}[r]
+        0.6954522414 & 0.1406786965 & 0.1638690622 \\
+        0.0447945634 & 0.8596711185 & 0.0955343182 \\
+        -0.0055258826 & 0.0040252103 & 1.0015006723 \\
+    \end{bmatrix*} \\
+    \\
+    TRA_{2} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
+\end{gather}
+\caption{ACESccLin to ACEScc}
+\label{eq:ACESccLin2ACES}
+\end{floatequ}

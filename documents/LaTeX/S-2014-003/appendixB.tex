@@ -1,0 +1,29 @@
+\appendixchapter{Application of ASC CDL parameters to ACEScc image data}{i}
+\label{appendixB}
+
+American Society of Cinematographers Color Decision List (ASC CDL) slope, offset, power, and saturation modifiers can be applied directly to ACEScc image data. ASC CDL color grades created on-set with ACESproxy images per the ACESproxy specification will reproduce the same look when applied to ACEScc images. ACEScc images however aren’t limited to the ACESproxy range. To preserve the extended range of ACEScc values, no limiting function should be applied with ASC CDL parameters. The power function, however, should not be applied to any negative ACEScc values after slope and offset are applied. Slope, offset, and power are applied with the following function.
+
+\begin{gather*} 
+    ACEScc_{out} = \left\{ 
+    \begin{array}{l r }
+        ACEScc_{in} \times slope + offset; & \quad ACEScc_{slopeoffset} \leq 0 \\
+        (ACEScc_{in} \times slope + offset)^{power}; & \quad ACEScc_{slopeoffset} > 0 \\
+    \end{array} \right. \\ 
+    \\
+    \begin{array}{l}
+    \text{Where:}\\
+    ACEScc_{slopeoffset} = ACEScc_{in} \times slope + offset
+    \end{array}
+\end{gather*}
+
+ASC CDL Saturation is also applied with no limiting function:
+
+\begin{gather*}
+    luma = 0.2126 \times ACEScc_{red} + 0.7152 \times ACEScc_{green} + 0.0722 \times ACEScc_{blue} \\
+    \begin{aligned}
+        ACEScc_{red} &= luma + saturation \times (ACEScc_{red} - luma) \\
+        ACEScc_{green} &= luma + saturation \times (ACEScc_{green} - luma) \\        
+        ACEScc_{blue} &= luma + saturation \times (ACEScc_{blue} - luma) \\ 
+    \end{aligned}
+\end{gather*}
+    

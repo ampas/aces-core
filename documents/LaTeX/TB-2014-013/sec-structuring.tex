@@ -1,0 +1,14 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Structuring the choices}
+
+Fundamentally, there are two main decisions to be made by the user: first, what device is being used to display the images; and second, how are the images to be viewed. As is the goal in UX design, the first decision, the display, is something that is intuitively obvious and expected.
+
+The second decision is less obvious but there is precedent for it. For example, many users are already familiar with the notion that logarithmically encoded images (e.g. negative-film scans) require some type of transformation (e.g. a print-film emulation) in order to be viewed correctly.
+
+By splitting the decision-making process into two steps, rather than requiring the user to select from a long list with M x N choices, they are able to make two separate choices, each from a much shorter set of options (of length M and N). (This is an over-simplification of the system, but hopefully the concept is clear.)
+
+This particular decomposition into Viewing and Display Transforms allows ACES to fit into some color management UX models that are already in common use. For example, OpenColorIO already structures its viewing pipeline into View and Display choices. 
+
+Another example are the products that use ICC-based color management. These products make use of the ICC monitor profile that is ubiquitous within the Mac and Windows operating systems and which convert desired colorimetry to display code values. Structuring the choices as View and Display allows ACES to be more easily integrated into ICC-based products.

@@ -1,0 +1,232 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Versioning System Specification}
+In the following definitions, \textit{italics} represent a changeable placeholder. \textbf{boldface} represents a required string or character.
+
+\section{String Formats}
+ACES system components shall use the following versioning string formats where applicable:
+
+\texttt{\textit{Type.}\textbf{a}\textit{MajorVersionNumber.MinorVersionNumber.PatchVersionNumber}}
+
+or
+
+\texttt{\textit{Type.Name.}\textbf{a}\textit{MajorVersionNumber.MinorVersionNumber.PatchVersionNumber}}
+
+where \texttt{Type} is one of the following:
+
+\begin{listize}
+    \item \texttt{ACES2065-1} -- Academy Color Encoding Specification, SMPTE 2065-1
+    \item \texttt{ACESrelease} -- ACES system release version
+    \item \texttt{ACEScc} -- ACES color grading working space
+    \item \texttt{ACESproxy} -- ACES ``wire format''
+    \item \texttt{ACEScg} -- ACES CG/VFX working space
+    \item \texttt{ADX} -- Academy Density Exchange Specification, SMPTE 2065-3
+    \item \texttt{IDT} -- ACES Input Transform (a.k.a. ``Input Device Transform'')
+    \item \texttt{LMT} -- ACES Look Transform (a.k.a. ``Look Modification Transform'')
+    \item \texttt{ODT} -- Output Device Transform
+    \item \texttt{RRT} -- Reference Rendering Transform
+    \item \texttt{RRTODT} -- ACES Output Transform (concatenated RRT and ODT)
+    \item \texttt{InvRRT} -- Inverse Reference Rendering Transform
+    \item \texttt{InvODT} -- Inverse Output Device Transform
+    \item \texttt{InvRRTODT} -- ACES inverse Output Transform (concatenated RRT and ODT)
+    \item \texttt{ACESlib} -- ACES library functions for core transforms, e.g., tonescales.ctl and utilities-color.ctl
+    \item \texttt{ACEScsc} -- ACES color space conversion transforms
+\end{listize}
+
+ACES system components are assigned a string that serves as a unique identifier for an ACES System Release. This identifier is constructed using a set of tokens as described in this specification so that it will be more human-readable than a typical Universally Unique Identifier (UUID).
+
+If the \texttt{PatchVersionNumber} is zero, it may be omitted from the versioning string for simplification. If both the \texttt{MinorVersionNumber} and the \texttt{PatchVersionNumber} are zero, they may both be omitted from the versioning string for simplification.
+
+\section{ACES Transform Identifiers}
+ACES transforms, expressed as CTL files, are assigned a Transform Identifier.  The Transform Identifier shall be included with all Product Partner implementations intended to match that ACES transform. The Transform Identifier shall be contained in the transform files as metadata or as a comment. For Academy-supplied transforms, the Transform Identifier plus an extension shall be used for the file name. The extension (e.g. .ctl) is not considered part of the Transform Identifier.
+
+Product Partner implementation transforms may be intended to match the results of a combined series of ACES CTL transforms, e.g., LMT+RRT+ODT.  In that case, all of the relevant ACES Transform Identifiers shall be included in the implementation Transform. The RRT+ODT combination is a unique case that is covered in \autoref{sec:rrtodt} below.
+
+\section{Friendly Names}
+ACES Transform Identifiers can be complex and therefore not appropriate for presentation to end users for selection purposes. All transforms should include ``friendly names'' as metadata within the transform file that software applications may access them for presentation in their user interfaces. Recommended friendly names are described in a separate document, ``Academy TB-2014-002, ACES Version 1.0 User Experience Guidelines.''
+
+\section{ACES System Release}
+The ACES System Release consists of a variety of ACES core components and ACES vendor-supplied components.
+
+The ACES System Release version shall use the following versioning convention: 
+
+\texttt{\textbf{ACESrelease.a}\textit{MajorVersionNumber.MinorVersionNumber.PatchVersionNumber}}
+
+The ACES System Release major version number shall be incremented with substantive changes to the ACES core components. When the ACES System Release major version number is changed it will require all core and vendor-supplied components be updated to confirm compatibility with the new ACES major version.
+
+The ACES System Release minor version number shall be incremented with non-substantive changes, e.g., a roll-up of minor ODT enhancements/additions or bug fixes. New ACES System Release minor versions shall not require an update to all ACES core and vendor-supplied components.
+
+The ACES System Release patch version number shall be incremented with bug fixes. New patch versions shall not require an update to all transforms.
+
+The ACES System Release version will not be incremented when ACES vendor-supplied components are updated.
+
+\section{ACES Core Components}
+ACES core components include: 
+
+\begin{listize}[-]
+	\item ACES Core Transforms
+	\item ACES Core Encodings
+	\item ACES Core Libraries and Utilities
+	\item ACES Core File Formats
+\end{listize}
+
+\subsection{ACES Core Transforms}
+The ACES Core Transforms include the following:
+
+\begin{listize}[-]
+	\item The Reference Rendering Transform
+	\item Academy-supplied Output Device Transforms
+	\item Academy-supplied Look Modification Transforms
+\end{listize}
+
+Transforms such as the RRT and ODTs rely on sub-functions included in separate CTL files (ACESlib). Whenever a change is made to the code of a sub-function, the version of the Transform Identifier will be incremented (even if the code in the RRT, ODT, etc. itself may not have changed). Since the results of an ODT depend on the RRT, whenever the RRT version is incremented, the version of all ODTs will also be incremented.
+
+\subsubsection{Reference Rendering Transform (RRT)}
+The RRT major version number shall match the ACES System Version Major Version number. The RRT Transform Identifier shall use the following versioning convention:
+
+\texttt{\textbf{RRT.a}\textit{ACESmajorVersionNumber.RRTminorVersionNumber.RRTpatchVersionNumber}}
+
+Example filenames using this format are: 
+\begin{listize}
+	\item \texttt{RRT.a1.0.0.ctl}
+	\item \texttt{RRT.a1.ctl}
+\end{listize}
+
+\subsubsection{Academy-supplied Output Transforms (ODTs)}
+An ODT's major version number shall match the ACES System Version Major Version number. ODT Transform Identifiers shall use the following versioning convention:
+
+{\fontsize{7.5pt}{9pt}\selectfont
+\texttt{\textbf{ODT}\textit{.Namespace.OutputFormat.\-}\textbf{a}\textit{ACESmajorVersionNumber.\-ODTminor\-Version\-Number.\-ODTpatchVersionNumber}} }
+
+\texttt{\textit{Namespace}} identifies the creator of the ODT. The \texttt{\textit{Namespace}} \texttt{Academy} is reserved for Academy-supplied ODTs.
+
+\texttt{\textit{OutputFormat}} fully describes the device and/or output data format of the ODT.
+
+Example filenames using this format are:
+\begin{listize}
+	\item \texttt{ODT.Academy.P3d60Projector.a1.0.0.ctl}
+	\item \texttt{ODT.Academy.Rec709\_D60sim\_100nits\_dim.a1.0.0.ctl}
+\end{listize}
+
+The Academy provides all ODTs in ACES 1.0, although it is anticipated that vendors will provide ACES-compatible ODTs in the future.
+
+\subsubsection{Academy-supplied Look Modification Transforms (LMTs)}
+Academy-supplied LMT's major version number shall match the ACES System Version Major Version number. LMT Transform Identifiers shall use the following versioning convention:
+
+{\fontsize{8.5pt}{10.2pt}\selectfont
+\texttt{\textbf{LMT}\textit{.Namespace.Name.\-}\textbf{a}\textit{ACESmajorVersionNumber.\-LMTminorVersionNumber.\-LMTpatch\-VersionNumber}}}
+
+\subsection{ACES Core Encodings}
+The ACES Core Encodings and \texttt{Type}s include the following:
+
+\begin{listize}[-]
+	\item SMPTE ST 2065-1:2012 (Academy Color Encoding Specification); \texttt{ACES2065-1}
+	\item SMPTE ST 2065-3:2012 (Academy Density Exchange); \texttt{ADX}
+	\item Academy S-2013-001 (ACESproxy); \texttt{ACESproxy}
+	\item Academy S-2014-003 (ACEScc); \texttt{ACEScc} 
+	\item Academy S-2014-004 (ACEScg); \texttt{ACEScg}
+\end{listize}
+
+Core encoding version names shall use the following convention:
+
+{\fontsize{8pt}{9.6pt}\selectfont
+\texttt{\textit{EncodingName.\-}\textbf{a}\textit{ACESmajorVersionNumber.\-EncodingMinorVersionNumber.\-Encoding\-PatchVersionNumber}} }
+
+\subsection{ACES Core Libraries and Utilities}
+Academy-supplied core libraries and utilities' major version number shall match the ACES System Version Major Version number. Core library and utilities Transform Identifiers shall use the following versioning convention:
+
+{\fontsize{8.5pt}{12pt}\selectfont
+\texttt{\textbf{ACESlib.a}\textit{ACESmajorVersionNumber.ACESlibMinorVersionNumber.ACESlib\-Patch\-Version\-Number}}
+
+\texttt{\textbf{ACEScsc.a}\textit{ACESmajorVersionNumber.ACEScscMinorVersionNumber.ACEScsc\-Patch\-Version\-Number}}
+}
+
+\subsection{ACES Core File Formats}
+The ACES Core File Formats include the following:
+
+\begin{listize}[-]
+	\item SMPTE ST 268:2014 (DPX)
+	\item SMPTE ST 2065-4:2013 (ACES Image Container File Layout)
+	\item ACES Clip-level Metadata File (clip-level metadata sidecar)
+	\item Academy-ASC Common LUT Format File (CLF)
+\end{listize}
+
+The SMPTE standard file formats are versioned according to SMPTE conventions.
+
+ACES Clip Metadata files and Academy-ASC Common LUT Format files shall contain a metadata field that identifies the ACES System Version Number with which they conform, and the required Transform Identifiers of the transforms referenced therein (see ``Academy TB-2014-009'' and ``Academy S-2014-006'' for additional details).
+
+\section{ACES Vendor-supplied components}
+Certain ACES components, such as Input Transforms and concatenated RRT/ODTs, are shipped by ACES Product Partners and therefore are not constrained to ACES System release schedules. Other ACES components, such as ODTs and LMTs, are likely to be vendor-supplied in the future. Nonetheless, the versioning and naming requirements are the same as for ACES core components in that they must be identified as being compatible with a given ACES major system release.
+
+To enable easier reading and parsing of Transform Identifiers, the sub-strings used for \texttt{\textit{NameSpace}} and \texttt{\textit{DeviceName}} should not contain spaces or periods and should also be limited to the ASCII character set.
+
+\subsection{Input Transforms (IDTs)}
+
+\texttt{\textbf{IDT}\textit{.NameSpace.DeviceName.}\textbf{a}\textit{ACESmajorVersionNumber.}\textbf{v}\textit{IDTversionNumber}}
+
+The creator of the IDT shall be identified using the \texttt{\textit{NameSpace}}. When the creator of the transforms is the manufacturer of the camera then the device is not required to repeat the manufacturer name.  If the IDT creator is not the camera manufacturer, then the manufacturer name shall be prepended to the \texttt{\textit{DeviceName}}.
+
+Example IDT names using this format are: 
+\begin{listize}
+	\item \texttt{IDT.Sony.F65.a1.v1.clf}
+	\item \texttt{IDT.Arri.AlexaEI100T.a1.v2.clf}
+	\item \texttt{IDT.Dolby.ArriAlexa.a1.v1.clf}
+\end{listize}
+
+\subsection{Look Transforms (LMTs)}
+
+\texttt{\textbf{LMT}\textit{.Namespace.Name.}\textbf{a}\textit{ACESmajorVersionNumber.}\textbf{v}\textit{LMTversionNumber}}
+
+The creator of the LMT shall be identified using the \texttt{\textit{NameSpace}}. The \texttt{\textit{NameSpace}} \texttt{Academy} is reserved for Academy-supplied LMTs. The \texttt{\textit{Name}} shall identify the purpose the LMT serves.
+
+Example LMT names using this format are: 
+\begin{listize}
+	\item \texttt{LMT.Academy.ACES\_0\_7\_1.a1.v1.ctl} (Academy-supplied v0.7.1 backwards-compatible transform)
+	\item \texttt{LMT.ACME.BleachBypass.a1.v1.clf} (ACME Transform, Inc.-supplied bleach bypass LMT compatible with ACES Version 1.0, in the Academy-ASC Common LUT Format)
+\end{listize}
+
+\subsection{Output Transforms (ODTs)}
+
+\texttt{\textbf{ODT}\textit{.Namespace.OutputFormat.}\textbf{a}\textit{ACESmajorVersionNumber.}\textbf{v}\textit{ODTversionNumber}}
+
+\texttt{\textit{NameSpace}} shall identify the creator of the ODT. The \texttt{\textit{NameSpace}} \texttt{Academy} is reserved for Academy-supplied ODTs. 
+
+\texttt{\textit{OutputFormat}} fully describes the device and/or output data format of the ODT.
+
+Example filenames using this format are:
+\begin{listize}
+	\item \texttt{ODT.ACME.P3D60ProjectorSomeSpecialCalibration.a1.v1.ctl}
+	\item \texttt{ODT.ACME.Rec709\_D60sim\_100nits\_dim.a1.v10.ctl}
+\end{listize}
+
+\subsection{Concatenated Reference Rendering Transform/Output Transforms (RRT/ODTs)} \label{sec:rrtodt}
+
+\texttt{\textbf{RRTODT}\textit{.Namespace.OutputFormat.}\textbf{a}\textit{ACESmajorVersionNumber.}\textbf{v}\textit{ODTversionNumber}}
+
+\texttt{\textit{Namespace}} shall identify the creator of the concatenated RRT/ODT. The \texttt{\textit{Namespace}} \texttt{Academy} is reserved for Academy-supplied concatenated RRT/ODTs.
+
+\texttt{\textit{OutputFormat}} fully describes the device and/or output data format of the concatenated RRT/ODT, and should use the \texttt{\textit{OutputFormat}} associated with the ODT used in the concatenated transform. 
+
+Example filenames using this format are: 
+\begin{listize}
+	\item \texttt{RRTODT.ACME.P3d60Projector.a1.v1.ctl}
+	\item \texttt{RRTODT.ACME.Rec709\_D60sim\_100nits\_dim.a1.v1.clf}
+	\item \texttt{RRTODT.ACME.P3D60ProjectorSomeSpecialCalibration.a1.v1.ctl}
+	\item \texttt{RRTODT.ACME.Rec709\_d60sim\_8000nits.a1.v1.clf}
+\end{listize}
+
+\section{Implementation Version Reporting}
+ACES implementations shall report the version of the ACES System in use to at least the Minor Version Number.  Reporting of the Patch Version Number is optional. For more details, refer to ``Academy TB-2014-002.''
+
+\section{ACES Pre-release Versions}
+Pre-release versions of ACES, i.e., versions prior to Version 1.0, shall use the following version string format:
+
+\texttt{\textbf{aPR}\textit{majorVersionNumber.MinorVersionNumber.PatchVersionNumber}}
+
+Example:
+\begin{listize}
+	\item \texttt{ACESrelease.aPR0.7.1}
+\end{listize}
+
+The ``\texttt{\textbf{aPR}}'' designation indicates a version of ACES prior to the Version 1.0 release and the use of any transforms with this designation is deprecated.

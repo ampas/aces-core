@@ -1,0 +1,41 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage}
+\altdocname{ACES Clip-level Metadata File Format Definition and Usage}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2014-009}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0.1}
+\docdate{April 24, 2015}
+\summary{
+The ACES Clip-level Metadata File (``ACESclip'') is a `sidecar' XML file intended to assist in configuring ACES viewing pipelines and to enable portability of ACES transforms in production. This document specifies use cases for ACESclip files, application support requirements, and the data model and XML tags needed for implementation.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{scope}
+\input{references}
+\input{termsanddefs}
+
+\input{sec-usecases}
+\input{sec-application}
+\input{sec-datamodel}
+\newpage
+\input{sec-extrefs}
+
+\begin{appendices}
+    \input{appendixA}
+\end{appendices}
+
+\end{document}

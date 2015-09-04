@@ -1,0 +1,41 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of a main, numbered section
+%% Modify below this line %%
+\chapter{Application and Use of ACESclip Files}
+
+\section{ACESclip Filename and Correspondence with Images}
+Transforms are identified with the CTL reference transform filename as defined in the ACES System Versioning Specification. Linking of the metadata about a transform to an actual instance of a transform is supported using ACES TransformIDs and XML id attributes.
+
+ACESclips are named using the format ``production\_naming\_convention.ACESclip.xml''.
+
+The production naming convention may be used to associate an ACESclip file with an image sequence, but this document does not specify an exact file naming convention.
+
+\section{Saving State of IDT Conversion and Initial Grade}
+Applications record the IDT used for converting camera-native data to ACES encodings, and include any pre-grade ASC CDL values that were used for the image sequences referenced by an ACESclip file.
+
+\section{Conversion of Camera Files Using IDTs and Pre-grades}
+For images not yet in the ACES file format, applications use the metadata for the IDT and ASC CDL pre-grade to view images using the ACES viewing pipeline. For images already in the ACES file format, the IDT conversion may be ignored, and only the pre-grade is applied prior to the ACES viewing pipeline.  
+
+\section{Default Configuration of ACES Viewing Pipeline}
+ACES content must be viewed as intended at any stage of production. Specific viewing pipelines may require different elements, so the exact viewing configuration used by a user making creative decisions must be recorded prior to shipment to another user. The ACES image sequence shall be displayed in an application with this ``last used'' viewing configuration, but a user may override the configured settings.
+
+The \textit{aces:Config} xml tag is used to set the viewing pipeline to match the viewing conditions recorded in the ACESclip file. The ODT for the current viewing display may be used instead of the \textit{aces:Config} ODT, but the user should be warned if they are not of the same class of display, e.g. Rec.709 used previously and an HDR display is the current display.
+
+\section{User Management of the Viewing Pipeline}
+Users may override an application’s ACES viewing pipeline at any time.  Applications must manage the conversion between various ACES-compatible images and the user-selected working spaces.
+
+When ASC CDL metadata is used, conversions to and from the ACEScc working space are saved in the \textit{aces:Config} metadata (wherein those particular CDL values must be applied).
+
+\section{Saving the State of the ACES Viewing Pipeline}
+The last state of the ACES Viewing Pipeline used to view an image sequence referenced by an ACESclip file must be recorded in the ACESclip file when a clip is closed or exported unless the user overrides this and does not want the clip to be changed.
+
+\section{Creating an Archive Metadata Link}
+When an ACES image sequence is created, placing identification traceable to source media in the \textit{aces:clipID} field is recommended.
+
+\section{Reading and Writing LMTs}
+The \textit{aces:TransformLibrary} XML element is used to transfer the actual transforms for LMTs to other users and facilities since these often may be custom LUTs. Applications shall read and write the XML structures containing CLF files.  An LMT combined with an RRT and ODT can be provided as well as a transform that simply contains the LMT. A stand-alone LMT must be merged with the other transforms in the basic ACES viewing pipeline for a user to look at the image.
+
+\section{Reading and Writing ACESclip Files}
+Applications shall support reading and writing of all XML elements described in this document. Recognition of extensions to the ACESclip specification developed by third parties is optional. However, if extensions are present, applications shall preserve them without change.
+
+The ACESclip file may contain any one or all of the top-level XML structures (\textit{aces:clipID}, \textit{aces:Config}, \textit{aces:TransformLibrary}). For any particular XML file, these are listed as optional. However, production requirements determine which structures must be present in an ACESclip file.

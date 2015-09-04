@@ -1,0 +1,45 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Design, Integration and Use of ACES Look Modification Transforms}
+\altdocname{Design, Integration and Use of ACES Look Modification Transforms}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2014-010}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0.2}
+\docdate{September 3, 2015}
+\summary{
+This document describes a component of the ACES viewing pipeline, the Look Modification Transform (LMT). The LMT precedes the sequential application of the ACES Reference Rendering Transform (RRT) and a particular Output Device Transform (ODT), and allows custom and systematic color changes to a set of clips to realize a chosen creative intent. In a workflow built around ACES-based color management, these changes can be limited to paths to a display (a `nondestructive' color change) or they can be used to produce new ACES image files (`baking in' the color changes).
+
+This Technical Bulletin defines terminology, provides motivating use cases for LMTs, specifies the syntax and carriage of LMTs, discusses how LMTs should be integrated into an ACES-based color managed project, and provides design guidelines for LMT authoring. Appendices provide and discuss example LMTs.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{introduction}
+
+\input{scope}
+\input{references}
+\input{termsanddefs}
+
+\input{sec-lmtusecases}
+\input{sec-specification}
+\input{sec-workflow}
+\input{sec-design}
+
+\begin{appendices}
+    \input{appendixA}
+    \input{appendixB}    
+\end{appendices}
+
+\end{document}

@@ -1,0 +1,14 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of a main, numbered section
+%% Modify below this line %%
+\chapter{External References}
+
+The ACESclip file may be externally referenced in an EDL file to assign different ACES pipeline configurations to different segments of a timeline.    Use the following comment field in an EDL for this purpose:
+
+001 Clipname  V             %___________  __________ ___________ ___________
+
+*ACES\_ClipXML:   myshow\_LMTnight\_A0001.xml
+
+The file name convention is user-defined.
+
+Applications importing an EDL with such a comment field should set its viewing pipeline based on the \textit{aces:Config} value for a particular marked section of the timeline.

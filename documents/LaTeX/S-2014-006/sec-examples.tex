@@ -1,0 +1,136 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Examples}
+\label{sec:examples}
+
+This section illustrates some of the typical forms of the LUT format. It should be noted that these are not real examples.
+
+The simplest form is an XML file containing a single node:
+
+\begin{lstlisting}[caption=Example of a ``LUT1D'']
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList xmlns="urn:NATAS:ASC:LUT:v1.2" id="ex1" name="example 1 transform">
+	<Description> Turn 4 grey levels into 4 inverted codes using a 1D </Description>
+	<LUT1D id="lut-23" name="4valueLut" inBitDepth="12i" outBitDepth="12i">
+		<Description> 1D LUT </Description>
+		<Array dim="4 1">
+			3
+			2
+			1
+			0
+		</Array>
+	</LUT1D>
+</ProcessList>
+\end{lstlisting}
+
+The \texttt{LUT1D} ProcessNode could be replaced with a 3D LUT (\autoref{ex:3dlut}) or a matrix (\autoref{ex:matrix}).
+
+\begin{lstlisting}[caption=Example of a \texttt{LUT3D},label=ex:3dlut]
+<LUT3D id="lut-24" name="green look" interpolation="trilinear" 
+	inBitDepth="12i" outBitDepth="16f">
+	<Description> 3D LUT </Description>
+	<Array dim="2 2 2 3">
+		0.0 0.0 0.0
+		0.0 0.0 1.0
+		0.0 1.0 0.0
+		0.0 1.0 1.0
+		1.0 0.0 0.0
+		1.0 0.0 1.0
+		1.0 1.0 0.0
+		1.0 1.0 1.0
+	</Array>
+</LUT3D>
+
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Example of a \texttt{Matrix},label=ex:matrix]
+<Matrix id="lut-25" name="colorspace conversion" inBitDepth="10i" outBitDepth="10i" >
+	<Description> 3x4 Matrix , 4th column is offset </Description>
+	<Array dim="3 4 3">
+		1.2  	0.0  	0.0   	0.002
+		0.0 	1.03 	0.001 	-0.005
+		0.004 	-0.007 	1.004  	0.0
+	</Array>
+</Matrix>
+
+\end{lstlisting}
+
+``Shaper LUTs'' require a bit more of an explanation.  This is once again an illustration of the technique using an \texttt{IndexMap} and not a real world example. These can also be implemented with \texttt{1DLUT}s.
+
+\begin{lstlisting}[caption=Example of a partially enumerated ``Shaper LUT'',label=ex:shaperlut]
+<LUT1D id="lut-25" name="shaper LUT" inBitDepth="10i" outBitDepth="16f">
+	<Description> 1D LUT with shaper </Description>
+	<IndexMap dim=4>0@0 10@100 20@250 30@360 40@440 445@445 
+					700@600 800@700 900@850 950@1023</IndexMap>
+	<Array dim="1024 1">
+		0.00
+		0.32
+		0.50
+		<1020 entries omitted>
+		1.0
+	</Array>
+</LUT1D>
+\end{lstlisting}
+
+\begin{lstlisting}[caption=Example of an ASC CDL node,label=ex:asccdl]
+<ASC_CDL id="cc01234" inBitDepth="16f" outBitDepth="16f" style="Fwd">
+	<Description>scene 1 exterior look</Description>
+	<SOPNode>
+		<Slope>1.000000  1.000000  0.900000</Slope>
+		<Offset>-0.030000  -0.020000  0.000000</Offset>
+		<Power>1.2500000  1.000000  1.000000</Power>
+	</SOPNode>
+	<SatNode>
+		<Saturation>1.700000</Saturation>
+	</SatNode>
+</ASC_CDL>
+
+\end{lstlisting}
+
+A full example of an XML file (\autoref{ex:fullexample}) shows three nodes in a ProcessList.
+
+\begin{lstlisting}[caption=Full example of an XML LUT file,label=ex:fullexample]
+<?xml version="1.0" encoding="UTF-8"?>
+<ProcessList xmlns="urn:NATAS:ASC:LUT:v1.2" id="luts-23+24+25" name="lut chain 34">
+	<Description> Turn 4 grey levels into 4 codes for a monitor using a 3by1D LUT 
+			into 3D LUT into 3x1D LUT </Description>
+	<OutputDescriptor> Sony BVM CRT </OutputDescriptor>
+	<LUT1D id="lut-23" name="input lut" inBitDepth="12i" outBitDepth="12i">
+		<Description> 3by1D LUT </Description>
+		<Array dim="4 3">
+			1 1 1
+			1 1 1
+			2 2 2 
+			2 2 2
+		</Array>
+	</LUT1D>
+	<LUT3D id="lut-24" name="green look output rendering" interpolation="trilinear"
+				inBitDepth="12i" outBitDepth="16f">
+		<Description> 3D LUT </Description>
+		<Array dim="4 4 4 3">
+			0.0 0.0 0.0
+			0.0 0.0 1.0
+			0.0 1.0 0.0
+			0.0 1.0 1.0
+			1.0 0.0 0.0
+			1.0 0.0 1.0
+			1.0 1.0 0.0
+			1.0 1.0 1.0
+			[ed:  ...abridged:   64 total entries...]
+			1.0 1.0 1.0
+		</Array>
+	</LUT3D>
+	<LUT1D id="lut-25" name="output conversion" inBitDepth="16f" outBitDepth="12i">
+		<Description> 3x1D LUT </Description>
+		<IndexMap dim=2>0.0@0 3.0@65504.0</IndexMap>
+		<Array dim="4 3">
+			0 0 0 
+			1 1 1
+			2 2 2 
+			3 3 3
+		</Array>
+	</LUT1D>
+</ProcessList>
+
+\end{lstlisting}

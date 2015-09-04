@@ -1,0 +1,69 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Configuring the ACES viewing pipeline}
+
+The most complicated aspect of the ACES user experience is configuring the settings needed for a product to convert ACES colors into device code values suitable for a given display and viewing environment.
+
+\section{Technical background}
+ACES stores images using a wide-range, linear, floating-point encoding of the original scene colorimetry. These ``scene-referred" images must be transformed for correct presentation in cinema and television. This transformation accounts not only for the difference between a linear encoding and the gamma-corrected encoding expected by display devices, but also for the difference in viewing environment between capture and display, for the limited dynamic range and gamut of practical displays, and the desire to produce a pleasing picture.
+
+Although this transformation involves well-understood principles of color science, there are also engineering trade-offs and aesthetic considerations which means there is no single correct approach. Each product manufacturer makes the trade-offs differently which results in products producing images having their own look. Traditionally motion picture film had a specific look that was different from video cameras. In this digital era, each digital motion picture camera manufacturer has one or more looks selectable in software, while visual effects and animation companies have their own ``tone-mapping transforms" that produce customized looks serving the visual aesthetics of the production.
+
+This diversity has created problems when interchanging digital media in scene-referred form since the recipient often does not know what viewing transform to use to correctly view the images. This has made digital workflows often more fragile than the film or tape-based workflows that they have supplanted.
+
+One of the foundational design principles of the ACES system is that it must be possible to reasonably view ACES-encoded images on various display devices without any additional information (i.e. without knowing ``what LUT am I supposed to use?"). This greatly increases the robustness of the system, not only for exchanging files between collaborators on a project, but also for placing ACES files in the vault for future generations.
+
+\section{The role of the Look Transform}
+Prior to ACES, it was common to ``bake" a look into the output transform. This was partly due to the common limitation that many products did not allow the user to specify a separate look transform. However, ACES introduces a paradigm-shift related to look transforms.
+
+Up to now, it has been necessary to create separate output transforms for each product being used. For example, on a large VFX movie, an engineer would need to create many flavors of LUTs in various file formats and different mathematical representations (e.g. number of grid points in the 3d-LUT, whether a pre-shaper is used or not, etc.). Furthermore, there would need to be versions for each display (e.g. transforms for both Rec. 709 and P3).
+
+One of the benefits of having standard transforms is that product vendors can craft their implementation of the ACES transforms to perform best for how their product works (e.g. using exact math, or a specific LUT structure). Furthermore, the transforms necessary for viewing on a wide variety of displays are provided with the ACES release. Given that these will be built into the products, it is not necessary (or even desirable) to require post-production engineers to build the same type of large LUT collections.
+
+Furthermore, ACES was designed for archiving use (similar to a negative that includes the creative color timing). Whether the Look Transform is baked in or included along with the unmodified ACES files, in either case, it is necessary for the Look Transform to exist separate and distinct from the Output Transform.
+
+For these reasons, it is very important for products to allow users to utilize separate Look Transforms that are not combined into an Output Transform.
+
+Ideally, products should allow the Look Transforms to be easily toggled on and off since it is often useful to see the ``neutral" or ``reference" ACES rendering on its own, without a look.
+
+\section{Terminology} \label{sec:terminology}
+ACES Output Transform -- The transform that converts ACES2065-1 colors to code values for a particular output device. This is the combination of the RRT and an ODT. (Please see Appendix \ref{appendixA} for definitions of the non-user-facing engineering terminology.)
+
+Look Transform -- Generally, a color transformation which affects the entire image to a particular creative effect. Specifically in this context, an ACES Look Transform is the user-facing term for an LMT. The input and output color space of an ACES Look Transform is ACES2065-1. Please refer to ``Academy TB-2014-010, Design, Integration and Use of ACES Look Modification Transforms."
+
+Viewing Pipeline -- The complete set of color transforms needed to convert color values from the product’s working space into code values to be sent to a display device. This includes the Look Transform(s) (if present), and the Output Transform. It may also include adaptor transforms needed to convert between a working space and ACES.
+
+Working space -- The color encoding used to modify (or create) images. In other words, the color space that the algorithms (color grading, compositing, CG rendering, etc.) work in. Products typically convert each source into a common working color space, perform some operation, and then convert to another color space for display or output. In order to achieve interoperability among products, a given operation (e.g. ASC CDL) must be applied in the same working space.
+
+\note{The terms RRT and ODT are engineering-centric terms and their use in products is deprecated.}
+
+
+\section{Guidelines}
+\subsection{Naming of menus}
+The strings ``Look Transform" and ``Output Transform" are suggested for labeling what the user is selecting (e.g. the text next to the UI widget that contains the set of options). The word ``Transform" may be omitted if it is clear from the context.
+
+\subsection{Naming of transforms}
+Products will choose the ``user friendly" name for transforms. It is highly recommended to use (or at least base) the string on the user-friendly name metadata included in the transform files. The recommended name for the Output Transform is contained in the ODT transform file. 
+
+\subsection{Unique identification of transforms} \label{sec:uid2}
+Products should make it possible for users to see the official transform identifier string associated with a transform. As this is a technical string, it is reasonable to put this somewhere separate from the user-friendly name (e.g., in an ``Advanced Info" dialog box). The transform identifier may be referred to as the ``Transform ID."
+
+Because the transform identifier for ODTs is incremented whenever the RRT changes, for the Output Transform it is sufficient to provide the transform identifier from the corresponding ODT.
+
+\subsection{Completeness}
+Products should enable users to select any of the Output Transforms included in the Academy releases.
+
+\subsection{Ease-of-use}
+Products should arrange their user experience in such a way that the user is not overwhelmed by needing to select from overly long lists of transforms. One method for doing this is to have both easy and advanced modes. Another method is to present a short list of the most likely transforms but also provide a way for the user to browse to find older, less common, or more specialized transforms. Another method is to filter the list of options. (This set of suggestions is intended to be illustrative rather than exhaustive.)
+
+\subsection{Handling other outputs}
+If in addition to viewing media on a display, the product also allows users to create new files, it may be necessary to allow the user to bake in an Output Transform that is different from the one they are using with their current display. For example, the user creates content on a broadcast monitor but needs to produce output for web viewing (i.e. sRGB).
+
+Also, in some products it is useful to allow other options. For example, in some VFX use-cases it is necessary to deliver media in the same format as the originals. In this scenario it is useful to allow an inverse IDT to be applied on output. (It is hoped that over time, this use-case will no longer be necessary and files may be exchanged using the ACES2065-1 encoding and ACES container format.)
+
+\subsection{Assigning appropriate default transforms}
+In many cases, there will be information available to the product that could guide the selection of the Output Transform. For example, the user may have already indicated elsewhere in the UI or during the installation/setup of the product what display device is connected. Also, it may be possible for a product to default to the most appropriate Output Transform based on the context (e.g. the user is doing video mastering). However, users should always be provided a method to over-ride any automatic transform selection.
+
+\subsection{Separate Look Transforms}
+The Look Transform is an integral part of the ACES system and products should enable users to select one or more Look Transforms to be applied in the viewing pipeline before the Output Transform. It is important to support the case where the Look Transform is separate from the Output Transform.

@@ -1,0 +1,78 @@
+\appendixchapter{IDT Construction From Captures of Target Materials}{i}
+
+If the digital camera system spectral responsivities cannot be obtained from the camera system manufacturer, and the equipment and environment for spectral sensitivity characterization are unavailable, an alternative approach may provide enough data to construct a digital camera system IDT, albeit one with less flexibility and potentially lower quality than direct use of spectral responsivities would provide. With this alternative approach, target patches are captured by both a reference measurement device (such as, for example, a telespectroradiometer) and by the digital camera system being characterized. The RICD's documented spectral responsivities are combined with the patches' spectral characteristics to produce the RICD's captured values for those patches, and optimization of those two sets of patches—after both have been transformed to some error minimization space—yields the 3x3 matrix at the core of the IDT.
+
+
+This process can be divided into steps:
+\begin{enumerate}
+	\item Spectral or colorimetric measurement of target patches and the target illumination source
+	\item Calculation of ACES RGB relative exposure values from spectral or colorimetric measurements
+	\item Digital camera system capture of the target patches under the target illumination source
+	\item Reconstruction of linear camera exposure values from digital camera system OECF and captured patch values
+	\item Conversion of reconstructed linear camera exposure and ACES RGB relative exposure values to an error minimization space
+	\item Linear regression of reconstructed linear camera exposure values and ACES RGB relative exposure values, as converted to the error minimization space, to produce initial values of 3x3 IDT matrix 
+	\item Optimization of the 3x3 IDT matrix
+	\item Embedding of the optimized 3x3 IDT matrix in an IDT transform	
+\end{enumerate}
+
+
+Those steps are discussed in the following sections:
+
+\subsection*{Spectral measurement of target patches}
+Telespectroradiometric measurements are preferable to combined spectral reflectance and illumination measurements, especially if the target exhibits fluorescence.
+
+
+The measurement geometry—the relative position of measurement device or digital camera, sample patch and (for reflective target patches) any illumination source(s)—should be rigidly established and maintained. It is critical that this measurement geometry be carried over to target patch capture with the digital camera. If characterization is done on a lab bench, the measurement device and the digital camera should be on the target normal at target center, and the target illumination should be from two opposing directions at 45$^\circ$ to the target normal. The illumination sources must have identical spectral characteristics. The illumination sources should be sufficiently distant from the target so as not to cause a combined illumination variation exceeding $\pm$1\% across the target area. Two omni-directional light sources positioned as above, and at a height exceeding four times the largest target dimension, results in a variation within $\pm$1\%. (If characterization is done on–set in daylight conditions then the requirement for opposing directions is dropped.) Neither the target's visibility to the capture device nor the illumination sources' visibility to the target should be in any way obstructed.
+
+
+The acceptance angle of the measuring instrument, the instrument's position relative to the target patch and the size of the target patch should be such that the edges of the target patch are not being measured: if the patch is recessed in its support, the edges may be shadowed, and moreover the patch center may be more planar than the patch edges. Typical acceptance angles for measuring instruments, when used for this type of capture, range between ${{}^1/_2}^\circ$ and 2$^\circ$. 
+
+
+Ideally the measurement device or digital camera position would be fixed, the illumination source position and spectral power distribution would be fixed, target patches would be measured individually with the target moved under a mask made from a black material, with mask and target held in a plane perpendicular to the measurement device or digital camera. As with recessed patches, however, this risks shadows being cast into the sampled target area by the target patch mask.
+
+\subsection*{Calculation of ACES RGB relative exposure values from measurements}
+The ACES R, G and B relative exposure values are obtained by a two-step process.
+
+\begin{enumerate}
+	\item Compute the dot products of the measured spectral radiance of the target patch (either emitted radiance, or reflected illumination radiance) and the corresponding area-normalized RICD spectral sensitivities given in Annex C of the ACES document.
+	\item Augment the computed values with the amount of camera flare associated with the RICD, as specified in the ACES document.
+\end{enumerate}
+
+
+\subsection*{Digital camera capture of the target patches}
+The considerations of in situ capture, measurement geometry, avoidance of patch edges and use of target patch mask have been covered in a previous section. Digital camera capture requires several other factors be considered:
+
+\begin{itemize}
+	\item The digital camera system data should not be irrevocably modified as part of any color rendering process. Digital camera system output that has been color rendered, typically encoded as video files, often has been internally altered in some spatially and perhaps temporally variant way to suit aesthetic preferences and has lost its relationship to scene radiometry. 
+	\item Capture should be at a single exposure level; automatic exposure determination should be disabled. The aperture and exposure time should be established such that clipping of the chart patches is avoided. Usually this can be accomplished when a gray card is captured with `normal' exposure.
+	\item Capture should be with the lens and filter(s) which will be used in production, including filtration for white balance, for reduction of UV, IR or unpolarized light, or for overall reduction of exposure with ND filters.
+	\item Digital camera image compression should be `lossless', or disabled entirely.
+	\item No aesthetic corrections or color-balancing operations should be done between capture and analysis.
+	\item The captured data should be radiometrically linear, whether that linearity be native to the captured image format, or the result of inversion of the native camera system image encoding. If natively linear, there should be at least 10 bits of linear data per RGB component. If linear is the result of an inversion of a log or power function used by the native camera system image encoding data metric, then the data prior to inversion should have at least 8 bits of encoded data per RGB component. The preservation of radiometric linearity can be verified by measurement and capture of a series of spectrally neutral targets.
+	\item If multiple target patches are acquired in a single exposure, the target should occupy the center of the frame and its image on the camera sensor should not extend into regions where lens vignetting or other factors influence transmitted energy relative to that transmitted along the common camera and lens axis.
+	\item The black level should be captured. This allows for estimating and removing the dark current. The black level should be captured with the same exposure settings as used to capture the patches, for example by covering the lens with a lens cap. The black level should be captured immediately after capturing the spatial illumination, as this tends to reduce the black current in defect pixels to levels commonly found in actual production.
+	\item The spatial distribution of the illumination should also be captured. This allows for compensation of uneven illumination and vignetting. This should be captured by replacing the target with a white card, gray card, or similar object having a uniform color and non-specular Binary Reflectance Distribution Function (BRDF). The replacement object must have the same placement as the target, so as not to change the reflected light.
+	\item The captured data for the target patch should be spatially (and if multiple captures are possible, temporally) averaged prior to use. As mentioned above, the averaged pixels should be from target patch center; target patch edges may be in shadow or nonplanar and should be avoided. At least 1,000 pixels, preferably 10,000 pixels, should be included in the computation of the average. The standard error of mean should not exceed 0.1\% of the average value.	
+\end{itemize}
+
+\subsection*{Reconstruction of linear camera exposure values from digital camera OECF and captured patch values}
+The linear data from the prior step describe the response of the camera to light present at the focal plane (that is, at the sensor). These data should be obtained by 
+
+\begin{enumerate}
+	\item Averaging any sequences of image data representing multiple captures of a single target patch.
+	\item Applying the inverse of the Camera system optoelectronic conversion function (OECF) to the camera system values.\footnote{Determination of the Camera OECF should follow the procedures given in ISO 14524, Photography -- Electronic still-picture cameras -- Methods for measuring opto-electronic conversion functions (OECFs).} 
+	\item Correcting for the estimated irregularities in the spatial distribution of the illumination.
+	\item Subtracting the estimated dark current.
+\end{enumerate}
+
+\subsection*{Conversion of reconstructed linear camera system exposure and ACES RGB relative exposure values to an error minimization space}
+The reconstructed linear camera system exposure and ACES RGB relative exposure values should be converted to a common error minimization space. 
+
+If this common error minimization space depends on the choice of some white tristimulus value, the same CIE XYZ value for white should be used for both sets of conversions. 
+
+\subsection*{Regression of linear camera system exposure values and ACES RGB relative exposure values to produce an optimized 3x3 IDT matrix}
+
+Regression of the 3x3 IDT matrix values proceeds in a manner identical to that described in Sections \ref{sec:compmat}, \ref{sec:compcostfn}, and \ref{sec:compend}.
+
+\subsection*{Embedding of the optimized 3x3 IDT matrix in an IDT transform}
+The optimized 3x3 IDT matrix is embedded in a CTL transform in a manner identically to that described in \autoref{sec:application}.

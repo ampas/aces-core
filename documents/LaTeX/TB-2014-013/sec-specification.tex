@@ -1,0 +1,19 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Specification}
+
+\section{Inputs}
+The inputs to an LMT are ACES RGB relative exposure values.
+
+\section{Outputs}
+The outputs of an LMT are ACES RGB relative exposure values.
+
+\section{Working space}
+The internal working space of an LMT is unrestricted. An LMT may internally transform its inputs into a non-ACES space and perform color operations there, as long as it transforms the results of those back to ACES before yielding them as outputs.
+
+\section{Syntax}
+LMTs are specified in Common LUT XML.
+
+\section{Transport}
+LMT metadata is carried in the ACESclip container file within the ACES\_Config element. Multiple LMTs are referenced in the TransformList element and are applied in the order in which they are referenced.

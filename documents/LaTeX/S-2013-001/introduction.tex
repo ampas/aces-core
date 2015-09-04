@@ -1,0 +1,20 @@
+% This file contains the content for the Introduction
+\unnumberedformat	    % Change formatting to that of "Introduction" section
+\chapter{Introduction} 	% Do not modify section title
+%% Modify below this line %%
+
+This document specifies a logarithmic-type integer encoding for the Academy Color Encoding System (ACES) for use in 10-bit and 12-bit hardware systems that need to transmit a representation of an ACES floating-point image.
+
+The Academy Color Encoding Specification prescribes a digital encoding method using the IEEE half-precision floating-point encoding defined in IEEE 754-2008. Many production systems do not support the use of 16-bit-per-color component transmission especially where hardware video systems are utilized. Some systems used for preview, look creation, and color grading are limited to common 10-bit and 12-bit video signals. In some cases, it is still necessary for a user to see a representation of the ACES image without it having been rendered for the output device using the Reference Rendering Transform (RRT), and where no 16-bit floating-point capability exists in the hardware and software.
+
+This document specifies encoding of ACES using 10-bit or 12-bit integer data types for compatibility with those systems. This encoding is defined and named herein as ACESproxy.
+
+10-bit and 12-bit integer data types cannot store the full range of ACES data with the same level of precision provided by the ACES half-precision floating-point format. To make appropriate use of the limited range of the 10-bit and 12-bit integer data types, the ACESproxy encoding uses a middle portion of the possible range of ACES values and is encoded using a logarithmic transfer function. To better facilitate on-set look creation, ACESproxy also uses a smaller color gamut. ACES values outside of this encoded range cannot be transmitted using ACESproxy and are assumed to be clipped to the maximum and minimum ACESproxy values.
+
+ACESproxy is appropriate as a working-space encoding for on-set preview and look creation systems since those systems are typically designed to work with other image data encoded in a similar fashion. The ACESproxy encoding is specifically designed to work well when graded using the American Society of Cinematographers Color Decision List (ASC CDL).
+
+The ACESproxy encoding was designed for the transmission of images across transports such as High Definition Serial Digital Interface (HD-SDI), for use within hardware systems limited to 10 or 12-bit operation, and for the creation of look metadata such as ASC CDL values.
+
+ACESproxy images are designed to be viewed through an ACES viewing pipeline as detailed in Appendix \ref{appendixA}. When viewed without an ACES output transform, ACESproxy images are dim, low in contrast and saturation, but allow all of the sensor’s image data to be viewed.
+
+ACESproxy-encoded images are intermediate encodings and are not replacements for ACES image data in postproduction color grading or finishing environments. There is no image file container format specified for use with ACESproxy. ACESproxy encoding is specifically not intended for interchange, mastering finals, or archiving, all of which are better completed using the original ACES files.
