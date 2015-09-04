@@ -72,7 +72,7 @@ void main
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2], ODT_4000nits);
 
   // Subtract small offset to allow for a code value of 0
-  	rgbPost = add_f_f3( -pow10(-4.4550166483), rgbPost);
+    rgbPost = add_f_f3( -pow10(-4.4550166483), rgbPost);
 
   // Convert to display primary encoding
     // Rendering space RGB to XYZ
@@ -83,11 +83,11 @@ void main
 
   // Handle out-of-gamut values
     // Clip values < 0 (i.e. projecting outside the display primaries)
-    rgb = clamp_f3( rgb, 0., HALF_POS_INF);    
+    rgb = clamp_f3( rgb, 0., HALF_POS_INF);
 
   // Encode with ST2048 transfer function
     float outputCV[3] = Y_2_ST2048_f3( rgb);
-  
+
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

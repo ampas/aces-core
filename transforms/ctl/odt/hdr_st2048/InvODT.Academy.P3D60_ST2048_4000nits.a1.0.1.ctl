@@ -41,15 +41,15 @@ void main
   // Convert from display primary encoding
     // Display primaries to CIE XYZ
     float XYZ[3] = mult_f3_f44( rgb, DISPLAY_PRI_2_XYZ_MAT);
-  
+
     // CIE XYZ to rendering space RGB
     float rgbPre[3] = mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
 
   // Add small offset that was used to allow for a code value of 0
-  	rgbPre = add_f_f3( pow10(-4.4550166483), rgbPre);
+    rgbPre = add_f_f3( pow10(-4.4550166483), rgbPre);
 
   // Apply the tonescale independently in rendering-space RGB
-	float rgbPost[3];
+    float rgbPost[3];
     rgbPost[0] = segmented_spline_c9_rev( rgbPre[0], ODT_4000nits);
     rgbPost[1] = segmented_spline_c9_rev( rgbPre[1], ODT_4000nits);
     rgbPost[2] = segmented_spline_c9_rev( rgbPre[2], ODT_4000nits);
