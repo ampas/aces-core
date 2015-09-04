@@ -1,3 +1,16 @@
+**Version 1.0.1 (September 4, 2015):**
+  * ACES technical documentation has been added as LaTeX source to facilitate tracking of document revisions.
+  * Utility functions for making the OCIO config have been added.
+  * Bug fixes:
+      * "ACES to ACESproxy" transforms - A bug in piecewise function logic for lin_2_acesProxy() was fixed. 
+  * Readability and robustness of some transforms have been improved with suggestions from users.
+  * Various typos in transform comments and documentation have been corrected.
+  * A broken link to the reference images has been corrected.
+  * HDR ODT transforms have been modified
+      * The lowest four coefficients for the HDR ODT tonescales have been adjusted in conjunction with a small offset to allow for obtaining a code value of 0.
+      * A Rec.2020 version of the 1000 nit ODT has been added.
+      * HDR transforms have had references to "PQ" changed to "ST2048".
+
 **Version 1.0 (December 20, 2014):**
   * Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
   * Filenames have been updated to conform to the ACES System Versioning Specification
