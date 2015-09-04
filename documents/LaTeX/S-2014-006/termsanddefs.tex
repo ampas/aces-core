@@ -1,0 +1,80 @@
+% This section contains the content for the Terms and Definitions
+\numberedformat
+\chapter{Terms and Definitions}
+The following terms and definitions are used in this document.
+%% Modify below this line %%
+\label{sec:termsanddefs}
+
+\term{LUT definition}
+Look-up tables are an array of size n where each entry has an index associated with it starting from $0$ and ending at $(n-1)$, (e.g. $lut[0], lut[1], \ldots , lut[n-1]$). Each entry contains the output value of the LUT for a particular input value. In a fully enumerated LUT, there is an entry for each possible input code. With a particular input bit depth $b$, the size $n$ equals $2^b$.
+
+\term{Sampled LUT}
+In a sampled LUT, there is a smaller set of entries representing sampled positions of the input code range.  By default, the minimum input code value is looked up in $lut[0]$ and the maximum input code value is looked up in $lut[n-1]$.  Other output code values are found directly if the input code is one of the sampled positions, otherwise the output values are interpolated between the two nearest sample entries in the LUT.
+
+\term{Interpolation}
+When an input value falls between two sampled positions in a LUT, the output value must be calculated as a proportion of the distance along some function that connects the two nearest values in the LUT. Multiple interpolation types are possible, and higher-order interpolations such as piece-wise cubic interpolation use more than just the adjacent entry to determine the shape of the function. The simplest interpolation type, linear, is a straight line between the points. An example of linear interpolation is provided below.
+
+Ex: with a table of the sampled input values in $inValue[i]$ where $i$ ranges from $0$ to $(n-1)$, and a table of the corresponding output values in $outValue[j]$ where $j$ is equal to $i$,
+
+\begin{center}
+\begin{tabularx}{3in}{ccXcc}
+	index $i$ & inValue && index $j$ & outValue \\ \hline
+	0 & 0 && 0 & 0 \\
+	$\vdots$ & $\vdots$ && $\vdots$ & $\vdots$ \\
+	$n-1$ & 1 && $n-1$ & 1000 \\
+\end{tabularx}
+\end{center}
+
+the $output$ resulting from $input$ can be calculated after finding the nearest $inValue[i] < input$. 
+
+When $inValue[i] = input$, the result is evaluated directly.
+
+\begin{center}
+$output = \dfrac{input-inValue[i]}{inValue[i+1]-inValue[i]} \times (outValue[j+1]-outValue[j])+outValue[j]$	
+\end{center}
+ 
+\term{Tetrahedral Interpolation}
+This is a type of interpolation for 3D LUTs in which the color space is subdivided by tetrahedra arranged to cover the entire 3D volume.  There are multiple ways to subdivide this space, however for color processing, this specification uses the form where each cube is split along the main (and usually neutral) diagonal into 6 tetrahedra.
+
+\term{\texttt{IndexMap} definition}
+The mapping of input code values to indexes of the table is modifiable allowing for remapping the range of applicable input values, changing the spacing of the input sampling function, and reshaping of the index function for lookups into the LUT. An \texttt{IndexMap} in its simplest form allows the definition of the range of input and output floating-point values that are normalized to 0 to 1.0 for accessing a 1DLUT or a 3DLUT. This extension to the LUT format is fully described in Appendix C. The \texttt{IndexMap} is primarily intended for improved implementation of floating-point LUTs and is not necessary for integer LUTs.
+
+\term{1D LUT definition}
+A color transform using a 1D LUT has as input a 1-component color value from which it finds the nearest index position whose $inValue$ is less than or equal to the implicit input values for the table. The transform algorithm then calculates the output value by interpolation between $outValue$ entries in the table. A 1DLUT shall be applied equally to all channels in a 3-component color calculation.
+
+\term{3by1D LUT definition}
+A 3by1DLUT is a particular case of a 1DLUT in which a 3-component pixel is the input value, and each component is looked up separately in its own 1DLUT which may differ from each other.
+
+\term{3DLUT definition}
+In a 3D LUT, the value range of the 3 color components defines the coordinate system of a 3D cube. A single position is found within the volume of the cube from the 3 input values, and a set of the nearest corresponding table entries are identified (between 4 to 8 table entries, depending on the interpolation algorithm). The 3-component output value is calculated by interpolating those nearest table entries from the 3DLUT.
+
+\note{For examples of 3D cube interpolation, look at ``Efficient color transformation implementation'' by Bala and Klassen in Digital Color Imaging Handbook, ed: Sharma, CRC Press, 2003, pg 694-702}
+
+\term{MATRIX definition}
+A matrix can be used for linear conversion of 3 color component pixels from one color space to another.
+
+The 3-component input value vector is multiplied by the matrix to create the new 3-component output value vector. Matrix color transforms in this format use the column vector convention:
+
+\begin{equation}
+    \begin{bmatrix*}
+        a_{11} & a_{12} & a_{13} \\
+        a_{21} & a_{22} & a_{23} \\
+        a_{31} & a_{32} & a_{33} \\
+    \end{bmatrix*} \\
+    \begin{bmatrix}
+        r\\
+        g\\
+        b
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        R\\
+        G\\
+        B
+    \end{bmatrix}
+\end{equation}
+
+where $[R, G, B]$ is the result of multiplying input $[r, g, b]$ by the matrix $[a]$.
+
+\term{ASC CDL}
+The American Society of Cinematographers' Color Decision List (ASC CDL). This provides a universal method of exchanging basic color correction parameters and specifies a particular color processing equation.

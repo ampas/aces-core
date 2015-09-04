@@ -1,0 +1,44 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{proc} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Recommended Procedures for the Creation and Use of Digital Camera System Input Device Transforms (IDTs)}
+\altdocname{Creation and Use of Digital Camera System Input Device Transforms (IDTs)}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{P-2013-001}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0}
+\docdate{April 24, 2015}
+\summary{
+In the Academy Color Encoding System, an Input Device Transform (IDT) processes non-color-rendered RGB image values from a digital camera system's capture of a scene lit by an assumed illumination source (the scene adopted white). The results of this process are white-balanced ACES RGB relative exposure values.
+
+Camera system vendors are recommended to provide two IDTs for each product, one optimized for CIE Illuminant D55 (daylight) and a second optimized for the ISO 7589 Studio Tungsten illuminant. Camera system vendors may optionally provide additional IDTs for common illumination sources such as Hydrargyrum Medium-arc Iodide (HMI) and KinoFlo\textsuperscript{\textregistered{}} lamps.
+
+The main body of this document provides a procedure for the creation and use of an IDT from the measured spectral responsivities of a digital camera system. Appendices provide examples of the use of the procedure, each illustrating a different engineering tradeoff. An additional appendix provides an alternative procedure for IDT creation if the spectral data required for the recommended procedure are unobtainable.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{acknowledgements} \newpage
+\input{introduction}
+
+\input{scope}
+\input{references}
+\input{termsanddefs} \newpage
+\input{procedure}
+
+\begin{appendices}
+	\input{appendixA}
+	\input{appendixB}
+\end{appendices}
+
+\end{document}

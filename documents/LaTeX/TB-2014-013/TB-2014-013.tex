@@ -1,0 +1,36 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Alternate ACES Viewing Pipeline User Experience}
+\altdocname{Alternate ACES Viewing Pipeline User Experience}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2014-013}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0.1}
+\docdate{April 24, 2015}
+\summary{
+The majority of products that implemented pre-release ACES adopted an approach that combined the RRT and ODT into a single transform. It may useful to have one transform that has both ACES rendering components (from the RRT and ODT) that outputs the desired display colorimetry followed by a simple transform that converts that colorimetry into display code values. The ACES User Experience Working Group is developing an alternate UX proposal for products that wish to structure their viewing pipeline using this approach. This work is put forward for consideration as a possible recommended approach for a future ACES release.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{introduction} \newpage
+
+\input{sec-challenges}
+\input{sec-structuring}
+\input{sec-filtering}
+\input{sec-roleoftherrt}
+\input{sec-terminology}
+\input{sec-mapping}
+
+\end{document}

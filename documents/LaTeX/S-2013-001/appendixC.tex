@@ -1,0 +1,18 @@
+\appendixchapter{Convention for use of ACESproxy SMPTE range}{i}
+\label{appendixC}
+
+This appendix defines the equivalent of a [0.0 \ldots{} 1.0] range in both 10-bit and 12-bit ACESproxy for use in applications.
+
+For consistency in using ACESproxy values in video systems designed around the [0.0 \ldots{} 1.0] video range (encoded in 10-bit video as the range 64-940), the following ACES values are considered the equivalents to 0.0 and 1.0 for both 10-bit and 12-bit video.
+
+
+\begin{center}
+\begin{tabularx}{0.75\textwidth}{|Y|c|c|c|c|}
+\hline
+\textbf{Video normalized scale} & \textbf{IRE} & \textbf{10-bit CV} & \textbf{12-bit CV} & \textbf{ACES} \\ \hline
+0.0 & 0\% & 64 & 256 & 0.001185417 \\ \hline
+1.0 & 100\% & 940 & 3760 & 222.875 \\ \hline
+\end{tabularx}
+\end{center}
+
+ASC CDL values are applied to values in the range [0.0 \ldots{} 1.0] which by this convention are set to ACES values 0.001185417 to 222.875. In integer based color grading systems this is typically accomplished by scaling from ``legal'' to full range before applying ASC CDL transforms. The ASC CDL application is further defined in a separate document.

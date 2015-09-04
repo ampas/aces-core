@@ -1,0 +1,131 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of "Introduction" section
+%% Modify below this line %%
+\chapter{Specification}
+
+\section{Naming conventions}
+The encoding of ACES specified in \autoref{sec:ACEScg} shall be known as ACEScg.
+
+\section{Color component value encoding}
+ACEScg shall be stored as either 16-bit (IEEE binary16) or 32-bit (IEEE binary32) floating point values.
+
+\section{Color component value range}
+The value range for ACEScg color component values is [-65504.0, +65504.0].
+
+The chromaticity coordinates of the defined ACEScg RGB primaries (AP1) form a triangle on the CIE chromaticity diagram. ACEScg RGB values which express visible colors are represented by points within this triangle that also lie within the visual gamut.
+
+The set of valid ACEScg RGB values also includes members whose projection onto the CIE chromaticity diagram falls outside the region of the AP1 primaries. These ACEScg RGB values include those with one or more negative ACEScg color component values; Ideally these values would be preserved through any compositing operations done in ACEScg space but it is recognized that keeping negative values is not always practical, in which case it will be acceptable to replace negative values with zero.
+
+Values well above 1.0 are expected and should not be clamped except as part of the color correction needed to produce a desired artistic intent.
+
+\section{Color component transfer function}
+The color component transfer function directly encodes relative exposure values and is defined as
+\begin{center}
+$R = E_r, \quad G = E_g, \quad B = E_b$
+\end{center}
+where $E_r$, $E_g$ and $E_b$ represent relative exposure values that would be captured from the scene by the ACES Reference Image Capture Device (RICD) and $R$, $G$ and $B$ are the resulting ACES color component values transformed to ACEScg using the methods specified in section 4.1.6.
+
+\section{Color space chromaticities}
+\label{sec:colorspace}
+ACEScg uses a different set of primaries than ACES RGB primaries defined in SMPTE ST 2065-1. The CIE 1931 colorimetry of the ACEScg RGB primaries and white are specified below.
+
+\subsection{Color primaries}
+The RGB primaries chromaticity values, known as AP1, shall be those found in \autoref{table:AP1rgb}.
+
+\begin{center}
+\begin{tabularx}{4.5in}{XlllXll}
+        & R       & G       & B       & & CIE x & CIE y \\ \hline
+Red     & 1.00000 & 0.00000 & 0.00000 & & 0.713 & 0.293 \\
+Green   & 0.00000 & 1.00000 & 0.00000 & & 0.165 & 0.830 \\
+Blue    & 0.00000 & 0.00000 & 1.00000 & & 0.128 & 0.044 \\
+\end{tabularx}
+\captionof{table}{ACEScg RGB primaries chromaticity values}    
+\label{table:AP1rgb}
+\end{center}
+
+\subsection{White Point}
+The white point shall be that found in \autoref{table:AP1w}.
+
+\begin{center}
+\begin{tabularx}{4.5in}{XlllXll}
+        & R       & G       & B       & & CIE x & CIE y \\ \hline
+White   & 1.00000 & 1.00000 & 1.00000 & & 0.32168 & 0.33767 \\
+\end{tabularx}
+\captionof{table}{ACES RGB white point chromaticity values}    
+\label{table:AP1w}
+\end{center}
+
+\note{The ACEScg white point is the same as the white point of ACES 2065-1.}
+
+\section{ACEScg}
+\label{sec:ACEScg}
+The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and ACEScg.
+
+\subsection{Converting ACES2065-1 RGB values to ACEScg RGB values}
+\label{sec:aces2acescg}
+ACES $R$, $G$, and $B$ values shall be converted to ACEScg $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+
+\note{Equation \ref{eq:aces2acescg} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScg $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACEScg specified in \autoref{sec:colorspace}.}
+
+\begin{floatequ} 
+\begin{gather}
+    \begin{bmatrix}
+        R_{ACEScg}\\
+        G_{ACEScg}\\
+        B_{ACEScg}
+    \end{bmatrix}
+    =
+    TRA_{1}
+    \cdot
+    \begin{bmatrix}
+        R_{ACES}\\
+        G_{ACES}\\
+        B_{ACES}
+    \end{bmatrix} \\
+    \\
+    TRA_{1} =
+    \begin{bmatrix*}[r]
+        1.4514393161 & -0.2365107469 & -0.2149285693 \\
+       -0.0765537734 &  1.1762296998 & -0.0996759264 \\
+        0.0083161484 & -0.0060324498 &  0.9977163014 \\
+    \end{bmatrix*} \\
+    \\
+    TRA_{1} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
+\end{gather}
+\caption{ACES2065-1 to ACEScg}
+\label{eq:aces2acescg}
+\end{floatequ}
+
+\subsection{Converting ACEScg RGB values to ACES2065-1 RGB values}
+ACEScg $R$, $G$, and $B$ values shall be converted to ACES2065-1 $R$, $G$ and $B$ using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+
+\note{Equation \ref{eq:acescg2aces} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScg $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACEScg specified in \autoref{sec:colorspace}.}
+
+\begin{floatequ} 
+\begin{gather}
+    \begin{bmatrix}
+        R_{ACES}\\
+        G_{ACES}\\
+        B_{ACES}
+    \end{bmatrix}
+    =
+    TRA_{2}
+    \cdot
+    \begin{bmatrix}
+        R_{ACEScg}\\
+        G_{ACEScg}\\
+        B_{ACEScg}
+    \end{bmatrix} \\
+    \\
+    TRA_{2} =
+    \begin{bmatrix*}[r]
+        0.6954522414 & 0.1406786965 & 0.1638690622 \\
+        0.0447945634 & 0.8596711185 & 0.0955343182 \\
+        -0.0055258826 & 0.0040252103 & 1.0015006723 \\
+    \end{bmatrix*} \\
+    \\
+    TRA_{2} = NPM^{-1}_{AP0} \cdot NPM_{AP1}
+\end{gather}
+\caption{ACEScg to ACES2065-1}
+\label{eq:acescg2aces}
+\end{floatequ}

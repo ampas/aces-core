@@ -1,0 +1,80 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{ACES User-facing Components}
+
+\section{Encodings}
+There are four image encodings that are used in ACES projects, although all encodings are not used in all workflows. The approach taken here is to keep the ACES prefix to identify the encodings as ACES components.
+
+1. Pre-release nomenclature: SMPTE 2065-1:2012, a.k.a. ``ACES''
+
+Use: base encoding, used for exchange of full fidelity images, archiving
+
+ACES 1.0 name: ``ACES2065-1''
+
+\vspace{10pt}
+2. Pre-release nomenclature: ``ACES wire format'', a.k.a. ``ACESproxy,'' ``ACESproxy10,'' ``ACESproxy12''
+
+Use: lightweight encoding for transmission over HD-SDI (or other production transmission schemes), on-set look management. Not intended to be stored or used in production imagery or for final color grading/mastering.
+
+ACES 1.0 name: ``ACESproxy'' 
+
+\vspace{10pt}
+3. Pre-release nomenclature: SMPTE 2065-1:2012 with Rec.2020+ primaries, log encoding, floating point encoding, a.k.a. ``ACES working space''
+
+Use: working space for color correctors, target for ASC-CDL values created on-set 
+
+ACES 1.0 name: ``ACEScc working space'' or ``ACEScc'' 
+
+\vspace{10pt}
+4. Pre-release nomenclature: VFX-friendly encoding, i.e., integer version of ``ACES working space,'' with ACESproxy transfer function
+
+Use: working space for paint/compositor applications that don’t support ACES2065 or ACEScc
+
+ACES 1.0 name: ``ACEScg working space'' or ``ACEScg''
+
+\section{Transforms}
+There are three basic ACES transforms that end users work with. Although the ``pioneers'' seem comfortable with the three letter acronyms, ACES 1.0 transitions to simpler terms that describe what these transforms do.
+
+1. Pre-release nomenclature: Input Device Transform, a.k.a. ``IDT''
+
+Use: converts digital camera native data to ACES2065
+
+ACES 1.0 name: ``ACES Input Transform''; Shorthand: ``Input Transform''
+
+\vspace{10pt}
+2. Pre-release nomenclature: Look Modification Transform, a.k.a. ``LMT''
+
+Use: applies a global, pre-RRT look to an ACES project
+
+ACES 1.0 name: ``ACES Look Transform''; Shorthand: ``Look Transform''
+
+\vspace{10pt}
+3. Pre-release nomenclature: ``RRT plus ODT'' a.k.a. ``ACES Viewing Transform''
+
+Use: converts ACES2065 data to display code values
+
+ACES 1.0 name: ``ACES Output Transform''; Shorthand: ``Output Transform''
+
+\section{Containers}
+Containers hold ACES image data, clip-level metadata and LUTs.
+
+1. Pre-release nomenclature: 2065-4:2013, a.k.a. ``ACES container,'' ``exr’s''
+
+Use: container for ACES2065 image data
+
+ACES 1.0 name: ``ACES container'' and ``exr file'' 
+
+\vspace{10pt}
+2. Pre-release nomenclature: Clip-level Metadata File
+
+Use: container for ACES clip-level metadata container
+
+ACES 1.0 name: ``ACESclip file''; Alternate: ``ACES xml''
+
+\vspace{10pt}
+3. Pre-release nomenclature: Academy-ASC Common LUT Format file, a.k.a. ``CLF file''
+
+Use: container for Academy-ASC Common LUT format data
+
+ACES 1.0 name: ``Academy-ASC Common LUT Format''; Alternates: ``Common LUT Format,''  ``clf file''

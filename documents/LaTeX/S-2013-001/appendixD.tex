@@ -1,0 +1,72 @@
+\appendixchapter{ACESproxy function derivation}{i}
+\label{appendixD}
+
+The ACESproxy 10-bit and 12-bit logarithmic encoding and decoding functions have been derived from the single mathematical function described below. A series of parameters are defined and the values for the parameters specified based on the bit depth of the encoding.
+
+\unnumberedformat
+\section{Math functions}
+The following general-use math functions are defined for use within the equations.
+
+ROUND$(\mathbf{a})$ \tabto{7em}Math function taking a floating-point value $\mathbf{a}$, and returning the integer value closest to $\mathbf{a}$.
+
+MAX$(\mathbf{a,b})$ \tabto{7em}Math function returning the greater of $\mathbf{a}$ or $\mathbf{b}$
+
+MIN$(\mathbf{a,b})$ \tabto{7em}Math function returning the lesser of $\mathbf{a}$ or $\mathbf{b}$
+
+FLOAT2CV$(\mathbf{a})$ \tabto{7em}Math function returning MAX($CVmin$, MIN($CVmax$, ROUND($\mathbf{a}$)))
+
+\section{Parameters}
+The following parameters are defined for each bit-depth.
+
+\begin{itemize}
+	\item $CVmin$ is the minimum code value available for representation of ACES image data.
+	\item $CVmax$ is the maximum code value available for representation of ACES image data.
+	\item $StepsPerStop$ is the number of code values representing a change of 1 stop in exposure.
+	\item $MidCVoffset$ is the integer code value representing the assigned midpoint of the exposure scale for a particular bit-depth encoding. (e.g. the point to which a mid-grey exposure value would be mapped)
+	\item $MidLogOffset$ is the base 2 logarithmic value representing the assigned midpoint of the exposure scale in log space, [e.g. $MidLogOffset = \log_2( 2^{-2.5} ) = -2.5$ ]
+\end{itemize}
+
+\begin{center}
+\begin{tabularx}{0.75\textwidth}{|l|Y|Y|}
+\hline
+	 & \textbf{ACESproxy 10-bit CV} & \textbf{ACESproxy 12-bit CV} \\ \hline
+	$CVmin$ & 64 & 256 \\ \hline
+	$CVmax$ & 940& 3760 \\ \hline
+	$StepsPerStop$ & 50 & 200 \\ \hline
+	$MidCVoffset$ & 425 & 1700 \\ \hline
+	$MidLogOffset$ & -2.5 & -2.5 \\ \hline
+\end{tabularx}
+\end{center}
+
+\note{$MidCVoffset$ is not equal to the ACESproxy value that most closely represents an ACES mid-gray value of 0.18. ACES 0.18 is most closely represented by ACESproxy 426 10-bit CV and 1705 12-bit CV.}
+ 
+\newpage
+\section{Encoding Function}
+The following floating-point equation is used to convert ACES values that are encoded according to SMPTE ST 2065-1 into integer code values.
+\begin{equation} 
+    \resizebox{\textwidth}{!}{$
+    ACESproxy = \left\{ 
+    \begin{array}{l l}
+        CVmin;    & ACES \leq 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
+        \mathrm{FLOAT2CV}\left[\left(\log_2(ACES)-MidLogOffset\right)\times StepsPerStop+MidCVOffset\right];        & ACES > 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
+    \end{array} \right. $ }
+\end{equation}
+
+where $ACESproxy$ is the resulting integer code value in the range of code values from $CVmin$ to $CVmax$. 
+
+
+An implementation may use mathematically equivalent forms of this encoding equation.
+
+
+\section{Decoding Function}
+The following floating-point equation is used to convert ACESproxy integer code values to ACES values that are encoded according to SMPTE ST 2065-1.
+
+\begin{center}
+$ACES = 2^{\left( \dfrac{(ACESproxy-MidCVoffset)}{StepsPerStop} + MidLogOffset\right)}$
+
+\end{center}
+
+The conversion to ACES creates the closest value in 16-bit half precision floating-point to the floating-point result of the equation. ACES values resulting from this equation are limited to the range of values that can be encoded in ACESproxy as illustrated in Appendix \ref{appendixB}. This decoding function does not produce negative ACES values.
+
+
+An implementation may use mathematically equivalent forms of this decoding equation.

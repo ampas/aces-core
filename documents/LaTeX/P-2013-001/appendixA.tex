@@ -1,0 +1,159 @@
+\appendixchapter{Examples of IDT construction}{i}
+\label{appendixA}
+
+\section{IDT Construction for a Linearized Colorimetric Camera System and a D60 Scene Adopted White}
+\label{sec:a1}
+This is the simplest case of IDT manufacture. Since the camera system is colorimetric, there is a unique and perfect conversion between the camera system RGB primaries and the ACES RGB primaries. Since the scene adopted white is equal to the encoding white, no neutral chromaticity difference exists, and thus the neutral chromaticity difference compensation matrix is the identity matrix.
+
+
+The only decision needed from the manufacturer is outside the scope of this recommended procedure: clipping strategy. Therefore procedures \autoref{sec:compstart} through \autoref{sec:compend} may be followed nearly verbatim, with $\mathbf{x}'_i$ of \autoref{sec:chromaticadaptation} being replaced by the identity matrix.
+
+
+\subsection{Compute spectral radiances of illuminated training spectral reflectances}
+$\mathbf{t}_i=\mathbf{h}_w*\mathbf{r}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of training spectral reflectances}
+$\mathbf{x}_i=\mathbf{X}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of scene adopted white}
+$\mathbf{w}_w=\mathbf{X}^\mathrm{T}\mathbf{h}_w$
+
+\subsection{Adjust training color CIE XYZ values to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity}
+$\mathbf{x}'_i = \phi(\mathbf{A}_{Bradford},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$
+
+Note that when the scene adopted white chromaticity is that of CIE Illuminant D60 (and therefore identical to ACES neutral chromaticity) the function $\phi$ will yield an identity matrix, with this equation reducing to
+
+$\mathbf{x}'_i=\mathbf{x}_i$
+
+\subsection{Compute camera system white balance factors}
+$\mathbf{b}=\dfrac{1}{\mathbf{C}^\mathrm{T}\mathbf{h}_w}$
+
+\subsection{Compute white-balanced linearized camera system response values of training \\*colors}
+$\mathbf{v}_i=\mathbf{b}*\mathbf{C}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Create initial values for the unoptimized IDT matrix entries}
+$   \mathbf{B} =
+    \begin{bmatrix}
+		\beta_1 & \beta_2 & 1-\beta_1-\beta_2 \\
+		\beta_3 & \beta_4 & 1-\beta_3-\beta_4 \\
+		\beta_5 & \beta_6 & 1-\beta_5-\beta_6
+    \end{bmatrix}$
+
+\subsection{Select a cost function for error minimization}
+$\chi^2=\displaystyle\sum_{i}^{n}\begin{Vmatrix}\mathbf{f}_{\mathrm{CAM}}(\mathbf{x}'_i,\mathbf{w})-\mathbf{f}_{\mathrm{CAM}}(\mathbf{MBv}_i,\mathbf{w})\end{Vmatrix}$
+
+\subsection{Find final matrix values minimizing cost function}
+Note that since the camera is colorimetric, the minimized cost function value should be 0, and the final matrix should be the same as would be produced by the matrix calculation.
+
+
+\section{IDT Construction for a Non-Linearized, Non-Colorimetric Camera System and a D60 Scene Adopted White}
+In this example, the scene adopted white still matches the encoding white, and therefore no neutral chromaticity difference exists. The camera system, however, is non-colorimetric; unlike the camera system described in \autoref{sec:a1}, cost minimization will \textit{not} produce a zero result, implying the presence of color analysis error in the camera system. IDT manufacturers may wish to modify the training spectral reflectances to redistribute color analysis error, e.g. scene neutrals might be repeated in the training spectral reflectances to emphasize their importance
+
+\subsection{Compute spectral radiances of illuminated training spectral reflectances}
+$\mathbf{t}_i=\mathbf{h}_w*\mathbf{r}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of training spectral reflectances}
+$\mathbf{x}_i=\mathbf{X}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of scene adopted white}
+$\mathbf{w}_w=\mathbf{X}^\mathrm{T}\mathbf{h}_w$
+
+\subsection{Adjust training color CIE XYZ values to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity}
+$\mathbf{x}'_i = \phi(\mathbf{A}_{Bradford},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$
+
+\subsection{Compute camera system white balance factors}
+$\mathbf{b}=\dfrac{1}{\mathbf{C}^\mathrm{T}\mathbf{h}_w}$
+
+\subsection{Compute white-balanced linearized camera system response values of training \\*colors}
+$\mathbf{v}_i=\mathbf{b}*\mathbf{C}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Create initial values for the unoptimized IDT matrix entries}
+$   \mathbf{B} =
+    \begin{bmatrix}
+		\beta_1 & \beta_2 & 1-\beta_1-\beta_2 \\
+		\beta_3 & \beta_4 & 1-\beta_3-\beta_4 \\
+		\beta_5 & \beta_6 & 1-\beta_5-\beta_6
+    \end{bmatrix}$
+
+\subsection{Select a cost function for error minimization}
+$\chi^2=\displaystyle\sum_{i}^{n}\begin{Vmatrix}\mathbf{f}_{\mathrm{CAM}}(\mathbf{x}'_i,\mathbf{w})-\mathbf{f}_{\mathrm{CAM}}(\mathbf{MBv}_i,\mathbf{w})\end{Vmatrix}$
+
+\subsection{Find final matrix values minimizing cost function}
+Since the camera is not colorimetric, the minimized cost function value will not be 0 and will be limited by the camera spectral sensitivities, the choice of training spectral reflectances, and choice of color appearance space for f$_\mathrm{CAM}$.
+
+
+\section{IDT Construction for a Non-Colorimetric Camera System, a Tungsten Scene Adopted White, and a Target `Look' of a Tungsten Capture}
+In this example, the scene adopted white no longer matches the encoding white, a neutral chromaticity difference exists, and the final result of the IDT construction procedure will need to embody neutral chromaticity difference compensation as well as correct for the non-colorimetric camera system response.
+
+\subsection{Compute spectral radiances of illuminated training spectral reflectances}
+$\mathbf{t}_i=\mathbf{h}_w*\mathbf{r}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of training spectral reflectances}
+$\mathbf{x}_i=\mathbf{X}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of scene adopted white}
+$\mathbf{w}_w=\mathbf{X}^\mathrm{T}\mathbf{h}_w$
+
+\subsection{Adjust training color CIE XYZ values to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity}
+Since the scene adopted white chromaticity differs from the ACES neutral chromaticity, some sort of transform must map the former to the latter. In this example, since we wish to preserve the appearance of the tungsten-lit scene, we employ a chromatic adaptation transform, employing a Bradford matrix.
+
+$\mathbf{x}'_i = \phi(\mathbf{A}_{Bradford},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$
+
+\subsection{Compute camera system white balance factors}
+$\mathbf{b}=\dfrac{1}{\mathbf{C}^\mathrm{T}\mathbf{h}_w}$
+
+\subsection{Compute white-balanced linearized camera system response values of training \\*colors}
+$\mathbf{v}_i=\mathbf{b}*\mathbf{C}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Create initial values for the unoptimized IDT matrix entries}
+$   \mathbf{B} =
+    \begin{bmatrix}
+		\beta_1 & \beta_2 & 1-\beta_1-\beta_2 \\
+		\beta_3 & \beta_4 & 1-\beta_3-\beta_4 \\
+		\beta_5 & \beta_6 & 1-\beta_5-\beta_6
+    \end{bmatrix}$
+
+\subsection{Select a cost function for error minimization}
+$\chi^2=\displaystyle\sum_{i}^{n}\begin{Vmatrix}\mathbf{f}_{\mathrm{CAM}}(\mathbf{x}'_i,\mathbf{w})-\mathbf{f}_{\mathrm{CAM}}(\mathbf{MBv}_i,\mathbf{w})\end{Vmatrix}$
+
+\subsection{Find final matrix values minimizing cost function}
+Since the camera is not colorimetric, the minimized cost function value will not be 0 and will be limited by the camera spectral sensitivities, the choice training spectral reflectances, choice of transforms used to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity, and choice of color appearance space for f$_\mathrm{CAM}$.
+
+
+\section{IDT Construction for a Non-Colorimetric Camera System, a Tungsten Scene Adopted White, and a Target `Look' of a D60 Capture}
+\label{sec:a4}
+In this example, the scene adopted white no longer matches the encoding white, a neutral chromaticity difference exists, and the final result of the IDT construction procedure will need to embody neutral chromaticity difference compensation as well as correct for the non-colorimetric camera system response.
+
+\subsection{Compute spectral radiances of illuminated training spectral reflectances}
+$\mathbf{t}_i=\mathbf{h}_w*\mathbf{r}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of training spectral reflectances}
+$\mathbf{x}_i=\mathbf{X}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Compute CIE XYZ tristimulus values of scene adopted white}
+$\mathbf{w}_w=\mathbf{X}^\mathrm{T}\mathbf{h}_w$
+
+\subsection{Adjust training color CIE XYZ values to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity}
+Since the scene adopted white chromaticity differs from the ACES neutral chromaticity, some sort of transform must map the former to the latter. In this example, since we wish to generate the appearance of the tungsten-lit scene having instead been captured under CIE Illuminant D60, we employ a transform, that uses a matrix specifically designed for such ‘re-illumination’.
+
+$\mathbf{x}'_i = \psi(\mathbf{A}_{re-illum},\mathbf{w}_w,\mathbf{w})\mathbf{x}_i$
+
+\subsection{Compute camera system white balance factors}
+$\mathbf{b}=\dfrac{1}{\mathbf{C}^\mathrm{T}\mathbf{h}_w}$
+
+\subsection{Compute white-balanced linearized camera system response values of training \\*colors}
+$\mathbf{v}_i=\mathbf{b}*\mathbf{C}^\mathrm{T}\mathbf{t}_i$
+
+\subsection{Create initial values for the unoptimized IDT matrix entries}
+$   \mathbf{B} =
+    \begin{bmatrix}
+		\beta_1 & \beta_2 & 1-\beta_1-\beta_2 \\
+		\beta_3 & \beta_4 & 1-\beta_3-\beta_4 \\
+		\beta_5 & \beta_6 & 1-\beta_5-\beta_6
+    \end{bmatrix}$
+
+\subsection{Select a cost function for error minimization}
+$\chi^2=\displaystyle\sum_{i}^{n}\begin{Vmatrix}\mathbf{f}_{\mathrm{CAM}}(\mathbf{x}'_i,\mathbf{w})-\mathbf{f}_{\mathrm{CAM}}(\mathbf{MBv}_i,\mathbf{w})\end{Vmatrix}$
+
+\subsection{Find final matrix values minimizing cost function}
+Since the camera is not colorimetric, the minimized cost function value will not be 0 and will be limited by the camera spectral sensitivities, the choice training spectral reflectances, choice of transforms used to compensate for difference between scene adopted white chromaticity and ACES neutral chromaticity, and choice of color appearance space for f$_\mathrm{CAM}$.

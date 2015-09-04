@@ -1,0 +1,84 @@
+\appendixchapter{Example analytic LMT supporting ASC CDL}{i}
+\label{appendixA}
+
+This example shows how a sequence of steps (here, seven steps) can be used to implement an LMT that applies ASC CDL values to effect a grade.
+
+\begin{enumerate}
+    \item Matrix:   \tabto{0.75in}Convert ACES image data to ACEScg image data.
+    \item 1DLUT:    \tabto{0.75in}Convert ACEScg image data to ACEScc image data with a fully enumerated 16-bit LUT.
+    \item Range:    \tabto{0.75in}Normalize to select floating-point range for application of CDL.
+    \item ASC CDL:  \tabto{0.75in}Apply ASC CDL values using the reference equations.
+    \item Range:    \tabto{0.75in}Scale and offset normalized CDL output back to full ACEScc range.
+    \item 1DLUT:    \tabto{0.75in}Apply output LUT convert ACEScc image data to ACEScg image data.
+    \item Matrix:   \tabto{0.75in}Convert ACEScg image data to ACES image data.
+\end{enumerate}
+
+\note{The matrix values shown are not correct; the values are chosen not for correctness but for clarity of exposition.}
+
+\vspace{18pt}
+
+\begin{lstlisting}
+<ProcessList xmlns="urn:NATAS:ASC:LUT:1.2" id="ProdLMTv1" name="WarmNight_v1">
+<Description> Create a warm nightime look </Description>
+<InputDescriptor>ACES</InputDescriptor>
+<OutputDescriptor>ACES</OutputDescriptor>
+<Matrix id="uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf6" name="ACEScsc.ACES_to_AP1.a1"
+  inBitDepth="16f" outBitDepth="16f" >
+	<Description> ACES_to_AP1 working space D60 white ** not the 
+	    right numbers** </Description>
+	<Array dim="3 3">
+		1.2		0.0			0.0
+		0.0		1.03		0.001
+		0.004	-0.007	1.004
+	</Array>
+</Matrix>
+<LUT1D id="uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf8" name="ConverttoACESccToneScale" 
+  inBitDepth="16f" outBitDepth="16f">
+	<Description>1D LUT </Description>
+	<Array dim="65535 3">
+		/* OMIT */
+	</Array>
+</LUT1D>
+<RANGE inBitDepth="16f" outBitDepth="16f" style = "noClamp" >
+	<minInValue>12841.570</minInValue>
+	<maxInValue>48742.586</maxInValue>
+	<minOutValue>0.0</minOutValue>
+	<maxOutValue>1.0</maxOutValue>
+</RANGE>
+<ASC CDL id="cc01234" inBitDepth="16f" outBitDepth="16f" >
+	<ASC_SOP>
+		<Description> not a real example</Description>
+		<Slope>1.0000 1.0000 0.800000</Slope>
+		<Offset>0.0000 0.0000 0.000000</Offset>
+		<Power>1.0000 1.0000 1.000000</Power>
+	</ASC_SOP>
+	<SATNode>
+		<Saturation>0.9</Saturation>
+	</SATNode>
+</ASC CDL>
+<RANGE inBitDepth="16f" outBitDepth="16f" style = "Clamp" >
+	<minInValue>0.0</minInValue>
+	<maxInValue>1.0</maxInValue>
+	<minOutValue>12841.570</minOutValue>
+	<maxOutValue>48742.586</maxOutValue>
+</RANGE>
+<LUT1D id="uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf9" name="ConvertLogtoLinear"
+  inBitDepth="16f" outBitDepth="16f">
+	<Description> takes ACEScc values and converts back to ACES range 
+	    NEGS CLIPPED</Description>
+	<IndexMap dim=2>0.0@0  65504.0@31743</IndexMap>
+	<Array dim="65535 3">
+		/* OMIT */
+	</Array>
+</LUT1D>
+<Matrix id="uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf9" name="ACEScsc.ap1_to_ACES"
+  inBitDepth="16f" outBitDepth="16f" >
+	<Description> Convert from AP1 to ACES </Description>
+	<Array dim="3 3">
+		1.2		0.0			0.0
+		0.0		1.03		0.001
+		0.004	-0.007	1.004
+	</Array>
+</Matrix>
+</ProcessList>
+\end{lstlisting}

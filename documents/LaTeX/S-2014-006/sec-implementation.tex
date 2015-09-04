@@ -1,0 +1,63 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Implementation Notes}
+\label{sec:implementation}
+
+\section{Efficient Processing}
+The transform engine may merge some or all of the transforms and must maintain appropriate precision in the calculations so that output values are correct. It is recommended that all calculations be done in at least 32-bit floating point. High accuracy for 16-bit half float output is required.
+
+The existence of a common LUT format cannot guarantee that the resulting images will look the same on all implementations as numerical accuracy issues in implementations can have a significant effect on image appearance.
+
+The engine may create a single LUT concatenating the output result of all of the node calculations but this may introduce some inaccuracies to the result due to LUT sampling errors. It is up to the user to determine whether these approximate results are sufficient.  
+
+\section{Indexing Calculations}
+A \texttt{ProcessNode} using LUT tables must perform an index calculation to take the range of input values and ratio them to the input `index' range of the table (i.e. the minimum and maximum index positions into the table). This allows the LUT location calculation to be easily achieved as the normalized index function can be multiplied by the number of entries in the LUT to get a direct hash function to the appropriate LUT locations. For integer inputs, this is straightforward as the \texttt{inBitDepth} attribute may be used to apply the whole range of input across the whole range of index positions.
+
+\section{Floating-point Output of the \texttt{ProcessList}}
+The output of the LUT chain should be intended for real devices, therefore a transform designer and/or the application should insure that output floating-point values do not contain infinities and NaN codes. The minimum and maximum representable integer values should be used instead. It is the responsibility of the application to handle overflows and underflows correctly.
+
+In most applications, it is either the internal requirements of the application or the end-user who controls the bit depth of pixels being processed through a \texttt{ProcessList}. So transform authors should not assume that applications will necessarily clamp and quantize based on the settings of the \texttt{outBitDepth} attribute for the last node of the \texttt{ProcessList}.
+
+\textit{Floating-point processing:}
+
+Although it has been traditional practice in converting from integer to floats to normalize the top integer code to a value of 1.0 in floating point, there is an increasing need for calculations in high-dynamic range imaging systems where this assumption might be flawed, so the assumption in the \texttt{ProcessList} element is that integer values are normalized floats where for example of 1023 in integer is output from a node as 1.0. A \texttt{Range} node is provided to make explicit the choice of scaling that a LUT designer wants to provide in his transform, including the normalization step. Floating-point values may exceed this range, but LUTs designed for output devices should also aim towards a final normalized result compatible with the integer range.
+
+\section{Half-float 1DLUTs}
+When the input to a \texttt{LUT1D} is 16f, the \texttt{halfDomain} attribute may be used to indicate that the value to be used for the lookup into the array treats the 16f value as an integer. As an example, the half-float value 1.0 will be the 15360th (zero-indexed) entry in the array. The simplest implementation of this requires that the LUT1D thus be fully enumerated with 65536 entries. The design of this 1D array must take into account the presence of negative numbers, infinities, and NaNs in the original 16f bit pattern.
+
+(code values 31744-32767 and 64513-65535 are infinity or NaNs)
+
+Similarly, the \texttt{rawHalf} attribute may be used to indicate that the integer 16 bit output values in each position of the output array represent the bit-equivalent, half floating-point values.  
+
+The floating-point values input to a node may have been manipulated via a \texttt{Range} node which may clamp values to a specific smaller range of floating-point values (the values of 0.0 to 1.0 being a common choice).  
+
+\section{Rescaling operations for input and output to a \texttt{ProcessNode}}
+The input and output bit depths of a single node may not match each other. For 1DLUTs and 3DLUTs, the output array values are assumed to be in the output bit depth. For \texttt{Matrix} elements, a scale factor must be applied within the coefficients of the matrix.
+
+\section{Rescaling operations for input and output to a \texttt{ProcessList}}
+There are scenarios where applications must change the input and output bit depth (\texttt{inBitDepth} and \texttt{outBitDepth}, respectively) of a \texttt{ProcessList}. One scenario is when the pixels supplied to or returned, when applying a transform, do not match the bit depth used by the transform creator. Another scenario is when combining two \texttt{ProcessList}s.  When changing or converting float to integer bit depths, a scale factor of $2^N-1$ is applied. The inverse scale factor is applied when converting integer to float.  Conversions between differing integer bit depths may be derived from these scale factors.
+
+\section{Type conversion between integer and float}
+Conversions from float to integer if required must be done by rounding. The output bit depth does not require that any node convert and quantize to integer values. The decision to quantize is made by the application invoking the \texttt{ProcessList}.
+
+Conversions from integers with bit depth $n$ to float should be done by:
+
+$floatValue =  \dfrac{intValue}{(2^n-1)}$
+
+\section{Interpolation Types}
+When an interpolation type is not listed, it is usually assumed to be linear interpolation (see example in definitions under “Sampled LUT”) or tri-linear in the case of a 3DLUT. Applications must support tetrahedral interpolation for 3DLUTs.
+
+A comment field is provided to identify the type of interpolation used for a particular cube. In many cases, the details of an interpolation used within a product may not be available. The interpolation type field is currently only a hint. Therefore, there is no assurance that images processed with the same XML LUT file on different hardware or software systems will yield the same resulting image. At the moment, this problem is outside the scope of the committee’s work. Hopefully, details on interpolations will be published or become more widely available in the future. Further, a common reference implementation of the LUT format may be able to achieve some standardization of common interpolation types.
+ 
+\section{XML File White Space}
+It is desirable that the \texttt{Array} elements keep single lines per entry so that a file can quickly be scanned by a human reader. There are some difficulties with this though as XML has some non-specific methods for handling white-space and thus if files are re-written from an XML parser, exact white spacing is not necessarily maintained. XML style sheets may be used for reviewing and checking the LUT's entries to keep the line layout the same.
+
+There is also the issue that is known to exist between Mac, Unix, and PC text files that have differing end-of-line conventions \textless{}CR\textgreater{}\textless{}LF\textgreater{} vs. \textless{}CR\textgreater{}. This may cause collapse of the values into one long line. The `newline' string, i.e. the byte(s) to be interpreted as ending each line of text, is the single code value $10_{10} = 0\mathrm{A}_{16}$ (ASCII `Line Feed' character), also indicated \textless{}lf\textgreater{}; this newline convention for text files is native to all *nix operating systems (including Linux and current Apple OSs).
+
+In addition to the above, parsers for this file format can be allowed to interpret either Microsoft's \textless{}cr\textgreater{}\textless{}lf\textgreater{} or old-style MacOS' \textless{}cr\textgreater{} newline conventions, but they should not generate CommonLUT files with this encoding.
+
+\section{Extensions}
+It is recommended that if readers find an unrecognized element outside of the \texttt{Info} block that they either raise an error or at least provide a warning message to the user. This could be an indication that there is a \texttt{ProcessNode} that is not recognized by the reader.
+
+The \texttt{Info} block in the \texttt{ProcessList} should be used for custom metadata that is unlikely to be recognized by other applications.

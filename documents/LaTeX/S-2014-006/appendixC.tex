@@ -1,0 +1,117 @@
+\appendixchapter{\texttt{IndexMap} Element}{n}
+\label{appendixC}
+
+Full support for an arbitrary \texttt{IndexMap} is now considered an extension to the CLF format as it complicated some implementation decisions. A reader should still recognize the token \texttt{IndexMap} structure and if only two elements are present should treat them as described. All other dimensions of an \texttt{IndexMap} are considered extensions and a user should be notified if the current reader does not support this extension.
+
+\subsection*{\texttt{IndexMap} definition}
+The mapping of input code values to indexes of the table is modifiable allowing for remapping the range of applicable input values, changing the spacing of the input sampling function, and reshaping of the index function for lookups into the LUT. For example, with a 16-bit floating-point code value, the table may be defined to only operate upon input values in the range from 0.0 to 1.0. Values outside of this range are not able to be looked up within the LUT range and extrapolation is not required. A reshaping function is useful to modify the density of sampled values in different regions of the LUT. Reshaping changes the relationship between input code values and the lookup position into the LUT.
+  
+An \texttt{IndexMap} is specified with a list containing pairs of values,  $inValue@i$, which replaces the original $inValue$ with the new $inValue$ at each entry $i$ in the table.
+
+In this example of reshaping, the precision of the higher input values is increased with more samples in that region of the function with the following set of index values:
+
+IndexMap:   $0@0 \quad 512@1 \quad 756@2 \quad 900@3 \quad 1023@4$
+
+This changes a table from the behavior of the left side to the new behavior on the right side. Note that the pixel output results of each of these transforms would be different.
+
+\begin{center}
+\begin{tabularx}{2in}{|X|X|X|}
+\hline
+\multicolumn{3}{|c|}{Without \texttt{IndexMap}} \\\hline
+index & inValue & outValue \\\hline
+0 & 0 & 0 \\\hline
+1 & 255	& 10 \\\hline
+2 & 511	& 100 \\\hline
+3 & 767	& 1000 \\\hline
+4 & 1023 &1023 \\\hline
+\end{tabularx}
+\quad
+\begin{tabularx}{2in}{|X|X|X|}
+\hline
+\multicolumn{3}{|c|}{With \texttt{IndexMap}} \\\hline
+index & inValue & outValue \\\hline
+0 & 0 & 0 \\\hline
+1 & 512 & 10 \\\hline
+2 & 756 & 100 \\\hline
+3 & 900 & 1000 \\\hline
+4 & 1023 & 1023 \\\hline
+\end{tabularx}
+\end{center}
+
+
+\subsection*{XML Example}
+As an example of an \texttt{IndexMap}, in a 5 position LUT1D with 10-bit input values, the IndexMap could be the following:
+
+\lstinline!<IndexMap dim=5> 60@0  301@1  542@2  782@3  1023@4 </IndexMap>!
+
+An input pixel value of 301 would be calculated using the output value in lut position `1.' 
+
+The first value in the \texttt{IndexMap} represents the minimum expected input value for the LUT and must contain the new input value for $lut[0]$. The last value in the \texttt{IndexMap} must always define the maximum expected input value, which is associated with the last entry in the LUT, $lut[n-1]$.  Values outside of the range of the \texttt{IndexMap} are looked up at either the minimum or the maximum input values.
+
+In a default \texttt{IndexMap}, the range of available inValues is spread equally (i.e. linear interpolation) across all of the available array indexes.  Each index position in the array has a new inValue corresponding to that index position. 
+
+In the simplest case, an \texttt{IndexMap} listing only two values, $inMin$ and $inMax$ defines the range of inValues that the LUT operates on where the $inValue$  for each index in the LUT ($n=4$) is linearly calculated as:
+
+\begin{center}
+\begin{tabularx}{3.5in}{|l|X|l|}
+\hline
+$i$ & $inValue$ & $outValue$ \\\hline
+0 & $inMin$	& 5 \\\hline
+1 & $\left(\frac{i}{(n-1)}\times(inMax-inMin)\right)+inMin$	& 100 \\\hline
+2 & $\left(\frac{i}{(n-1)}\times(inMax-inMin)\right)+inMin$	& 1000 \\\hline
+3 & $inMax$ & 10000 \\\hline
+\end{tabularx}
+\end{center}
+
+Values outside of the range of the \texttt{IndexMap} are looked up at either the minimum or the maximum input values. For example, with 16-bit floating-point codes (\texttt{inBitDepth="16"}), a LUT may have been constructed to use only the input values of $[0 \ldots 1.0]$, in which case, the minimum and maximum input values will be $0.0$ and $1.0$, respectively. If there was an input value of $-1.0$, the lookup for the minimum input value would be used.
+
+In the absence of an \texttt{IndexMap}, the default case, the minimum and maximum input values are determined using the full range of available code values based on the input bit depth and type.
+
+In a complete \texttt{IndexMap}, there is a value provided for each index into the table. This is desired particularly in the case of a LUT3D so that the exact input value of each entry is available.  
+
+An \texttt{IndexMap} will never contain more entries than the lookup table itself.
+
+If only one \texttt{IndexMap} is present in a LUT node, it is applied for all the color components. If there is more than one \texttt{IndexMap}, there must be one \texttt{IndexMap} for each component (in RGB order) for a total of three.
+
+
+\subsection*{Example}
+
+\lstset{frame=single}
+\begin{lstlisting}[caption=Example of a partially enumerated ``Shaper LUT'']
+<LUT1D id="lut-25" name="shaper LUT" inBitDepth="10i" outBitDepth="16f">
+	<Description> 1D LUT with shaper </Description>
+	<IndexMap dim=4>0@0 10@100 20@250 30@360 40@440 445@445 
+	    700@600 800@700 900@850 950@1023</IndexMap>
+	<Array dim="1024 1">
+        0.00
+        0.32
+        0.50
+        <1020 entries omitted>
+        1.0
+	</Array>
+</LUT1D>
+\end{lstlisting}
+
+An \texttt{IndexMap} (optional extension) is used to reshape the sampling function in the LUT.  While it is sometimes possible to combine LUT calculations so that a single LUT would suffice, there are also cases where it is convenient to separate the array data from the sampling function.
+
+In a partial \texttt{IndexMap}, there are greater than 2 items in the list but fewer items than there are index positions into the table. This is the case, for example, where you want to use a 10-point function to change the input shape of a 10-bit LUT that has 1023 entries.
+
+\lstset{frame=none}
+\begin{lstlisting}
+<IndexMap dim=10>0@0 10@100 20@250 30@360 40@440 445@445 700@600 800@700 900@850 
+    950@1023</IndexMap>
+\end{lstlisting}
+\lstset{frame=single}
+
+Each index position in the table will have a new $inValue$ calculated using the function in the \texttt{IndexMap} list.
+
+In this example, the input sample function is changed to stretch the regions of the LUT that process the shadows and highlights. An input value of 10 is instead placed at position 100 in the LUT allowing greater definition in the LUT for all values between 0 and 10 (positions $0 \ldots 100$ in the LUT). In the highlights, an input value of 800 is instead placed at 700, and 900 is instead at position 850. This gives the highlights 150 positions in the LUT as compared to the original 100 positions. Needless to say the accuracy of the middle region of the LUT is compressed.
+
+Another possible use is to apply an overall delta to the data in the array, perhaps with an offset or gain function. If the input data is `density' (log with a gamma), and the LUT represents a film print emulation, then applying an offset to the lookup with a shaper LUT will simulate the effect of a printer light change.
+
+\subsection*{Indexing Calculations with \texttt{IndexMap}}
+A \texttt{ProcessNode} using LUT tables must perform an index calculation to take the range of input values and ratio them to the input `index' range of the table (i.e. the minimum and maximum index positions into the table). This allows the LUT location calculation to be easily achieved as the normalized index function can be multiplied by the number of entries in the LUT to get a direct hash function to the appropriate LUT locations. For integer inputs, this is straightforward as the inBitDepth attribute may be used to apply the whole range of input across the whole range of index positions.
+
+For floating-point inputs, the \texttt{IndexMap} element can be used to select the beginning and end values of the input floats, and apply them across the range of index positions. The LUT designer  may specify range selection with an \texttt{IndexMap}, and/or convert floats in a prior \texttt{Range} node or 1DLUT. In the absence of an \texttt{IndexMap}, the [0 to 1.0] range is applied across the input index range.
+
+Two methods are possible for increasing the accuracy of the LUT calculation by changing the density of samples in a particular region of the LUT. One is to use a 1DLUT node as a `shaper LUT' ahead of a main LUT. The other method which has a more compact representation is to use the \texttt{IndexMap} as a re-indexing function. The array in the main LUT node and the \texttt{IndexMap} are specified at the same time to provide better sampling using the selected interpolation method. The \texttt{IndexMap} defines values at specific array coordinates.  For this second method, the \texttt{IndexMap} values are first used to calculate a hash function (the \texttt{IndexMap} table) that should have as many entries as the number of entries in the target LUT. This table contains output entries that are fractional coordinates into the array of the main LUT. The first lookup into the \texttt{IndexMap} uses the standard LUT access method ($range fraction \times numEntries$) to find the second LUT entry point. This second LUT output value is used for direct access to the main LUT whether a 1DLUT or a 3DLUT where the fractional amount provides the interpolation ratio to the next coordinate of the LUT. A different \texttt{IndexMap} will require revision to the main LUT node to place entries in new positions.

@@ -1,0 +1,35 @@
+% This section contains the content for the Terms and Definitions
+\numberedformat
+\chapter{Terms and Definitions}
+The following terms and definitions are used in this document.
+%% Modify below this line %%
+
+\term{Pre-grade}
+Preliminary color adjustment (``grade'') applied after image creation; typically used for balancing exposure and color for later use in production.
+
+\term{ClipName}
+Name attached to an image sequence or segment of an image sequence; often used in EDLs to describe the version of images used in the edited sequence.  
+
+\term{Source\_Media\_ID}
+General term for identifying the original source name of images or image sequences when the images/sequences were created; often referenced in EDLs. Other terms used for this purpose include Tape Name (CMX EDL formats) and ReelName. An example Source\_Media\_ID name is \textit{A004B003}, which describes \textit{Camera `A' magazine 004  clip B  003}. Noted: for international usage, the Source\_Media\_ID must be a Unicode string.
+
+\term{DateTime}
+(reference: ISO8601:2004) timestamp format  
+
+The DateTime is specified in the following form "YYYY-MM-DDThh:mm:ss\{offset\}" where:
+\begin{itemize}
+    \item YYYY indicates the year
+    \item MM indicates the month
+    \item DD indicates the day
+    \item T indicates the start of the required time section
+    \item hh indicates the hour
+    \item mm indicates the minute
+    \item ss indicates the second
+    \item \{offset\} time zone offset from UTC
+\end{itemize}
+\note{All components are required.}
+
+Example:  2014-11-20T12:24:13-8:00
+
+\term{TransformID}
+String identifying the ACES transform, generally a Color Transformation Language (CTL) file or LUT file. Please see the ACES System Versioning Specification for more information on the format to use for TransformIDs.

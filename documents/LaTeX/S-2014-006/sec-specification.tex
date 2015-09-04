@@ -1,0 +1,47 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Specification}
+\label{sec:specification}
+
+Color transformations (LUTs) are stored in text files that have a defined XML structure.
+
+The top level element in the XML file defines a \texttt{ProcessList} which represents a sequential set of color transformations. The result of each single color transformation feeds into the next transform in the list to create a daisy chain of transforms.
+
+An application reads the XML file and initializes a transform engine to perform the transformations in the list. The transform engine reads as input a stream of code values of pixels, performs the calculations and/or interpolations, and writes an output stream representing a new set of code values for the pixels.  
+
+In this document, the sequence of transformations is described as a node-graph where each \texttt{ProcessNode} performs a transform on a stream of pixel data and only one input line (input pixel values) may enter a node and only one output line (output pixel values) may exit a node. A \texttt{ProcessList} may be defined to work on either 1-component or 3-component pixel data, however all transforms in the list must be appropriate especially in the 1-component case (black-and-white) where only 1D LUT operations are allowed.
+ 
+\begin{figure}[htbp]
+\begin{center}
+    \includegraphics[width=4in]{processList.png}
+\caption{Process List}
+\label{fig:lmt}
+\end{center}
+\end{figure}
+
+The system described in this document assumes that the transform engine performs the set of calculations represented by the color transform nodes. The transform engine has internal objects containing procedures for each type of transform, and the data or data array for each node in the file. The engine determines the appropriate color calculations needed for each of the transform nodes and establishes the sequence of transforms according to the sequence in the list.
+
+Each \texttt{ProcessNode} must indicate for its input and output whether the pixel values are floats or integers, and must also specify the bit depth. In software applications, it is assumed that all processing is performed in floating point and the indication of an integer value represents normalized values (e.g. 10 bit integer represents values from 0.0 to 1.0).
+
+\note{See \autoref{sec:implementation} for notes on floating point processing.}
+
+The input format of each node must be matched by the output format of the previous node in the processing chain. Conversion of values between floating-point and integer ranges must be explicitly performed within a \texttt{ProcessNode}. Conversions between integer and floating-point ranges can be made explicit either in the LUT array output, or with a special \texttt{Range} node. Floating-point values may require handling large ranges of values, and so the \texttt{Range} node is provided for the designer of transforms so that floating-point values may have their ranges altered before feeding into the next node of the list.
+
+It should be noted that input floating-point values may not be assumed to be within any particular range, and due to the need for high dynamic range processing, may cover the entire bit depth of the floating-point type.  Selection of the appropriate range for processing in LUTs is achieved for floating-point values with a Range node. Similarly on the output, floating-point values of -65504.0 to 65504 could be expected from certain types of LUTs. A LUT designer can design a processing path that uses all normalized floating-point values, but other ranges of output in the \texttt{ProcessList} are also possible.
+
+The last node of the \texttt{ProcessList} is expected to be the final output of the LUT. A LUT designer can allow floating-point values to be interpreted by applications and thus delay control of the final encoding through user selections. 
+
+A \texttt{Range} node as the very last node in the \texttt{ProcessList} allows specification of minimum and maximum output values and clamping if needed.
+
+The file format does not provide a mechanism to assign color transforms to either image sequences or image regions. However, the XML structure defining the LUT transform, a \texttt{ProcessList}, may be encapsulated in a larger XML structure potentially providing that mechanism. This mechanism is outside the scope of this document.
+
+Each XML file shall be completely self-contained needing no external information or metadata. Each list must be given a unique ID for reference, however, a color transform may not be incorporated by reference to another XML LUT file. The full content of a color transform must be included in each file. This insures that each LUT file can be an independent archival element.
+
+The data for a LUT is specified with an ordered array that is either all floats or all integers. When three RGB color components are present, it is assumed that these are red, green, and blue in that order.  
+
+There is only one order for how the data array elements are specified in a LUT, which is in general from black to white (from the minimum input value position to the maximum input value position). Arbitrary ordering of list elements is not provided in the format (see \autoref{sec:XMLelements} for details).
+
+For 3DLUTs, the indexes to the cube are assumed to have regular spacing across the range of input values unless otherwise specified with an \texttt{IndexMap}. The transform designer at a minimum may specify the first and last index positions of the LUT relative to the input code value range (see \autoref{sec:indexmap} for details).  All other uses of the \texttt{IndexMap} are considered extensions.
+
+For simplicity's sake, the standard LUT format does not keep track of color spaces, or require the application to convert to a particular color space before use. 3x3 and 3x4 matrices may be defined in a \texttt{ProcessNode} for color conversion needs. Comment fields are provided so that the designer of a transform can indicate the intended usage. The application carries the burden of properly using the transform and/or maintaining pixels in the proper color space.
