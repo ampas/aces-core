@@ -41,7 +41,10 @@ void main
   // Convert from display primary encoding
     // Display primaries to CIE XYZ
     float XYZ[3] = mult_f3_f44( rgb, DISPLAY_PRI_2_XYZ_MAT);
-  
+
+      // Apply CAT from assumed observer adapted white to ACES white point
+      XYZ = mult_f3_f33( XYZ, invert_f33( D60_2_D65_CAT));
+
     // CIE XYZ to rendering space RGB
     float rgbPre[3] = mult_f3_f44( XYZ, XYZ_2_AP1_MAT);
 
