@@ -1,6 +1,6 @@
 
-// <ACEStransformID>InvODT.Academy.Rec2020_ST2048_1000nits.a1.0.1</ACEStransformID>
-// <ACESuserName>ACES 1.0 Inverse Output - Rec.2020 ST2048 (1000 nits)</ACESuserName>
+// <ACEStransformID>InvODT.Academy.Rec2020_ST2084_1000nits.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Inverse Output - Rec.2020 ST2084 (1000 nits)</ACESuserName>
 
 // 
 // Inverse Output Device Transform - Rec.2020 (1000 cd/m^2)
@@ -35,8 +35,8 @@ void main
 {
     float outputCV[3] = { rIn, gIn, bIn};
 
-  // Decode with inverse ST2048 transfer function
-    float rgb[3] = ST2048_2_Y_f3( outputCV);
+  // Decode with inverse ST2084 transfer function
+    float rgb[3] = ST2084_2_Y_f3( outputCV);
 
   // Convert from display primary encoding
     // Display primaries to CIE XYZ

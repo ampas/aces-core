@@ -44,7 +44,7 @@ Included in ACES 1.0.1:
   * HDR ODT transforms have been modified
       * The lowest four coefficients for the HDR ODT tonescales have been adjusted in conjunction with a small offset to allow for obtaining a code value of 0.
       * A Rec.2020 version of the 1000 nit ODT has been added.
-      * HDR transforms have had references to "PQ" changed to "ST2048".
+      * HDR transforms have had references to "PQ" changed to "ST2084".
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 

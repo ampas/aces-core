@@ -1,6 +1,6 @@
 
-// <ACEStransformID>ODT.Academy.Rec2020_ST2048_1000nits.a1.0.1</ACEStransformID>
-// <ACESuserName>ACES 1.0 Output - Rec.2020 ST2048 (1000 nits)</ACESuserName>
+// <ACEStransformID>ODT.Academy.Rec2020_ST2084_1000nits.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - Rec.2020 ST2084 (1000 nits)</ACESuserName>
 
 // 
 // Output Device Transform - Rec.2020 (1000 cd/m^2)
@@ -89,8 +89,8 @@ void main
     // Clip values < 0 (i.e. projecting outside the display primaries)
     rgb = clamp_f3( rgb, 0., HALF_POS_INF);
 
-  // Encode with ST2048 transfer function
-    float outputCV[3] = Y_2_ST2048_f3( rgb);
+  // Encode with ST2084 transfer function
+    float outputCV[3] = Y_2_ST2084_f3( rgb);
 
     rOut = outputCV[0];
     gOut = outputCV[1];

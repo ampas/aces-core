@@ -1,6 +1,6 @@
 
-// <ACEStransformID>InvODT.Academy.P3D60_ST2048_4000nits.a1.0.1</ACEStransformID>
-// <ACESuserName>ACES 1.0 Inverse Output - P3-D60 ST2048 (4000 nits)</ACESuserName>
+// <ACEStransformID>InvODT.Academy.P3D60_ST2084_4000nits.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Inverse Output - P3-D60 ST2084 (4000 nits)</ACESuserName>
 
 // 
 // Inverse Output Device Transform - P3D60 (4000 cd/m^2)
@@ -35,8 +35,8 @@ void main
 {
     float outputCV[3] = { rIn, gIn, bIn};
 
-  // Decode with inverse ST2048 transfer function
-    float rgb[3] = ST2048_2_Y_f3( outputCV);
+  // Decode with inverse ST2084 transfer function
+    float rgb[3] = ST2084_2_Y_f3( outputCV);
 
   // Convert from display primary encoding
     // Display primaries to CIE XYZ
