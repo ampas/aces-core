@@ -2,7 +2,7 @@
 
 The links below point to the current versions of the ACES technical documentation. 
 
-Git is used to version control the LaTeX source for the documents, which is hosted here on Github. Thus, any updates to the documents will be visible through git commits. The PDFs generated from the most up-to-date LaTeX source are linked to below and from the ACES website.
+Git is used to version control the LaTeX source for the documents, which is hosted here on GitHub. Thus, any updates to the documents will be visible through git commits. The PDFs generated from the most up-to-date LaTeX source are linked to below and from the ACES website.
 
 These documents may be updated updated frequently in order to incorporate developer feedback, so please check the [ACES Documentation Manifest](http://j.mp/docsmanifest) to ensure you have the latest versions before finalizing your ACES implementation.
 
