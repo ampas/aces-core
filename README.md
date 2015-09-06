@@ -53,7 +53,7 @@ For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in t
 The links to the current and all past versions of the ACES Developer Resources
 can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
 
-Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
+Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on GitHub at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
 
 Individual files now conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
 

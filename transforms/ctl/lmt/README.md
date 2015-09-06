@@ -49,6 +49,6 @@ Generation of the LMT to ACESv0.1.1:
 
 ### Application of LMTs to ACES data ###
                 
-Care should be taken when using LMTs as the LMT transform can inadvertently limit the dynamic range of the ACES' data. This is particularly true when using empirical LMTs. This is due to the inherent dynamic range limitation associated with the transformation of ACESdata to a set of display code values. ACES' data created using an LMT such as the ACESv0.1.1 LMT will not contain the additional dynamic range usually associated with ACES data.
+Care should be taken when using LMTs as the LMT transform can inadvertently limit the dynamic range of the ACES' data. This is particularly true when using empirical LMTs. This is due to the inherent dynamic range limitation associated with the transformation of ACES' data to a set of display code values. ACES' data created using an LMT such as the ACESv0.1.1 LMT will not contain the additional dynamic range usually associated with ACES data.
 
 ACES' data created using an analytic LMT may not have this limitation. If the algorithm does not limit the dynamic range during the transformation from ACES to ACES', then the LMT may preserve the dynamic range associated with the original ACES data.
