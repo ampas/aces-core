@@ -27,18 +27,18 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *SonyF35.StillLife.dpx* - pictorial camera original file
     * *syntheticChart.01.exr* - a synthetic test chart    
   * **ACES/**
-    * *DigitalLAD.2048x1556.exr* - `ACEScsc.ADX10_to_ACES.a1.0.1.ctl` applied to *camera/DigitalLAD.2048x1556.dpx*
-    * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.dpx*
+    * *DigitalLAD.2048x1556.exr* - `ACEScsc.ADX10_to_ACES.a1.0.1.ctl` applied to *camera/DigitalLAD.2048x1556.exr*
+    * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.exr*
     * *syntheticChart.01.exr* - `ACESlib.Unity.a1.0.1.ctl` applied to *camera/syntheticChart.01.exr*
   * **ACEScc/**
-    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *syntheticChart.01.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
   * **ACEScg/**
-    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScg.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScg.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *syntheticChart.01.exr* - `ACEScsc.ACES_to_ACEScg.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
   * **ACESproxy/**
-    * *SonyF35.StillLife_ACESproxy10i.exr* - `ACEScsc.ACES_to_ACESproxy10i.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
-    * *SonyF35.StillLife_ACESproxy12i.exr* - `ACEScsc.ACES_to_ACESproxy12i.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
+    * *SonyF35.StillLife_ACESproxy10i.exr* - `ACEScsc.ACES_to_ACESproxy10i.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ACESproxy12i.exr* - `ACEScsc.ACES_to_ACESproxy12i.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *syntheticChart_ACESproxy10i.01.exr* - `ACEScsc.ACES_to_ACESproxy10i.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
     * *syntheticChart_ACESproxy12i.01.exr* - `ACEScsc.ACES_to_ACESproxy12i.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
   * **InvACES/**
@@ -78,15 +78,15 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *syntheticChart.01_from_ODT.Academy.Rec2020_100nits_dim.exr* - `InvODT.Academy.Rec2020_100nits_dim.a1.0.1.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.Rec2020_100nits_dim.tiff*
     * *syntheticChart.01_from_ODT.Academy.RGBmonitor_D60sim_100nits_dim.exr* - `InvODT.Academy.DCDM.a1.0.1.ctl` applied to *ODT/syntheticChart.01_ODT.Academy.RGBmonitor_D60sim_100nits_dim.tiff*
   * **LMT/**
-    * *SonyF35.StillLife_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
-    * *SonyF35.StillLife_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
-    * *SonyF35.StillLife_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.dpx*
-    * *syntheticChart.01_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.1.ctl` applied to *ACES/syntheticChart.01.dpx*
-    * *syntheticChart.01_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.1.ctl` applied to *ACES/syntheticChart.01.dpx*
-    * *syntheticChart.01_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.1.ctl` applied to *ACES/syntheticChart.01.dpx*
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *syntheticChart.01_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
   * **OCES/**
     * *SonyF35.StillLife.exr* - `RRT.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *syntheticChart.01_oces.exr* - `RRT.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01.exr* - `RRT.a1.0.1.ctl` applied to *ACES/syntheticChart.01.exr*
   * **ODT/**
     * *SonyF35.StillLife_ODT.Academy.DCDM_P3D60.tiff* - `ODT.Academy.DCDM_P3D60.a1.0.1.ctl` applied to *OCES/SonyF35.StillLife.exr*
     * *SonyF35.StillLife_ODT.Academy.DCDM.tiff* - `ODT.Academy.DCDM.a1.0.1.ctl` applied to *OCES/SonyF35.StillLife.exr*    
