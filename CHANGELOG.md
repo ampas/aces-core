@@ -9,7 +9,7 @@
   * HDR ODT transforms have been modified
       * The lowest four coefficients for the HDR ODT tonescales have been adjusted in conjunction with a small offset to allow for obtaining a code value of 0.
       * A Rec.2020 version of the 1000 nit ODT has been added.
-      * HDR transforms have had references to "PQ" changed to "ST2048".
+      * HDR transforms have had references to "PQ" changed to "ST2084".
 
 **Version 1.0 (December 20, 2014):**
   * Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
