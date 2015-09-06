@@ -30,7 +30,7 @@
       * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.
       * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added
       * Rec.709 ODTs now have a runtime flag for full range or legal range output. The default is full range.
-  * ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated
+  * ACEScc (formerly ACESlog) and ACESproxy transforms have been updated
   * Miscellaneous code cleanups. Removal of unused code
 
   
