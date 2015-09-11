@@ -27,8 +27,8 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *SonyF35.StillLife.dpx* - pictorial camera original file
     * *syntheticChart.01.exr* - a synthetic test chart    
   * **ACES/**
-    * *DigitalLAD.2048x1556.exr* - `ACEScsc.ADX10_to_ACES.a1.0.1.ctl` applied to *camera/DigitalLAD.2048x1556.exr*
-    * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.exr*
+    * *DigitalLAD.2048x1556.exr* - `ACEScsc.ADX10_to_ACES.a1.0.1.ctl` applied to *camera/DigitalLAD.2048x1556.dpx*
+    * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.dpx*
     * *syntheticChart.01.exr* - `ACESlib.Unity.a1.0.1.ctl` applied to *camera/syntheticChart.01.exr*
   * **ACEScc/**
     * *SonyF35.StillLife.exr* - `ACEScsc.ACES_to_ACEScc.a1.0.1.ctl` applied to *ACES/SonyF35.StillLife.exr*
