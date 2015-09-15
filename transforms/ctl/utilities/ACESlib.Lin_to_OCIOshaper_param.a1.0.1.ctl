@@ -31,8 +31,8 @@ void main
   float maxLinear = pow(2.0, maxExposure) * middleGrey;
   float scale = (maxLinear - minLinear) / PQ_max;
 
-  rOut = Y_2_ST2048( (rIn - minLinear)/scale );
-  gOut = Y_2_ST2048( (gIn - minLinear)/scale );
-  bOut = Y_2_ST2048( (bIn - minLinear)/scale );
+  rOut = Y_2_ST2084( (rIn - minLinear)/scale );
+  gOut = Y_2_ST2084( (gIn - minLinear)/scale );
+  bOut = Y_2_ST2084( (bIn - minLinear)/scale );
   aOut = aIn;  
 }
