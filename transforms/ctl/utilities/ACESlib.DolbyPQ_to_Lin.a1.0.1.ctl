@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.ST2048_to_Lin.a1.0.1.ctl</ACEStransformID>
+// <ACEStransformID>ACESlib.DolbyPQ_to_Lin.a1.0.1</ACEStransformID>
 
 // 
 // Generic transform from SMPTE ST2084 to linear
