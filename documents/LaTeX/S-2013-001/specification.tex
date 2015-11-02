@@ -47,7 +47,7 @@ White   & 1.00000 & 1.00000 & 1.00000 & & 0.32168 & 0.33767 \\
 The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and 10-bit integer ACESproxy values.
 
 \subsection{10-bit ACESproxy encoding}
-ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy10 values using Equation \ref{eq:ACESproxyLin2ACESproxy10}.
 
@@ -125,7 +125,7 @@ ACESproxy $R$, $G$, and $B$ values shall be converted to ACESproxyLin values usi
 \label{eq:ACESproxy2ACESproxyLin10}
 \end{floatequ}
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 \note{Equation \ref{eq:ACESproxyLin2ACES10} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
@@ -165,7 +165,7 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
 The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and 12-bit integer ACESproxy values.
 
 \subsection{12-bit ACESproxy encoding}
-ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values using Equation \ref{eq:ACESproxyLin2ACESproxy12}.
 
@@ -242,7 +242,7 @@ ACESproxy $R$, $G$, and $B$ values shall be converted to ACESproxyLin values usi
 \label{eq:ACESproxy2ACESproxyLin}
 \end{floatequ}
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 \note{Equation \ref{eq:ACESproxyLin2ACES12} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
