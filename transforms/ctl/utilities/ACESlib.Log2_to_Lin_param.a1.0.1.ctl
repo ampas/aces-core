@@ -17,8 +17,8 @@ float log2_to_lin_32f
 {
   if (logNorm < 0.0) return 0.0;
 
-  float log2 = logNorm*(maxExposure - minExposure) + minExposure;
-  float lin = pow(2.0, log2) * middleGrey;
+  float lg2 = logNorm*(maxExposure - minExposure) + minExposure;
+  float lin = pow(2.0, lg2) * middleGrey;
   
   return lin;
 }
