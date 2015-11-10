@@ -72,7 +72,7 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input varying int legalRange = 0
+    input uniform bool legalRange = false
 )
 {
     float oces[3] = { rIn, gIn, bIn};
@@ -135,7 +135,7 @@ void main
     outputCV[2] = bt1886_r( linearCV[2], DISPGAMMA, L_W, L_B);
 
   // Default output is full range, check if legalRange param was set to true
-    if (legalRange == 1) {
+    if (legalRange) {
       outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 

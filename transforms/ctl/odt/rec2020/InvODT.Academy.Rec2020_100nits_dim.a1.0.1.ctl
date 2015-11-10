@@ -36,13 +36,13 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input varying int legalRange = 0
+    input uniform bool legalRange = false
 )
 {  
     float outputCV[3] = { rIn, gIn, bIn};
 
   // Default output is full range, check if legalRange param was set to true
-    if (legalRange == 1) {
+    if (legalRange) {
       outputCV = smpteRange_to_fullRange_f3( outputCV);
     }
 
