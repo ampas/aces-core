@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.Lin_to_OCIOshaper_param.a1.0.1.ctl</ACEStransformID>
+// <ACEStransformID>ACESutil.Lin_to_OCIOshaper_param.a1.0.1.ctl</ACEStransformID>
 
 // 
 // Generic transform from linear to an OCIOshaper encoding
@@ -7,7 +7,7 @@
 
 
 
-import "ACESlib.Utilities_Color.a1.0.1";
+import "ACESutil.Utilities_Color.a1.0.1";
 
 
 

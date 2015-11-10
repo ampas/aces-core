@@ -1,15 +1,13 @@
 
-// <ACEStransformID>ACESlib.Utilities_Color.a1.0.1</ACEStransformID>
+// <ACEStransformID>ACESutil.Utilities_Color.a1.0.1</ACEStransformID>
 
-//
-// utilities-color.ctl
 //
 // Color related constants and functions
 //
 
 
 
-import "ACESlib.Utilities.a1.0.1";
+import "ACESutil.Utilities.a1.0.1";
 
 
 

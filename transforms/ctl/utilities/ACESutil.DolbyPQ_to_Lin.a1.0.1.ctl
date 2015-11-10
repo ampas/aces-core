@@ -1,13 +1,13 @@
 
-// <ACEStransformID>ACESlib.Lin_to_DolbyPQ.a1.0.1</ACEStransformID>
+// <ACEStransformID>ACESutil.DolbyPQ_to_Lin.a1.0.1</ACEStransformID>
 
 // 
-// Generic transform from linear to encoding specified in SMPTE ST2084
+// Generic transform from SMPTE ST2084 to linear
 // 
 
 
 
-import "ACESlib.Utilities_Color.a1.0.1";
+import "ACESutil.Utilities_Color.a1.0.1";
 
 
 
@@ -23,8 +23,8 @@ void main
   output varying float aOut
 )
 {
-  rOut = Y_2_ST2084( rIn );
-  gOut = Y_2_ST2084( gIn );
-  bOut = Y_2_ST2084( bIn );
+  rOut = ST2084_2_Y( rIn );
+  gOut = ST2084_2_Y( gIn );
+  bOut = ST2084_2_Y( bIn );
   aOut = aIn;  
 }
