@@ -30,8 +30,9 @@ where \texttt{Type} is one of the following:
     \item \texttt{InvRRT} -- Inverse Reference Rendering Transform
     \item \texttt{InvODT} -- Inverse Output Device Transform
     \item \texttt{InvRRTODT} -- ACES inverse Output Transform (concatenated RRT and ODT)
-    \item \texttt{ACESlib} -- ACES library functions for core transforms, e.g., tonescales.ctl and utilities-color.ctl
+    \item \texttt{ACESlib} -- ACES library functions for core transforms, e.g., Tonescales
     \item \texttt{ACEScsc} -- ACES color space conversion transforms
+    \item \texttt{ACESutil} -- utility functions provided with the ACES release, e.g., Adjust\_Exposure
 \end{listize}
 
 ACES system components are assigned a string that serves as a unique identifier for an ACES System Release. This identifier is constructed using a set of tokens as described in this specification so that it will be more human-readable than a typical Universally Unique Identifier (UUID).
@@ -105,7 +106,7 @@ An ODT's major version number shall match the ACES System Version Major Version 
 
 Example filenames using this format are:
 \begin{listize}
-	\item \texttt{ODT.Academy.P3d60Projector.a1.0.0.ctl}
+	\item \texttt{ODT.Academy.P3D60\_48nits.a1.0.0.ctl}
 	\item \texttt{ODT.Academy.Rec709\_D60sim\_100nits\_dim.a1.0.0.ctl}
 \end{listize}
 

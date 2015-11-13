@@ -2,8 +2,6 @@
 // <ACEStransformID>ACESlib.Utilities_Color.a1.0.1</ACEStransformID>
 
 //
-// utilities-color.ctl
-//
 // Color related constants and functions
 //
 

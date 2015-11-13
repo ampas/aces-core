@@ -1,8 +1,8 @@
 
-// <ACEStransformID>ACESlib.Lin_to_OCIOshaper_param.a1.0.1.ctl</ACEStransformID>
+// <ACEStransformID>ACESutil.OCIOshaper_to_Lin_param.a1.0.1.ctl</ACEStransformID>
 
 // 
-// Generic transform from linear to an OCIOshaper encoding
+// Generic transform from an OCIOshaper encoding to linear
 // 
 
 
@@ -31,8 +31,8 @@ void main
   float maxLinear = pow(2.0, maxExposure) * middleGrey;
   float scale = (maxLinear - minLinear) / PQ_max;
 
-  rOut = Y_2_ST2084( (rIn - minLinear)/scale );
-  gOut = Y_2_ST2084( (gIn - minLinear)/scale );
-  bOut = Y_2_ST2084( (bIn - minLinear)/scale );
+  rOut = ST2084_2_Y( rIn )*scale + minLinear;
+  gOut = ST2084_2_Y( gIn )*scale + minLinear;
+  bOut = ST2084_2_Y( bIn )*scale + minLinear;
   aOut = aIn;  
 }
