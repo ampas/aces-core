@@ -172,7 +172,7 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values u
 \begin{floatequ} 
 \begin{equation} 
     \resizebox{\textwidth}{!}{$
-    ACESproxy10 = \left\{ 
+    ACESproxy12 = \left\{ 
     \begin{array}{l l}
         256;    & ACESproxyLin \leq 2^{-9.72} \\
         \mathrm{FLOAT2CV12}\left[\left(\log_2(ACESproxyLin)+2.5\right)\times 200+1700\right];        & ACESproxyLin > 2^{-9.72} \\
@@ -236,7 +236,7 @@ ACESproxy $R$, $G$, and $B$ values shall be converted to ACESproxyLin values usi
 
 \begin{floatequ} 
 \begin{equation} 
-    ACESproxyLin = 2^{\left(\dfrac{ACESproxy10-1700}{200}-2.5\right)}
+    ACESproxyLin = 2^{\left(\dfrac{ACESproxy12-1700}{200}-2.5\right)}
 \end{equation}
 \caption{ACESproxy12 to ACESproxyLin}
 \label{eq:ACESproxy2ACESproxyLin}
