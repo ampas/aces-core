@@ -136,10 +136,9 @@
 \fancypagestyle{plain}{%
   \fancyhf{} % clear all six fields
   \fancyhead[L]{\Docnumber}
-  \fancyhead[C]{\Altdocname}
-  \fancyhead[R]{Page \thepage}
-  \fancyfoot[L]{Version \Versionnumber}
-  \fancyfoot[R]{\Docdate }
+  \fancyhead[R]{\Altdocname}
+  \fancyfoot[L]{Page \thepage}
+  \fancyfoot[R]{\Docdate}
   \renewcommand{\headrulewidth}{0pt}
   \renewcommand{\footrulewidth}{0pt}
 }
@@ -323,7 +322,7 @@
 		\vspace{22pt}
 		\fontsize{11}{13.2} 
 		\selectfont
-		Version \Versionnumber \hspace{0.25 in} \Docdate \\
+		\Docdate \\
 		\vspace{18pt}
 	\end{center}
 	\begin{adjustwidth}{0.5in}{0.5in}
