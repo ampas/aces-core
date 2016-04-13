@@ -1,3 +1,14 @@
+**Version 1.0.2 (April 12, 2016):**
+  * Added Missing chromatic adaptation transform in Rec2020 1000-nit InvODT
+  * Fixed ACEStransformID references in DolbyPQ utility CTLs
+  * Fixed lingering ST2048 references
+  * Fixes typo in file names in images/README
+  * Fixed file names in images README
+  * Various minor typographical and stylistic fixes
+  * Renamed all references to ST2084 from ST2048
+  * Tabs => spaces and blank space cleanup
+  * Updated README and CHANGELOG
+
 **Version 1.0.1 (September 4, 2015):**
   * ACES technical documentation has been added as LaTeX source to facilitate tracking of document revisions.
   * Utility functions for making the OCIO config have been added.
