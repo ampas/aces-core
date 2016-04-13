@@ -23,9 +23,9 @@ images, and documentation.
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
 
-### Changes from Previous Releases ###
+### Changes from Previous Release ###
 
-Though the "master" branch is 1.0.1, the current version of ACES remains 1.0. The 1.0.1 
+Though the "master" branch is 1.0.2, the current major version of ACES remains 1.0. The 1.0.2 
 "patch" release does not add features, change the look, or modify the core transforms 
 beyond addressing reported bugs since the Major version release. 
 
@@ -34,17 +34,16 @@ new features that will ultimately be rolled into a future version of ACES. These
 improvements will continue to be staged on the dev branch for testing as they become 
 available.
 
-Included in ACES 1.0.1:
-  * ACES technical documentation has been added as LaTeX source to facilitate tracking of document revisions.
-  * Utility functions for making the OCIO config have been added.
-  * A bug in piecewise function logic for lin_2_acesProxy() was fixed. 
-  * Readability and robustness of some transforms have been improved with suggestions from users.
-  * Various typos in transform comments and documentation have been corrected.
-  * A broken link to the reference images has been corrected.
-  * HDR ODT transforms have been modified
-      * The lowest four coefficients for the HDR ODT tonescales have been adjusted in conjunction with a small offset to allow for obtaining a code value of 0.
-      * A Rec.2020 version of the 1000 nit ODT has been added.
-      * HDR transforms have had references to "PQ" changed to "ST2048".
+Included in ACES 1.0.2:
+  * Added Missing chromatic adaptation transform in Rec2020 1000-nit InvODT
+  * Fixed ACEStransformID references in DolbyPQ utility CTLs
+  * Fixed lingering ST2048 references
+  * Fixed type in file names in images/README
+  * Fixed file names in images README
+  * Various minor typographical and stylistic fixes
+  * Renamed all references to ST2084 from ST2048
+  * Tabs => spaces and blank space cleanup      
+  * Update README and CHANGELOG
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 
@@ -53,7 +52,7 @@ For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in t
 The links to the current and all past versions of the ACES Developer Resources
 can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
 
-Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
+Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on GitHub at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
 
 Individual files now conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
 

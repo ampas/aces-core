@@ -1,3 +1,14 @@
+**Version 1.0.2 (April 12, 2016):**
+  * Added Missing chromatic adaptation transform in Rec2020 1000-nit InvODT
+  * Fixed ACEStransformID references in DolbyPQ utility CTLs
+  * Fixed lingering ST2048 references
+  * Fixes typo in file names in images/README
+  * Fixed file names in images README
+  * Various minor typographical and stylistic fixes
+  * Renamed all references to ST2084 from ST2048
+  * Tabs => spaces and blank space cleanup
+  * Updated README and CHANGELOG
+
 **Version 1.0.1 (September 4, 2015):**
   * ACES technical documentation has been added as LaTeX source to facilitate tracking of document revisions.
   * Utility functions for making the OCIO config have been added.
@@ -9,7 +20,7 @@
   * HDR ODT transforms have been modified
       * The lowest four coefficients for the HDR ODT tonescales have been adjusted in conjunction with a small offset to allow for obtaining a code value of 0.
       * A Rec.2020 version of the 1000 nit ODT has been added.
-      * HDR transforms have had references to "PQ" changed to "ST2048".
+      * HDR transforms have had references to "PQ" changed to "ST2084".
 
 **Version 1.0 (December 20, 2014):**
   * Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
@@ -30,7 +41,7 @@
       * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.
       * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added
       * Rec.709 ODTs now have a runtime flag for full range or legal range output. The default is full range.
-  * ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated
+  * ACEScc (formerly ACESlog) and ACESproxy transforms have been updated
   * Miscellaneous code cleanups. Removal of unused code
 
   

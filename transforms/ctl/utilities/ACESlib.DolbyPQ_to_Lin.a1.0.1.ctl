@@ -1,8 +1,8 @@
 
-// <ACEStransformID>ACESlib.ST2048_to_Lin.a1.0.1.ctl</ACEStransformID>
+// <ACEStransformID>ACESlib.DolbyPQ_to_Lin.a1.0.1</ACEStransformID>
 
 // 
-// Generic transform from SMPTE ST2048 to linear
+// Generic transform from SMPTE ST2084 to linear
 // 
 
 
@@ -23,8 +23,8 @@ void main
   output varying float aOut
 )
 {
-  rOut = ST2048_2_Y( rIn );
-  gOut = ST2048_2_Y( gIn );
-  bOut = ST2048_2_Y( bIn );
+  rOut = ST2084_2_Y( rIn );
+  gOut = ST2084_2_Y( gIn );
+  bOut = ST2084_2_Y( bIn );
   aOut = aIn;  
 }
