@@ -5,7 +5,7 @@
 // Generic transform from linear to a log base-2 encoding
 // 
 
-
+import "ACESlib.Utilities.a1.0.1";
 
 float lin_to_log2_32f
 (
