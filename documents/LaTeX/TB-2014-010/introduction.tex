@@ -1,0 +1,26 @@
+% This file contains the content for the Introduction
+\unnumberedformat	    % Change formatting to that of "Introduction" section
+\chapter{Introduction} 	% Do not modify section title
+%% Modify below this line %%
+
+The Look Modification Transform (LMT) imparts an image-wide creative `look' to the appearance of ACES images. It is a component of the ACES viewing pipeline that precedes the Reference Rendering Transform (RRT) and a selected Output Device Transform (ODT). LMTs exist because some color manipulations can be complex, and having a pre-set for a complex look makes a colorist's work more efficient. In addition, emulation of traditional color reproduction methods such as the projection of film print requires complex interactions of colors that are better modeled in a systematic transform than by requiring a colorist to match `by eye.'
+
+The LMT is intended to supplement — not replace — a colorist's traditional tools for grading and manipulating images. There are three places in the viewing pipeline where production staff modifies the look of the image from the default rendering of ACES data:  
+
+\begin{itemize}
+    \item   Adjustments to the exposure levels or white balance of a particular shot are often done as a `pre-grade.'
+    \item   A colorist applies a grade to further refine and modify the color appearance to achieve the creative look of a shot. 
+    \item   Finally the LMT provides an additional, optional tool for the colorist to manipulate ACES images and preview the result.
+\end{itemize}
+
+Thus the pre-grade and the LMT bracket the colorist's grading work.
+
+While the colorist's grading tools allow manipulation of either the overall image or of selected pieces of the image, the LMT is designed to work only across the overall image. 
+
+As part of the ACES viewing pipeline, the LMT takes ACES color-encoded values as inputs, and outputs modified ACES-encoded values that may then be immediately processed by the RRT and an ODT (in this case, the ODT appropriate for the colorist’s display).
+
+Outside an immediate ACES viewing pipeline, the LMT’s output can additionally (or alternatively) be saved, creating a new ACES image container file that has `baked in' the effect of the LMT on the original image. When this new file with `baked in' changes is viewed using the standard ACES viewing pipeline, the creative intent reflected in the prior application of the LMT to the original will be preserved. 
+
+LMTs can be reused across multiple shots or even across an entire production. They are separate from a shot's `grade' or a particular vendor's color grade file.
+
+Key characteristics of a well-designed LMT are portability across applications, and preservation (to the extent that is both possible and practical) of ACES's high dynamic range and wide color gamut while still imparting a designed, creative, target look.

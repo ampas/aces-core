@@ -9,5 +9,5 @@ directly to confirm they have the latest IDTs for their camera.
 ## Note to camera manufacturers ##
 If you would like IDTs for your cameras included in this repository, or would
 like to update IDTs currently in the repository, please open a pull request. You
-may also contact aces-dev@oscars.org for assistance with IDT creation,
-IDT submission, or to include links to IDTs hosted on your site.
+may also send an email to acessupport@oscars.org for assistance with IDT 
+creation, IDT submission, or to include links to IDTs hosted on your site.

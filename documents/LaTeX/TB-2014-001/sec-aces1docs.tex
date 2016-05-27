@@ -1,0 +1,77 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{ACES Documents}
+
+\section{Overview/General}
+\subsection{ACES Versioning System}
+``Academy S-2014-002, Academy Color Encoding System -- Versioning System'' describes the versioning of the engineering components that comprise the public release of the ACES system. Version numbers are intended to be used within ACES files such as transforms and the ACES Clip-level Metadata file. A separate document deals with naming and versioning issues as they relate to end-users (see \autoref{uxguidelines}).
+
+\subsection{ACES Component Names}
+``Academy TB-2014-012, Academy Color Encoding System Component Names'' defines key ACES component names as a prelude to an ACES glossary.
+
+\subsection{ACES User Experience Guidelines} \label{uxguidelines}
+``Academy TB-2014-002, Academy Color Encoding System User Experience Guidelines'' provides guidelines for product developers building products that implement ACES and for others looking for guidance on how best to present ACES terminology and concepts to end-users.
+
+\subsection{Alternate ACES Viewing Pipeline User Experience}
+``Academy TB-2014-013, Alternate ACES Viewing Pipeline User Experience'' describes an alternate approach to implementing and presenting the ACES viewing pipeline. 
+
+
+\section{SMPTE Engineering Documents}
+\subsection{SMPTE ST 2065-1:2012}
+\label{aces}
+``Academy S-2008-001 -- Academy Color Encoding Specification (ACES)'' was published prior to SMPTE ST 2065-1:2012. S-2008-001 served as the basis for the SMPTE document but is now superseded by the SMPTE standard.
+
+``Academy TB-2014-004, Informative Notes on SMPTE ST 2065-1 -- Academy Color Encoding Specification (ACES)'' provides background and contextual information related to SMPTE ST 2065-1:2012. Appendix A provides Academy S-2008-001 for historical reference.
+
+\subsection{SMPTE ST 2065-2:2012 and SMPTE ST 2065-3:2012}
+Academy S-2008-002 served as the basis for SMPTE ST 2065-2:2012 and ST 2065-3:2012, but is now superseded by the SMPTE standards.
+
+``Academy TB-2014-005, Informative Notes on SMPTE ST 2065-2 -- Academy Printing Density (APD) -- Spectral Responsivities, Reference Measurement Device and Spectral Calculation and SMPTE ST 2065-3 Academy Density Exchange Encoding (ADX) -- Encoding Academy Printing Density (APD) Values'' provides background and contextual information related to SMPTE ST 2065-2:2012 and SMPTE ST 2065-3:2012. Appendix A provides S-2008-002 for historical reference.
+
+\subsection{SMPTE ST 2065-4:2013}
+\label{acescontainer}
+``Academy TB-2014-006, Informative Notes on SMPTE ST 2065-4 -- ACES Image Container File Layout'' provides background and contextual information related to SMPTE ST 2065-4:2013.
+
+\subsection{SMPTE ST 268:2014}
+\label{adxcontainer}
+``Academy TB-2014-007, Informative Notes on SMPTE ST 268:2014 -- File Format for Digital Moving Picture Exchange (DPX) -- Amendment 1'' provides background and contextual information related to SMPTE ST 268:2014.
+
+
+\section{ACES Encodings}
+\subsection{ACES2065-1}
+The document referenced in \autoref{aces} specifies ACES, the fundamental colorimetric encoding in the Academy Color Encoding System.
+
+\subsection{ACEScc}
+``Academy S-2014-003, ACEScc -- A Logarithmic Encoding of ACES Data for use within Color Grading Systems'' defines a colorimetric encoding appropriate for final color adjustment operations.
+
+\subsection{ACESproxy}
+``Academy S-2013-001, ACESproxy -- An Integer Log Encoding of ACES Image Data'' defines a colorimetric encoding appropriate for on-set preview and on-set look management applications.
+
+\subsection{ACEScg}
+``Academy S-2014-004, ACEScg -- A Working Space for CGI Render and Compositing'' defines a colorimetric encoding appropriate as a working space for use in Computer Generated Imagery (CGI) tools such as compositors, paint and rendering systems.
+
+\subsection{ASC-CDL Application}
+``Academy TB-2014-008'' describes a recommended method for applying ASC-CDL values to image data in an ACES workflow.
+
+
+\section{ACES Containers and Metadata}
+\subsection{ACES Image Files}
+The document referenced in \autoref{acescontainer} specifies the container format for ACES2065-1 encoded images.
+
+\subsection{ADX Files}
+The document referenced in \autoref{adxcontainer} specifies the container format for ADX-encoded images.
+
+\subsection{ACESclip Files}
+``Academy TB-2014-009, Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage'' defines an XML-based file format that contains metadata to describe the viewing pipeline for a collection of image files associated with an ACES workflow.
+
+\subsection{Look Modification Transform Files}
+``Academy TB-2014-010, Design, Integration and Use of ACES Look Modification Transforms'' describes the design, integration and use of ACES Look Modification Transforms (LMTs).
+
+\subsection{Academy-ASC Common LUT Format Files}
+``Academy S-2014-006, A Common File Format for Look-Up Tables'' specifies an XML-based file format that contains color Look-Up Tables (LUTs). LUTs are used extensively in implementations of and workflows using the Academy Color Encoding System.
+
+
+\section{Other}
+\subsection{Digital Camera Input Device Transform (IDT) Developers Guide}
+``Academy P-2013-001, Recommended Procedures for the Creation and Use of Digital Camera System Input Device Transforms (IDTs)'' describes methods to create Input Device Transforms for use with the Academy Color Encoding System.

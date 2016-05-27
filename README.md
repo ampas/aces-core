@@ -1,14 +1,14 @@
 ## Academy Color Encoding System Developer Resources ##
 
 The Academy Color Encoding System (ACES) is a set of components that facilitates
-a wide range of motion picture workflows while eliminating the ambiguity of
+a wide range of motion picture and television workflows while eliminating the ambiguity of
 legacy file formats. The system is designed to support both all-digital and
 hybrid film-digital motion picture workflows.
 
 The basic ACES components are:
 
 * Color encoding and metric specifications, file format specifications, color
-transformations, and an open source reference implementation. 
+transformations, and an open source reference implementation 
 * A set of reference images and calibration targets for film scanners and
 recorders 
 * Documentation on the system and software tools
@@ -23,42 +23,36 @@ images, and documentation.
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
 
-### Changes from Previous Releases ###
+### Changes from Previous Release ###
 
-* Additional transforms, encodings, documents, and reference images are included as part of the ACES Version 1.0 release. Please carefully review the ACES Version 1.0 documentation package for details on new features and enhancements for ACES Version 1.0
-* Filenames have been updated to conform to the ACES System Versioning Specification
-* RRT     
-    * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.  
-    * The global desaturation is now applied in RGB space prior to the RRT tone scale.  This was done to improve the overall look of the images based on end-user feedback.
-    
-    * The red modifier and glow module variables have been modified.  This was done to improve the overall look of the images based on end-user feedback. 
-    * A clip of negative values has been added prior to the application of the 3x3 matrix that converts ACES to the rendering primaries. This is added to avoid an error that can occur with negative and saturated ACES values turning positive and saturated.
-    
-    * The RRT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail. 
-    
-    * The output luminance of an 18% scene reflector was moved from 5.0 nits to 4.8 nits to slightly darken the overall image in response to end-user feedback.     
-    * The hue restore function has been removed to improve grading behavior and address rare instances where image noise could be enhanced.
-    * The RRT tone scale has been modified to allow for the use of b-splines in the new HDR ODTs.
-* ODTs
-    * New set of rendering primaries have been introduced to improve gradeability and vectorscope behavior.  The new primaries, known as AP1, are near the spectrum locus but exceed anticipated device gamuts, including ITU-R BT.2020 at a range of white points.
-    
-    * The ODT tone scale has been modified to address end-user concerns that the default rendering in v0.7.1 unnecessarily crushed shadow detail.
-    
-    * The hue restore and smart-clip functions have been removed to improve grading behavior and address rare instances where image noise could be enhanced.
-    * ODT tone scales have been modified to allow the ability to achieve device black on-set and more quickly in the DI environment.
-    * Rec.709, Rec.2020, and rgbMonitor ODTs supporting dim surround environments have been added
-    * Rec.709 ODTs now have a runtime flag for full range or legal range output. The default is full range.
-* ACEScc (formerly ACESlog) and ACESproxy tranforms have been updated
-* Miscellaneous code cleanups. Removal of unused code
+Though the "master" branch is 1.0.2, the current major version of ACES remains 1.0. The 1.0.2 
+"patch" release does not add features, change the look, or modify the core transforms 
+beyond addressing reported bugs since the Major version release. 
 
-For a detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
+As always, you should check the hotfixes and dev branches for the latest bug fixes and 
+new features that will ultimately be rolled into a future version of ACES. These 
+improvements will continue to be staged on the dev branch for testing as they become 
+available.
+
+Included in ACES 1.0.2:
+  * Added Missing chromatic adaptation transform in Rec2020 1000-nit InvODT
+  * Fixed ACEStransformID references in DolbyPQ utility CTLs
+  * Fixed lingering ST2048 references
+  * Fixed type in file names in images/README
+  * Fixed file names in images README
+  * Various minor typographical and stylistic fixes
+  * Renamed all references to ST2084 from ST2048
+  * Tabs => spaces and blank space cleanup      
+  * Update README and CHANGELOG
+
+For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 
 ### Versioning ###
  
 The links to the current and all past versions of the ACES Developer Resources
 can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/ampas/aces-dev/releases).  
 
-Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on Github at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
+Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on GitHub at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
 
 Individual files now conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
 
@@ -67,27 +61,24 @@ Individual files now conform to the ACES System Versioning Specification.  Detai
 __Master Branch__
  
 The current release version of ACES can always be found at the HEAD of the
-master branch.  Previous release versions are tagged and are also commits on the
-master.  The master branch contains no intermediate commits so all commits on
-the master branch are tagged and represent a release of ACES.
+master branch.  The master branch contains no intermediate commits and all commits on
+the master branch are tagged to represent a release of ACES.
 
 __Dev Branch__
  
-All commits between releases will be on the dev branch. Commits on the dev
-branch will be included in the next release version. Commits staged on the dev
-branch, but not yet merged into the master, should be considered non-critical. 
-All intermediate commits for a release will be staged on the dev branch before
-being merged into the master and tagged.
+Intermediate commits between releases will be staged on the dev branch.  Commits staged 
+on the dev branch, but not yet merged into the master, should be considered as "planned 
+for inclusion" in the next release version.  Commits on the dev branch will ultimately 
+be merged into the master branch as part of a future release.
 
 __Hotfixes Branch__
- 
-In some cases it may be necessary to create a hotfixes branch.  The hotfixes
+
+In some instances it may be necessary to create a hotfixes branch.  The hotfixes
 branch will include important, but not fully tested, fixes for bugs found in a
-particular release.
-Hotfixes should only be implemented by developers if the bug they are intended
-to correct is encountered in the course of production and is deemed to be a
-barrier to using a particular ACES release.  Hotfixes, once fully tested, will
-be merged into dev branch, and ultimately the master.    
+particular release.  Hotfixes should only be implemented by developers if the bug they 
+are intending to correct is encountered in the course of production and is deemed to be 
+a barrier to using a particular ACES release.  Hotfixes, once fully tested, will
+be merged into the dev branch, and ultimately the master.
 
 ## Prerequisites ##
 
@@ -103,7 +94,7 @@ Academy under the following terms and conditions: A worldwide, royalty-free,
 non-exclusive right to copy, modify, create derivatives, and use, in source and
 binary forms, is hereby granted, subject to acceptance of this license.
 
-Copyright 2014 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
+Copyright 2015 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
 Portions contributed by others as indicated. All rights reserved.
 
 Performance of any of the aforementioned acts indicates acceptance to be bound

@@ -1,0 +1,17 @@
+\appendixchapter{Range of ACES values}{i}
+\label{appendixB}
+
+This appendix is intended for developers who wish to validate the accuracy of their implementation.
+
+The table below contains the results of conversions using exact 16-bit ACES codes. 16-bit ACES has higher precision than either form of ACESproxy so rounding of ACES values will occur. These numbers are accurate for neutral values where R=G=B.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|Y|Y|Y|Y|Y|Y|}
+\hline
+\textbf{ACES 16-bit half-float Hex Code} & \textbf{ACES} & \textbf{ACESproxy 10-bit CV} & 
+\textbf{ACESproxy 12-bit CV} & \textbf{ACES decoded from 10-bit ACESproxy} & \textbf{ACES decoded from 12-bit ACESproxy} \\ \hline
+14DA & 0.001184464 & 64 & 256 & 0.001185417 & 0.001185417 \\ \hline
+31C3 & 0.180053711 & 426 & 1705 & 0.179199219 & 0.179809570 \\ \hline
+5AF7 & 222.875 & 940 & 3760 & 222.875 & 222.875 \\ \hline
+\end{tabularx}
+\end{center}

@@ -1,0 +1,38 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Informative Notes on\\
+	SMPTE ST 2065-2 Academy Printing \\*Density (APD) -- Spectral Responsivities, Reference Measurement Device and Spectral Calculation\\* and\\* SMPTE ST 2065-3 Academy Density Exchange Encoding (ADX) -- Encoding Academy Printing Density (APD) Values
+}
+\altdocname{Informative Notes on SMPTE ST 2065-2 and ST 2065-3}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2014-005}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0.1}
+\docdate{April 24, 2015}
+\summary{
+This document provides notes on SMPTE ST 2065-2 Academy Printing Density (APD) -- Spectral Responsivities, Reference Measurement Device and Spectral Calculation and SMPTE ST 2065-3 Academy Density Exchange Encoding (ADX) -- Encoding Academy Printing Density (APD) Values.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{scope}
+\input{references}
+\input{sec-notes1}
+
+\begin{appendices}
+	\input{appendixA}
+	\includepdf[pages={-}]{S-2008-002.pdf}
+\end{appendices}
+
+\end{document}

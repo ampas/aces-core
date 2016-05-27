@@ -1,0 +1,38 @@
+% This section contains the content for the Terms and Definitions
+\numberedformat
+\chapter{Terms and Definitions}
+The following terms and definitions are used in this document.
+%% Modify below this line %%
+
+\term{Academy Color Encoding Specification (ACES)}
+RGB color encoding for exchange of image data that have not been color rendered, between and throughout production and postproduction, within the Academy Color Encoding System. ACES is specified in SMPTE Standard ST 2065-1.
+
+\term{ACEScc}
+A logarithmic encoding of ACES data suitable for color grading, representing ACES data in 32-bit floating-point format, with a smaller set of primaries than the ACES RGB primaries defined in SMPTE ST 2065-1.
+
+\term{ACEScg}
+A linear encoding of ACES data suitable for color grading, representing ACES data in 32-bit floating-point format, with a smaller set of primaries than the ACES RGB primaries defined in SMPTE ST 2065-1.
+
+\term{ACESproxy}
+A logarithmic encoding of ACES data, with both a 10-bit and 12-bit integer representation, conveying ACES image data for viewing and for determination of grading parameters. ACESproxy-encoded image data are never stored, only displayed.
+
+\term{American Society of Cinematographers Color Decision List (ASC CDL)}
+A set of file formats for the exchange of basic primary color grading information between equipment and software from different manufacturers. ASC CDL provides for Slope, Offset and Power operations applied to each of the red, green and blue channels and for an overall Saturation operation affecting all three channels.
+
+\term{Color operation}
+A function mapping one color to another. In the context of the ACES viewing pipeline, color operations include but are not limited to arithmetic and table lookup.
+
+\term{Grade}
+An ordered set of color operations, the composition of which is determined by a skilled colorist in a reference viewing environment. A grade may be applied to some subset of an image, and in those regions where it is applied, the degree of application may change depending on location within the image. Grades are typically created for each shot or sequence and are managed on a timeline. Grades may be re-used across shots.
+
+\term{Input Device Transform (IDT)}
+A transform taking images produced by a capture device and converting them into ACES images.
+
+\term{Look Modification Transform (LMT)}
+An ordered set of color operations typically applied at some higher level than an individual shot, and perhaps applied across an entire project. The input to an LMT is always a triplet of ACES RGB relative exposure values; its output is always a new triplet of ACES RGB relative exposure values. LMTs are applied identically across all of the pixels in an ACES image. The LMT’s output may be directed towards the last two stages of the ACES viewing pipeline (the RRT and an ODT appropriate for some display), or supplied as input to a subsequent LMT, or saved to an ACES container file for later processing.
+
+\term{Pre-grade}
+An ordered set of color operations that are applied uniformly across the entire image. Pre-grading is used to produce a neutral balanced, correctly exposed image when the desired creative grade is not yet known.
+
+\term{Look Transform}
+A sequence of one or more LMTs, with the output of one LMT being provided as the input to the next LMT. In the ACES viewing pipeline, the output of the last LMT in the sequence is provided to the RRT and a selected ODT. 

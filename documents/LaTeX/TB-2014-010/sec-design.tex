@@ -1,0 +1,39 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of "Introduction" section
+%% Modify below this line %%
+\chapter{Design}
+
+Simple LMTs are the best. An LMT should be as simple as possible while still achieving the desired modification to the displayed image.
+
+\section{Overall principles}
+
+\subsection{Support high dynamic range}
+ACES image data can represent luminances from far below the detectability threshold of the human visual system all the way up to luminances causing physical pain — the maximum ACES luminance is about 65,505 times as bright as a diffuse white object in the scene. An LMT should endeavor to preserve this luminance range as much as is possible. 
+
+\subsection{Handle a wide color gamut}
+Creation of ACES imagery by CGI renderers, or by grading operations on live-action capture, can create ACES image values containing colors not found in nature—colors on the spectral locus that only became readily producible with the advent of the laser. An LMT should handle as wide a color gamut as is possible and practical, and avoid imposing arbitrary limits on hue or saturation. 
+
+\subsection{Use high-level constructs to enable optimizations}
+The Common LUT Format allows the ACES system release to provide a tool chest of predefined operations. LMT authors should use these rather than writing their own for several reasons:
+
+\begin{itemize}
+    \item   They were developed as part of the ACES project, have well-defined semantics, and are tested.
+    \item   They obey the two principles above (‘Support high dynamic range’ and ‘Handle the full color gamut’) to the maximum extent possible,
+    \item   Future releases might introduce performance or quality optimizations that depend on recognition of predefined operations.
+\end{itemize}
+
+\section{Analytic and empirical approaches}
+Broadly speaking, LMTs can be characterized as either analytic or empirical. 
+
+\subsection{Analytic LMTs}
+Analytic LMTs usually have concise mathematical definitions. The prime example of an analytic LMT is probably the ACES-system-provided LMT that applies ASC CDL to ACES data. Another (hypothetical) analytic LMT might be one that changes saturation with luminance at certain hue angles. Analytic LMTs are typically expressed as a set of ordered mathematical operations or 1D LUT lookup operations on colors or color component values.
+
+\subsection{Empirical LMTs}
+Empirical LMTs usually are derived by sampling the results of some other color reproduction process, such as normal or special film processing. Empirical LMTs are often provided as 3D LUTs that record a regular subsampling of the results of such processes. 
+
+A challenge arises when using ACES values to index the 3D LUT, as ACES values are radiometrically linear and have a very wide floating point range. The Common LUT Format provides for forward and inverse `shaper LUT' operations that (when wrapped around an appropriately constructed 3D LUT) effectively solve this problem. Implementers should review the `1D LUT' section of the Common LUT Format definition.
+
+\section{Importing `looks' from non-ACES-color-managed workflows}
+Importing a `look file' or LUT from a color system not defined using ACES can be quite difficult. Such ‘look files’ contain transforms to be applied in color spaces other than ACES or the ACES ‘working space’ used by ACESproxy and ACEScc, often presume the relationship between scene and encoded values is encoded with some (possibly proprietary) power function or log function, and likely are designed to supply a display device with code values directly rather than hand off the image to the RRT and a selected ODT.
+
+For all of these reasons, it is typically better (and often much more efficient over the course of a production) to establish new Look Transforms within a workflow that is built around ACES-based color management rather than to try and mathematically translate a `look file' or LUT intended for use with a workflow based on some other color management system.

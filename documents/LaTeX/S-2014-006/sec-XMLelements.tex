@@ -1,0 +1,322 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{XML Elements}
+\label{sec:XMLelements}
+
+\section{\texttt{ProcessList}}
+This is the root element for any LUT XML file and is required even if only one \texttt{ProcessNode} will be present. A \texttt{ProcessList} is composed of one or more \texttt{ProcessNode}s.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[id][required] Unique identifier of the \texttt{ProcessList}.
+	\xmlitem[name][optional] Text name of the \texttt{ProcessList} for display or selection from an application's user interface.
+	\xmlitem[compCLFversion][required] Minimum compatible CLF spec version needed to read this file.
+	\xmlitem[inverseOf][optional] Optional field for linking to another \texttt{ProcessList id} (unique) which is the inverse of this one.
+\end{xmlfields}
+
+Elements:	
+\begin{xmlfields}
+    \xmlitem[Description][required] Comment field for an arbitrary string describing the function, usage, or notes about the \texttt{ProcessList}. A \texttt{ProcessList} can have one or more \texttt{Description}s.
+    \xmlitem[Info][optional] optional element for addition of custom metadata not needed to interpret the transforms. Includes:
+    	\begin{xmlfields}
+			\xmlitem[AppRelease][optional] application software release level
+			\xmlitem[CalibrationInfo][optional] calibration metadata used when making the LUT for a device
+			\begin{list}{}{\setlength{\itemsep}{4pt}}
+				\item \texttt{\textless DisplayDeviceSerialNum\textgreater}
+				\item \texttt{\textless DisplayDeviceHostName\textgreater}
+				\item \texttt{\textless OperatorName\textgreater}
+				\item \texttt{\textless CalibrationDateTime\textgreater}
+				\item \texttt{\textless MeasurementProbe\textgreater}
+				\item \texttt{\textless CalibrationSoftwareName\textgreater}
+				\item \texttt{\textless CalibrationSoftwareVersion\textgreater}
+			\end{list}
+    	\end{xmlfields}
+    \xmlitem[InputDescriptor][optional] Comment field describing the intended source code values of the \texttt{ProcessList}.
+    \xmlitem[OutputDescriptor][optional] Comment field describing the intended output target of the \texttt{ProcessList} (e.g., target display).
+    \xmlitem[ProcessNode][required] At least one \texttt{ProcessNode} must be in the list. The \texttt{ProcessNode} is described in \autoref{sec:ProcessNode}.
+\end{xmlfields}
+
+\section{\texttt{ProcessNode}}
+\label{sec:ProcessNode}
+This element represents a process node; it is the primary color transformation element for LUT interchange. Different types of processing are expressed by substitution from this basic element including \texttt{LUT1D}, \texttt{LUT3D}, \texttt{Range} and \texttt{Matrix}. In the future, other kinds of \texttt{ProcessNode}s can be defined as part of the standard to handle alternate forms of processing. All \texttt{ProcessNode} substitutes inherit the attributes and elements below.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[id][optional]  Unique identifier of the \texttt{ProcessNode}.
+	\xmlitem[name][optional] Text name of the \texttt{ProcessNode} for display or selection from an application's user interface.
+	\xmlitem[inBitDepth][required] Number of bits and type of the input values to which the \texttt{ProcessNode} is applied. The input values can be either integers or floats. Supported values are ``\texttt{8i}'', ``\texttt{10i}'', ``\texttt{12i}'', ``\texttt{16i}'', ``\texttt{16f}'' or ``\texttt{32f}''.
+	\xmlitem[outBitDepth][required] Number of bits and type of the output values which the \texttt{ProcessNode} generates. The output values can be either integers or floats, independent of the input values. Supported values are ``\texttt{8i}'', ``\texttt{10i}'', ``\texttt{12i}'', ``\texttt{16i}'', ``\texttt{16f}'' or ``\texttt{32f}''.
+\end{xmlfields}
+
+Elements:
+\begin{xmlfields}
+	\xmlitem[Description][optional] Comment field for an arbitrary string describing the function, usage, or notes about the \texttt{ProcessNode}. A \texttt{ProcessNode} can have one or more \texttt{Description}s.
+\end{xmlfields}
+
+\subsection{\texttt{LUT1D} (substitute for \texttt{ProcessNode})}
+This element specifies a 1D LUT or a 3by1D LUT.  A 1D LUT transform uses an input pixel value, finds the two nearest index positions in the LUT, and then interpolates the output value using the entries associated with those positions. If the input to a \texttt{LUT1D} is an RGB value, the same LUT will be applied to all three color components. If a 3by1D LUT is supplied, each color component is looked up in a separate \texttt{LUT1D} of the same length. In both cases, the ordered entries of the LUT are provided in \texttt{Array}.  In a 3by1D LUT, by convention, the \texttt{LUT1D} for the first component goes in the first column of \texttt{Array},  etc.).  The lookup operation may be altered by redefining the mapping of the input values to index positions of the LUT using an \texttt{IndexMap}.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[interpolation][optional] Name or description of the preferred calculation used to interpolate values from the \texttt{LUT1D}. This attribute is optional with a default of ``\texttt{linear}'' if the attribute is not present. Systems that utilize LUTs may use different types of interpolation; therefore, this attribute is intended as a guide to an application if it wants to attempt recreating the exact outputs of the originating application. Typical values for this attribute would be ``\texttt{linear}'' or ``\texttt{cubic}''.
+	\xmlitem[rawHalfs][optional] If this attribute is present, its value must be ``\texttt{true}''. In this case, the output array values in the form of unsigned 16-bit integers are interpreted as the equivalent bit pattern, half floating-point values. (e.g.  to represent the value 1.0, enter the integer 15360 in the \texttt{Array} element because it has the same bit-pattern. This allows specification of exact half-float values without relying on conversion from decimal text strings.)
+	\xmlitem[halfDomain][optional] If this attribute is present, its value must be ``\texttt{true}''. In this case, the input domain to the node is all possible 16-bit floating-point values, and there must be exactly 65536 entries in the LUT1D \texttt{Array} element (e.g. the unsigned integer 15360 has the same bit-pattern (0011110000000000) as the half-float value 1.0, so the 15360th, zero-indexed, entry in the \texttt{Array} element is the output value corresponding to an input value of 1.0). The \texttt{IndexMap} may not be used in this case.
+\end{xmlfields}
+
+Elements:
+\begin{xmlfields}
+	\xmlitem[IndexMap][optional] Table that maps input values to index positions of the \texttt{LUT1D}'s \texttt{Array}.\par
+		In its simplest form, with a dim=2, this element can be used to define the input floating-point range that will be used by the LUT.\par
+		An extension to the LUT format described in Appendix \ref{appendixC}.
+	\xmlitem[Array][required] Table that provides the entries of the \texttt{LUT1D} from the minimum to the maximum input values. In a 3by1D LUT, each column in \texttt{Array} provides the 1D LUT for a color component; for RGB, the 1st column corresponds to R’s 1D LUT, the 2nd column corresponds to G’s 1D LUT, etc.
+\end{xmlfields}
+
+
+\subsection{\texttt{LUT3D} (substitute for \texttt{ProcessNode})}
+This element specifies a 3D LUT. In a \texttt{LUT3D} element, the 3 color components of the input value are used to find the nearest indexed values along each axis of the 3D cube. The 3-component output value is calculated by interpolating within the volume defined by the nearest corresponding positions in the LUT. The lookup operation may be altered by redefining the mapping of the input values to index positions into the LUT (see \texttt{IndexMap}). An interpolation comment field is provided to indicate the preferred interpolation calculation to perform within the volume.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[interpolation][optional] Name or description of the preferred calculation used to interpolate values in the \texttt{3DLUT}. This attribute is optional with a default of ``\texttt{trilinear}'' if the attribute is not present. Systems that utilize LUTs may use different types of interpolation; therefore, this attribute is  intended as a guide to an application if it wants to attempt recreating the exact outputs of the originating application. Typical values for this attribute would be ``\texttt{trilinear}'' or ``\texttt{tetrahedral}''.
+\end{xmlfields}
+
+Elements:
+\begin{xmlfields}
+	\xmlitem[IndexMap][optional] Table that maps input values to index positions of the \texttt{LUT3D}'s \texttt{Array}. 
+		In its simplest form, with a dim=2, this element can be used to define the input floating-point range that will be used by the LUT.\par
+		An extension to the LUT format described in Appendix \ref{appendixC}.
+	\xmlitem[Array][required] Table comprised of the entries for the \texttt{LUT3D} from the minimum to the maximum input values, the third component index changing fastest.
+
+		Ex:   order of entries for a 2x2x2 cube by index $[0 \ldots 1]$
+		
+		\begin{center}
+			\begin{tabularx}{1in}{XXX}
+				0 & 0 & 0 \\
+				0 & 0 & 1 \\
+				0 & 1 & 0 \\
+				0 & 1 & 1 \\
+				1 & 0 & 0 \\
+				1 & 0 & 1 \\
+				1 & 1 & 0 \\
+				1 & 1 & 1 \\
+			\end{tabularx}
+		\end{center}
+\end{xmlfields}
+
+\subsection{\texttt{Matrix} (substitute for \texttt{ProcessNode})}
+This element specifies a matrix transformation to be applied to the input values. The input and output of a \texttt{Matrix} are always 3-component values. All matrix calculations should be performed in floating point, and input bit depths of integer type should be treated as scaled floats. If the input bit depth and output bit depth do not match, the coefficients in the matrix must incorporate the results of the `scale' factor that will convert the input bit depth to the output bit depth (e.g. input of \texttt{10i} with an output of \texttt{12i} requires the matrix coefficients already have a factor of 4095/1023 applied). Changing the input or output bit depth requires creation of a new set of coefficients for the LUT.
+
+The output values are calculated using the row-order convention:
+
+\begin{equation}
+    \begin{bmatrix*}
+        a_{11} & a_{12} & a_{13} \\
+        a_{21} & a_{22} & a_{23} \\
+        a_{31} & a_{32} & a_{33} \\
+    \end{bmatrix*} \\
+    \begin{bmatrix}
+        r\\
+        g\\
+        b
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        R\\
+        G\\
+        B
+    \end{bmatrix}
+\end{equation}
+\begin{align*}		
+	R = (r \cdot a_{11}) + (g \cdot a_{12}) + (b \cdot a_{13}) \\
+	G = (r \cdot a_{21}) + (g \cdot a_{22}) + (b \cdot a_{23}) \\
+	B = (r \cdot a_{31}) + (g \cdot a_{32}) + (b \cdot a_{33})
+\end{align*}
+
+An offset matrix may be defined as a 3x4 array in which the input value is typically defined as ($r$, $g$, $b$, 1.0).  The 4th column of the matrix may then be used to add an offset term to the conversion of the matrix. The output of the 3x4 matrix is ($R$, $G$, $B$). Matrices using an offset calculation will have one more column than rows.
+
+\begin{equation}
+    \begin{bmatrix*}
+        a_{11} & a_{12} & a_{13} & off1\\
+        a_{21} & a_{22} & a_{23} & off2\\
+        a_{31} & a_{32} & a_{33} & off3\\
+    \end{bmatrix*} \\
+    \begin{bmatrix}
+        r\\
+        g\\
+        b\\
+        1.0
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        R\\
+        G\\
+        B
+    \end{bmatrix}
+\end{equation}
+ 
+Elements:
+\begin{xmlfields}
+	\xmlitem[Array][required] Table that provides the coefficients of the transformation matrix. The matrix dimensions are either 3x3 or 3x4. The matrix is serialized row by row from top to bottom and from left to right, i.e., ``$a_{11}\ a_{12}\ a_{13}\ a_{21}\ a_{22}\ a_{23}\ \ldots$'' for a 3x3 matrix.
+		\begin{equation}
+		    \begin{bmatrix*}
+		        a_{11} & a_{12} & a_{13} \\
+		        a_{21} & a_{22} & a_{23} \\
+		        a_{31} & a_{32} & a_{33} \\
+		    \end{bmatrix*} \\
+		\end{equation}
+	
+\end{xmlfields}
+
+\subsection{\texttt{Range} (substitute for \texttt{ProcessNode})}
+The \texttt{Range} element maps the input domain to the output range by scaling and offsetting values and must be calculated in floating point. The \texttt{Range} element is also used to clamp values.
+
+If a \texttt{minInValue} is present, then \texttt{minOutValue} must also be present and the result is clamped at the low end. Similarly, if \texttt{maxInValue} is present, then \texttt{maxOutValue} must also be present and the result is clamped at the high end. If none of \texttt{minInValue}, \texttt{minOutValue}, \texttt{maxInValue}, or \texttt{maxOutValue} are present, then the \texttt{Range} operator performs only scaling.
+
+The scaling of \texttt{minInValue} and \texttt{maxInValue} depends on the input bit depth, and the scaling of \texttt{minOutValue} and \texttt{maxOutValue} depends on the output bit depth.
+
+Elements:
+\begin{xmlfields}
+	\xmlitemopt[minInValue][optional]
+	\xmlitemopt[maxInValue][optional]
+	\xmlitemopt[minOutValue][optional]
+	\xmlitemopt[maxOutValue][optional]
+\end{xmlfields}
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[style][optional]
+		Description of the preferred handling of the scaling calculation of the \texttt{Range} node. If the style attribute is not present, clamping is performed.
+		\begin{xmlfields}
+			\xmlitemd[``noClamp''] If present, do not apply the clamping in the equations below (i.e. floating point values above \texttt{maxOutValue} are allowed). 
+			\xmlitemd[``Clamp''] If present, clamping is applied according to:
+				\begin{equation}
+					\mathrm{MIN}(\texttt{maxOutValue}, \mathrm{MAX}( \texttt{minOutValue}, RGB_{out} ))
+				\end{equation}
+		\end{xmlfields}
+\end{xmlfields}
+
+The range between \texttt{minInValue} and \texttt{maxInValue} is scaled to the \texttt{minOutValue} and \texttt{maxOutValue} range using the following equation:
+\begin{align*}
+	scale &= \dfrac{(\texttt{maxOutValue} - \texttt{minOutValue})}{(\texttt{maxInValue} - \texttt{minInValue})} \\
+	RGB_{out} &= RGB_{in} \times scale + \texttt{minOutValue} - \texttt{minInValue} \times scale \\
+	RGB_{out_{clamped}} &= \mathrm{MIN}(\texttt{maxOutValue}, \mathrm{MAX}( \texttt{minOutValue}, RGB_{out}))
+\end{align*}
+
+If the input and output bit depths are not the same, a conversion should take place using the range elements. If the elements defining an \texttt{InValue} range or \texttt{OutValue} range are not provided, then the default behavior is to use the full range available with the \texttt{inBitDepth} or \texttt{outBitDepth} attribute used in place of the missing input range or missing output range, respectively, as calculated with these equations:
+
+In the formulae below, if the bit depth is integral, then rangescalar() is defined as:
+	\begin{equation} 
+	 	\mathrm{rangescalar}( bitDepthInteger ) = 2^{bitDepth} - 1
+	\end{equation}
+If the bit depth is specified as floating point, then:
+	\begin{equation} 
+		\mathrm{rangescalar}( float ) = 1.0
+	\end{equation}
+
+If only minimum values are specified, the formula is:
+	\begin{align*}
+		scale &= \dfrac{\mathrm{rangescalar}(outBitDepth)}{\mathrm{rangescalar}(inBitDepth)} \\
+		RGB_{out} &= \mathrm{MAX}( \texttt{minOutValue}, RGB_{in} \times scale + \texttt{minOutValue} - \texttt{minInValue} \times scale)		
+	\end{align*}
+
+If only maximum values are specified, the formula is:
+	\begin{align*}
+		scale &= \dfrac{\mathrm{rangescalar}(outBitDepth)}{\mathrm{rangescalar}(inBitDepth)} \\
+		RGB_{out} &= \mathrm{MIN}( \texttt{maxOutValue}, RGB_{in} \times scale + \texttt{maxOutValue} - \texttt{maxInValue} \times scale)		
+	\end{align*}
+
+\subsection{\texttt{ASC\_CDL} (substitute for \texttt{ProcessNode})}
+This node contains the parameters for processing pixels using the ASC CDL color correction equations. The ASC CDL equations are designed to work on an input domain of floating-point values of [0 to 1.0] although values greater than 1.0 can be present. The output data may or may not be clamped depending on the processing configuration below.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[id][optional] This should match the id attribute of the ColorCorrection element in the ASC CDL XML format.
+	\xmlitem[style][optional] Determines the formula applied by the operator. The valid options are:
+		\begin{xmlfields}
+			\xmlitemd["Fwd"] implementation of v1.2 ASC CDL equation
+			\xmlitemd["Rev"] inverse equation
+			\xmlitemd["FwdNoClamp"] similar to the \texttt{Fwd} equation, but without clamping
+			\xmlitemd["RevNoClamp"] inverse equation
+		\end{xmlfields}
+		The first two implement the math provided in version 1.2 of the ASC CDL specification.  The second two omit the clamping step and are intended to provide compatibility with the many applications that take that alternative approach.
+\end{xmlfields}
+
+Elements:
+\begin{xmlfields}
+	\xmlitem[SOPNode][optional] The \texttt{SOPNode} is optional, but if present, must contain one each of the following sub-elements:
+	\begin{xmlfields}
+		\xmlitemd[Slope] If not provided, the default is 1.0 for all channels.
+		\xmlitemd[Offset] If not provided, the default is 0.0 for all channels.
+		\xmlitemd[Power] If not provided, the default is 1.0 for all channels.
+	\end{xmlfields}
+	\xmlitem[SatNode][optional] The \texttt{SatNode} is optional, but if present, must contain one of the following sub-element:
+	\begin{xmlfields}
+		\xmlitemd[Saturation] If not provided, the default is 1.0 for all channels.
+	\end{xmlfields}
+\end{xmlfields}
+
+\note{The structure of this \texttt{ProcessNode} matches the structure of the XML format described in the v1.2 ASC CDL specification. However, unlike the ASC CDL XML format, there are no alternate spellings allowed for these elements.}
+
+The math for \texttt{style="Fwd"} is:
+	\begin{align*}
+		SAT_{in} &= \mathrm{clamp}(RGB_{in} \times slope + offset)^{power} \\
+		luma &= 0.2126 * SAT_{in_R} + 0.7152 * SAT_{in_G} + 0.0722 * SAT_{in_B} \\
+		RGB_{out} &= \mathrm{clamp}(luma + saturation * (SAT_{in} - luma))
+	\end{align*}
+
+where clamp() clamps the argument to [0,1].
+
+The math for \texttt{style="FwdNoClamp"} is the same as for \texttt{"Fwd"} but the two clamp() functions are omitted. Also, if $(input * slope + offset) < 0$, then no power function is applied.
+
+The math for \texttt{style="Rev"} is:
+	\begin{align*}
+		RGB_{in_{clamp}} &= \mathrm{clamp}(RGB_{in}) \\
+		luma &= 0.2126 * R_{in_{clamp}} + 0.7152 * G_{in_{clamp}} + 0.0722 * B_{in_{clamp}} \\
+		RGB_{sat_{out}} &= luma + \frac{1}{saturation} * (RGB_{in_{clamp}} - luma) \\
+		RGB_{out} &= \mathrm{clamp}\left(\frac{\mathrm{clamp}(RGB_{sat_{out}})^{\frac{1}{power}} - offset}{slope}\right) \\
+	\end{align*}
+
+The math for \texttt{style="RevNoClamp"} is the same as for \texttt{"Rev"} but the two clamp() functions are omitted. Also, if $RGB_{sat_{out}} < 0$, then no power function is applied.
+
+\note{The equations above assume that the input and output bit depths are floating-point. For integer inputs and outputs, the values must be normalized to or from [0.0, 1.0] scaling. In other words, the slope, offset, power, and saturation values stored in the \texttt{ProcessNode} do not depend on \texttt{inBitDepth} and \texttt{outBitDepth} they are always interpreted as if the bit depths were float.}
+
+
+\section{\texttt{IndexMap} element} \label{sec:indexmap}
+This element defines a list that is a new mapping of input code values, $inValues$, to index positions, $n$, in a LUT's \texttt{Array}. The format of each item in the list is $newInValue\mathrm{@}n$. For example, the first \texttt{IndexMap} item might be $64\mathrm{@}0$ which assigns the $inValue=64.0$ to position $0$ in the LUT. 
+
+In its simplest form, with a \texttt{dim=2}, this element can be used to define the input floating point range that will be used by the LUT.
+
+An extension to the LUT format described in Appendix \ref{appendixC}.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[dim][required] Field that specifies the number of items in the list.	
+\end{xmlfields}
+
+\section{\texttt{Array} element}
+This element contains the table entries of a LUT in order from minimum value to maximum value with a single line for each color component triple.  The \texttt{dim} attribute specifies the dimensions of the cube, the length of the LUT, or the size of the array.
+
+The \texttt{dim} attribute and the type of node should match.
+
+Attributes:
+\begin{xmlfields}
+	\xmlitem[dim][required] 	Specifies the dimension of the LUT or the matrix and the number of components. The data points for a \texttt{ProcessNode} are contained in an XML array element. The \texttt{dim} attribute provides the dimensionality of the indexes, where:
+
+		4 entries have the dimensions of a 3D cube plus the number of components per entry.
+		\begin{list}{}{\setlength{\itemsep}{4pt}\setlength{\topsep}{0pt}}
+				\item e.g. \texttt{dim = 17 17 17 3 } indicates a 17-cubed 3D lookup table with 3 component color
+		\end{list}
+
+		3 entries have the matrix dimensions and component value.
+		\begin{list}{}{\setlength{\itemsep}{4pt}\setlength{\topsep}{0pt}}
+				\item e.g. \texttt{dim = 3 3 3 } is a 3 by 3 matrix acting on 3-component values
+				\item e.g. \texttt{dim = 3 4 3 } is a 3 by 4 matrix acting on 3-component values
+		\end{list}
+
+		2 entries have the length of the LUT and the component value (1 or 3).
+		\begin{list}{}{\setlength{\itemsep}{4pt}\setlength{\topsep}{0pt}}
+				\item e.g. \texttt{dim = 256 3 } indicates a 256 element 1D LUT with 3 components (a 3by1DLUT)
+				\item e.g. \texttt{dim = 256 1 } indicates a 256 element 1D LUT with 1 component (1DLUT)
+		\end{list}
+\end{xmlfields}

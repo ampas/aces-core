@@ -1,0 +1,51 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Naming of color spaces and encodings}
+
+The pre-release versions of ACES focused heavily on the transforms from input devices and the transforms to output devices. However, the overall user experience of ACES goes beyond these device color transforms. If the working space used in a product is not properly chosen, this can easily cause problems for users.
+
+A full discussion of working spaces and color encodings is beyond the scope of this document and a proper introduction to those topics will be provided in a separate document. However, this section provides a concise description intended to set the necessary context for the UX requirements.
+
+As defined above, a working color space (or working space) is the digital representation of color that a product uses to edit or create images--it is the representation manipulated by the algorithms that embody the product. In the field of color science, a color encoding specification is a method for digitally encoding color that is used to communicate a color appearance. The specification should include information such as the color primary set and the non-linearity (if any) applied prior to digital quantization. This essentially provides a mapping between the digital code value and a color stimulus. In addition, it is important that the specification also describe the intended viewing environment so that the appearance of that color stimulus may be estimated.
+
+The SMPTE 2065-1:2012 color encoding specification is not always the most appropriate choice for a working space. Indeed, the use of the ACES color transforms does not require that the 2065-1 space be used as the working space.
+
+In some pre-release implementations of ACES, the 2065-1 space was used in contexts where it was not entirely appropriate because of implicit assumptions embedded into the design of the algorithms being used. For example, some algorithms assume a logarithmic or gamma-encoded working space and the use of a scene-linear encoding such as 2065-1 caused controls to behave unexpectedly. As another example, some algorithms have had trouble dealing with the extremely wide 2065-1 primaries.
+
+To address these problems, a set of working spaces is recommended to improve the ACES 1.0 user experience.
+
+It is noted that since the transforms provided in the ACES Release often expect inputs/outputs to be encoded in the 2065-1 color space, products may need to insert ``adaptor'' transforms as necessary to convert into or out of the working spaces. This should be transparent to end-users.
+
+\section{Primary sets}
+It is often useful to be able to refer to a set of primaries (i.e., color space chromaticities) separately from a complete color encoding specification (which would include a non-linearity, viewing environment, etc.). Hence this document introduces names for the color primary sets used in ACES color encodings. Please note that the ACES primary sets are neither working spaces nor color encoding specifications. Rather, they are building blocks that may be used as part of a color encoding specification.
+
+ACES Primaries 0 (AP0) -- The color primaries used in the SMPTE 2065-1:2012 color encoding specification. These are very wide gamut primaries that allow the entire spectrum locus to be represented using only positive values.
+
+ACES Primaries 1 (AP1) -- The color primaries used in the ACES 1.0 working space color encoding specifications. These are wide-gamut primaries that are a bit larger than the primaries used in ITU-R BT.2020.
+
+The use of the term ``Rec. 2020+'' to refer to AP1 is discouraged. The ITU-R BT.2020 specification is a video encoding that has a gamma, a D65 white point, and an associated viewing environment, none of which apply to AP1.
+
+Since AP1 is narrower than AP0, some RGB values that are all positive when using AP0, may have a negative component when represented using AP1. If the algorithms being used in a product cannot handle negative values, care should be taken when converting into a working space using AP1.
+
+Please note that since these are not actually color spaces, the usage of these acronyms in virtually all product UIs is discouraged. In particular, it is not advisable to combine the primaries and the ``gamma'' into names such as ``AP1 (gamma 2.2)'' and ``AP1 (linear)''. Instead, please use the working space names below.
+
+\section{Color encodings and working spaces}
+The following color spaces are included as part of the ACES System. Each is designed for a specific type of end-user task. Please note that the full color encoding specifications of these spaces is found in accompanying documents. The recommended naming is as follows:
+
+ACES2065-1 -- This is the recommended end-user name for the color encoding defined in SMPTE 2065-1:2012. This is the color encoding used for storing images in the SMPTE 2065-4:2013 container file format.
+
+ADX -- This is the Academy Density Exchange color space defined in SMPTE 2065-3:2012. It is the recommended storage space to use for film scans and should be stored in the SMPTE 268M:2003 Am1 (DPX-amended) container format.
+
+ACESproxy -- This is the light-weight color encoding used for transmission over HD-SDI. (It is not intended to be stored or used for final production imagery.) This color encoding has been revised for the ACES 1.0 release. The names of the pre-release versions of this encoding are ACESproxy10 and ACESproxy12.
+
+ACEScc -- This color encoding is intended for use as a working space in color correction or color grading products. This space uses the AP1 primaries and a logarithmic non-linearity. 
+
+ACEScg -- This color encoding is intended for use as a working space for visual effects and animation tasks such as compositing or CG rendering. This space uses the AP1 primaries and is a scene-linear encoding.
+
+\section{Guidelines}
+\subsection{Availability of an ACES working space}
+Products should provide users with the option of using the ACES working space that is appropriate for the given type of product (other working space options may also be provided).
+
+\subsection{Naming of ACES working spaces}
+Products should use the working space names provided above in their UI (names of primary sets should not appear directly in the UI).

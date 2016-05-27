@@ -1,0 +1,13 @@
+% This file contains the content for the Scope
+\cleardoublepage
+\numberedformat	
+\chapter{Scope} 	% Do not modify section title
+%% Modify below this line %%
+
+The ACES Clip-level Metadata File (``ACESclip'') is a `sidecar' XML file intended to assist in configuring ACES viewing pipelines and to enable portability of ACES transforms in production. An ACESclip file describes the transforms necessary to configure an ACES viewing pipeline for a collection of related image files. An ACESclip file may be associated with either a single collection of individual image files or a ``packaged'' clip such as an MXF file or other manners of clip packaging. 
+
+ACESclip files also may attach color transform information such as ASC CDL or Common LUT Format (.clf) files to a clip for transfer to later users or facilities.
+
+ACESclip files are suitable archiving elements. Together with the finished ACES image files, they form a complete archival record of how image content is intended to be viewed.
+
+ACESclip files do not contain ``timeline'' metadata such as edit points. Timeline management files such as Edit Decision Lists (EDLs) or Avid Log Exchange files (ALEs) may reference ACESclip files, attaching them to editing events and thus enable standardized color management throughout all stages of production.

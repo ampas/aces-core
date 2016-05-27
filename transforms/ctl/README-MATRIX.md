@@ -2,7 +2,7 @@
 
 ### Summary of Differences ###
 
-In CTL, the order of operands in vector-times-matrix functions is swapped from "textbook" convention. Textbooks often use “matrix-times-column vector” notation, but CTL functions expect “row vector-times-matrix” syntax. 
+In CTL, the order of operands in vector-times-matrix functions is swapped from "textbook" convention. Textbooks often use "matrix-times-column vector" notation, but CTL functions expect "row vector-times-matrix" syntax. 
 
 (See page 40-41 of [CtlManual.pdf](https://github.com/ampas/CTL/tree/master/doc/CtlManual.pdf) for more information )
 
@@ -52,9 +52,9 @@ In CTL, the same operation would be:
 
 
 ### Values for ACES Transforms ###
-In the ACES tranforms, built-in CTL functions are used for vector/matrix operations. 
+In the ACES transforms, built-in CTL functions are used for vector/matrix operations. 
 
-For absolute clarity of the math being performed, the name of a matrix as it appears in the CTL transforms is listed below, followed by the explicit math that would calculate the same result as the built in functions when using that matrix as the operator.
+For absolute clarity of the math being performed, the name of a matrix as it appears in the CTL transforms is listed below, followed by the explicit math that would calculate the same result as the built-in functions when using that matrix as the operator.
 
 Note that the values of the matrix coefficients are rounded to 10 decimal places, but in actual implementations, indexing into stored variables at full precision of the specific implementation is preferred.
 

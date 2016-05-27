@@ -1,0 +1,49 @@
+\documentclass[10pt]{academydoc}
+\pagestyle{plain}
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Academy Color Encoding System Version 1.0\\*User Experience Guidelines}
+\altdocname{ACES Version 1.0 User Experience Guidelines}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2014-002}
+\committeename{Academy Color Encoding System (ACES) Project Committee}
+\versionnumber{1.0.2}
+\docdate{September 3, 2015}
+\summary{
+The Academy Color Encoding System (ACES) is the industry standard for managing color throughout the life-cycle of a motion picture or television production (from creation, thru editorial, grading, audience presentation, and archiving).
+
+Early adopters of technology products tend to be quite technology-savvy. One of the main goals of the release of ACES 1.0 is to broaden the user base beyond the very technically-oriented early adopters. In order to make it more accessible to a wider audience of users, it is necessary to make the ACES User Experience (ACES UX) simpler and more consistent across products.
+
+This document provides guidelines for those building products that implement ACES and to others looking for guidance on how best to present ACES terminology and concepts to end-users.
+
+Those implementing ACES in products should also refer to the Logo Program Requirements and Usage document.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{introduction} \newpage
+
+\input{references}
+\input{sec-schematic}
+\input{sec-inputtransforms}
+\input{sec-viewingpipeline}
+\input{sec-versioning}
+\input{sec-naming}
+\input{sec-acescontainer}
+\input{sec-clf}
+\input{sec-acesclip}
+
+\begin{appendices}
+	\input{appendixA}	
+\end{appendices}
+
+\end{document}

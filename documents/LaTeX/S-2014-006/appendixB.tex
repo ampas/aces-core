@@ -1,0 +1,11 @@
+\appendixchapter{Use of the Common LUT format for implementation of ACES Color Transforms}{n}
+\label{appendixB}
+
+The \texttt{ProcessList id} attribute may be used to contain the \texttt{ACEStransformID} which is mandatory for ACES transforms.
+
+The following elements may be used within the \texttt{Info} block of the \texttt{ProcessList} element.
+
+\begin{xmlfields}
+    \xmlitem[ACEStransformID][required for ACES transforms] This element contains an ACES transform identifier as described in Academy S-2014-002. If the transform is the combination of several ACES component transforms, this element may contain several ACES Transform Identifiers, separated by white space or line separators.
+	\xmlitem[ACESuserName][required for ACES transforms] This element contains the user-friendly name recommended for use in product user interfaces as described in Academy TB-2014-002.
+\end{xmlfields}

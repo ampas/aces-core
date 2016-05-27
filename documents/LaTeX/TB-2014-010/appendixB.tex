@@ -1,0 +1,31 @@
+\appendixchapter{Example empirical LMT supporting PFE}{i}
+\label{appendixB}
+
+This example shows how a 3DLUT can be used to implement an LMT that emulates the look of projected film print.
+
+\vspace{18pt}
+
+\begin{lstlisting}
+<ProcessList xmlns="urn:NATAS:ASC:LUT:1.1" id="ProdLMTv1" name="WarmNight_v1">
+<Description> Create a warm nightime look </Description>
+<InputDescriptor>ACES</InputDescriptor>
+<OutputDescriptor>ACES</OutputDescriptor>
+<LUT1D id="uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf8" name="ConverttoACESccToneScale" 
+    inBitDepth="16f" outBitDepth="16f">
+	<Description> Shaper LUT for interpolation into 3DLUT uses positive 
+	    value ACEScc spacing. </Description>
+	<Array dim="65535 3">
+		/* OMIT */
+	</Array>
+</LUT1D>
+<LUT3D id=" uuid:f81d4fae-7dec-11d0-a765-00a0c91e6bf2" name="PFE_Vision2_12Nov2003" 
+    interpolation="tetrahedral" inBitDepth="16f" outBitDepth="16f" >
+	<Description> 3D LUT calculated in ACEScc outputs ACES values </Description>
+	<Array dim="64 64 64 3">
+			0.0 0.0 0.0
+			/* OMIT */
+			65504.0 65504.0 65504.0
+	</Array>
+</LUT3D>
+</ProcessList>
+\end{lstlisting}

@@ -1,0 +1,117 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of a main, numbered section
+%% Modify below this line %%
+
+% Define a local macro - FieldName, description, comment
+\newcommand{\xmlfield}[3]{
+	\TabPositions{2em,1.75in,2.5in,2.6in}
+	\tab\texttt{#1} \tab#2 \tab// #3	 \par
+}
+
+
+\chapter{Data Model}
+
+This section describes the data intended for use within the ACES Clip-level Metadata file.
+
+	\tabto{0.3in}\{string\} are XML attributes
+
+All top level structures shall be tagged as being within the "aces" namespace.
+
+The format of the data in this section represents pseudo-code rather than the XML schema. Indentation of the Tags indicates they are sub-elements of the XML structure just above in indentation.
+
+\section{Header Info}
+\texttt{<ACESmetadata} \{xmlns\} \texttt{>} \tabto{2.5in}// root xml structure for file and namespace
+
+	\tabto{2em}attribute \hspace{2em} xmlns \hspace{2em} ACES namespace ``xmlns:aces=/oscars.org/aces/ref/acesmetadata''
+
+\section{ACESclip File Information}
+This section defines the file as an asset and shall be present as the first entries in the file.
+
+	\TabPositions{2em,2.2in,4in}
+	\tab\texttt{ContainerFormatVersion}\tab(minOccurs=1 maxOccurs=1)\tab// AMPAS version of container spec
+
+	\tab\texttt{ModificationTime}\tab(minOccurs=1 maxOccurs=1)\tab// the last time this file was changed
+
+	\tab\texttt{UUID} \{type\}\tab(minOccurs=0 maxOccurs=1)\tab// a unique ID for asset manager uses
+
+\section{Clip Identification -- Archival Information}
+This section provides an archival identification for the first creation and use of a clip in ACES.
+
+The ClipID is intended to point to a specific image sequence as a reference but does not maintain timeline information (e.g., MarkIn, MarkOut reference points) as this is the role of EDLs and ALE files. The ClipID is not required to maintain clip edits and conversion history, but it is possible to have several ClipIDs with the oldest date being the creation clip and the newest date being the current version. This information also associates this particular ACESclip file with a clip sequence for re-association if required. Because of the variability of editor's organization and naming schemes, the contents of the strings for ClipName and Source\_MediaID are not specified, but are assumed to be used in a consistent manner within a production. Absence of a ClipID indicates that the transform state in \textit{aces:Config} is applicable to all of the image files in a directory.
+
+\texttt{<aces:ClipID>}\tabto{1.5in}(minOccurs=0 maxOccurs=unbounded)
+
+    \xmlfield{ClipName}{string}{clip name - production dependent}
+    \xmlfield{Source\_MediaID}{string}{ID of source directory or media}
+    \xmlfield{ClipDate}{DateTime}{date of clip creation (allows for fixes to a \\ 
+    	\tab\tab\tab\tab\tab sequence to be timestamped)}
+    \xmlfield{Note}{string}{note field - general purpose}    
+
+\texttt{</aces:ClipID>}
+
+\section{ACES Transform Pipeline Configuration Information}
+Essential metadata for ACES pipeline configuration in support of the above use cases must be captured.
+
+In this section, the attribute \textbf{\{TransformID\}} is an identifier for the reference definition for a particular transform according to the ACES versioning system (see Academy S-2014-002). A ``functionally equivalent'' transform that implements a named, particular transform must exist.\footnote{For standard ACES transforms, appending the ``.ctl'' suffix to the TransformID will create a filename that has the transform in the ACES CTL distribution.}
+
+The LinkTransform fields identify a functional transform (most likely a LUT) that implements the referenced transform.  The attribute \textbf{\{id\}} is the name of the file or XML structure containing the linked transform. These links may be to a transform provided in the standard ACES release, or they may be custom versions that have a unique name. Organization of the location of transforms is outside of the scope of this document.
+
+The attribute \textbf{\{status\}} is set to `preview' unless the transform has already been applied to the image data in which case status shall be set to `applied'. If the status is `applied', this transform shall be disregarded for the current clip.
+
+The working space is assumed to be ACES except for the GradeRef where a small set of ACES transforms may be used to change the working space before application of the ASC CDL. LMTs may have their own working space defined in the ProcessList.
+
+\texttt{<aces:Config>}\tabto{1.5in}(minOccurs=1 maxOccurs=1)
+
+	\tabto{2em}\texttt{TimeStamp}\tabto{3.5in}// DateTime type: any change in this section\\\tabto{3.6in}shall be timestamped \par
+	\tabto{2em}\texttt{ACESrelease\_Version}\{version\} \par
+	\tabto{2em}\texttt{aces:InputTransformList}\tabto{3in}(minOccurs=0 maxOccurs=1)\tabto{3.5in}// conversion into aces \par
+	\tabto{4em}\texttt{aces:IDTref} \{TransformID, status\} \par
+	\tabto{6em}\texttt{LinkTransform} \{id\} \tabto{3.5in}// pointer to ProcessList of just the IDT\par
+	\tabto{4em}\texttt{aces:GradeRef} \{status\} \par
+	\tabto{6em}\texttt{Convert\_to\_WorkSpace} \{TransformID\} \par
+	\tabto{6em}\texttt{ColorDecisionList} \{xmnls=ASC\} \tabto{3.5in}// portable grade in ASC CDL\\\tabto{3.6in}XML format v2.1\par
+	\tabto{6em}\texttt{Convert\_from\_WorkSpace} \{TransformID\} \par
+	\tabto{4em}\texttt{LinkInputTransformList} \{id\} \tabto{3.5in}// pointer to combined ProcessList \par
+	\tabto{2em}\texttt{/aces:InputTransformList} \par
+	\tabto{2em}\texttt{aces:PreviewTransformList} \tabto{3in}(minOccurs=1 maxOccurs=1)\par
+	\tabto{4em}\texttt{aces:LMTref} \{TransformID, status\} \tabto{3in}(minOccurs=0 maxOccurs=3)\par
+	\tabto{6em}\texttt{LinkTransform} \{id\} \tabto{3.5in}// pointer to ProcessList of just the LMT\par
+	\tabto{4em}\texttt{aces:RRTref} \{TransformID\} \tabto{3in}(minOccurs=1 maxOccurs=1)\tabto{3.5in}// consistent with the ACESrelease\_Version\par
+	\tabto{4em}\texttt{aces:ODTref} \{TransformID\} \tabto{3in}(minOccurs=1 maxOccurs=1)\par
+	\tabto{6em}\texttt{LinkTransform} \{id\} \tabto{3.5in}// pointer to ProcessList containing above \\\tabto{3.6in}RRT+ODT\par
+	\tabto{4em}\texttt{LinkPreviewTransform} \{id\} \tabto{3.5in}// pointer to overall combination ProcessList \\\tabto{3.6in}of all of the above LMT+RRT+ODT\par
+	\tabto{2em}\texttt{/aces:PreviewTransformList} \par
+
+\texttt{</aces:Config>}
+
+\section{Info Block Information}
+This section is for optional user-defined metadata.  Customized information may be included but other applications are not required to read or use these fields. It is required only that the fields be preserved when the ACESclip file is read and then rewritten. 
+
+\texttt{<aces:Info>}\tabto{1.5in}(minOccurs=0 maxOccurs=1)
+
+	\tabto{4em}\texttt{Application} \{version\} \tabto{2.25in}(recommended) \tabto{3.25in}// identify last software that modified the \\\tabto{3.35in}clip container\par
+	\tabto{4em}\texttt{Comment} \tabto{2.25in}(optional) \par
+	\tabto{4em}[Extension Fields]
+	
+\texttt{</aces:Info>}
+
+\section{Carriage of XML-based Color Transform Files}
+The Transform Library is intended to provide a portable mechanism for transforms, particularly those listed in the aces:Config.  Transforms may take the form of a CDL or a Common LUT Format ProcessList. (A CTL implementation is provided for reference, but production support of CTL files is not currently required).
+
+Each transform in this section is required to have an {id} attribute for reference from the ACESconfig.
+
+The Transform Library may be present in the ACESclip file or it may be a stand-alone file.
+
+If transforms are not present in the file, they must be made available through some other means such as a Production Library distribution.
+
+\texttt{<aces:Transform\_Library>}\tabto{2in}(minOccurs=0 maxOccurs=1)
+
+	\tabto{4em}\texttt{<ColorDecisionList} \{id\}\texttt{>} \tabto{3in}(minOccurs=0 maxOccurs=unbounded)\par
+	\tabto{4em}\texttt{<ProcessList} \{id\}\texttt{>} \tabto{3in}(minOccurs=0 maxOccurs=unbounded)\par
+	\tabto{4em}\texttt{<CTL file} \{name, id\}\texttt{>} \tabto{3in}(minOccurs=0 maxOccurs=unbounded) \\\tabto{3in}// multiple -- CDATA wrapper. CTL support \\\tabto{3.1in}not required\par
+    \tabto{6em}\texttt{<!}[CDATA[CTL FILE ----\\
+    \tabto{6.1em}***** include .ctl file *****\\
+    \tabto{6em}]]\texttt{>}\par
+	\tabto{4em}\texttt{</CTL file} \{name\}
+	
+\texttt{</aces:Transform\_Library>}

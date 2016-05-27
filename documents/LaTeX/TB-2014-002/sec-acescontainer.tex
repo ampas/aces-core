@@ -1,0 +1,15 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{ACES Container}
+
+Please refer to the SMPTE ST 2065-4:2013.  This is an image file format (based on OpenEXR) for storing images in the ACES2065-1 color encoding.
+
+The recommended end-user name for this file format is an ``ACES container.''
+
+\section{Guidelines}
+\subsection{Assigning default color space}
+When reading ACES container files, the color space should default to ACES2065-1.
+
+\subsection{File metadata}
+Products should read and write the metadata in the header of the container file as per the SMPTE specification.

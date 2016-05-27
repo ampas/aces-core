@@ -1,0 +1,28 @@
+% This file contains the content for a main section
+\numberedformat
+%% Modify below this line %%
+\chapter{Challenges}
+
+In many implementations of pre-release ACES, products required users to select from a long list of transforms essentially consisting of the RRT combined with an ODT. The ODTs supplied with pre-release versions of ACES varied along the following characteristics:
+
+\begin{itemize}
+    \item released version of the CTL transforms
+    \item display calibration aim
+    \item cinema simulation mode vs. adapted mode
+    \item target gamut limiting
+    \item legal vs. full range
+    \item forward and inverse transforms
+\end{itemize}
+
+Furthermore, we are introducing additional factors such as:
+
+\begin{itemize}
+    \item viewing environment
+    \item target dynamic range (for HDR displays)
+\end{itemize}
+
+The factorial combinations of these transforms implies that it would be overwhelming to users to ask them to select from amongst dozens or even hundreds of possible transforms. Some principle must be found to organize them.
+
+Further complicating matters is that the algorithms currently in use do not support all possible combinations of parameters (nor do all combinations even make sense as user options). For example, the target gamut limiting is very device specific. Likewise options for HDR video displays do not make sense for typical video displays or cinema projectors. So as with Input Transforms, it is not feasible to present the choices as a consistent and well-ordered set of parametric options.
+
+Finally, the notion of an RRT + ODT and other aspects of the pre-releases are unique to ACES and become difficult in the context of products which simultaneously need to support other methods of color management.

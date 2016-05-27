@@ -1,0 +1,123 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of "Introduction" section
+%% Modify below this line %%
+\chapter{LMT use cases}
+
+Two styles of image modification are common in post-production: interactive modification, either across the entire frame or in isolated regions of interest, and a preset systematic modification across the entire frame. The interactive image modification is termed `grading.' The ACES term for preset systematic, full-frame image modification is `look modification.' Look modification is performed using a Look Modification Transform (LMT).
+
+\section{Emulation of photochemical processing}
+Though modern grading systems are very powerful, some whole-frame color transformations are too complex for even a skilled colorist to accomplish using grading system controls. Often the complexity arises when the creative intent is to simulate, for frames captured with digital cinema cameras, the nonlinear color and exposure relationships used in film laboratory photochemical processing, especially nonstandard photochemical processing. Examples of such color transformations include:
+
+\begin{itemize}
+    \item   `Bleach Bypass' emulation: modification of image color values to achieve a unique desaturated appearance mimicking projection of a print that had skipped a normal laboratory bleaching step.
+    \item   Technicolor 3-strip emulation: modification of image color values to achieve a saturated, higher-contrast appearance mimicking projection of a print from Technicolor’s imbibition dye transfer process (c. 1938)
+    \item   Kodak Vision 3 print film emulation: modification of image color values to achieve a reproduction of the relationship between scene exposure values and projected film imagery resulting from the use of Kodak’s latest film stocks.
+\end{itemize}
+
+\autoref{fig:photochemical} illustrates how a colorist could prepend one or more emulation LMTs to the RRT (which itself precedes a selected ODT), so that his or her time could be spent on sequence, shot and/or region-specific color requests from the client. The grade modifies the image first, followed by the process emulation provided by the LMT.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{photochemicalProcessing.png}
+\caption{}
+\label{fig:photochemical}
+\end{center}
+\end{figure}
+
+\section{Systematic Color Correction (and application of ASC CDL)}
+The LMT takes as input an image in the ACES color space and yields a modified image that is still in the ACES color space. As a consequence, LMTs can be `chained' together, one after another. \autoref{fig:lmtChain} shows a grading workflow where, prior to applying the `Kodak Vision 3 emulation' LMT described above, the colorist applies an `ASC CDL' LMT—very likely one whose parameter values were chosen by the cinematographer on-set to modify the default `look' of emulated Kodak Vision 3 stock. 
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{chainingLMTs.png}
+\caption{}
+\label{fig:lmtChain}
+\end{center}
+\end{figure}
+
+\note{The values of the ASC CDL in this case are only valid in the context of the selected `Kodak Vision 3 emulation' LMT. If this LMT were removed, the ASC CDL values would no longer be valid.}
+ 
+Note that the ASC CDL LMT incorporates a conversion from ACES to ACEScc before the ASC CDL operations will be applied, and likewise incorporates a conversion from ACEScc to ACES after the ASC CDL operations have been applied. This `wrapping' of ASC CDL operations is a key capability of the ACES Common LUT format.
+
+\section{Trim Pass Grading}
+Content today is delivered across a wide range of output devices, each of which has their own color space and characteristic brightness. Creative adjustments to the look of shots are often needed to enhance the content's appearance beyond the original creative intent. The client might desire to accentuate the difference between the results of the viewing pipeline for theatrical exhibition, the results of the viewing pipeline appropriate for home video and the results of the viewing pipeline appropriate for mobile streaming. This could be done by having three workflows that differed only in that the first had no LMT `accentuating' the image for any nonstandard viewing environment, the second had an LMT just prior to the application of the RRT and an ODT designated as appropriate for home video viewing, and the second had an LMT just prior to the application of the RRT and an ODT designated as appropriate for viewing with content streamed to mobile devices, as shown in \autoref{fig:trimPassGrading}.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{trimPassGrading.png}
+\caption{}
+\label{fig:trimPassGrading}
+\end{center}
+\end{figure}
+
+\section{Flexible pre-sets for creative modifications}
+Separation of grading and LMT(s) allows for a production to make significant changes in creative decisions that affect the entire frame equally, without requiring the colorist to start from scratch, or ideally without even requiring a trim pass. For example, the client might start a production shooting `day for night' and use an LMT to accomplish this result (\autoref{fig:dayForNight}).
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{dayForNight.png}
+\caption{}
+\label{fig:dayForNight}
+\end{center}
+\end{figure}
+ 
+A change in creative direction (say, after a test screening) might place the captured action two hours earlier, so `day for night' might become `day for dusk'. Since the LMT is separate from the grade, the change may be made without requiring lengthy and expensive colorist intervention. A new LMT is simply swapped into the old LMT's place (\autoref{fig:dayForDusk}).
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{dayForDusk.png}
+\caption{}
+\label{fig:dayForDusk}
+\end{center}
+\end{figure}
+
+\section{Permanent Color Modification (archival)}
+The workflows above all show a `transient' processing of image file to displayed output, with the display being a calibrated grading monitor or projector. It is also completely valid and correct to archive the input to the RRT as an ACES container file, `baking in' the grade and any LMT application(s), as shown in \autoref{fig:archival}.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{archival.png}
+\caption{}
+\label{fig:archival}
+\end{center}
+\end{figure}
+
+A person who retrieves an ACES file need not know about the grades and LMT(s) applied to produce the desired creative result; by virtue of being an ACES file, the image `speaks for itself' when the RRT and a selected ODT are applied. 
+
+It is extremely important that the LMT authors preserve as much of the dynamic range of the LMT’s input ACES RGB relative exposure values as is possible. This provides the maximum amount of latitude for a colorist grading through the LMT. It also preserves the maximum amount of grading latitude for someone who later retrieves stored ACES container files created by ‘baking in’ the effect of the LMT to the graded ACES images, when remastering for a radically different display or viewing environment (e.g. for grading on a higher-dynamic-range display than previously available). While full preservation of dynamic range and gamut is almost never possible, when faced with an engineering decision in which all other considerations are equal, the LMT author should choose the option that retains more of the LMT input’s dynamic range and color gamut.
+
+Preserving the integrity of the ACES RGB relative exposure values representing the scene means more than just not clipping highlight luminances or very deep shadow tones. It also means avoiding severe distortions of the distributions of ACES values, such as the distortion caused by a strong `gamma' operation, e.g. by a very large or very small value for one or more CDL `power' parameters.
+
+Because LMT's are customizable and unique, and because it is essential to maintain the portability and archivability of an ACES project, it is always necessary to preserve the LMT transforms within any project where they are used.
+
+\note{If a production wishes to preserve maximum flexibility for later remastering, it should archive the original ACES images, any clip-level metadata-bearing container encapsulating the original image files, any IDT(s), any pre-grading adjustments (see the following `LMTs and pre-grading for Visual Effects' section), any project-wide and shot-specific grading parameters, and the Look Transform (that is, the set of all LMTs employed to achieve the creative result, in their proper sequence).}
+
+\section{Portability}
+LMTs are expressed and transported using the Common LUT format (also known as the Academy/ASC LUT format or the ASC/Academy LUT format).
+
+The building blocks of an LMT include basic arithmetical operations, simple matrix application, 1D LUTs and 3D LUTs. Straightforward color transforms can often be expressed analytically using the first three of these building blocks. More complex (and typically empirically derived) LMTs may be conveyed as 3D LUTs. The Common LUT format was chosen because it can express, in a portable encoding, all of the abovementioned operations and LUTs.
+
+\note{Using the floating point ACES RGB relative exposure values directly as 1D LUT indices requires a more complex lookup mechanism than found in traditional 1D LUT implementations. The Common LUT Format supports this type of lookup by using the halfDomain attribute of the LUT1D process node; see the Common LUT Format documentation for more information.}
+
+\section{LMTs and pre-grading for Visual Effects}
+In some cases, color corrections may be created prior to the colorist session in a scene-balancing `pre-grade.' This allows for all shots in a sequence to share identical LMTs `downstream' in the color modification pipeline. A motivating case would be a long sequence of daylight shots with varying color temperature.
+An example of this workflow, with two illustrations, is shown below. The first illustration shows what might happen at a visual effects facility that receives a number of shots that will be edited together to make up a sequence.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{vfx1.png}
+\caption{}
+\label{fig:vfx1}
+\end{center}
+\end{figure}
+
+When the visual effects are complete, the frames supplied to the colorist have both the pre-grade and the visual effect(s) `baked in.' The Look Transform is not `baked in' to this imagery, since it must be applied after the grade, but is instead carried as metadata, and is referenced by the ACES clip container.
+
+\begin{figure}[H]
+\begin{center}
+    \includegraphics[width=\textwidth]{vfx2.png}
+\caption{}
+\label{fig:vfx2}
+\end{center}
+\end{figure}
+

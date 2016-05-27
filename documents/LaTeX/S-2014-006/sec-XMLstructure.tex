@@ -1,0 +1,42 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{XML Structure}
+\label{sec:XMLstructure}
+
+LUTs are stored in XML files each of which must have the same XML root element, \texttt{ProcessList}, regardless of the number of LUTs in the file. The \texttt{ProcessList} root element contains a sequence of \texttt{ProcessNode}s which are typically either LUTs or matrices. Any \texttt{ProcessList} must also contain at least one \texttt{ProcessNode}. An example of the overall structure of a LUT file is thus:
+
+\lstset{frame=none}
+\begin{lstlisting}
+<ProcessList id="123">
+	<Matrix id="1">
+		data & metadata
+	</Matrix>
+	<LUT1D id="2">
+ 		data & metadata
+	</LUT1D>
+	<Matrix id="3">
+		data & metadata
+	</Matrix>
+</ProcessList>	
+\end{lstlisting}
+
+The order and number of transforms is determined by the designer of the transform.
+
+The XML file may contain other information that is useful to XML interpreters.  This includes a starting line that identifies the XML version number and Unicode values.  This line is mandatory once in a file and looks like this:
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+\end{lstlisting}
+
+The file may also contain XML comments that may be used to describe the structure of the file or save information that would not normally be exposed to a database or to a user.
+XML comments are enclosed in brackets like so,     
+
+\begin{lstlisting}
+<!--   This is a comment    -->
+\end{lstlisting}
+\lstset{frame=single}
+
+It is often useful to identify the natural or formal language in which text strings of XML documents are written.  The special attribute named xml:lang may be inserted in XML documents to specify the language used in the contents and attribute values of any element in an XML document. The values of the attribute are language identifiers as defined by IETF RFC 3066. In addition, the empty string may be specified.
+
+The language specified by xml:lang applies to the element where it is specified (including the values of its attributes), and to all elements in its content unless overridden with another instance of xml:lang. In particular, the empty value of xml:lang can be used to override a specification of xml:lang on an enclosing element, without specifying another language.
