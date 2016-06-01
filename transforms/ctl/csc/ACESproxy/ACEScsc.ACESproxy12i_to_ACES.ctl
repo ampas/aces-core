@@ -73,12 +73,12 @@ void main
     ACESproxy[1] = gIn * 4095.0;
     ACESproxy[2] = bIn * 4095.0;
 
-    float AP1_lin[3];
-    AP1_lin[0] = ACESproxy_to_lin( ACESproxy[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    AP1_lin[1] = ACESproxy_to_lin( ACESproxy[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    AP1_lin[2] = ACESproxy_to_lin( ACESproxy[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    float lin_AP1[3];
+    lin_AP1[0] = ACESproxy_to_lin( ACESproxy[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    lin_AP1[1] = ACESproxy_to_lin( ACESproxy[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    lin_AP1[2] = ACESproxy_to_lin( ACESproxy[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
 
-    float ACES[3] = mult_f3_f44( AP1_lin, AP1_2_AP0_MAT);
+    float ACES[3] = mult_f3_f44( lin_AP1, AP1_2_AP0_MAT);
 
     rOut = ACES[0];
     gOut = ACES[1];

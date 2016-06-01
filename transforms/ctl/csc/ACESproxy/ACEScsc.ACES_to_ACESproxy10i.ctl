@@ -67,12 +67,12 @@ void main
 	// Pre-clamp: This clamp serves to avoid large negative ACES values from potentially folding over to large positive values when multiplied through the AP0-to-AP1 matrix. This is usually not an issue in real camera images.
     ACES = clamp_f3( ACES, 0.0, HALF_POS_INF); 
 
-    float ACESproxy_lin[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
+    float lin_AP1[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 
     int ACESproxy[3];
-    ACESproxy[0] = lin_to_ACESproxy( ACESproxy_lin[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    ACESproxy[1] = lin_to_ACESproxy( ACESproxy_lin[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
-    ACESproxy[2] = lin_to_ACESproxy( ACESproxy_lin[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    ACESproxy[0] = lin_to_ACESproxy( lin_AP1[0], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    ACESproxy[1] = lin_to_ACESproxy( lin_AP1[1], StepsPerStop, MidCVoffset, CVmin, CVmax);
+    ACESproxy[2] = lin_to_ACESproxy( lin_AP1[2], StepsPerStop, MidCVoffset, CVmin, CVmax);
     
     // Prepare output values based on application bit depth handling
     //  NOTE: This step is required for use with ctlrender. 
