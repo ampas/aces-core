@@ -47,12 +47,12 @@ void main
     output varying float aOut
 )
 {
-    float ACESccLin[3];
-    ACESccLin[0] = ACEScc_to_lin( rIn);
-    ACESccLin[1] = ACEScc_to_lin( gIn);
-    ACESccLin[2] = ACEScc_to_lin( bIn);
+    float lin_AP1[3];
+    lin_AP1[0] = ACEScc_to_lin( rIn);
+    lin_AP1[1] = ACEScc_to_lin( gIn);
+    lin_AP1[2] = ACEScc_to_lin( bIn);
 
-    float ACES[3] = mult_f3_f44( ACESccLin, AP1_2_AP0_MAT);
+    float ACES[3] = mult_f3_f44( lin_AP1, AP1_2_AP0_MAT);
   
     rOut = ACES[0];
     gOut = ACES[1];

@@ -66,10 +66,10 @@ void main
     // values so that a conversion from ACES to ACEScc and back can be made 
     // lossless.
 
-    float ACESccLin[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
+    float lin_AP1[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 
-    rOut = lin_to_ACEScc( ACESccLin[0]);
-    gOut = lin_to_ACEScc( ACESccLin[1]);
-    bOut = lin_to_ACEScc( ACESccLin[2]);
+    rOut = lin_to_ACEScc( lin_AP1[0]);
+    gOut = lin_to_ACEScc( lin_AP1[1]);
+    bOut = lin_to_ACEScc( lin_AP1[2]);
     aOut = aIn;
 }
