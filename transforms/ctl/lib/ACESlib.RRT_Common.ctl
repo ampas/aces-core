@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESlib.RRT_Common.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Lib - RRT Common</ACESuserName>
 
 //
 // Contains functions and constants shared by forward and inverse RRT transforms

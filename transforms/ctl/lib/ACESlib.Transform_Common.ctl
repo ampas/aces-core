@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESlib.Transform_Common.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Lib - Transform Common</ACESuserName>
 
 //
 // Contains functions and constants shared by multiple forward and inverse 

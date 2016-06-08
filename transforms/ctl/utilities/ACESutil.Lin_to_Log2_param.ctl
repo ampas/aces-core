@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESutil.Lin_to_Log2_param.a1.0.1</ACEStransformID>
+// <ACESuserName>Linear to Log2 (Parametric)</ACESuserName>
 
 // 
 // Generic transform from linear to a log base-2 encoding

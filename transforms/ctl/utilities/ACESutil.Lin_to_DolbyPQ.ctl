@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESutil.Lin_to_DolbyPQ.a1.0.1</ACEStransformID>
+// <ACESuserName>Linear to Dolby PQ</ACESuserName>
 
 // 
 // Generic transform from linear to encoding specified in SMPTE ST2084

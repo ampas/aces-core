@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESlib.ODT_Common.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Lib - ODT Common</ACESuserName>
 
 //
 // Contains functions and constants shared by forward and inverse ODT transforms 

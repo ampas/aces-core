@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESlib.Utilities_Color.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Lib - Color Utilities</ACESuserName>
 
 //
 // Color related constants and functions

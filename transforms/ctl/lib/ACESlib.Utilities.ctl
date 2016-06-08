@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESlib.Utilities.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Lib - Utilities</ACESuserName>
 
 //
 // Generic functions that may be useful for writing CTL programs

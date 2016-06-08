@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESutil.DolbyPQ_to_Lin.a1.0.1</ACEStransformID>
+// <ACESuserName>Dolby PQ to Linear</ACESuserName>
 
 // 
 // Generic transform from SMPTE ST2084 to linear

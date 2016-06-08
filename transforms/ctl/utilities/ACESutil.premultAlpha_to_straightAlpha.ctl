@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESutil.premultAlpha_to_straightAlpha.a1.0.2</ACEStransformID>
+// <ACESuserName>Pre-multiplied Alpha to Straight Alpha</ACESuserName>
 
 // 
 // Transform to convert Alpha Premultiplied RGB values to straight Alpha RGB values

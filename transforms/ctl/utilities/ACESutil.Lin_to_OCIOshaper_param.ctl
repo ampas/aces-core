@@ -1,5 +1,6 @@
 
 // <ACEStransformID>ACESutil.Lin_to_OCIOshaper_param.a1.0.1</ACEStransformID>
+// <ACESuserName>Linear to OCIO Shaper (Parametric)</ACESuserName>
 
 // 
 // Generic transform from linear to an OCIOshaper encoding

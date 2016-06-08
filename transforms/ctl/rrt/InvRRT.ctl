@@ -1,5 +1,6 @@
 
 // <ACEStransformID>InvRRT.a1.0.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 - Inverse RRT</ACESuserName>
 
 // 
 // Inverse Reference Rendering Transform (RRT)
