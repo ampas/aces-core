@@ -53,7 +53,7 @@ $lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACEScc values using E
 \begin{equation} 
     ACEScct = \left\{ 
     \begin{array}{l l }
-        9.088363765997 \times lin_{AP1} + 0.0842482996;    & \quad lin_{AP1} \leq 0.0078125 \\[10pt]
+        10.5402377416545 \times lin_{AP1} + 0.0729055341958355;    & \quad lin_{AP1} \leq 0.0078125 \\[10pt]
         \dfrac{\log_{2}(lin_{AP1}) + 9.72}{17.52}; & \quad lin_{AP1} > 0.0078125 \\    
     \end{array} \right.
 \end{equation}
@@ -100,7 +100,7 @@ ACEScct $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ values using 
 \resizebox{\textwidth}{!}{$
     lin_{AP1} = \left\{ 
     \begin{aligned}
-        &\dfrac{\left(ACEScct-0.0842482996\right)}{9.088363765997};& ACEScct& \leq 0.155251141552511 \\[10pt]
+        &\dfrac{\left(ACEScct-0.0729055341958355\right)}{10.5402377416545};& ACEScct& \leq 0.155251141552511 \\[10pt]
         &2^{(ACEScct \times 17.52-9.72)}; &0.155251141552511 \leq ACEScct& < \dfrac{\log_{2}(65504)+9.72}{17.52} \\[10pt]
         &65504; & ACEScct& \geq \dfrac{\log_{2}(65504)+9.72}{17.52} \\    
     \end{aligned} \right.
