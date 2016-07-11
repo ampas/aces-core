@@ -23,8 +23,8 @@ import "ACESlib.Transform_Common";
 
 const float X_BRK = 0.0078125;
 const float Y_BRK = 0.155251141552511;
-const float A = 9.08836376599650;
-const float B = 0.0842482996306638;
+const float A = 10.5402377416545;
+const float B = 0.0729055341958355;
 
 
 
