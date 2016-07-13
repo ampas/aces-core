@@ -9,11 +9,10 @@
 //
 // Summary :
 //  This transform is intended for mapping OCES onto a desktop computer monitor 
-//  typical of those used in motion picture visual effects production used to 
-//  simulate the image appearance produced by odt_p3d60. These monitors may
-//  occasionally be referred to as "sRGB" displays, however, the monitor for
-//  which this transform is designed does not exactly match the specifications
-//  in IEC 61966-2-1:1999.
+//  typical of those used in motion picture visual effects production. These 
+//  monitors may occasionally be referred to as "sRGB" displays, however, the 
+//  monitor for which this transform is designed does not exactly match the 
+//  specifications in IEC 61966-2-1:1999.
 // 
 //  The assumed observer adapted white is D60, and the viewing environment is 
 //  that of a dim surround. 
