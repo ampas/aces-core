@@ -1,6 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Rename ACES CTL transforms in an ACES repository based on the ACEStransformID of each file"""
+
+"""Rename ACES CTL transforms in an ACES repository based on the ACEStransformID of each file
+
+usage: renameCTL.py [-h] [-v] [-i PATH]
+
+Function to rename ACES CTL transforms in an ACES repository based on the
+ACEStransformID of each file
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --verbose         display verbose output
+  -i PATH, --inputPath PATH
+                        root path where files to be renamed are found
+"""
 
 import os
 
