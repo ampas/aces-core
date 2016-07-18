@@ -25,8 +25,8 @@ images, and documentation.
 
 ### Changes from Previous Release ###
 
-Though the "master" branch is 1.1, the current major version of ACES remains 1.0. The 1.1 
-"minor" release adds features, but does not change the look, or modify the existing core transforms 
+Though the "master" branch is 1.0.3, the current major version of ACES remains 1.0. The 1.0.3 
+"patch" release adds features, but does not change the look, or modify the existing core transforms 
 beyond addressing reported bugs since the major version release. 
 
 As always, you should check the hotfixes and dev branches for the latest bug fixes and 
@@ -34,7 +34,7 @@ new features that will ultimately be rolled into a future version of ACES. These
 improvements will continue to be staged on the dev branch for testing as they become 
 available.
 
-Included in ACES 1.1:
+Included in ACES 1.0.3:
 
   * New Features: 
      * Add new ACEScct color correction working space transforms
@@ -68,7 +68,7 @@ For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in t
 
 #### Notes on ACEScct ####
 
-A new color correction working space has been added to ACES 1.1.  The new working space, known as ACEScct, is intended to address some colorists desire for a grading behavior similar to that of legacy working spaces such as ITU-R BT.709.  ACEScct is intended to be an alternate color correction working space to ACEScc for those who prefer its grading behaviors.  As such, developers implementing ACES 1.1 in products that previously only used ACEScc should offer end users a choice of ACEScc or ACEScct in the user interface as the color correction working space. Among the behaviors charateristic of ACEScct is a more distict "milking" or "fogging" of shadows when a lift operation is applied when compared to the same operation applied in ACEScc. This is accomplished through the addition of a "toe" to working space function.  It is important to note that ACEScct is *NOT* compatiable with ASC-CDL values generated on-set using the ACESproxy encoding.  If there is a need to reproduce a look generated on-set where ACESproxy was used, ACEScc must be used in the dailies and/or DI environment.
+A new color correction working space has been added to ACES 1.0.3.  The new working space, known as ACEScct, is intended to address some colorists desire for a grading behavior similar to that of traditional log film scans.  ACEScct is intended to be an alternate color correction working space to ACEScc for those who prefer its grading behaviors.  As such, developers implementing ACES 1.0.3 in products that previously only used ACEScc should offer end users a choice of ACEScc or ACEScct in the user interface as the color correction working space. Among the behaviors charateristic of ACEScct is a more distict "milking" or "fogging" of shadows when a lift operation is applied when compared to the same operation applied in ACEScc. This is accomplished through the addition of a "toe" to working space function.  It is important to note that ACEScct is *NOT* compatiable with ASC-CDL values generated on-set using the ACESproxy encoding.  If there is a need to reproduce a look generated on-set where ACESproxy was used, ACEScc must be used in the dailies and/or DI environment.
 
 ### Versioning ###
  
