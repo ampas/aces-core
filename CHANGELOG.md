@@ -1,4 +1,4 @@
-**Version 1.1 (TBD):**
+**Version 1.0.3 (TBD):**
 
   * New Features: 
      * Add new ACEScct color correction working space transforms
