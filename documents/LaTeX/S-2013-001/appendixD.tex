@@ -42,13 +42,13 @@ The following parameters are defined for each bit-depth.
  
 \newpage
 \section{Encoding Function}
-The following floating-point equation is used to convert ACES values that are encoded according to SMPTE ST 2065-1 into integer code values.
+The following floating-point equation is used to convert linear values to integer code values.
 \begin{equation} 
     \resizebox{\textwidth}{!}{$
     ACESproxy = \left\{ 
     \begin{array}{l l}
-        CVmin;    & ACES \leq 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
-        \mathrm{FLOAT2CV}\left[\left(\log_2(ACES)-MidLogOffset\right)\times StepsPerStop+MidCVOffset\right];        & ACES > 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
+        CVmin;    & lin \leq 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
+        \mathrm{FLOAT2CV}\left[\left(\log_2(lin)-MidLogOffset\right)\times StepsPerStop+MidCVOffset\right];        & lin > 2^{\left({\frac{(CVmin-MidCVoffset)}{StepsPerStop}-MidLogOffset}\right)} \\
     \end{array} \right. $ }
 \end{equation}
 
@@ -59,14 +59,14 @@ An implementation may use mathematically equivalent forms of this encoding equat
 
 
 \section{Decoding Function}
-The following floating-point equation is used to convert ACESproxy integer code values to ACES values that are encoded according to SMPTE ST 2065-1.
+The following floating-point equation is used to convert ACESproxy integer code values to linear values.
 
 \begin{center}
-$ACES = 2^{\left( \dfrac{(ACESproxy-MidCVoffset)}{StepsPerStop} + MidLogOffset\right)}$
+$lin = 2^{\left( \dfrac{(ACESproxy-MidCVoffset)}{StepsPerStop} + MidLogOffset\right)}$
 
 \end{center}
 
-The conversion to ACES creates the closest value in 16-bit half precision floating-point to the floating-point result of the equation. ACES values resulting from this equation are limited to the range of values that can be encoded in ACESproxy as illustrated in Appendix \ref{appendixB}. This decoding function does not produce negative ACES values.
+The conversion to linear creates the closest value in 16-bit half precision floating-point to the floating-point result of the equation. Linear values resulting from this equation are limited to the range of values that can be encoded in ACESproxy as illustrated in Appendix \ref{appendixB}. This decoding function does not produce negative values.
 
 
 An implementation may use mathematically equivalent forms of this decoding equation.

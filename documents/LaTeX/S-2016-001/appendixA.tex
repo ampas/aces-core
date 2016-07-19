@@ -3,6 +3,8 @@
 
 American Society of Cinematographers Color Decision List (ASC CDL) slope, offset, power, and saturation modifiers can be applied directly to ACEScct image data. To preserve the extended range of ACEScct values, no limiting function should be applied with ASC CDL parameters. The power function, however, should not be applied to any negative ACEScct values after slope and offset are applied. Slope, offset, and power are applied with the following function.
 
+\note{ACEScct is not compatible with ASC CDL values generated on-set using the ACESproxy encoding. If there is a need to reproduce a look generated on-set where ACESproxy was used, ACEScc must be used in the dailies and/or DI environment to achieve a match.}
+
 \begin{gather*} 
     ACEScct_{out} = \left\{ 
     \begin{array}{l r }

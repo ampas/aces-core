@@ -47,17 +47,17 @@ White   & 1.00000 & 1.00000 & 1.00000 & & 0.32168 & 0.33767 \\
 The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and 10-bit integer ACESproxy values.
 
 \subsection{10-bit ACESproxy encoding}
-ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy10 values using Equation \ref{eq:ACESproxyLin2ACESproxy10}.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACESproxy10 values using Equation \ref{eq:linAP12ACESproxy10}.
 
 \begin{floatequ} 
 \begin{equation} 
     \resizebox{\textwidth}{!}{$
     ACESproxy10 = \left\{ 
     \begin{array}{l l}
-        64;    & ACESproxyLin \leq 2^{-9.72} \\
-        \mathrm{FLOAT2CV10}\left[\left(\log_2(ACESproxyLin)+2.5\right)\times 50+425\right];        & ACESproxyLin > 2^{-9.72} \\
+        64;    & lin_{AP1} \leq 2^{-9.72} \\
+        \mathrm{FLOAT2CV10}\left[\left(\log_2(lin_{AP1})+2.5\right)\times 50+425\right];        & lin_{AP1} > 2^{-9.72} \\
     \end{array} \right.$
 	}
 \end{equation}
@@ -73,18 +73,18 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy10 values u
 
 \tabto{0.75in} MIN$(\mathbf{a}, \mathbf{b})$ returns the lesser of $\mathbf{a}$ or $\mathbf{b}$
 }
-\caption{ACESproxyLin to ACESproxy10}
-\label{eq:ACESproxyLin2ACESproxy10}
+\caption{lin\textsubscript{AP1} to ACESproxy10}
+\label{eq:linAP12ACESproxy10}
 \end{floatequ}
 
-\note{Equation \ref{eq:ACES2ACESproxyLin10} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:ACES2linAP110} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
     \begin{bmatrix}
-        R_{ACESproxyLin}\\
-        G_{ACESproxyLin}\\
-        B_{ACESproxyLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix}
     =
     TRA_{1}
@@ -104,8 +104,8 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy10 values u
     \\
     TRA_{1} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
 \end{gather}
-\caption{ACES to ACESproxyLin}
-\label{eq:ACES2ACESproxyLin10}
+\caption{ACES to lin\textsubscript{AP1}}
+\label{eq:ACES2linAP110}
 \end{floatequ}
 
 \note{ACESproxy values encoded using the equation above are not appropriate for storage or for archiving. They are intended for use only with digital transport interfaces unable to carry half-precision floating-point values, and with integer-based grading systems designed to generate look metadata that will guide the color grading applied to ACES image data later in the post-production process.}
@@ -115,19 +115,19 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy10 values u
 
 
 \subsection{10-bit ACESproxy decoding}
-ACESproxy $R$, $G$, and $B$ values shall be converted to ACESproxyLin values using Equation \ref{eq:ACESproxy2ACESproxyLin10}.
+ACESproxy $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ values using Equation \ref{eq:ACESproxy2linAP110}.
 
 \begin{floatequ} 
 \begin{equation} 
-    ACESproxyLin = 2^{\left(\dfrac{ACESproxy10-425}{50}-2.5\right)}
+    lin_{AP1} = 2^{\left(\dfrac{ACESproxy10-425}{50}-2.5\right)}
 \end{equation}
-\caption{ACESproxy10 to ACESproxyLin}
-\label{eq:ACESproxy2ACESproxyLin10}
+\caption{ACESproxy10 to lin\textsubscript{AP1}}
+\label{eq:ACESproxy2linAP110}
 \end{floatequ}
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-\note{Equation \ref{eq:ACESproxyLin2ACES10} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:linAP12ACES10} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
@@ -140,9 +140,9 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
     TRA_{2}
     \cdot
     \begin{bmatrix}
-        R_{ACESproxyLin}\\
-        G_{ACESproxyLin}\\
-        B_{ACESproxyLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix} \\
     \\
     TRA_{2} =
@@ -154,8 +154,8 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
     \\
     TRA_{2} = NPM^{-1}_{AP0} \cdot NPM_{AP1}
 \end{gather}
-\caption{ACESproxyLin to ACES}
-\label{eq:ACESproxyLin2ACES10}
+\caption{lin\textsubscript{AP1} to ACES}
+\label{eq:linAP12ACES10}
 \end{floatequ}
 
 
@@ -165,17 +165,17 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
 The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and 12-bit integer ACESproxy values.
 
 \subsection{12-bit ACESproxy encoding}
-ACES $R$, $G$, and $B$ values shall be converted to ACESproxyLin $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values using Equation \ref{eq:ACESproxyLin2ACESproxy12}.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACESproxy12 values using Equation \ref{eq:linAP12ACESproxy12}.
 
 \begin{floatequ} 
 \begin{equation} 
     \resizebox{\textwidth}{!}{$
     ACESproxy12 = \left\{ 
     \begin{array}{l l}
-        256;    & ACESproxyLin \leq 2^{-9.72} \\
-        \mathrm{FLOAT2CV12}\left[\left(\log_2(ACESproxyLin)+2.5\right)\times 200+1700\right];        & ACESproxyLin > 2^{-9.72} \\
+        256;    & lin_{AP1} \leq 2^{-9.72} \\
+        \mathrm{FLOAT2CV12}\left[\left(\log_2(lin_{AP1})+2.5\right)\times 200+1700\right];        & lin_{AP1} > 2^{-9.72} \\
     \end{array} \right.$
     }
 \end{equation}
@@ -191,18 +191,18 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values u
 \tabto{0.75in} MIN$(\mathbf{a}, \mathbf{b})$ returns the lesser of $\mathbf{a}$ or $\mathbf{b}$
 }
 
-\caption{ACESproxyLin to ACESproxy12}
-\label{eq:ACESproxyLin2ACESproxy12}
+\caption{lin\textsubscript{AP1} to ACESproxy12}
+\label{eq:linAP12ACESproxy12}
 \end{floatequ}
 
-\note{Equation \ref{eq:ACES2ACESproxyLin12} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:ACES2linAP112} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
     \begin{bmatrix}
-        R_{ACESproxyLin}\\
-        G_{ACESproxyLin}\\
-        B_{ACESproxyLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix}
     =
     TRA_{1}
@@ -222,8 +222,8 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values u
     \\
     TRA_{1} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
 \end{gather}
-\caption{ACES to ACESproxyLin}
-\label{eq:ACES2ACESproxyLin12}
+\caption{ACES to lin\textsubscript{AP1}}
+\label{eq:ACES2linAP112}
 \end{floatequ}
 
 \note{ACESproxy values encoded using the equation above are not appropriate for storage or for archiving. They are intended for use only with digital transport interfaces unable to carry half-precision floating-point values, and with integer-based grading systems designed to generate look metadata that will guide the color grading applied to ACES image data later in the post-production process.}
@@ -232,19 +232,19 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACESproxy12 values u
 
 
 \subsection{12-bit ACESproxy decoding}
-ACESproxy $R$, $G$, and $B$ values shall be converted to ACESproxyLin values using Equation \ref{eq:ACESproxy2ACESproxyLin}.
+ACESproxy $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ values using Equation \ref{eq:ACESproxy2ACESproxyLin}.
 
 \begin{floatequ} 
 \begin{equation} 
-    ACESproxyLin = 2^{\left(\dfrac{ACESproxy12-1700}{200}-2.5\right)}
+    lin_{AP1} = 2^{\left(\dfrac{ACESproxy12-1700}{200}-2.5\right)}
 \end{equation}
-\caption{ACESproxy12 to ACESproxyLin}
-\label{eq:ACESproxy2ACESproxyLin}
+\caption{ACESproxy12 to lin\textsubscript{AP1}}
+\label{eq:ACESproxy2linAP1}
 \end{floatequ}
 
-ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-\note{Equation \ref{eq:ACESproxyLin2ACES12} shows the relationship between ACES $R$, $G$, and $B$ values and ACESproxyLin $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:linAP12ACES12} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACESproxy specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
@@ -257,9 +257,9 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
     TRA_{2}
     \cdot
     \begin{bmatrix}
-        R_{ACESproxyLin}\\
-        G_{ACESproxyLin}\\
-        B_{ACESproxyLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix} \\
     \\
     TRA_{2} =
@@ -271,6 +271,6 @@ ACESproxyLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $
     \\
     TRA_{2} = NPM^{-1}_{AP0} \cdot NPM_{AP1}
 \end{gather}
-\caption{ACESproxyLin to ACESproxy}
-\label{eq:ACESproxyLin2ACES12}
+\caption{lin\textsubscript{AP1} to ACESproxy}
+\label{eq:linAP12ACES12}
 \end{floatequ}
