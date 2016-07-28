@@ -95,14 +95,15 @@ void main
   // --- Compensate for different white point being darker  --- //
   // This adjustment is to correct an issue that exists in ODTs where the device 
   // is calibrated to a white chromaticity other than D60. In order to simulate 
-  // D60 on such devices, unequal code values are sent to the display to achieve 
-  // neutrals at D60. In order to produce D60 on a device calibrated to the DCI 
-  // white point (i.e. equal code values yield CIE x,y chromaticities of 0.314, 
-  // 0.351) the red channel is higher than green and blue to compensate for the 
-  // "greenish" DCI white. This is the correct behavior but it means that as 
-  // highlight increase, the red channel will hit the device maximum first and 
-  // clip, resulting in a chromaticity shift as the green and blue channels 
-  // continue to increase.
+  // D60 on such devices, unequal code values must be sent to the display to achieve 
+  // the chromaticities of D60. More specifically, in order to produce D60 on a device 
+  // calibrated to a D65 white point (i.e. equal code values yield CIE x,y 
+  // chromaticities of 0.3127, 0.329) the red channel must be slightly higher than 
+  // that of green and blue in order to compensate for the relatively more "blue-ish" 
+  // D65 white. This unequalness of color channels is the correct behavior but it 
+  // means that as neutral highlights increase, the red channel will hit the 
+  // device maximum first and clip, resulting in a small chromaticity shift as the 
+  // green and blue channels continue to increase to their maximums.
   // To avoid this clipping error, a slight scale factor is applied to allow the 
   // ODTs to simulate D60 within the D65 calibration white point. 
 
