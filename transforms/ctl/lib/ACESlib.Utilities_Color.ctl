@@ -46,6 +46,14 @@ const Chromaticities P3D60_PRI =
   { 0.32168,  0.33767}
 };
 
+const Chromaticities P3D65_PRI =
+{
+  { 0.68000,  0.32000},
+  { 0.26500,  0.69000},
+  { 0.15000,  0.06000},
+  { 0.31270,  0.32900}
+};
+
 const Chromaticities P3DCI_PRI =
 {
   { 0.68000,  0.32000},
