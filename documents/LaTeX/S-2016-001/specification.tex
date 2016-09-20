@@ -47,7 +47,7 @@ The following functions shall be used to convert between ACES values, encoded ac
 \subsection{Encoding Function}
 ACES $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACEScc values using Equation \ref{eq:linAP12ACEScct}.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACEScct values using Equation \ref{eq:linAP12ACEScct}.
 
 \begin{floatequ} 
 \begin{equation} 
@@ -112,7 +112,7 @@ $}
 
 $lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-\note{Equation \ref{eq:linAP12ACES} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScc $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:linAP12ACES} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScct $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScct specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
