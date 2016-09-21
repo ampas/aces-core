@@ -25,27 +25,50 @@ images, and documentation.
 
 ### Changes from Previous Release ###
 
-Though the "master" branch is 1.0.2, the current major version of ACES remains 1.0. The 1.0.2 
-"patch" release does not add features, change the look, or modify the core transforms 
-beyond addressing reported bugs since the Major version release. 
+Though the "master" branch is 1.0.3, the current major version of ACES remains 1.0. The 1.0.3 
+"patch" release adds features, but does not change the look, or modify the existing core transforms 
+beyond addressing reported bugs since the major version release. 
 
 As always, you should check the hotfixes and dev branches for the latest bug fixes and 
 new features that will ultimately be rolled into a future version of ACES. These 
 improvements will continue to be staged on the dev branch for testing as they become 
 available.
 
-Included in ACES 1.0.2:
-  * Added Missing chromatic adaptation transform in Rec2020 1000-nit InvODT
-  * Fixed ACEStransformID references in DolbyPQ utility CTLs
-  * Fixed lingering ST2048 references
-  * Fixed type in file names in images/README
-  * Fixed file names in images README
-  * Various minor typographical and stylistic fixes
-  * Renamed all references to ST2084 from ST2048
-  * Tabs => spaces and blank space cleanup      
-  * Update README and CHANGELOG
+Included in ACES 1.0.3:
+
+  * New Features: 
+     * Add new ACEScct color correction working space transforms
+     * Add ACEScct specification document
+     * Add Sony S-Log3 / S-Gamut3 IDTs
+     * Add functions to convert between premultiplied and straight alpha
+     * Add D65 RGB Monitor ODT
+     * Add new reference images for new transforms
+  * Bug Fixes:
+     * Update copy and paste typo in ACESproxy document
+     * Update ODT functions legal range input variable usage to avoid a situation where it may not execute as intended.
+     * Update miscellaneous to local variables in utility functions to avoid clashes with existing global variables
+     * Update miscellaneous minor errors in Transform IDs
+     * Update miscellaneous transforms missing ACESuserName Tags
+  * Other:
+     * Update IDT READMEs to reflect latest manufacturer provided information including broken links
+     * Restructure utility and lib functions directories for use clarification
+     * Restructure directories to consolidate CSC transforms
+     * Update equation variables names in ACEScc and ACESproxy documents for greater clarity 
+     * Miscellaneous math simplifications in utility functions
+     * Miscellaneous white space fixes in CTL transforms
+     * Miscellaneous typo fixes in CTL transform comments
+     * Remove version number from CTL file names
+     * Add Python script to rename CTL files based on TransformID
+     * Update all documents to remove version numbers and use date as unique identifier
+     * Update all documents to use vector logo
+     * Update reference images to reflect code changes
+     * Update README and CHANGELOG
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
+
+#### Notes on ACEScct ####
+
+A new color correction working space has been added to ACES 1.0.3.  The new working space, known as ACEScct, is intended to address some colorists' desire for a grading behavior similar to that of traditional log film scans.  ACEScct is intended to be an alternate color correction working space to ACEScc for those who prefer its grading behavior.  As such, developers implementing ACES 1.0.3 in products that previously only used ACEScc should offer end users a choice of ACEScc or ACEScct in the user interface as the color correction working space.  Among the characteristics of ACEScct is a more distict "milking" or "fogging" of shadows when a lift operation is applied when compared to the same operation applied in ACEScc.  This is a result of the addition of a "toe" to the non-linear encoding function.  It is important to note that ACEScct is *NOT* compatible with ASC-CDL values generated on-set using the ACESproxy encoding.  If there is a need to reproduce a look generated on-set where ACESproxy was used, ACEScc must be used in the dailies and/or DI environment.
 
 ### Versioning ###
  
@@ -94,7 +117,7 @@ Academy under the following terms and conditions: A worldwide, royalty-free,
 non-exclusive right to copy, modify, create derivatives, and use, in source and
 binary forms, is hereby granted, subject to acceptance of this license.
 
-Copyright 2015 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
+Copyright 2016 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
 Portions contributed by others as indicated. All rights reserved.
 
 Performance of any of the aforementioned acts indicates acceptance to be bound

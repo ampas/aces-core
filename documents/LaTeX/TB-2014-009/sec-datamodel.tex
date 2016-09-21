@@ -96,7 +96,7 @@ This section is for optional user-defined metadata.  Customized information may 
 \texttt{</aces:Info>}
 
 \section{Carriage of XML-based Color Transform Files}
-The Transform Library is intended to provide a portable mechanism for transforms, particularly those listed in the aces:Config.  Transforms may take the form of a CDL or a Common LUT Format ProcessList. (A CTL implementation is provided for reference, but production support of CTL files is not currently required).
+The Transform Library is intended to provide a portable mechanism for transforms, particularly those listed in the \textit{aces:Config}.  Transforms may take the form of a CDL or a Common LUT Format ProcessList. (A CTL implementation is provided for reference, but production support of CTL files is not currently required).
 
 Each transform in this section is required to have an {id} attribute for reference from the ACESconfig.
 
@@ -112,6 +112,6 @@ If transforms are not present in the file, they must be made available through s
     \tabto{6em}\texttt{<!}[CDATA[CTL FILE ----\\
     \tabto{6.1em}***** include .ctl file *****\\
     \tabto{6em}]]\texttt{>}\par
-	\tabto{4em}\texttt{</CTL file} \{name\}
+	\tabto{4em}\texttt{</CTL file} \{name\}\texttt{>}
 	
 \texttt{</aces:Transform\_Library>}

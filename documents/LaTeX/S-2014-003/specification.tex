@@ -7,7 +7,7 @@
 The logarithmic encoding of ACES specified in \autoref{sec:ACEScc} shall be known as ACEScc.
 
 \section{Color component value encoding}
-ACEScc values are encoded as 32-bit floating-point numbers. This floating-point encoding uses 32 bits per component as described in IEEE P754.
+ACEScc values are encoded as 32-bit floating-point numbers. This floating-point encoding uses 32 bits per component as described in IEEE 754.
 
 \section{Color space chromaticities}
 \label{sec:colorspace}
@@ -45,31 +45,31 @@ White   & 1.00000 & 1.00000 & 1.00000 & & 0.32168 & 0.33767 \\
 The following functions shall be used to convert between ACES values, encoded according to SMPTE ST 2065-1, and ACEScc.
 
 \subsection{Encoding Function}
-ACES $R$, $G$, and $B$ values shall be converted to ACESccLin $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-ACESccLin $R$, $G$, and $B$ values shall be converted to ACEScc values using Equation \ref{eq:ACESccLin2ACEScc}.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACEScc values using Equation \ref{eq:linAP12ACEScc}.
 
 \begin{floatequ} 
 \begin{equation} 
     ACEScc = \left\{ 
     \begin{array}{l l }
-        \dfrac{\left(\log_{2}(2^{-16}) + 9.72\right)}{17.52};    & \quad ACESccLin \leq 0 \\[10pt]
-        \dfrac{\left(\log_{2}(2^{-16} + ACESccLin \times 0.5) + 9.72\right)}{17.52};        & \quad ACESccLin < 2^{-15} \\[10pt]
-        \dfrac{\left(\log_{2}(ACESccLin) + 9.72\right)}{17.52}; & \quad ACESccLin \geq 2^{-15} \\    
+        \dfrac{\left(\log_{2}(2^{-16}) + 9.72\right)}{17.52};    & \quad lin_{AP1} \leq 0 \\[10pt]
+        \dfrac{\left(\log_{2}(2^{-16} + lin_{AP1} \times 0.5) + 9.72\right)}{17.52};        & \quad lin_{AP1} < 2^{-15} \\[10pt]
+        \dfrac{\left(\log_{2}(lin_{AP1}) + 9.72\right)}{17.52}; & \quad lin_{AP1} \geq 2^{-15} \\    
     \end{array} \right.
 \end{equation}
-\caption{ACESccLin to ACEScc}
-\label{eq:ACESccLin2ACEScc}
+\caption{lin\textsubscript{AP1} to ACEScc}
+\label{eq:linAP12ACEScc}
 \end{floatequ}
 
-\note{Equation \ref{eq:ACES2ACESccLin} shows the relationship between ACES $R$, $G$, and $B$ values and ACESccLin $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:ACES2linAP1} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
     \begin{bmatrix}
-        R_{ACESccLin}\\
-        G_{ACESccLin}\\
-        B_{ACESccLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix}
     =
     TRA_{1}
@@ -89,19 +89,19 @@ ACESccLin $R$, $G$, and $B$ values shall be converted to ACEScc values using Equ
     \\
     TRA_{1} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
 \end{gather}
-\caption{ACES to ACESccLin}
-\label{eq:ACES2ACESccLin}
+\caption{ACES to lin\textsubscript{AP1}}
+\label{eq:ACES2linAP1}
 \end{floatequ}
 
 \note{Clipping ACES values below 0 in the above function is not required. Implementers are encouraged to encode negative values or take care when clipping color outside the ACEScc gamut. See Appendix \ref{appendixA} for details.}
 
 \subsection{Decoding Function}
-ACEScc $R$, $G$, and $B$ values shall be converted to ACESccLin values using Equation \ref{eq:ACEScc2ACESccLin}.
+ACEScc $R$, $G$, and $B$ values shall be converted to $lin_{AP1}$ values using Equation \ref{eq:ACEScc2linAP1}.
 
 \begin{floatequ} 
 \begin{equation}
 \resizebox{\textwidth}{!}{$
-    ACESccLin = \left\{ 
+    lin_{AP1} = \left\{ 
     \begin{aligned}
         &\left(2^{(ACEScc \times 17.52-9.72)}-2.0^{-16}\right)\times2.0;& ACEScc& \leq \dfrac{(9.72-15)}{17.52} \\[10pt]
         &2^{(ACEScc \times 17.52-9.72)}; & \small \dfrac{(9.72-15)}{17.52} \leq ACEScc& < \dfrac{\log_{2}(65504)+9.72}{17.52} \\[10pt]
@@ -109,13 +109,13 @@ ACEScc $R$, $G$, and $B$ values shall be converted to ACESccLin values using Equ
     \end{aligned} \right.
 $}
 \end{equation}
-\caption{ACEScc to ACESccLin}
-\label{eq:ACEScc2ACESccLin}
+\caption{ACEScc to lin\textsubscript{AP1}}
+\label{eq:ACEScc2linAP1}
 \end{floatequ}
 
-ACESccLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+$lin_{AP1}$ $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
-\note{Equation \ref{eq:ACESccLin2ACES} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScc $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
+\note{Equation \ref{eq:linAP12ACES} shows the relationship between ACES $R$, $G$, and $B$ values and $lin_{AP1}$ $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1. AP1 are the primaries of ACEScc specified in \autoref{sec:colorspace}.}
 
 \begin{floatequ} 
 \begin{gather}
@@ -128,9 +128,9 @@ ACESccLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ 
     TRA_{2}
     \cdot
     \begin{bmatrix}
-        R_{ACESccLin}\\
-        G_{ACESccLin}\\
-        B_{ACESccLin}
+        R_{lin_{AP1}}\\
+        G_{lin_{AP1}}\\
+        B_{lin_{AP1}}
     \end{bmatrix} \\
     \\
     TRA_{2} =
@@ -142,6 +142,6 @@ ACESccLin $R$, $G$, and $B$ values shall be converted to ACES $R$, $G$, and $B$ 
     \\
     TRA_{2} = NPM^{-1}_{AP1} \cdot NPM_{AP0}
 \end{gather}
-\caption{ACESccLin to ACEScc}
-\label{eq:ACESccLin2ACES}
+\caption{lin\textsubscript{AP1} to ACEScc}
+\label{eq:linAP12ACES}
 \end{floatequ}

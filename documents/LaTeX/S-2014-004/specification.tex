@@ -63,7 +63,7 @@ The following functions shall be used to convert between ACES values, encoded ac
 
 \subsection{Converting ACES2065-1 RGB values to ACEScg RGB values}
 \label{sec:aces2acescg}
-ACES $R$, $G$, and $B$ values shall be converted to ACEScg $R$, $G$, and $B$ values using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACES $R$, $G$, and $B$ values shall be converted to ACEScg $R$, $G$, and $B$ values using the transformation matrix ($TRA_{1}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 \note{Equation \ref{eq:aces2acescg} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScg $R$, $G$, and $B$ values. $TRA_{1}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP1}$ inverse and $NPM_{AP0}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACEScg specified in \autoref{sec:colorspace}.}
 
@@ -97,7 +97,7 @@ ACES $R$, $G$, and $B$ values shall be converted to ACEScg $R$, $G$, and $B$ val
 \end{floatequ}
 
 \subsection{Converting ACEScg RGB values to ACES2065-1 RGB values}
-ACEScg $R$, $G$, and $B$ values shall be converted to ACES2065-1 $R$, $G$ and $B$ using the transformation matrix ($TRA$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
+ACEScg $R$, $G$, and $B$ values shall be converted to ACES2065-1 $R$, $G$ and $B$ using the transformation matrix ($TRA_{2}$) calculated and applied using the methods provided in Section 4 of SMPTE RP 177:1993.
 
 \note{Equation \ref{eq:acescg2aces} shows the relationship between ACES $R$, $G$, and $B$ values and ACEScg $R$, $G$, and $B$ values. $TRA_{2}$, rounded to 10 significant digits, is derived from the product of $NPM_{AP0}$ inverse and $NPM_{AP1}$ calculated using methods provided in Section 3.3 of SMPTE RP 177:1993. AP0 are the primaries of ACES specified in SMPTE ST 2065-1:2012. AP1 are the primaries of ACEScg specified in \autoref{sec:colorspace}.}
 
