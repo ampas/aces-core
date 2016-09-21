@@ -1,4 +1,4 @@
-**Version 1.0.3 (TBD):**
+**Version 1.0.3 (September 20, 2016):**
 
   * New Features: 
      * Add new ACEScct color correction working space transforms
@@ -27,7 +27,6 @@
      * Update all documents to use vector logo
      * Update reference images to reflect code changes
      * Update README and CHANGELOG
-
 
 **Version 1.0.2 (April 12, 2016):**
 
