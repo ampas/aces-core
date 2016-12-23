@@ -1,11 +1,11 @@
 
-// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI800-CCT2400-ND1pt3.a1.v1</ACEStransformID>
+// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI800-CCT2400-ND1pt3.a1.v2</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - ARRIRAW (EI800, 2400K, ND1.3)</ACESuserName>
 
 // ARRI ALEXA IDT for ALEXA linear files
 //  with camera EI set to 800
 //  and CCT of adopted white set to 2400K
-// Written by v3_IDT_maker.py v0.08 on Friday 19 December 2014
+// Written by v3_IDT_maker.py v0.09 on Thursday 22 December 2016
 
 const float EI = 800.0;
 const float black = 256.0 / 65535.0;
@@ -28,9 +28,9 @@ void main
 	float b_lin = (bIn - black) * exp_factor;
 
 	// convert to ACES primaries using CCT-dependent matrix
-	rOut = r_lin * 0.748486 + g_lin * 0.097563 + b_lin * 0.153951;
-	gOut = r_lin * -0.003830 + g_lin * 1.041991 + b_lin * -0.038161;
-	bOut = r_lin * 0.041639 + g_lin * -0.557294 + b_lin * 1.515655;
+	rOut = r_lin * 7.4848636258509e-01 + g_lin * 9.7562568803922e-02 + b_lin * 1.5395106861099e-01;
+	gOut = r_lin * -3.8297025135612e-03 + g_lin * 1.0419911895818e+00 + b_lin * -3.8161487068243e-02;
+	bOut = r_lin * 4.1638780951366e-02 + g_lin * -5.5729365780271e-01 + b_lin * 1.5156548768514e+00;
 	aOut = 1.0;
 
 }
