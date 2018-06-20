@@ -2,6 +2,13 @@
 
 The following is a very brief overview of Look Modification Transforms (LMTs). For more information, please review TB-2014-010, which can be found in the [`documents`](../../../documents) directory.
 
+Additionally, there is a multi-part series of posts on ACESCentral that detail the use and creation of LMTs:
+
+* [LMTs Part 1](http://acescentral.com/t/lmts-part-1-what-are-they-and-what-can-they-do-for-me/790 "LMTs Part 1")
+* [LMTs Part 2](http://acescentral.com/t/lmts-part-2-how-do-they-work-and-how-are-they-made/1203 "LMTs Part 2")
+* [LMTs Part 3](http://acescental.com/t/lmts-part-3-how-do-they-work-and-how-are-they-made-continued/1206 "LMTs Part 3")
+* [LMTs Part 4](http://acescentral.com/t/lmts-part-4-how-do-they-work-and-how-are-they-made-continued/1217 "LMTs Part 4")
+
 ### Introduction to LMTs ###
 
 Look Modification Transforms (LMTs) provide a means to apply a variety of looks to ACES images. LMTs can be used to change the look from the default associated with the RRT to a custom look that one might want to use. The range of looks achievable via LMTs are only limited by the transformation used in the LMT itself.
