@@ -422,3 +422,106 @@ float[3] ST2084_2_Y_f3( float in[3])
 
   return out;
 }
+
+
+// Conversion of PQ signal to HLG, as detailed in Section 7 of ITU-R BT.2390-0
+float[3] ST2084_2_HLG_1000nits_f3( float PQ[3]) 
+{
+    // ST.2084 EOTF (non-linear PQ to display light)
+    float displayLinear[3] = ST2084_2_Y_f3( PQ);
+
+    // HLG Inverse EOTF (i.e. HLG inverse OOTF followed by the HLG OETF)
+    // HLG Inverse OOTF (display linear to scene linear)
+    float Y_d = 0.2627*displayLinear[0] + 0.6780*displayLinear[1] + 0.0593*displayLinear[2];
+    const float L_w = 1000.;
+    const float L_b = 0.;
+    const float alpha = (L_w-L_b);
+    const float beta = L_b;
+    const float gamma = 1.2;
+    
+    float sceneLinear[3];
+    if (Y_d == 0.) { 
+        /* This case is to protect against pow(0,-N)=Inf error. The ITU document
+        does not offer a recommendation for this corner case. There may be a 
+        better way to handle this, but for now, this works. 
+        */ 
+        sceneLinear[0] = 0.;
+        sceneLinear[1] = 0.;
+        sceneLinear[2] = 0.;        
+    } else {
+        sceneLinear[0] = pow( (Y_d-beta)/alpha, (1.-gamma)/gamma) * ((displayLinear[0]-beta)/alpha);
+        sceneLinear[1] = pow( (Y_d-beta)/alpha, (1.-gamma)/gamma) * ((displayLinear[1]-beta)/alpha);
+        sceneLinear[2] = pow( (Y_d-beta)/alpha, (1.-gamma)/gamma) * ((displayLinear[2]-beta)/alpha);
+    }
+
+    // HLG OETF (scene linear to non-linear signal value)
+    const float a = 0.17883277;
+    const float b = 0.28466892; // 1.-4.*a;
+    const float c = 0.55991073; // 0.5-a*log(4.*a);
+
+    float HLG[3];
+    if (sceneLinear[0] <= 1./12) {
+        HLG[0] = sqrt(3.*sceneLinear[0]);
+    } else {
+        HLG[0] = a*log(12.*sceneLinear[0]-b)+c;
+    }
+    if (sceneLinear[1] <= 1./12) {
+        HLG[1] = sqrt(3.*sceneLinear[1]);
+    } else {
+        HLG[1] = a*log(12.*sceneLinear[1]-b)+c;
+    }
+    if (sceneLinear[2] <= 1./12) {
+        HLG[2] = sqrt(3.*sceneLinear[2]);
+    } else {
+        HLG[2] = a*log(12.*sceneLinear[2]-b)+c;
+    }
+
+    return HLG;
+}
+
+
+// Conversion of HLG to PQ signal, as detailed in Section 7 of ITU-R BT.2390-0
+float[3] HLG_2_ST2084_1000nits_f3( float HLG[3]) 
+{
+    const float a = 0.17883277;
+    const float b = 0.28466892; // 1.-4.*a;
+    const float c = 0.55991073; // 0.5-a*log(4.*a);
+
+    const float L_w = 1000.;
+    const float L_b = 0.;
+    const float alpha = (L_w-L_b);
+    const float beta = L_b;
+    const float gamma = 1.2;
+
+    // HLG EOTF (non-linear signal value to display linear)
+    // HLG to scene-linear
+    float sceneLinear[3];
+    if ( HLG[0] >= 0. && HLG[0] <= 0.5) {
+        sceneLinear[0] = pow(HLG[0],2.)/3.;
+    } else {
+        sceneLinear[0] = (exp((HLG[0]-c)/a)+b)/12.;
+    }        
+    if ( HLG[1] >= 0. && HLG[1] <= 0.5) {
+        sceneLinear[1] = pow(HLG[1],2.)/3.;
+    } else {
+        sceneLinear[1] = (exp((HLG[1]-c)/a)+b)/12.;
+    }        
+    if ( HLG[2] >= 0. && HLG[2] <= 0.5) {
+        sceneLinear[2] = pow(HLG[2],2.)/3.;
+    } else {
+        sceneLinear[2] = (exp((HLG[2]-c)/a)+b)/12.;
+    }        
+    
+    float Y_s = 0.2627*sceneLinear[0] + 0.6780*sceneLinear[1] + 0.0593*sceneLinear[2];
+
+    // Scene-linear to display-linear
+    float displayLinear[3];
+    displayLinear[0] = alpha * pow( Y_s, gamma-1.) * sceneLinear[0] + beta;
+    displayLinear[1] = alpha * pow( Y_s, gamma-1.) * sceneLinear[1] + beta;
+    displayLinear[2] = alpha * pow( Y_s, gamma-1.) * sceneLinear[2] + beta;
+        
+    // ST.2084 Inverse EOTF
+    float PQ[3] = Y_2_ST2084_f3( displayLinear);
+
+    return PQ;
+}
