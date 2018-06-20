@@ -270,6 +270,24 @@ float moncurve_r( float y, float gamma, float offs )
   return x;
 }
 
+float[3] moncurve_f_f3( float x[3], float gamma, float offs)
+{
+    float y[3];
+    y[0] = moncurve_f( x[0], gamma, offs);
+    y[1] = moncurve_f( x[1], gamma, offs);
+    y[2] = moncurve_f( x[2], gamma, offs);
+    return y;
+}
+
+float[3] moncurve_r_f3( float y[3], float gamma, float offs)
+{
+    float x[3];
+    x[0] = moncurve_r( y[0], gamma, offs);
+    x[1] = moncurve_r( y[1], gamma, offs);
+    x[2] = moncurve_r( y[2], gamma, offs);
+    return x;
+}
+
 float bt1886_f( float V, float gamma, float Lw, float Lb)
 {
   // The reference EOTF specified in Rec. ITU-R BT.1886
@@ -290,6 +308,23 @@ float bt1886_r( float L, float gamma, float Lw, float Lb)
   return V;
 }
 
+float[3] bt1886_f_f3( float V[3], float gamma, float Lw, float Lb)
+{
+    float L[3];
+    L[0] = bt1886_f( V[0], gamma, Lw, Lb);
+    L[1] = bt1886_f( V[1], gamma, Lw, Lb);
+    L[2] = bt1886_f( V[2], gamma, Lw, Lb);
+    return L;
+}
+
+float[3] bt1886_r_f3( float L[3], float gamma, float Lw, float Lb)
+{
+    float V[3];
+    V[0] = bt1886_r( L[0], gamma, Lw, Lb);
+    V[1] = bt1886_r( L[1], gamma, Lw, Lb);
+    V[2] = bt1886_r( L[2], gamma, Lw, Lb);
+    return V;
+}
 
 // SMPTE Range vs Full Range scaling formulas
 float smpteRange_to_fullRange( float in)
