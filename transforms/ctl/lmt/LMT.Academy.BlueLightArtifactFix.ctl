@@ -1,7 +1,13 @@
+
+// <ACEStransformID>LMT.Academy.BlueLightArtifactFix.a1.1</ACEStransformID>
+// <ACESuserName>ACES 1.0 Look - Blue Light Artifact Fix</ACESuserName>
+
 //
-// LMT for fixing occasional image artifacts seen in bright highlights (e.g. sirens,headlights,etc.)
-// Note that this will change scene colorimetry! (but tends to do so in a pleasing way)
-//
+// LMT for desaturating blue hues in order to reduce the artifact where bright 
+// blue colors (e.g. sirens, headlights, LED lighting, etc.) may become 
+// oversaturated or exhibit hue shifts as a result of clipping.
+// 
+
 
 const float correctionMatrix[3][3] = {
   { 0.9404372683,  0.0083786969,  0.0005471261},
