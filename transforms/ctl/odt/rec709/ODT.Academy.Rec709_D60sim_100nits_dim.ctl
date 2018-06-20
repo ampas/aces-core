@@ -77,67 +77,66 @@ void main
 {
     float oces[3] = { rIn, gIn, bIn};
 
-  // OCES to RGB rendering space
+    // OCES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
-  // Apply the tonescale independently in rendering-space RGB
+    // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
     rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // Scale luminance to linear code value
+    // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
-  // --- Compensate for different white point being darker  --- //
-  // This adjustment is to correct an issue that exists in ODTs where the device 
-  // is calibrated to a white chromaticity other than D60. In order to simulate 
-  // D60 on such devices, unequal code values must be sent to the display to achieve 
-  // the chromaticities of D60. More specifically, in order to produce D60 on a device 
-  // calibrated to a D65 white point (i.e. equal code values yield CIE x,y 
-  // chromaticities of 0.3127, 0.329) the red channel must be slightly higher than 
-  // that of green and blue in order to compensate for the relatively more "blue-ish" 
-  // D65 white. This unequalness of color channels is the correct behavior but it 
-  // means that as neutral highlights increase, the red channel will hit the 
-  // device maximum first and clip, resulting in a small chromaticity shift as the 
-  // green and blue channels continue to increase to their maximums.
-  // To avoid this clipping error, a slight scale factor is applied to allow the 
-  // ODTs to simulate D60 within the D65 calibration white point. 
+    // --- Compensate for different white point being darker  --- //
+    // This adjustment corrects for an issue that exists in ODTs where the 
+    // device is calibrated to a white chromaticity other than that of the 
+    // adapted white.
+    // In order to produce D60 on a device calibrated to D65 white (i.e. 
+    // equal display code values yield CIE x,y chromaticities of 0.3217, 0.329) 
+    // the red channel is higher than blue and green to compensate for the 
+    // "bluer" D60 white. This is the intended behavior but it means that 
+    // without compensation, as highlights increase, the red channel will hit 
+    // the device maximum first and clip, resulting in a chromaticity shift as 
+    // the green and blue channels continue to increase.
+    // To avoid this clipping behavior, a slight scale factor is applied to 
+    // allow the ODT to simulate D60 within the D65 calibration white point. 
 
     // Scale and clamp white to avoid casted highlights due to D60 simulation
     linearCV[0] = min( linearCV[0], 1.0) * SCALE;
     linearCV[1] = min( linearCV[1], 1.0) * SCALE;
     linearCV[2] = min( linearCV[2], 1.0) * SCALE;
 
-  // Apply gamma adjustment to compensate for dim surround
+    // Apply gamma adjustment to compensate for dim surround
     linearCV = darkSurround_to_dimSurround( linearCV);
 
-  // Apply desaturation to compensate for luminance difference
+    // Apply desaturation to compensate for luminance difference
     linearCV = mult_f3_f33( linearCV, ODT_SAT_MAT);
 
-  // Convert to display primary encoding
+    // Convert to display primary encoding
     // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  // Handle out-of-gamut values
+    // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
-  
-  // Encode linear code values with transfer function
+
+    // Encode linear code values with transfer function
     float outputCV[3];
     outputCV[0] = bt1886_r( linearCV[0], DISPGAMMA, L_W, L_B);
     outputCV[1] = bt1886_r( linearCV[1], DISPGAMMA, L_W, L_B);
     outputCV[2] = bt1886_r( linearCV[2], DISPGAMMA, L_W, L_B);
 
-  // Default output is full range, check if legalRange param was set to true
+    // Default output is full range, check if legalRange param was set to true
     if (legalRange) {
-      outputCV = fullRange_to_smpteRange_f3( outputCV);
+        outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 
     rOut = outputCV[0];
