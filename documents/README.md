@@ -23,6 +23,8 @@ _**System Documentation**_
 	* _**DRAFT**_ [TB-2014-013](http://j.mp/TB-2014-013) Alternate ACES Viewing Pipeline User Experience
 * ACES Component Names
 	* [TB-2014-012](http://j.mp/TB-2014-012) Academy Color Encoding System (ACES) Version 1.0 Component Names
+* Derivation of the ACES White Point CIE Chromaticity Coordinates
+	* [TB-2018-001](http://j.mp/TB-2018-001) Derivation of the ACES White Point CIE Chromaticity Coordinates
 
 _**Encodings and Metrics**_
 

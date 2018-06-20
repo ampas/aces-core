@@ -1,0 +1,9 @@
+% This file contains the content for the Scope
+\cleardoublepage
+\numberedformat	
+\chapter{Scope} 	% Do not modify section title
+%% Modify below this line %%
+
+This document describes the derivation of the ACES white point CIE chromaticity coordinates and details of why the chromaticity coordinates were chosen.  This document includes links to an example Python implementation of the derivation and an iPython notebook intended to help readers reproduce the referenced values.
+
+This document is primarily intended for those interested in understanding the details of the technical specification of ACES and the history of its development. The definition of a color space encoding's white point chromaticity coordinates is one important factor in the definition of a color managed system. The white point used in various ACES encodings does not dictate the creative white point of images created or mastered using the ACES system. It exists to enable accurate conversion to and from the other color encodings such as CIE XYZ.  The proper usage of the ACES white point in conversion, mastering, or reproduction are beyond the scope of this document.  For example, the proper usage of the ACES white point in encoding scene colorimetry in ACES2065-1 is detailed in P-2013-001 \cite{idt}.  

@@ -1,0 +1,48 @@
+\documentclass[10pt]{academydoc}
+\usepackage{siunitx}
+\usepackage{mathptmx}
+\usepackage{bm}
+\usepackage[backend=bibtex, style=ieee, sorting=none]{biblatex}
+\usepackage{amsmath}
+\bibliography{citations.bib}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcommand{\rgbequal}[0]{%
+    $R{=}G{=}B$%
+    \ignorespaces
+}%
+
+\pagestyle{plain}
+
+
+% Set Document Details
+\doctype{tb} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
+\docname{Derivation of the ACES White Point \\CIE Chromaticity Coordinates}
+\altdocname{Derivation of the ACES White Point CIE Chromaticity Coordinates}
+% Sets the document name used in header - usually an abbreviated document title
+\docnumber{TB-2018-001}
+\committeename{Academy Color Encoding System (ACES) Project}
+\docdate{June 15, 2018}
+\summary{
+This document describes the derivation of the white point CIE chromaticity coordinates used in various ACES encodings including ACES2065-1, ACEScg, ACESproxy, ACEScc and details of why the chromaticity coordinates were chosen.
+}
+
+% Document Starts Here
+\begin{document}
+
+\maketitle
+
+\input{notices} \newpage
+\input{histanddocs} \newpage
+
+\tableofcontents \newpage
+
+\input{introduction}
+
+\input{scope}
+\input{references}
+\input{sec-derivation}
+\input{sec-discussion}
+
+\end{document}
