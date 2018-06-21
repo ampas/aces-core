@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.Utilities_Color.a1.0.3</ACEStransformID>
+// <ACEStransformID>ACESlib.Utilities_Color.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Lib - Color Utilities</ACESuserName>
 
 //
