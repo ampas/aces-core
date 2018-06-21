@@ -1,9 +1,9 @@
 
-// <ACEStransformID>ODT.Academy.RGBmonitor_100nits_dim.a1.0.3</ACEStransformID>
-// <ACESuserName>ACES 1.0 Output - sRGB</ACESuserName>
+// <ACEStransformID>ODT.Academy.RGBmonitor_D60sim_100nits_dim.a1.0.3</ACEStransformID>
+// <ACESuserName>ACES 1.0 Output - sRGB (D60 sim.)</ACESuserName>
 
 // 
-// Output Device Transform - RGB computer monitor
+// Output Device Transform - RGB computer monitor (D60 simulation)
 //
 
 //
@@ -14,7 +14,7 @@
 //  monitor for which this transform is designed does not exactly match the 
 //  specifications in IEC 61966-2-1:1999.
 // 
-//  The assumed observer adapted white is D65, and the viewing environment is 
+//  The assumed observer adapted white is D60, and the viewing environment is 
 //  that of a dim surround. 
 //
 //  The monitor specified is intended to be more typical of those found in 
@@ -31,13 +31,14 @@
 // Display EOTF :
 //  The reference electro-optical transfer function specified in 
 //  IEC 61966-2-1:1999.
+//  Note: This EOTF is *NOT* gamma 2.2
 //
 // Signal Range:
 //    This transform outputs full range code values.
 //
 // Assumed observer adapted white point:
 //         CIE 1931 chromaticities:    x            y
-//                                     0.3127       0.329
+//                                     0.32168      0.33767
 //
 // Viewing Environment:
 //   This ODT has a compensation for viewing environment variables more typical 
@@ -57,8 +58,11 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
+// NOTE: The EOTF is *NOT* gamma 2.4, it follows IEC 61966-2-1:1999
 const float DISPGAMMA = 2.4; 
 const float OFFSET = 0.055;
+
+const float SCALE = 0.955;
 
 
 
@@ -76,42 +80,58 @@ void main
 {
     float oces[3] = { rIn, gIn, bIn};
 
-  // OCES to RGB rendering space
+    // OCES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
-  // Apply the tonescale independently in rendering-space RGB
+    // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
     rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // Scale luminance to linear code value
+    // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);    
 
-  // Apply gamma adjustment to compensate for dim surround
+    // --- Compensate for different white point being darker  --- //
+    // This adjustment corrects for an issue that exists in ODTs where the 
+    // device is calibrated to a white chromaticity other than that of the 
+    // adapted white.
+    // In order to produce D60 on a device calibrated to D65 white (i.e. 
+    // equal display code values yield CIE x,y chromaticities of 0.3217, 0.329) 
+    // the red channel is higher than blue and green to compensate for the 
+    // "bluer" D60 white. This is the intended behavior but it means that 
+    // without compensation, as highlights increase, the red channel will hit 
+    // the device maximum first and clip, resulting in a chromaticity shift as 
+    // the green and blue channels continue to increase.
+    // To avoid this clipping behavior, a slight scale factor is applied to 
+    // allow the ODT to simulate D60 within the D65 calibration white point. 
+
+    // Scale and clamp white to avoid casted highlights due to D60 simulation
+    linearCV[0] = min( linearCV[0], 1.0) * SCALE;
+    linearCV[1] = min( linearCV[1], 1.0) * SCALE;
+    linearCV[2] = min( linearCV[2], 1.0) * SCALE;
+
+    // Apply gamma adjustment to compensate for dim surround
     linearCV = darkSurround_to_dimSurround( linearCV);
 
-  // Apply desaturation to compensate for luminance difference
+    // Apply desaturation to compensate for luminance difference
     linearCV = mult_f3_f33( linearCV, ODT_SAT_MAT);
 
-  // Convert to display primary encoding
+    // Convert to display primary encoding
     // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
-
-    // Apply CAT from ACES white point to assumed observer adapted white point
-    XYZ = mult_f3_f33( XYZ, D60_2_D65_CAT);
 
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-  // Handle out-of-gamut values
+    // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
 
-  // Encode linear code values with transfer function
+    // Encode linear code values with transfer function
     float outputCV[3];
     // moncurve_r with gamma of 2.4 and offset of 0.055 matches the EOTF found in IEC 61966-2-1:1999 (sRGB)
     outputCV[0] = moncurve_r( linearCV[0], DISPGAMMA, OFFSET);
