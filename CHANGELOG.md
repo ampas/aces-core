@@ -1,3 +1,65 @@
+**Version 1.1 (June 21, 2018):**
+
+* New Features: 
+    * Add P3 ODTs:
+        * P3D65 (and inverse)
+        * P3D65 "D60 simulation" (i.e. D60 adapted white point) (and inverse)
+        * P3DCI "D65 simulation" (i.e. D65 adapted white point) (and inverse)
+        * P3D65 limited to Rec.709 (inverse not required)
+    * Add Rec.2020 ODTs:
+        * Rec.2020 limited to Rec.709 (inverse not required)
+        * Rec.2020 limited to P3D65 (inverse not required)
+    * Add DCDM ODT:
+        * DCDM with D65 adapted white point and limited to P3D65 (and inverse)
+    * Add new ACESlib files:
+        * SSTS: code for the Single Stage Tone Scale used in HDR Output Transforms
+        * OutputTransforms: beginning of modules needed for parameterizing Output Transforms
+    * Add new subfunctions to existing ACESlib files:
+        * Utilities_Color: 
+            * functions for converting between PQ and HLG at 1000 nits
+            * `_f3` versions of `moncurve` and `bt1886` encoding functions
+        * ODT_Common:
+            * `_f3` version of `Y_2_linCV` and `linCV_2_Y`
+        * RRT_Common:
+            * functions containing the non-tone scale portion of the RRT for simpler application in forward and inverse Output Transforms
+    * Add new ACESutil functions:
+        * DolbyPQ_to_HLG_1000nits
+        * HLG_to_DolbyPQ_1000nits
+    * Add HDR Output Transforms (RRT+ODT):
+        * P3D65 (108 cd/m^2) ST.2084 - designed for use in Dolby Cinema (and inverse)
+        * Rec.2020 (1000 cd/m^2) ST.2084 (and inverse)
+        * Rec.2020 (2000 cd/m^2) ST.2084 (and inverse)
+        * Rec.2020 (4000 cd/m^2) ST.2084 (and inverse)
+        * Rec.2020 (1000 cd/m^2) HLG (and inverse)
+    * Remove HDR ODTs (and inverses)
+        * `ODT.Academy.P3D60_ST2084_1000nits.ctl`
+        * `ODT.Academy.P3D60_ST2084_2000nits.ctl`
+        * `ODT.Academy.P3D60_ST2084_4000nits.ctl`
+        * `ODT.Academy.Rec2020_ST2084_1000nits.ctl`
+        * `InvODT.Academy.P3D60_ST2084_1000nits.ctl`
+        * `InvODT.Academy.P3D60_ST2084_2000nits.ctl`
+        * `InvODT.Academy.P3D60_ST2084_4000nits.ctl`
+        * `InvODT.Academy.Rec2020_ST2084_1000nits.ctl`
+    * Rename some existing transforms for clarity:
+        * Rename `DCDM_P3D60` to `DCDM_P3D60limited`
+        * Rename `P3DCI` to `P3DCI_D60sim`
+        * Rename `RGBmonitor` to `sRGB`
+    * Add LMT that can help correct bright blue light clipping or hue shifts
+    * Add new reference images for new transforms
+    * Add documentation:
+        * TB-2018-001 - Derivation of the ACES White Point CIE Chromaticity Coordinates
+            * Python module with reference implementation of TB-2018-001
+            * iPython Notebook with calculation of values used in TB-2018-001
+* Bug Fixes:
+    * Arri IDT - Improve linearization of LogC data
+* Other:
+    * Miscellaneous white space and line wrap fixes in CTL transforms
+    * Miscellaneous typo fixes in CTL transform comments
+    * Miscellaneous README and CTL comment updates
+    * Miscellaneous LaTeX documentation typo and code fixes
+    * Update ACEStranformIDs where appropriate
+    * Update README and CHANGELOG
+
 **Version 1.0.3 (September 20, 2016):**
 
   * New Features: 
