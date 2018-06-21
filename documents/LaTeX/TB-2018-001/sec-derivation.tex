@@ -1,0 +1,17 @@
+% This file contains the content for a main section
+\newpage
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Derivation of CIE chromaticity coordinates}
+\label{chap:dervation}
+
+The CIE xy chromaticity coordinates of the ACES white point are specified in SMPTE ST 2065-1:2012 as $x=0.32168$ $y=0.33767$ \cite{SMPTE20651}. The ACES white point chromaticity coordinates are derived using the following procedure:
+
+\begin{enumerate}
+    \item Calculate the CIE Daylight spectral power distribution for a Correlated Color Temperature (CCT) of \SI[mode=text]{6000}{\kelvin} over the wavelength intervals \SI[mode=text]{300}{\nm} to \SI[mode=text]{830}{\nm} in \SI[mode=text]{1}{\nm} increments as specified in CIE 15:2004 Section 3.1 \cite{CIE152004}
+    \item Calculate the CIE 1931 XYZ tristimulus values of the spectral power distribution as specified in CIE 15:2004 Section 7.1 \cite{CIE152004}
+    \item Convert the CIE XYZ values to CIE xy chromaticity coordinates as specified in CIE 15:2004 Section 7.3 \cite{CIE152004}
+    \item Round the CIE xy chromaticity coordinates to 5 decimal places
+\end{enumerate}
+
+An implementation of the procedure described above can be found at: \\ \url{https://github.com/ampas/aces-dev/tree/master/documents/python/TB-2018-001/aces_wp.py}

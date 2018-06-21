@@ -1,0 +1,154 @@
+% This file contains the content for a main section
+\regularsectionformat
+%% Modify below this line %%
+\chapter{Discussion}
+\label{chap:discussion}
+
+\section{Comparison of the ACES white point and CIE \texorpdfstring{D\textsubscript{60}}{D60}}
+\label{sec:comp}
+Frequently, the white point associated with various ACES encodings is said to be `D\textsubscript{60}' \cite{autodesk,bmforum,acescentralD60}. This shorthand notation has sometimes led to confusion for those familiar with the details of how the chromaticity coordinates of the CIE D series illuminants are calculated \cite{notD60}.  The chromaticity coordinates of any CIE D series illuminant can be calculated using the equations found in Section 3 of CIE 15:2004 and reproduced in Equation~\ref{eq:xyeq} \cite{CIE152004}.
+
+\begin{floatequ}[!ht]
+    \begin{alignat*}{2}
+    & y_{D} && = -3.000x_{D}^{2}+2.870x_{D}-0.275 \\
+    & x_{D} && =
+        \begin{dcases}
+            0.244063+0.09911{\frac {10^{3}}{T}}+2.9678{\frac {10^{6}}{T^{2}}}-4.6070{\frac {10^{9}}{T^{3}}} \qquad & 4,000\ \mathrm {K} \leq T\leq 7,000\ \mathrm {K} \\
+            0.237040+0.24748{\frac {10^{3}}{T}}+1.9018{\frac {10^{6}}{T^{2}}}-2.0064{\frac {10^{9}}{T^{3}}} \qquad & 7,000\ \mathrm {K} < T\leq 25,000\ \mathrm {K}
+        \end{dcases}
+    \end{alignat*}
+    
+    \captionsetup{width=.75\textwidth}
+    \caption{Calculation of CIE xy from CCT for CIE Daylight}
+    \label{eq:xyeq}
+\end{floatequ}
+
+The CIE has specified four canonical daylight illuminants (D\textsubscript{50}, D\textsubscript{55}, D\textsubscript{65} and D\textsubscript{75}) \cite{CIE152004}.  Contrary to what the names might imply, the correlated color temperature (CCT) values of these four canonical illuminants are not the nominal CCT values of \SI[mode=text]{5000}{\kelvin}, \SI[mode=text]{5500}{\kelvin}, \SI[mode=text]{6500}{\kelvin}, and \SI[mode=text]{7500}{\kelvin}.  For instance, CIE D\textsubscript{65} does not have a CCT of \SI[mode=text]{6500}{\kelvin} but rather a CCT temperature of approximately \SI[mode=text]{6504}{\kelvin} \cite{wyszecki1982color}.  
+The exact CCT values differ from the nominal CCT values due to a 1968 revision to $c_2$, the second radiation constant in Planck's blackbody radiation formula \cite{Durieux1970}.  When the value of $c_2$ was changed from 0.014380 to 0.014388, it altered the CIE xy location of the Planckian locus for a blackbody. This small change to the Planckian locus' position relative to the chromaticity coordinates of the established CIE daylight locus had the effect of changing the correlated color temperature of the CIE D series illuminants ever so slightly.  The precise CCT values for the established canonical CIE D series illuminants can be determined by applying the equation in Equation~\ref{eq:ccteq} to the nominal CCT values implied by the illuminant name.  The exact CCT values of the canonical daylight illuminants are not whole numbers after the correction factor is applied, but it is common to round their values to the nearest Kelvin.  The CCT values of the CIE canonical daylight illuminants before the 1968 change to $c_2$, after the 1968 change, and rounded to the nearest Kelvin can be found in Table~\ref{tab:d_cct}. 
+
+\begin{floatequ}[!ht]
+\begin{equation}
+    CCT_{new} = CCT\times \frac{1.4388}{1.4380}
+\end{equation}
+    \captionsetup{width=.75\textwidth}
+    \caption{Conversion of nominal pre-1968 CCT to post-1968 CCT}
+    \label{eq:ccteq}
+\end{floatequ}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabularx}{.97\linewidth}{|Y|Y|Y|Y|}
+    \hline
+    \textbf{CIE D} & \textbf{CCT} & \textbf{CCT current} & \textbf{CCT current} \\ [-1.3ex]
+    \textbf{Illuminant} & \textbf{before 1968} & \footnotesize{\textbf{(round to 3 decimal places)}} & \footnotesize{\textbf{(round to 0 decimal places)}} \\ \hline
+    D\textsubscript{50} & \SI[mode=text]{5000}{\kelvin} & \SI[mode=text]{5002.782}{\kelvin} & \SI[mode=text]{5003}{\kelvin} \\ \hline
+    D\textsubscript{55} & \SI[mode=text]{5500}{\kelvin} & \SI[mode=text]{5503.060}{\kelvin} & \SI[mode=text]{5503}{\kelvin} \\ \hline
+    D\textsubscript{65} & \SI[mode=text]{6500}{\kelvin} & \SI[mode=text]{6503.616}{\kelvin} & \SI[mode=text]{6504}{\kelvin} \\ \hline
+	D\textsubscript{75} & \SI[mode=text]{7500}{\kelvin} & \SI[mode=text]{7504.172}{\kelvin} & \SI[mode=text]{7504}{\kelvin} \\ \hline
+    \end{tabularx}
+    \captionsetup{width=.75\textwidth}
+    \caption{CCT of canonical CIE daylight illuminants \cite{tableValsPython}}
+    \label{tab:d_cct}
+\end{table}
+
+D\textsubscript{60} is not one of the four CIE canonical daylight illuminants so the exact CCT of such a daylight illuminant could be interpreted to be either approximately \SI[mode=text]{6003}{\kelvin} ($6000 \times \frac{1.4388}{1.4380}$) or \SI[mode=text]{6000}{\kelvin}.  Regardless, the ACES white point chromaticity coordinates derived using the method specified in Section~\ref{chap:dervation} differs from both the chromaticity coordinates of CIE daylight with a CCT of \SI[mode=text]{6003}{\kelvin} and CIE daylight with a CCT of \SI[mode=text]{6000}{\kelvin}.  The chromaticity coordinates of each, rounded to 5 decimal places, can be found in Table~\ref{tab:ciexy}.  As illustrated in Figure~\ref{fig:cieuv}, the chromaticity coordinates of the ACES white point do not fall on the daylight locus nor do they match those of any CIE daylight spectral power distribution.  The positions of the chromaticity coordinates in CIE Uniform Color Space (u$^\prime$v$^\prime$) and the differences from the ACES chromaticity coordinates in $\Delta$u$^\prime$v$^\prime$ can be found in Table~\ref{tab:cieuv}.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabularx}{.75\linewidth}{|l|Y|Y|}
+    \hline
+     & \textbf{CIE $\boldsymbol{x}$} & \textbf{CIE $\boldsymbol{y}$} \\ \hline
+    ACES White Point & 0.32168 & 0.33767 \\ \hline
+    CIE Daylight 6000K & 0.32169  & 0.33780 \\ \hline
+	CIE Daylight 6003K & 0.32163  & 0.33774 \\ \hline
+    \end{tabularx}
+    \captionsetup{width=.75\textwidth}
+    \caption{CIE xy chromaticity coordinates rounded to 5 decimal places \cite{tableValsPython}}
+    \label{tab:ciexy}
+\end{table}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabularx}{.75\linewidth}{|l|Y|Y|Y|}
+    \hline
+     & \textbf{CIE $\boldsymbol{u^\prime}$} & \textbf{CIE $\boldsymbol{v^\prime}$} & $\boldsymbol{\Delta u^\prime v^\prime}$ \\ \hline
+    ACES White Point & 0.20078 & 0.47421 & 0\\ \hline
+    CIE Daylight 6000K & 0.20074 & 0.47427 & 0.00008 \\ \hline
+	CIE Daylight 6003K & 0.20072 & 0.47423 & 0.00007 \\ \hline
+    \end{tabularx}
+    \captionsetup{width=.75\textwidth}
+    \caption{CIE u$^\prime$v$^\prime$ chromaticity coordinates and $\Delta$u$^\prime$v$^\prime$ from the ACES white point rounded to 5 decimal places \cite{tableValsPython}}
+    \label{tab:cieuv}
+\end{table}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.5\textwidth]{cieuv.png}
+    \caption{CIE UCS diagram with chromaticity coordinates}
+    \label{fig:cieuv}
+\end{figure}
+
+Although the ACES white point chromaticity is not on either the Planckian locus or the daylight locus, the CCT of its chromaticity can still be estimated.  There are a number of methods for estimating the CCT of any particular set of chromaticity coordinates \cite{robertson1968computation,mccamy1992correlated,hernandez1999calculating,Ohno2014}.  The results of four popular methods can be found in Table~\ref{tab:aceswpcct}.  Each of the methods estimates the CCT of the ACES white point to be very close to \SI[mode=text]{6000}{\kelvin}.
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabularx}{.9\linewidth}{|Y|Y|}
+    \hline
+    \textbf{CCT Estimation Method} & \textbf{ACES white point CCT} \\ \hline
+    Robertson & \SI[mode=text]{5998.98}{\kelvin} \\ \hline
+    Hernandez-Andres & \SI[mode=text]{5997.26}{\kelvin} \\ \hline
+    Ohno & \SI[mode=text]{6000.04}{\kelvin} \\ \hline
+	McCamy & \SI[mode=text]{6000.41}{\kelvin} \\ \hline
+    \end{tabularx}
+    \captionsetup{width=.9\textwidth}
+    \caption{Estimation of the CCT of the ACES white point rounded to 2 decimal places \cite{tableValsPython}}
+    \label{tab:aceswpcct}
+\end{table}
+
+\section{Reasons for the ``\texorpdfstring{D\textsubscript{60}}{D60}-like'' white point}
+\label{sec:reasonForD60}
+The ACES white point was first specified by the Academy's ACES Project Committee in 2008 in Academy Specification S-2008-001.  The details in S-2008-001 were later standardized in SMPTE ST 2065-1:2012.  Prior to the release of the Academy specification the Project Committee debated various aspects of the ACES2065-1 encoding, including the exact white point, for many months.  The choice of the ``D\textsubscript{60}-like'' white point was influenced heavily by discussions centered around viewer adaptation, dark surround viewing conditions, ``cinematic look'', and preference.  In the end, the Committee decided to go with a white point that was close to that of a daylight illuminant but also familiar to those with a film heritage. The white point would later be adopted for use in other encodings used in the ACES system. It is important to note that the ACES white point does not dictate the chromaticity of the reproduction neutral axis.  Using various techniques beyond the scope of this document the chromaticity of the equal red, green and blue (ACES2065-1 \rgbequal) may match the ACES white point, the display calibration white point, or any other white point preferred for technical or aesthetic reasons.
+
+The Committee felt that a white point with a chromaticity similar to that of daylight was appropriate for ACES2065-1.  However, the exact CCT of the daylight was in question.  Some felt D\textsubscript{55} was a reasonable choice given its historical use as the design illuminant for daylight color negative films.  Others felt D\textsubscript{65} would be good choice given its use in television and computer graphics as a display calibration white point.  Because the exact white point chromaticity would not prohibit users from achieving any reproduction white point, the Committee ultimately decided to use the less common CCT of \SI[mode=text]{6000}{\kelvin}.  This choice was based on an experiment to determine the reproduction chromaticity of projected color print film, the relative location of the white point compared to other white points commonly used in digital systems, and the general belief that imagery reproduced with the white point felt aesthetically ``cinematic''.
+
+The projected color print film experiment involved simulating the exposure of a spectrally non-selective (neutral) gray scale onto color negative film, printing that negative onto a color print film, then projecting the color film onto a motion picture screen with a xenon-based film projector and measuring the colorimetry off the screen. The result of the experiment found that the CIE xy chromaticity coordinates of a projected LAD patch \cite{pytlak1976simplified,kodakLad} through a film system were approximately $x=0.32170$ $y=0.33568$. Figure~\ref{fig:filmprintthrough} shows a plot of the CIE $u^\prime v^\prime$ chromaticity coordinates of a scene neutral as reproduced by a film system compared to the CIE daylight locus and the ACES white point.  The chromaticity of the film system LAD reproduction was determined to be closest to CIE daylight with the CCT of \SI[mode=text]{6000}{\kelvin} when the differences were calculated in CIE $u^\prime v^\prime$.  A summary of the CIE $u^\prime v^\prime$ differences between CIE daylight at various CCTs and the LAD patch chromaticity are summarized in Table~\ref{tab:lad}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/PrintThroughChromaticities.png}
+    \caption{Film system print-through color reproduction of original scene neutral scale}
+    \label{fig:filmprintthrough}
+\end{figure}
+
+\begin{table}[!ht]
+    \centering
+    \begin{tabularx}{.75\linewidth}{|Y|Y|}
+    \hline
+    \textbf{Daylight CCT} & $\boldsymbol{\Delta u^\prime v^\prime}$ \textbf{from LAD chromaticity}\\ \hline
+		\SI[mode=text]{5500}{\kelvin} & 0.008183 \\ \hline
+		\SI[mode=text]{5600}{\kelvin} & 0.006619 \\ \hline
+		\SI[mode=text]{5700}{\kelvin} & 0.005112 \\ \hline
+		\SI[mode=text]{5800}{\kelvin} & 0.003676 \\ \hline
+		\SI[mode=text]{5900}{\kelvin} & 0.002354 \\ \hline
+		\SI[mode=text]{6000}{\kelvin} & 0.001360 \\ \hline
+		\SI[mode=text]{6100}{\kelvin} & 0.001448 \\ \hline
+		\SI[mode=text]{6200}{\kelvin} & 0.002442 \\ \hline
+		\SI[mode=text]{6300}{\kelvin} & 0.003627 \\ \hline
+		\SI[mode=text]{6400}{\kelvin} & 0.004836 \\ \hline
+		\SI[mode=text]{6500}{\kelvin} & 0.006035 \\ \hline
+    \end{tabularx}
+    \captionsetup{width=.75\textwidth}
+    \caption{CIE $\Delta$u$^\prime$v$^\prime$ difference between projected LAD patch and CIE Daylight CCT chromaticity coordinates round to 6 decimal places \cite{tableValsPython}}
+    \label{tab:lad}
+\end{table}
+
+
+\section{Reasons why the ACES white point doesn't match the CIE \texorpdfstring{D\textsubscript{60}}{D60} chromaticity coordinates}
+\label{sec:reasonsForDifference}
+As discussed in Section~\ref{sec:reasonForD60}, the ACES white point was chosen to be very close to that of CIE Daylight with a CCT of \SI[mode=text]{6000}{\kelvin}.  This raises the question why the CIE chromaticity coordinates of $x=0.32169$ $y=0.33780$ were not used.  The reasoning is somewhat precautionary; at the time, the exact chromaticity coordinates for the ACES white point were being debated, the ACES Project Committee was concerned about the implications the choice of any particular set of chromaticity coordinates could suggest.  
+
+Those new to ACES can often misinterpret the specification of a set of ACES encoding white point chromaticity coordinates as a requirement that the final reproduction neutral axis chromaticity is limited to only that white point chromaticity.  However, as pointed out in Section~\ref{sec:reasonForD60}, the ACES encoding white point does not dictate the chromaticity of the reproduction neutral axis, and regardless of the ACES white point chromaticity, the reproduction neutral axis may match the ACES white point, the display calibration white point, or any other white point preferred for technical or aesthetic reasons.  The ACES white point chromaticity coordinates serve to aid in the understanding and, if desired, conversion of the colorimetry of ACES encoded images to any other encoding including those with a different white point.
+
+Just as the implication of the ACES encoding white point on reproduction can be misunderstood, the ACES Project Committee was also concerned that the ACES encoding white point might have unintended implications for image creators. Specifically, the Committee was concerned that the choice of a set of chromaticity coordinates that corresponded to a source with a defined spectral power distribution might be misunderstood to suggest that only that source could be used to illuminate the scene.  For example, the Committee was concerned if the ACES white point chromaticity was chosen to match that of CIE Daylight with a CCT of \SI[mode=text]{6000}{\kelvin} then \textit{only} scenes photographed under CIE Daylight with a CCT of \SI[mode=text]{6000}{\kelvin} would be compatible with the ACES system.  In reality, ACES does not dictate the source under which movies or television shows can be photographed.  ACES Input Transforms handle the re-encoding of camera images to ACES2065-1 and preserve all the technical and artistic intent behind on-set lighting choices.  
+
+For these reasons as well as an abundance of caution, the ACES Project Committee decided it would be best to use a set of chromaticity coordinates very near those of CIE Daylight with a CCT of \SI[mode=text]{6000}{\kelvin} but not exactly those of any easily calculated spectral power distribution.

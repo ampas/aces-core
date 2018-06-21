@@ -1,9 +1,9 @@
 
 // <ACEStransformID>ODT.Academy.DCDM_P3D60.a1.0.3</ACEStransformID>
-// <ACESuserName>ACES 1.0 Output - DCDM (P3 gamut clip)</ACESuserName>
+// <ACESuserName>ACES 1.0 Output - DCDM (P3D60 Limited)</ACESuserName>
 
 // 
-// Output Device Transform - DCDM (X'Y'Z'), limited to P3D60
+// Output Device Transform - DCDM (X'Y'Z') (P3D60 Limited)
 //
 
 //
@@ -44,13 +44,12 @@ import "ACESlib.Utilities";
 import "ACESlib.Transform_Common";
 import "ACESlib.ODT_Common";
 import "ACESlib.Tonescales";
+import "ACESlib.OutputTransforms";
 
 
 
 /* ----- ODT Parameters ------ */
-const Chromaticities DISPLAY_PRI = P3D60_PRI;
-const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
-const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
+const Chromaticities LIMITING_PRI = P3D60_PRI;
 
 const float DISPGAMMA = 2.6; 
 
@@ -70,36 +69,30 @@ void main
 {
     float oces[3] = { rIn, gIn, bIn};
 
-  // ACES to RGB rendering space
+    // ACES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
-  // Apply the tonescale independently in rendering-space RGB
+    // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
     rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // Scale luminance to linear code value
+    // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
-  // Rendering space RGB to XYZ
+    // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
-  // XYZ to P3D60    
-    float P3D60[3] = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
-    
-  // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
-    P3D60 = clamp_f3( P3D60, 0., 1.);
+    // Constrain to limiting primaries
+    XYZ = limit_to_primaries( XYZ, LIMITING_PRI);
 
-  // P3D60 to XYZ
-    XYZ = mult_f3_f44( P3D60, DISPLAY_PRI_2_XYZ_MAT);
-
-  // Encode linear code values with transfer function
+    // Encode linear code values with transfer function
     float outputCV[3] = dcdm_encode( XYZ);
-    
+
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

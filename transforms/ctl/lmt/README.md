@@ -2,6 +2,13 @@
 
 The following is a very brief overview of Look Modification Transforms (LMTs). For more information, please review TB-2014-010, which can be found in the [`documents`](../../../documents) directory.
 
+Additionally, there is a multi-part series of posts on ACESCentral that detail the use and creation of LMTs:
+
+* [LMTs Part 1](http://acescentral.com/t/lmts-part-1-what-are-they-and-what-can-they-do-for-me/790 "LMTs Part 1")
+* [LMTs Part 2](http://acescentral.com/t/lmts-part-2-how-do-they-work-and-how-are-they-made/1203 "LMTs Part 2")
+* [LMTs Part 3](http://acescental.com/t/lmts-part-3-how-do-they-work-and-how-are-they-made-continued/1206 "LMTs Part 3")
+* [LMTs Part 4](http://acescentral.com/t/lmts-part-4-how-do-they-work-and-how-are-they-made-continued/1217 "LMTs Part 4")
+
 ### Introduction to LMTs ###
 
 Look Modification Transforms (LMTs) provide a means to apply a variety of looks to ACES images. LMTs can be used to change the look from the default associated with the RRT to a custom look that one might want to use. The range of looks achievable via LMTs are only limited by the transformation used in the LMT itself.
@@ -16,7 +23,7 @@ LMTs are always ACES to ACES transformations. In the example below the resulting
 
 ### Building the Included LMTS ###
 
-The LMTs included with this package are "empirical" LMTs, described in section 7.2.2 of TB-2014-010. By using inverse RRT and ODT transforms, this method can be used to create a match to an existing look such as a Print Film Emulation or a custom look that was created outside of the ACES system. An example of an LMT created using this method is the ACES v0.1.1 LMT included with this package. ( see [`LMT.Academy.ACES_0_1_1.a1.0.3.ctl`](./LMT.Academy.ACES_0_1_1.a1.0.3.ctl) )
+The LMTs included with this package are "empirical" LMTs, described in section 7.2.2 of TB-2014-010. By using inverse RRT and ODT transforms, this method can be used to create a match to an existing look such as a Print Film Emulation or a custom look that was created outside of the ACES system. An example of an LMT created using this method is the ACES v0.1.1 LMT included with this package. ( see [`LMT.Academy.ACES_0_1_1.ctl`](./LMT.Academy.ACES_0_1_1.ctl) )
 
 The ACES v0.1.1 LMT was created to provide a means to recreate the look of the RRT/ODT system that shipped with v0.1.1 of ACES.  To create it, a series of ACES values were processed through the v0.1.1 RRT and the v0.1.1 P3D60 ODT. The resulting P3 code values were then processed through the inverse P3D60 ODT and RRT of the current ACES release transforms to yield a corresponding set of ACES' values. The original ACES values and the ACES' values were used to build a 3DLUT mapping which serves as the ACES v0.1.1 LMT.  The following diagram illustrates the process.
 

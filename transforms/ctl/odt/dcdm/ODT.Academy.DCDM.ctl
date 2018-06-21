@@ -55,32 +55,32 @@ void main
 {
     float oces[3] = { rIn, gIn, bIn};
 
-  // OCES to RGB rendering space
+    // OCES to RGB rendering space
     float rgbPre[3] = mult_f3_f44( oces, AP0_2_AP1_MAT);
 
-  // Apply the tonescale independently in rendering-space RGB
+    // Apply the tonescale independently in rendering-space RGB
     float rgbPost[3];
     rgbPost[0] = segmented_spline_c9_fwd( rgbPre[0]);
     rgbPost[1] = segmented_spline_c9_fwd( rgbPre[1]);
     rgbPost[2] = segmented_spline_c9_fwd( rgbPre[2]);
 
-  // Scale luminance to linear code value
+    // Scale luminance to linear code value
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
-  // Rendering space RGB to XYZ
+    // Rendering space RGB to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
-  // Handle out-of-gamut values
-  // There should not be any negative values but will clip just to ensure no 
-  // math errors occur with the gamma function in the EOTF
+    // Handle out-of-gamut values
+    // There should not be any negative values but will clip just to ensure no 
+    // math errors occur with the gamma function in the EOTF
     XYZ = clamp_f3( XYZ, 0., HALF_POS_INF);
 
-  // Encode linear code values with transfer function
+    // Encode linear code values with transfer function
     float outputCV[3] = dcdm_encode( XYZ);
-    
+
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

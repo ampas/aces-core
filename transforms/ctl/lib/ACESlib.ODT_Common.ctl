@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.ODT_Common.a1.0.3</ACEStransformID>
+// <ACEStransformID>ACESlib.ODT_Common.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Lib - ODT Common</ACESuserName>
 
 //
@@ -49,7 +49,23 @@ float linCV_2_Y( float linCV, float Ymax, float Ymin)
   return linCV * (Ymax - Ymin) + Ymin;
 }
 
+float[3] Y_2_linCV_f3( float Y[3], float Ymax, float Ymin)
+{
+    float linCV[3];
+    linCV[0] = Y_2_linCV( Y[0], Ymax, Ymin);
+    linCV[1] = Y_2_linCV( Y[1], Ymax, Ymin);
+    linCV[2] = Y_2_linCV( Y[2], Ymax, Ymin);
+    return linCV;
+}
 
+float[3] linCV_2_Y_f3( float linCV[3], float Ymax, float Ymin)
+{
+    float Y[3];
+    Y[0] = linCV_2_Y( linCV[0], Ymax, Ymin);
+    Y[1] = linCV_2_Y( linCV[1], Ymax, Ymin);
+    Y[2] = linCV_2_Y( linCV[2], Ymax, Ymin);
+    return Y;
+}
 
 float[3] darkSurround_to_dimSurround( float linearCV[3])
 {
