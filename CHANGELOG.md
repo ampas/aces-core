@@ -57,7 +57,7 @@
     * Miscellaneous typo fixes in CTL transform comments
     * Miscellaneous README and CTL comment updates
     * Miscellaneous LaTeX documentation typo and code fixes
-    * Update ACEStranformIDs where appropriate
+    * Update ACEStransformIDs where appropriate
     * Update README and CHANGELOG
 
 **Version 1.0.3 (September 20, 2016):**
