@@ -3,7 +3,7 @@
 // <ACESuserName>ACES 1.0 Lib - SSTS</ACESuserName>
 
 //
-// Contains functions used for forward and inverse tone scale 
+// Contains functions used for forward and inverse tone scale
 //
 
 
@@ -18,7 +18,7 @@ struct TsPoint
 {
     float x;        // ACES
     float y;        // luminance
-    float slope;    // 
+    float slope;    //
 };
 
 struct TsParams
@@ -27,12 +27,12 @@ struct TsParams
     TsPoint Mid;
     TsPoint Max;
     float coefsLow[6];
-    float coefsHigh[6];    
+    float coefsHigh[6];
 };
 
 
 
-// TODO: Move all "magic numbers" (i.e. values in interpolation tables, etc.) to top 
+// TODO: Move all "magic numbers" (i.e. values in interpolation tables, etc.) to top
 // and define as constants
 
 const float MIN_STOP_SDR = -6.5;
@@ -50,7 +50,7 @@ const float MAX_LUM_RRT = 10000.0;
 
 float lookup_ACESmin( float minLum )
 {
-    const float minTable[2][2] = { { log10(MIN_LUM_RRT), MIN_STOP_RRT }, 
+    const float minTable[2][2] = { { log10(MIN_LUM_RRT), MIN_STOP_RRT },
                                    { log10(MIN_LUM_SDR), MIN_STOP_SDR } };
 
     return 0.18*pow( 2., interpolate1D( minTable, log10( minLum)));
@@ -58,7 +58,7 @@ float lookup_ACESmin( float minLum )
 
 float lookup_ACESmax( float maxLum )
 {
-    const float maxTable[2][2] = { { log10(MAX_LUM_SDR), MAX_STOP_SDR }, 
+    const float maxTable[2][2] = { { log10(MAX_LUM_SDR), MAX_STOP_SDR },
                                    { log10(MAX_LUM_RRT), MAX_STOP_RRT } };
 
     return 0.18*pow( 2., interpolate1D( maxTable, log10( maxLum)));
@@ -77,7 +77,7 @@ float[5] init_coefsLow(
     // Determine two lowest coefficients (straddling minPt)
     coefsLow[0] = (TsPointLow.slope * (log10(TsPointLow.x)-0.5*knotIncLow)) + ( log10(TsPointLow.y) - TsPointLow.slope * log10(TsPointLow.x));
     coefsLow[1] = (TsPointLow.slope * (log10(TsPointLow.x)+0.5*knotIncLow)) + ( log10(TsPointLow.y) - TsPointLow.slope * log10(TsPointLow.x));
-    // NOTE: if slope=0, then the above becomes just 
+    // NOTE: if slope=0, then the above becomes just
         // coefsLow[0] = log10(TsPointLow.y);
         // coefsLow[1] = log10(TsPointLow.y);
     // leaving it as a variable for now in case we decide we need non-zero slope extensions
@@ -85,18 +85,18 @@ float[5] init_coefsLow(
     // Determine two highest coefficients (straddling midPt)
     coefsLow[3] = (TsPointMid.slope * (log10(TsPointMid.x)-0.5*knotIncLow)) + ( log10(TsPointMid.y) - TsPointMid.slope * log10(TsPointMid.x));
     coefsLow[4] = (TsPointMid.slope * (log10(TsPointMid.x)+0.5*knotIncLow)) + ( log10(TsPointMid.y) - TsPointMid.slope * log10(TsPointMid.x));
-    
+
     // Middle coefficient (which defines the "sharpness of the bend") is linearly interpolated
-    float bendsLow[2][2] = { {MIN_STOP_RRT, 0.18}, 
+    float bendsLow[2][2] = { {MIN_STOP_RRT, 0.18},
                              {MIN_STOP_SDR, 0.35} };
     float pctLow = interpolate1D( bendsLow, log2(TsPointLow.x/0.18));
     coefsLow[2] = log10(TsPointLow.y) + pctLow*(log10(TsPointMid.y)-log10(TsPointLow.y));
 
     return coefsLow;
-} 
+}
 
-float[5] init_coefsHigh( 
-    TsPoint TsPointMid, 
+float[5] init_coefsHigh(
+    TsPoint TsPointMid,
     TsPoint TsPointMax
 )
 {
@@ -116,13 +116,13 @@ float[5] init_coefsHigh(
         // coefsHigh[0] = log10(TsPointHigh.y);
         // coefsHigh[1] = log10(TsPointHigh.y);
     // leaving it as a variable for now in case we decide we need non-zero slope extensions
-    
+
     // Middle coefficient (which defines the "sharpness of the bend") is linearly interpolated
-    float bendsHigh[2][2] = { {MAX_STOP_SDR, 0.89}, 
+    float bendsHigh[2][2] = { {MAX_STOP_SDR, 0.89},
                               {MAX_STOP_RRT, 0.90} };
     float pctHigh = interpolate1D( bendsHigh, log2(TsPointMax.x/0.18));
     coefsHigh[2] = log10(TsPointMid.y) + pctHigh*(log10(TsPointMax.y)-log10(TsPointMid.y));
-    
+
     return coefsHigh;
 }
 
@@ -155,13 +155,13 @@ TsParams init_TsParams(
         {cLow[0], cLow[1], cLow[2], cLow[3], cLow[4], cLow[4]},
         {cHigh[0], cHigh[1], cHigh[2], cHigh[3], cHigh[4], cHigh[4]}
     };
-         
+
     return P;
 }
 
 
 float ssts
-( 
+(
     varying float x,
     varying TsParams C
 )
@@ -171,11 +171,11 @@ float ssts
 
     // Check for negatives or zero before taking the log. If negative or zero,
     // set to HALF_MIN.
-    float logx = log10( max(x, HALF_MIN )); 
+    float logx = log10( max(x, HALF_MIN ));
 
     float logy;
 
-    if ( logx <= log10(C.Min.x) ) { 
+    if ( logx <= log10(C.Min.x) ) {
 
         logy = logx * C.Min.slope + ( log10(C.Min.y) - C.Min.slope * log10(C.Min.x) );
 
@@ -196,12 +196,12 @@ float ssts
         int j = knot_coord;
         float t = knot_coord - j;
 
-        float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]}; 
+        float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]};
 
         float monomials[ 3] = { t * t, t, 1. };
         logy = dot_f3_f3( monomials, mult_f3_f33( cf, M1));
 
-    } else { //if ( logIn >= log10(C.Max.x) ) { 
+    } else { //if ( logIn >= log10(C.Max.x) ) {
 
         logy = logx * C.Max.slope + ( log10(C.Max.y) - C.Max.slope * log10(C.Max.x) );
 
@@ -213,11 +213,11 @@ float ssts
 
 
 float inv_ssts
-( 
+(
     varying float y,
     varying TsParams C
 )
-{  
+{
     const int N_KNOTS_LOW = 4;
     const int N_KNOTS_HIGH = 4;
 
@@ -252,7 +252,7 @@ float inv_ssts
             cf[ 0] = C.coefsLow[1];  cf[ 1] = C.coefsLow[2];  cf[ 2] = C.coefsLow[3];  j = 1;
         } else if ( logy > KNOT_Y_LOW[ 2] && logy <= KNOT_Y_LOW[ 3]) {
             cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];  j = 2;
-        } 
+        }
 
         const float tmp[ 3] = mult_f3_f33( cf, M1);
 
@@ -277,7 +277,7 @@ float inv_ssts
             cf[ 0] = C.coefsHigh[1];  cf[ 1] = C.coefsHigh[2];  cf[ 2] = C.coefsHigh[3];  j = 1;
         } else if ( logy > KNOT_Y_HIGH[ 2] && logy <= KNOT_Y_HIGH[ 3]) {
             cf[ 0] = C.coefsHigh[2];  cf[ 1] = C.coefsHigh[3];  cf[ 2] = C.coefsHigh[4];  j = 2;
-        } 
+        }
 
         const float tmp[ 3] = mult_f3_f33( cf, M1);
 
@@ -304,7 +304,7 @@ float inv_ssts
 
 
 float[3] ssts_f3
-( 
+(
     varying float x[3],
     varying TsParams C
 )
@@ -319,7 +319,7 @@ float[3] ssts_f3
 
 
 float[3] inv_ssts_f3
-( 
+(
     varying float x[3],
     varying TsParams C
 )

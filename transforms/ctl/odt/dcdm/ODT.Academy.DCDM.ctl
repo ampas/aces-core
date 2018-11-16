@@ -2,21 +2,21 @@
 // <ACEStransformID>ODT.Academy.DCDM.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - DCDM</ACESuserName>
 
-// 
+//
 // Output Device Transform - DCDM (X'Y'Z')
 //
 
-// 
-// Summary :
-//  The output of this transform follows the encoding specified in SMPTE 
-//  S428-1-2006. The gamut is a device-independent colorimetric encoding based  
-//  on CIE XYZ. Therefore, output values are not limited to any physical 
-//  device's actual color gamut that is determined by its color primaries.
-// 
-//  The assumed observer adapted white is D60, and the viewing environment is 
-//  that of a dark theater. 
 //
-//  This transform shall be used for a device calibrated to match the Digital 
+// Summary :
+//  The output of this transform follows the encoding specified in SMPTE
+//  S428-1-2006. The gamut is a device-independent colorimetric encoding based
+//  on CIE XYZ. Therefore, output values are not limited to any physical
+//  device's actual color gamut that is determined by its color primaries.
+//
+//  The assumed observer adapted white is D60, and the viewing environment is
+//  that of a dark theater.
+//
+//  This transform shall be used for a device calibrated to match the Digital
 //  Cinema Reference Projector Specification outlined in SMPTE RP 431-2-2007.
 //
 // Assumed observer adapted white point:
@@ -37,15 +37,15 @@ import "ACESlib.Tonescales";
 
 
 /* --- ODT Parameters --- */
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -74,7 +74,7 @@ void main
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
     // Handle out-of-gamut values
-    // There should not be any negative values but will clip just to ensure no 
+    // There should not be any negative values but will clip just to ensure no
     // math errors occur with the gamma function in the EOTF
     XYZ = clamp_f3( XYZ, 0., HALF_POS_INF);
 

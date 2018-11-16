@@ -2,9 +2,9 @@
 // <ACEStransformID>ACESutil.Lin_to_DolbyPQ.a1.0.3</ACEStransformID>
 // <ACESuserName>Linear to Dolby PQ</ACESuserName>
 
-// 
+//
 // Generic transform from linear to encoding specified in SMPTE ST2084
-// 
+//
 
 
 
@@ -27,5 +27,5 @@ void main
   rOut = Y_2_ST2084( rIn );
   gOut = Y_2_ST2084( gIn );
   bOut = Y_2_ST2084( bIn );
-  aOut = aIn;  
+  aOut = aIn;
 }

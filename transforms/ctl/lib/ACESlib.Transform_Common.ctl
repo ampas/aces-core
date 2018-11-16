@@ -3,8 +3,8 @@
 // <ACESuserName>ACES 1.0 Lib - Transform Common</ACESuserName>
 
 //
-// Contains functions and constants shared by multiple forward and inverse 
-// transforms 
+// Contains functions and constants shared by multiple forward and inverse
+// transforms
 //
 
 
@@ -23,8 +23,8 @@ const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
 const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
 const float AP1_2_AP0_MAT[4][4] = mult_f44_f44( AP1_2_XYZ_MAT, XYZ_2_AP0_MAT);
 
-const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1], 
-                             AP1_2_XYZ_MAT[1][1], 
+const float AP1_RGB2Y[3] = { AP1_2_XYZ_MAT[0][1],
+                             AP1_2_XYZ_MAT[1][1],
                              AP1_2_XYZ_MAT[2][1] };
 
 

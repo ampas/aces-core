@@ -27,7 +27,7 @@ const float W = 3760.;
 
 
 /* ============ SUBFUNCTIONS ============ */
-float SLog2_to_lin 
+float SLog2_to_lin
 (
   float SLog,
   float b,
@@ -36,14 +36,14 @@ float SLog2_to_lin
 )
 {
   float lin;
-  
+
   if (SLog >= ab)
     lin = ( 219. * ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) * 0.9;
-  else if (SLog < ab) 
+  else if (SLog < ab)
     lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;
-  
+
   return lin;
-  
+
 }
 
 
@@ -52,7 +52,7 @@ float SLog2_to_lin
 
 /* ============ Main Algorithm ============ */
 void main
-(   
+(
     input varying float rIn,
     input varying float gIn,
     input varying float bIn,
@@ -77,7 +77,7 @@ void main
 
   // S-Gamut to ACES matrix
   float aces[3] = mult_f3_f33( lin, SGAMUT_TUNG_TO_ACES_MTX);
-  
+
   rOut = aces[0];
   gOut = aces[1];
   bOut = aces[2];

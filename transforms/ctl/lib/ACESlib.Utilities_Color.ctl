@@ -70,7 +70,7 @@ const Chromaticities ARRI_ALEXA_WG_PRI =
   { 0.31270,  0.32900}
 };
 
-const Chromaticities REC2020_PRI = 
+const Chromaticities REC2020_PRI =
 {
   { 0.70800,  0.29200},
   { 0.17000,  0.79700},
@@ -78,7 +78,7 @@ const Chromaticities REC2020_PRI =
   { 0.31270,  0.32900}
 };
 
-const Chromaticities RIMMROMM_PRI = 
+const Chromaticities RIMMROMM_PRI =
 {
   { 0.7347,  0.2653},
   { 0.1596,  0.8404},
@@ -93,17 +93,17 @@ const Chromaticities RIMMROMM_PRI =
 // Various transformations between color encodings and data representations
 //
 
-// Transformations between CIE XYZ tristimulus values and CIE x,y 
+// Transformations between CIE XYZ tristimulus values and CIE x,y
 // chromaticity coordinates
 float[3] XYZ_2_xyY( float XYZ[3])
-{  
+{
   float xyY[3];
   float divisor = (XYZ[0] + XYZ[1] + XYZ[2]);
   if (divisor == 0.) divisor = 1e-10;
   xyY[0] = XYZ[0] / divisor;
-  xyY[1] = XYZ[1] / divisor;  
+  xyY[1] = XYZ[1] / divisor;
   xyY[2] = XYZ[1];
-  
+
   return xyY;
 }
 
@@ -111,7 +111,7 @@ float[3] xyY_2_XYZ( input varying float xyY[3])
 {
   float XYZ[3];
   XYZ[0] = xyY[0] * xyY[2] / max( xyY[1], 1e-10);
-  XYZ[1] = xyY[2];  
+  XYZ[1] = xyY[2];
   XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / max( xyY[1], 1e-10);
 
   return XYZ;
@@ -119,7 +119,7 @@ float[3] xyY_2_XYZ( input varying float xyY[3])
 
 
 // Transformations from RGB to other color representations
-float rgb_2_hue( float rgb[3]) 
+float rgb_2_hue( float rgb[3])
 {
   // Returns a geometric hue angle in degrees (0-360) based on RGB values.
   // For neutral colors, hue is undefined and the function will return a quiet NaN value.
@@ -129,7 +129,7 @@ float rgb_2_hue( float rgb[3])
   } else {
     hue = (180./M_PI) * atan2( sqrt(3)*(rgb[1]-rgb[2]), 2*rgb[0]-rgb[1]-rgb[2]);
   }
-    
+
   if (hue < 0.) hue = hue + 360.;
 
   return hue;
@@ -139,21 +139,21 @@ float rgb_2_yc( float rgb[3], float ycRadiusWeight = 1.75)
 {
   // Converts RGB to a luminance proxy, here called YC
   // YC is ~ Y + K * Chroma
-  // Constant YC is a cone-shaped surface in RGB space, with the tip on the 
+  // Constant YC is a cone-shaped surface in RGB space, with the tip on the
   // neutral axis, towards white.
   // YC is normalized: RGB 1 1 1 maps to YC = 1
   //
-  // ycRadiusWeight defaults to 1.75, although can be overridden in function 
+  // ycRadiusWeight defaults to 1.75, although can be overridden in function
   // call to rgb_2_yc
-  // ycRadiusWeight = 1 -> YC for pure cyan, magenta, yellow == YC for neutral 
+  // ycRadiusWeight = 1 -> YC for pure cyan, magenta, yellow == YC for neutral
   // of same value
-  // ycRadiusWeight = 2 -> YC for pure red, green, blue  == YC for  neutral of 
+  // ycRadiusWeight = 2 -> YC for pure red, green, blue  == YC for  neutral of
   // same value.
 
-  float r = rgb[0]; 
-  float g = rgb[1]; 
+  float r = rgb[0];
+  float g = rgb[1];
   float b = rgb[2];
-  
+
   float chroma = sqrt(b*(b-g)+g*(g-r)+r*(r-b));
 
   return ( b + g + r + ycRadiusWeight * chroma) / 3.;
@@ -182,10 +182,10 @@ float[3][3] calculate_cat_matrix
   )
 {
   //
-  // Calculates and returns a 3x3 Von Kries chromatic adaptation transform 
-  // from src_xy to des_xy using the cone response primaries defined 
-  // by coneRespMat. By default, coneRespMat is set to CONE_RESP_MAT_BRADFORD. 
-  // The default coneRespMat can be overridden at runtime. 
+  // Calculates and returns a 3x3 Von Kries chromatic adaptation transform
+  // from src_xy to des_xy using the cone response primaries defined
+  // by coneRespMat. By default, coneRespMat is set to CONE_RESP_MAT_BRADFORD.
+  // The default coneRespMat can be overridden at runtime.
   //
 
   const float src_xyY[3] = { src_xy[0], src_xy[1], 1. };
@@ -212,7 +212,7 @@ float[3][3] calculate_cat_matrix
 
 
 
-float[3][3] calc_sat_adjust_matrix 
+float[3][3] calc_sat_adjust_matrix
   ( input varying float sat,
     input varying float rgb2Y[3]
   )
@@ -225,18 +225,18 @@ float[3][3] calc_sat_adjust_matrix
   M[0][0] = (1.0 - sat) * rgb2Y[0] + sat;
   M[1][0] = (1.0 - sat) * rgb2Y[0];
   M[2][0] = (1.0 - sat) * rgb2Y[0];
-  
+
   M[0][1] = (1.0 - sat) * rgb2Y[1];
   M[1][1] = (1.0 - sat) * rgb2Y[1] + sat;
   M[2][1] = (1.0 - sat) * rgb2Y[1];
-  
+
   M[0][2] = (1.0 - sat) * rgb2Y[2];
   M[1][2] = (1.0 - sat) * rgb2Y[2];
   M[2][2] = (1.0 - sat) * rgb2Y[2] + sat;
 
-  M = transpose_f33(M);    
+  M = transpose_f33(M);
   return M;
-} 
+}
 
 
 
@@ -250,7 +250,7 @@ float moncurve_f( float x, float gamma, float offs )
   float y;
   const float fs = (( gamma - 1.0) / offs) * pow( offs * gamma / ( ( gamma - 1.0) * ( 1.0 + offs)), gamma);
   const float xb = offs / ( gamma - 1.0);
-  if ( x >= xb) 
+  if ( x >= xb)
     y = pow( ( x + offs) / ( 1.0 + offs), gamma);
   else
     y = x * fs;
@@ -263,7 +263,7 @@ float moncurve_r( float y, float gamma, float offs )
   float x;
   const float yb = pow( offs * gamma / ( ( gamma - 1.0) * ( 1.0 + offs)), gamma);
   const float rs = pow( ( gamma - 1.0) / offs, gamma - 1.0) * pow( ( 1.0 + offs) / gamma, gamma);
-  if ( y >= yb) 
+  if ( y >= yb)
     x = ( 1.0 + offs) * pow( y, 1.0 / gamma) - offs;
   else
     x = y * rs;
@@ -364,16 +364,16 @@ float[3] fullRange_to_smpteRange_f3( float rgbIn[3])
 }
 
 
-// SMPTE 431-2 defines the DCDM color encoding equations. 
-// The equations for the decoding of the encoded color information are the 
+// SMPTE 431-2 defines the DCDM color encoding equations.
+// The equations for the decoding of the encoded color information are the
 // inverse of the encoding equations
 // Note: Here the 4095 12-bit scalar is not used since the output of CTL is 0-1.
 float[3] dcdm_decode( float XYZp[3])
 {
     float XYZ[3];
-    XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);  
-    XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);  
-    XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);  
+    XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);
+    XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);
+    XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);
 
     return XYZ;
 }
@@ -403,7 +403,7 @@ const float pq_C = 10000.0;
 
 // Converts from the non-linear perceptually quantized space to linear cd/m^2
 // Note that this is in float, and assumes normalization from 0 - 1
-// (0 - pq_C for linear) and does not handle the integer coding in the Annex 
+// (0 - pq_C for linear) and does not handle the integer coding in the Annex
 // sections of SMPTE ST 2084-2014
 float ST2084_2_Y( float N )
 {
@@ -420,7 +420,7 @@ float ST2084_2_Y( float N )
 
 // Converts from linear cd/m^2 to the non-linear perceptually quantized space
 // Note that this is in float, and assumes normalization from 0 - 1
-// (0 - pq_C for linear) and does not handle the integer coding in the Annex 
+// (0 - pq_C for linear) and does not handle the integer coding in the Annex
 // sections of SMPTE ST 2084-2014
 float Y_2_ST2084( float C )
 //pq_r
@@ -437,7 +437,7 @@ float Y_2_ST2084( float C )
 float[3] Y_2_ST2084_f3( float in[3])
 {
   // converts from linear cd/m^2 to PQ code values
-  
+
   float out[3];
   out[0] = Y_2_ST2084( in[0]);
   out[1] = Y_2_ST2084( in[1]);
@@ -449,7 +449,7 @@ float[3] Y_2_ST2084_f3( float in[3])
 float[3] ST2084_2_Y_f3( float in[3])
 {
   // converts from PQ code values to linear cd/m^2
-  
+
   float out[3];
   out[0] = ST2084_2_Y( in[0]);
   out[1] = ST2084_2_Y( in[1]);
@@ -460,7 +460,7 @@ float[3] ST2084_2_Y_f3( float in[3])
 
 
 // Conversion of PQ signal to HLG, as detailed in Section 7 of ITU-R BT.2390-0
-float[3] ST2084_2_HLG_1000nits_f3( float PQ[3]) 
+float[3] ST2084_2_HLG_1000nits_f3( float PQ[3])
 {
     // ST.2084 EOTF (non-linear PQ to display light)
     float displayLinear[3] = ST2084_2_Y_f3( PQ);
@@ -473,16 +473,16 @@ float[3] ST2084_2_HLG_1000nits_f3( float PQ[3])
     const float alpha = (L_w-L_b);
     const float beta = L_b;
     const float gamma = 1.2;
-    
+
     float sceneLinear[3];
-    if (Y_d == 0.) { 
+    if (Y_d == 0.) {
         /* This case is to protect against pow(0,-N)=Inf error. The ITU document
-        does not offer a recommendation for this corner case. There may be a 
-        better way to handle this, but for now, this works. 
-        */ 
+        does not offer a recommendation for this corner case. There may be a
+        better way to handle this, but for now, this works.
+        */
         sceneLinear[0] = 0.;
         sceneLinear[1] = 0.;
-        sceneLinear[2] = 0.;        
+        sceneLinear[2] = 0.;
     } else {
         sceneLinear[0] = pow( (Y_d-beta)/alpha, (1.-gamma)/gamma) * ((displayLinear[0]-beta)/alpha);
         sceneLinear[1] = pow( (Y_d-beta)/alpha, (1.-gamma)/gamma) * ((displayLinear[1]-beta)/alpha);
@@ -516,7 +516,7 @@ float[3] ST2084_2_HLG_1000nits_f3( float PQ[3])
 
 
 // Conversion of HLG to PQ signal, as detailed in Section 7 of ITU-R BT.2390-0
-float[3] HLG_2_ST2084_1000nits_f3( float HLG[3]) 
+float[3] HLG_2_ST2084_1000nits_f3( float HLG[3])
 {
     const float a = 0.17883277;
     const float b = 0.28466892; // 1.-4.*a;
@@ -535,18 +535,18 @@ float[3] HLG_2_ST2084_1000nits_f3( float HLG[3])
         sceneLinear[0] = pow(HLG[0],2.)/3.;
     } else {
         sceneLinear[0] = (exp((HLG[0]-c)/a)+b)/12.;
-    }        
+    }
     if ( HLG[1] >= 0. && HLG[1] <= 0.5) {
         sceneLinear[1] = pow(HLG[1],2.)/3.;
     } else {
         sceneLinear[1] = (exp((HLG[1]-c)/a)+b)/12.;
-    }        
+    }
     if ( HLG[2] >= 0. && HLG[2] <= 0.5) {
         sceneLinear[2] = pow(HLG[2],2.)/3.;
     } else {
         sceneLinear[2] = (exp((HLG[2]-c)/a)+b)/12.;
-    }        
-    
+    }
+
     float Y_s = 0.2627*sceneLinear[0] + 0.6780*sceneLinear[1] + 0.0593*sceneLinear[2];
 
     // Scene-linear to display-linear
@@ -554,7 +554,7 @@ float[3] HLG_2_ST2084_1000nits_f3( float HLG[3])
     displayLinear[0] = alpha * pow( Y_s, gamma-1.) * sceneLinear[0] + beta;
     displayLinear[1] = alpha * pow( Y_s, gamma-1.) * sceneLinear[1] + beta;
     displayLinear[2] = alpha * pow( Y_s, gamma-1.) * sceneLinear[2] + beta;
-        
+
     // ST.2084 Inverse EOTF
     float PQ[3] = Y_2_ST2084_f3( displayLinear);
 

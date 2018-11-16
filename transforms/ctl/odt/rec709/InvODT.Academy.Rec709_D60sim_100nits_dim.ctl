@@ -2,7 +2,7 @@
 // <ACEStransformID>InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - Rec.709 (D60 sim.)</ACESuserName>
 
-// 
+//
 // Inverse Output Device Transform - Rec709 (D60 simulation)
 //
 
@@ -19,7 +19,7 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(DISPLAY_PRI,1.0);
 
-const float DISPGAMMA = 2.4; 
+const float DISPGAMMA = 2.4;
 const float L_W = 1.0;
 const float L_B = 0.0;
 
@@ -27,11 +27,11 @@ const float SCALE = 0.955;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -39,7 +39,7 @@ void main
     output varying float aOut,
     input uniform bool legalRange = false
 )
-{  
+{
     float outputCV[3] = { rIn, gIn, bIn};
 
     // Default output is full range, check if legalRange param was set to true

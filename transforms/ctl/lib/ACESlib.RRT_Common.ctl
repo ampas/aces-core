@@ -69,8 +69,8 @@ float sigmoid_shaper( float x)
 
 // ------- Red modifier functions
 float cubic_basis_shaper
-( 
-  varying float x, 
+(
+  varying float x,
   varying float w   // full base width of the shaper function (in degrees)
 )
 {
@@ -78,39 +78,39 @@ float cubic_basis_shaper
                     {  3./6, -6./6,  3./6,  0./6 },
                     { -3./6,  0./6,  3./6,  0./6 },
                     {  1./6,  4./6,  1./6,  0./6 } };
-  
+
   float knots[5] = { -w/2.,
                      -w/4.,
                      0.,
                      w/4.,
                      w/2. };
-  
+
   float y = 0;
-  if ((x > knots[0]) && (x < knots[4])) {  
-    float knot_coord = (x - knots[0]) * 4./w;  
+  if ((x > knots[0]) && (x < knots[4])) {
+    float knot_coord = (x - knots[0]) * 4./w;
     int j = knot_coord;
     float t = knot_coord - j;
-      
+
     float monomials[4] = { t*t*t, t*t, t, 1. };
 
     // (if/else structure required for compatibility with CTL < v1.5.)
     if ( j == 3) {
-      y = monomials[0] * M[0][0] + monomials[1] * M[1][0] + 
+      y = monomials[0] * M[0][0] + monomials[1] * M[1][0] +
           monomials[2] * M[2][0] + monomials[3] * M[3][0];
     } else if ( j == 2) {
-      y = monomials[0] * M[0][1] + monomials[1] * M[1][1] + 
+      y = monomials[0] * M[0][1] + monomials[1] * M[1][1] +
           monomials[2] * M[2][1] + monomials[3] * M[3][1];
     } else if ( j == 1) {
-      y = monomials[0] * M[0][2] + monomials[1] * M[1][2] + 
+      y = monomials[0] * M[0][2] + monomials[1] * M[1][2] +
           monomials[2] * M[2][2] + monomials[3] * M[3][2];
     } else if ( j == 0) {
-      y = monomials[0] * M[0][3] + monomials[1] * M[1][3] + 
+      y = monomials[0] * M[0][3] + monomials[1] * M[1][3] +
           monomials[2] * M[2][3] + monomials[3] * M[3][3];
     } else {
       y = 0.0;
     }
   }
-  
+
   return y * 3/2.;
 }
 
@@ -135,7 +135,7 @@ float uncenter_hue( float hueCentered, float centerH)
 float[3] rrt_sweeteners( float in[3])
 {
     float aces[3] = in;
-    
+
     // --- Glow module --- //
     float saturation = rgb_2_saturation( aces);
     float ycIn = rgb_2_yc( aces);
@@ -155,7 +155,7 @@ float[3] rrt_sweeteners( float in[3])
     aces = clamp_f3( aces, 0., HALF_POS_INF);
     float rgbPre[3] = mult_f3_f44( aces, AP0_2_AP1_MAT);
     rgbPre = clamp_f3( rgbPre, 0., HALF_MAX);
-    
+
     // --- Global desaturation --- //
     rgbPre = mult_f3_f33( rgbPre, RRT_SAT_MAT);
     return rgbPre;
@@ -164,7 +164,7 @@ float[3] rrt_sweeteners( float in[3])
 float[3] inv_rrt_sweeteners( float in[3])
 {
     float rgbPost[3] = in;
-    
+
     // --- Global desaturation --- //
     rgbPost = mult_f3_f33( rgbPost, invert_f33(RRT_SAT_MAT));
 

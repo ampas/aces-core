@@ -2,25 +2,25 @@
 // <ACEStransformID>ODT.Academy.RGBmonitor_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - sRGB</ACESuserName>
 
-// 
+//
 // Output Device Transform - RGB computer monitor
 //
 
 //
 // Summary :
-//  This transform is intended for mapping OCES onto a desktop computer monitor 
-//  typical of those used in motion picture visual effects production. These 
-//  monitors may occasionally be referred to as "sRGB" displays, however, the 
-//  monitor for which this transform is designed does not exactly match the 
+//  This transform is intended for mapping OCES onto a desktop computer monitor
+//  typical of those used in motion picture visual effects production. These
+//  monitors may occasionally be referred to as "sRGB" displays, however, the
+//  monitor for which this transform is designed does not exactly match the
 //  specifications in IEC 61966-2-1:1999.
-// 
-//  The assumed observer adapted white is D65, and the viewing environment is 
-//  that of a dim surround. 
 //
-//  The monitor specified is intended to be more typical of those found in 
+//  The assumed observer adapted white is D65, and the viewing environment is
+//  that of a dim surround.
+//
+//  The monitor specified is intended to be more typical of those found in
 //  visual effects production.
 //
-// Device Primaries : 
+// Device Primaries :
 //  Primaries are those specified in Rec. ITU-R BT.709
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.64      0.33
@@ -29,7 +29,7 @@
 //              White:        0.3127    0.329     100 cd/m^2
 //
 // Display EOTF :
-//  The reference electro-optical transfer function specified in 
+//  The reference electro-optical transfer function specified in
 //  IEC 61966-2-1:1999.
 //  Note: This EOTF is *NOT* gamma 2.2
 //
@@ -41,7 +41,7 @@
 //                                     0.3127       0.329
 //
 // Viewing Environment:
-//   This ODT has a compensation for viewing environment variables more typical 
+//   This ODT has a compensation for viewing environment variables more typical
 //   of those associated with video mastering.
 //
 
@@ -59,15 +59,15 @@ const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
 // NOTE: The EOTF is *NOT* gamma 2.4, it follows IEC 61966-2-1:1999
-const float DISPGAMMA = 2.4; 
+const float DISPGAMMA = 2.4;
 const float OFFSET = 0.055;
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -90,7 +90,7 @@ void main
     float linearCV[3];
     linearCV[0] = Y_2_linCV( rgbPost[0], CINEMA_WHITE, CINEMA_BLACK);
     linearCV[1] = Y_2_linCV( rgbPost[1], CINEMA_WHITE, CINEMA_BLACK);
-    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);    
+    linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
     // Apply gamma adjustment to compensate for dim surround
     linearCV = darkSurround_to_dimSurround( linearCV);

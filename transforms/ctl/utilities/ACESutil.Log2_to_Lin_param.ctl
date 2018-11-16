@@ -2,17 +2,17 @@
 // <ACEStransformID>ACESutil.Log2_to_Lin_param.a1.0.3</ACEStransformID>
 // <ACESuserName>OCIO Shaper to Linear (Parametric)</ACESuserName>
 
-// 
+//
 // Generic transform from log base-2 encoding to linear
-// 
+//
 
 
 
 float log2_to_lin_32f
 (
-  float logNorm, 
-  float middleGrey, 
-  float minExposure, 
+  float logNorm,
+  float middleGrey,
+  float minExposure,
   float maxExposure
 )
 {
@@ -20,7 +20,7 @@ float log2_to_lin_32f
 
   float lg2 = logNorm*(maxExposure - minExposure) + minExposure;
   float lin = pow(2.0, lg2) * middleGrey;
-  
+
   return lin;
 }
 
@@ -45,5 +45,5 @@ void main
   rOut = log2_to_lin_32f( rIn, middleGrey, minExposure, maxExposure);
   gOut = log2_to_lin_32f( gIn, middleGrey, minExposure, maxExposure);
   bOut = log2_to_lin_32f( bIn, middleGrey, minExposure, maxExposure);
-  aOut = aIn;  
+  aOut = aIn;
 }

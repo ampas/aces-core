@@ -9,11 +9,11 @@ import "ACESlib.Utilities_Color";
 
 
 // Conversion of PQ signal to HLG, as detailed in Section 7 of ITU-R BT.2390-0
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -28,5 +28,5 @@ void main
     rOut = HLG[0];
     gOut = HLG[1];
     bOut = HLG[2];
-    aOut = aIn;  
+    aOut = aIn;
 }

@@ -39,7 +39,7 @@ float SLog1_to_lin
 
   if (SLog >= ab)
     lin = ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) * 0.9;
-  else if (SLog < ab) 
+  else if (SLog < ab)
     lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 5.) * 0.9;
 
   return lin;

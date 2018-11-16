@@ -4,13 +4,13 @@
 
 //
 // Unity
-// 
+//
 // Output is the same as input
 //
 
 
-void main 
-(   
+void main
+(
   input varying float rIn,
   input varying float gIn,
   input varying float bIn,

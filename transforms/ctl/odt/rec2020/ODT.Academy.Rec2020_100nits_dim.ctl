@@ -2,20 +2,20 @@
 // <ACEStransformID>ODT.Academy.Rec2020_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - Rec.2020</ACESuserName>
 
-// 
+//
 // Output Device Transform - Rec2020
 //
 
 //
 // Summary :
-//  This transform is intended for mapping OCES onto a Rec.2020 broadcast 
-//  monitor that is calibrated to a D65 white point at 100 cd/m^2. The assumed 
-//  observer adapted white is D65, and the viewing environment is that of a dim 
-//  surround. 
+//  This transform is intended for mapping OCES onto a Rec.2020 broadcast
+//  monitor that is calibrated to a D65 white point at 100 cd/m^2. The assumed
+//  observer adapted white is D65, and the viewing environment is that of a dim
+//  surround.
 //
 //  A possible use case for this transform would be UHDTV/video mastering.
 //
-// Device Primaries : 
+// Device Primaries :
 //  Primaries are those specified in Rec. ITU-R BT.2020
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.708     0.292
@@ -24,13 +24,13 @@
 //              White:        0.3127    0.329     100 cd/m^2
 //
 // Display EOTF :
-//  The reference electro-optical transfer function specified in 
+//  The reference electro-optical transfer function specified in
 //  Rec. ITU-R BT.1886.
 //
 // Signal Range:
-//    By default, this transform outputs full range code values. If instead a 
-//    SMPTE "legal" signal is desired, there is a runtime flag to output 
-//    SMPTE legal signal. In ctlrender, this can be achieved by appending 
+//    By default, this transform outputs full range code values. If instead a
+//    SMPTE "legal" signal is desired, there is a runtime flag to output
+//    SMPTE legal signal. In ctlrender, this can be achieved by appending
 //    '-param1 legalRange 1' after the '-ctl odt.ctl' string.
 //
 // Assumed observer adapted white point:
@@ -38,7 +38,7 @@
 //                                     0.3127       0.329
 //
 // Viewing Environment:
-//   This ODT has a compensation for viewing environment variables more typical 
+//   This ODT has a compensation for viewing environment variables more typical
 //   of those associated with video mastering.
 //
 
@@ -55,17 +55,17 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = REC2020_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB(DISPLAY_PRI,1.0);
 
-const float DISPGAMMA = 2.4; 
+const float DISPGAMMA = 2.4;
 const float L_W = 1.0;
 const float L_B = 0.0;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

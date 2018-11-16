@@ -2,7 +2,7 @@
 // <ACEStransformID>ACEScsc.ADX16_to_ACES.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - ADX16</ACESuserName>
 
-// 
+//
 // Universal ADX16 to ACES Transform
 //
 

@@ -7,10 +7,10 @@ import "ACESlib.Utilities";
 import "ACESlib.OutputTransforms";
 
 
-// Support for HLG in ACES is tricky, since HLG is "scene-referred" and ACES 
+// Support for HLG in ACES is tricky, since HLG is "scene-referred" and ACES
 // Output transforms produce display-referred output. ACES supports HLG at
 // 1000 nits by converting the ST.2084 output to HLG using the method specified
-// in Section 7 of ITU-R BT.2390-0. 
+// in Section 7 of ITU-R BT.2390-0.
 
 
 const float Y_MIN = 0.0001;                     // black luminance (cd/m^2)
@@ -21,7 +21,7 @@ const Chromaticities DISPLAY_PRI = REC2020_PRI; // encoding primaries (device se
 const Chromaticities LIMITING_PRI = REC2020_PRI;// limiting primaries
 
 const int EOTF = 5;                             // 0: ST-2084 (PQ)
-                                                // 1: BT.1886 (Rec.709/2020 settings) 
+                                                // 1: BT.1886 (Rec.709/2020 settings)
                                                 // 2: sRGB (mon_curve w/ presets)
                                                 // 3: gamma 2.6
                                                 // 4: linear (no EOTF)
@@ -32,7 +32,7 @@ const int SURROUND = 0;                         // 0: dark ( NOTE: this is the o
                                                 // 2: normal ( *inactive* - selecting this will have no effect )
 
 const bool STRETCH_BLACK = true;                // stretch black luminance to a PQ code value of 0
-const bool D60_SIM = false;                       
+const bool D60_SIM = false;
 const bool LEGAL_RANGE = false;
 
 

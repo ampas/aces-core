@@ -2,7 +2,7 @@
 // <ACEStransformID>InvODT.Academy.P3D60_48nits.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - P3-D60</ACESuserName>
 
-// 
+//
 // Inverse Output Device Transform - P3D60
 //
 
@@ -20,15 +20,15 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = P3D60_PRI;
 const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
 
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

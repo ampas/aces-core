@@ -2,19 +2,19 @@
 // <ACEStransformID>ACESutil.Lin_to_Log2_param.a1.0.3</ACEStransformID>
 // <ACESuserName>Linear to Log2 (Parametric)</ACESuserName>
 
-// 
+//
 // Generic transform from linear to a log base-2 encoding
-// 
+//
 
 import "ACESlib.Utilities";
 
 float lin_to_log2_32f
 (
-  float lin, 
-  float middleGrey, 
-  float minExposure, 
+  float lin,
+  float middleGrey,
+  float minExposure,
   float maxExposure
-) 
+)
 {
   if (lin <= 0.0) return 0.0;
 
@@ -46,5 +46,5 @@ void main
   rOut = lin_to_log2_32f( rIn, middleGrey, minExposure, maxExposure);
   gOut = lin_to_log2_32f( gIn, middleGrey, minExposure, maxExposure);
   bOut = lin_to_log2_32f( bIn, middleGrey, minExposure, maxExposure);
-  aOut = aIn;  
+  aOut = aIn;
 }

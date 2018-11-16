@@ -2,9 +2,9 @@
 // <ACEStransformID>ACESutil.Lin_to_OCIOshaper_param.a1.0.3</ACEStransformID>
 // <ACESuserName>Linear to OCIO Shaper (Parametric)</ACESuserName>
 
-// 
+//
 // Generic transform from linear to an OCIOshaper encoding
-// 
+//
 
 
 
@@ -35,5 +35,5 @@ void main
   rOut = Y_2_ST2084( (rIn - minLinear)/scale );
   gOut = Y_2_ST2084( (gIn - minLinear)/scale );
   bOut = Y_2_ST2084( (bIn - minLinear)/scale );
-  aOut = aIn;  
+  aOut = aIn;
 }

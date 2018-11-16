@@ -16,7 +16,7 @@ import "ACESlib.Transform_Common";
 
 
 void main
-(   
+(
     input varying float rIn,
     input varying float gIn,
     input varying float bIn,

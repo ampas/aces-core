@@ -2,19 +2,19 @@
 // <ACEStransformID>ODT.Academy.Rec709_D60sim_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - Rec.709 (D60 sim.)</ACESuserName>
 
-// 
+//
 // Output Device Transform - Rec709 (D60 simulation)
 //
 
 //
 // Summary :
 //  This transform is intended for mapping OCES onto a Rec.709 broadcast monitor
-//  that is calibrated to a D65 white point at 100 cd/m^2. The assumed observer 
-//  adapted white is D60, and the viewing environment is a dim surround. 
+//  that is calibrated to a D65 white point at 100 cd/m^2. The assumed observer
+//  adapted white is D60, and the viewing environment is a dim surround.
 //
 //  A possible use case for this transform would be cinema "soft-proofing".
 //
-// Device Primaries : 
+// Device Primaries :
 //  Primaries are those specified in Rec. ITU-R BT.709
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.64      0.33
@@ -23,13 +23,13 @@
 //              White:        0.3127    0.329     100 cd/m^2
 //
 // Display EOTF :
-//  The reference electro-optical transfer function specified in 
+//  The reference electro-optical transfer function specified in
 //  Rec. ITU-R BT.1886.
 //
 // Signal Range:
-//    By default, this transform outputs full range code values. If instead a 
-//    SMPTE "legal" signal is desired, there is a runtime flag to output 
-//    SMPTE legal signal. In ctlrender, this can be achieved by appending 
+//    By default, this transform outputs full range code values. If instead a
+//    SMPTE "legal" signal is desired, there is a runtime flag to output
+//    SMPTE legal signal. In ctlrender, this can be achieved by appending
 //    '-param1 legalRange 1' after the '-ctl odt.ctl' string.
 //
 // Assumed observer adapted white point:
@@ -37,7 +37,7 @@
 //                                     0.32168      0.33767
 //
 // Viewing Environment:
-//   This ODT has a compensation for viewing environment variables more typical 
+//   This ODT has a compensation for viewing environment variables more typical
 //   of those associated with video mastering.
 //
 
@@ -54,7 +54,7 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
-const float DISPGAMMA = 2.4; 
+const float DISPGAMMA = 2.4;
 const float L_W = 1.0;
 const float L_B = 0.0;
 
@@ -62,11 +62,11 @@ const float SCALE = 0.955;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -93,18 +93,18 @@ void main
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
     // --- Compensate for different white point being darker  --- //
-    // This adjustment corrects for an issue that exists in ODTs where the 
-    // device is calibrated to a white chromaticity other than that of the 
+    // This adjustment corrects for an issue that exists in ODTs where the
+    // device is calibrated to a white chromaticity other than that of the
     // adapted white.
-    // In order to produce D60 on a device calibrated to D65 white (i.e. 
-    // equal display code values yield CIE x,y chromaticities of 0.3217, 0.329) 
-    // the red channel is higher than blue and green to compensate for the 
-    // "bluer" D60 white. This is the intended behavior but it means that 
-    // without compensation, as highlights increase, the red channel will hit 
-    // the device maximum first and clip, resulting in a chromaticity shift as 
+    // In order to produce D60 on a device calibrated to D65 white (i.e.
+    // equal display code values yield CIE x,y chromaticities of 0.3217, 0.329)
+    // the red channel is higher than blue and green to compensate for the
+    // "bluer" D60 white. This is the intended behavior but it means that
+    // without compensation, as highlights increase, the red channel will hit
+    // the device maximum first and clip, resulting in a chromaticity shift as
     // the green and blue channels continue to increase.
-    // To avoid this clipping behavior, a slight scale factor is applied to 
-    // allow the ODT to simulate D60 within the D65 calibration white point. 
+    // To avoid this clipping behavior, a slight scale factor is applied to
+    // allow the ODT to simulate D60 within the D65 calibration white point.
 
     // Scale and clamp white to avoid casted highlights due to D60 simulation
     linearCV[0] = min( linearCV[0], 1.0) * SCALE;

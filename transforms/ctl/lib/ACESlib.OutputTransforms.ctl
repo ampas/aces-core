@@ -3,7 +3,7 @@
 // <ACESuserName>ACES 1.0 Lib - Output Transforms</ACESuserName>
 
 //
-// Contains functions used for forward and inverse Output Transforms (RRT+ODT) 
+// Contains functions used for forward and inverse Output Transforms (RRT+ODT)
 //
 
 
@@ -16,8 +16,8 @@ import "ACESlib.SSTS";
 
 
 float[3] limit_to_primaries
-( 
-    float XYZ[3], 
+(
+    float XYZ[3],
     Chromaticities LIMITING_PRI
 )
 {
@@ -29,7 +29,7 @@ float[3] limit_to_primaries
 
     // Clip any values outside the limiting primaries
     float limitedRgb[3] = clamp_f3( rgb, 0., 1.);
-    
+
     // Convert limited RGB to XYZ
     return mult_f3_f44( limitedRgb, LIMITING_PRI_2_XYZ_MAT);
 }
@@ -55,10 +55,10 @@ float[3] outputTransform
     float in[3],
     float Y_MIN,
     float Y_MID,
-    float Y_MAX,    
+    float Y_MAX,
     Chromaticities DISPLAY_PRI,
     Chromaticities LIMITING_PRI,
-    int EOTF,  
+    int EOTF,
     int SURROUND,
     bool STRETCH_BLACK = true,
     bool D60_SIM = false,
@@ -67,7 +67,7 @@ float[3] outputTransform
 {
     float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
-    /* 
+    /*
         NOTE: This is a bit of a hack - probably a more direct way to do this.
         TODO: Fix in future version
     */
@@ -85,33 +85,33 @@ float[3] outputTransform
 
     /*  Scale absolute luminance to linear code value  */
     float linearCV[3] = Y_2_linCV_f3( rgbPost, Y_MAX, Y_MIN);
-    
+
     // Rendering primaries to XYZ
     float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
     // Apply gamma adjustment to compensate for dim surround
-    /*  
-        NOTE: This is more or less a placeholder block and is largely inactive 
+    /*
+        NOTE: This is more or less a placeholder block and is largely inactive
         in its current form. This section currently only applies for SDR, and
         even then, only in very specific cases.
-        In the future it is fully intended for this module to be updated to 
+        In the future it is fully intended for this module to be updated to
         support surround compensation regardless of luminance dynamic range. */
-    /*  
-        TOD0: Come up with new surround compensation algorithm, applicable 
-        across all dynamic ranges and supporting dark/dim/normal surround.  
+    /*
+        TOD0: Come up with new surround compensation algorithm, applicable
+        across all dynamic ranges and supporting dark/dim/normal surround.
     */
     if (SURROUND == 0) { // Dark surround
-        /*  
-        Current tone scale is designed for dark surround environment so no 
-        adjustment is necessary. 
+        /*
+        Current tone scale is designed for dark surround environment so no
+        adjustment is necessary.
         */
     } else if (SURROUND == 1) { // Dim surround
-        // INACTIVE for HDR and crudely implemented for SDR (see comment below)        
-        if ((EOTF == 1) || (EOTF == 2) || (EOTF == 3)) { 
-            /* 
+        // INACTIVE for HDR and crudely implemented for SDR (see comment below)
+        if ((EOTF == 1) || (EOTF == 2) || (EOTF == 3)) {
+            /*
             This uses a crude logical assumption that if the EOTF is BT.1886,
             sRGB, or gamma 2.6 that the data is SDR and so the SDR gamma
-            compensation factor from v1.0 will apply. 
+            compensation factor from v1.0 will apply.
             */
             XYZ = dark_to_dim( XYZ); /*
             This uses a local dark_to_dim function that is designed to take in
@@ -127,8 +127,8 @@ float[3] outputTransform
     //    if (LIMITING_PRI != DISPLAY_PRI)
     // but you can't because Chromaticities do not work with bool comparison operator
     // For now, limit no matter what.
-    XYZ = limit_to_primaries( XYZ, LIMITING_PRI); 
-    
+    XYZ = limit_to_primaries( XYZ, LIMITING_PRI);
+
     // Apply CAT from ACES white point to assumed observer adapted white point
     // TODO: Needs to expand from just supporting D60 sim to allow for any
     // observer adapted white point.
@@ -143,7 +143,7 @@ float[3] outputTransform
     // CIE XYZ to display encoding primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
-    // Scale to avoid clipping when device calibration is different from D60. 
+    // Scale to avoid clipping when device calibration is different from D60.
     // To simulate D60, unequal code values are sent to the display.
     // TODO: Needs to expand from just supporting D60 sim to allow for any
     // observer adapted white point.
@@ -153,23 +153,23 @@ float[3] outputTransform
            This needs a more complex algorithm to handle all cases.
         */
         float SCALE = 1.0;
-        if ((DISPLAY_PRI.white[0] == 0.3127) & 
+        if ((DISPLAY_PRI.white[0] == 0.3127) &
             (DISPLAY_PRI.white[1] == 0.329)) { // D65
                 SCALE = 0.96362;
-        } 
-        else if ((DISPLAY_PRI.white[0] == 0.314) & 
+        }
+        else if ((DISPLAY_PRI.white[0] == 0.314) &
                  (DISPLAY_PRI.white[1] == 0.351)) { // DCI
                 linearCV[0] = roll_white_fwd( linearCV[0], 0.918, 0.5);
                 linearCV[1] = roll_white_fwd( linearCV[1], 0.918, 0.5);
                 linearCV[2] = roll_white_fwd( linearCV[2], 0.918, 0.5);
-                SCALE = 0.96;                
-        } 
+                SCALE = 0.96;
+        }
         linearCV = mult_f_f3( SCALE, linearCV);
     }
 
 
     // Clip values < 0 (i.e. projecting outside the display primaries)
-    // NOTE: P3 red and values close to it fall outside of Rec.2020 green-red 
+    // NOTE: P3 red and values close to it fall outside of Rec.2020 green-red
     // boundary
     linearCV = clamp_f3( linearCV, 0., HALF_POS_INF);
 
@@ -190,7 +190,7 @@ float[3] outputTransform
         if (STRETCH_BLACK == true) {
             outputCV = Y_2_ST2084_f3( clamp_f3( linCV_2_Y_f3(linearCV, Y_MAX, 0.0), 0.0, HALF_POS_INF) );
         } else {
-            outputCV = Y_2_ST2084_f3( linCV_2_Y_f3(linearCV, Y_MAX, Y_MIN) );        
+            outputCV = Y_2_ST2084_f3( linCV_2_Y_f3(linearCV, Y_MAX, Y_MIN) );
         }
     } else if (EOTF == 1) { // BT.1886 (Rec.709/2020 settings)
         outputCV = bt1886_r_f3( linearCV, 2.4, 1.0, 0.0);
@@ -201,13 +201,13 @@ float[3] outputTransform
     } else if (EOTF == 4) { // linear
         outputCV = linCV_2_Y_f3(linearCV, Y_MAX, Y_MIN);
     } else if (EOTF == 5) { // HLG
-        // NOTE: HLG just maps ST.2084 output to HLG encoding. 
+        // NOTE: HLG just maps ST.2084 output to HLG encoding.
         // TODO: Restructure if/else tree to minimize this redundancy.
         if (STRETCH_BLACK == true) {
             outputCV = Y_2_ST2084_f3( clamp_f3( linCV_2_Y_f3(linearCV, Y_MAX, 0.0), 0.0, HALF_POS_INF) );
         }
         else {
-            outputCV = Y_2_ST2084_f3( linCV_2_Y_f3(linearCV, Y_MAX, Y_MIN) );        
+            outputCV = Y_2_ST2084_f3( linCV_2_Y_f3(linearCV, Y_MAX, Y_MIN) );
         }
         outputCV = ST2084_2_HLG_1000nits_f3( outputCV);
     }
@@ -216,7 +216,7 @@ float[3] outputTransform
         outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 
-    return outputCV;    
+    return outputCV;
 }
 
 float[3] invOutputTransform
@@ -224,10 +224,10 @@ float[3] invOutputTransform
     float in[3],
     float Y_MIN,
     float Y_MID,
-    float Y_MAX,    
+    float Y_MAX,
     Chromaticities DISPLAY_PRI,
     Chromaticities LIMITING_PRI,
-    int EOTF,  
+    int EOTF,
     int SURROUND,
     bool STRETCH_BLACK = true,
     bool D60_SIM = false,
@@ -236,7 +236,7 @@ float[3] invOutputTransform
 {
     float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ( DISPLAY_PRI, 1.0);
 
-    /* 
+    /*
         NOTE: This is a bit of a hack - probably a more direct way to do this.
         TODO: Update in accordance with forward algorithm.
     */
@@ -290,20 +290,20 @@ float[3] invOutputTransform
             If DCI, roll_white_fwd is used also.
         */
         float SCALE = 1.0;
-        if ((DISPLAY_PRI.white[0] == 0.3127) & 
+        if ((DISPLAY_PRI.white[0] == 0.3127) &
             (DISPLAY_PRI.white[1] == 0.329)) { // D65
                 SCALE = 0.96362;
                 linearCV = mult_f_f3( 1./SCALE, linearCV);
-        } 
-        else if ((DISPLAY_PRI.white[0] == 0.314) & 
+        }
+        else if ((DISPLAY_PRI.white[0] == 0.314) &
                  (DISPLAY_PRI.white[1] == 0.351)) { // DCI
-                SCALE = 0.96;                
+                SCALE = 0.96;
                 linearCV[0] = roll_white_rev( linearCV[0]/SCALE, 0.918, 0.5);
                 linearCV[1] = roll_white_rev( linearCV[1]/SCALE, 0.918, 0.5);
                 linearCV[2] = roll_white_rev( linearCV[2]/SCALE, 0.918, 0.5);
-        } 
+        }
 
-    }    
+    }
 
     // Encoding primaries to CIE XYZ
     float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
@@ -318,28 +318,28 @@ float[3] invOutputTransform
     }
 
     // Apply gamma adjustment to compensate for dim surround
-    /*  
-        NOTE: This is more or less a placeholder block and is largely inactive 
+    /*
+        NOTE: This is more or less a placeholder block and is largely inactive
         in its current form. This section currently only applies for SDR, and
         even then, only in very specific cases.
-        In the future it is fully intended for this module to be updated to 
+        In the future it is fully intended for this module to be updated to
         support surround compensation regardless of luminance dynamic range. */
-    /*  
-        TOD0: Come up with new surround compensation algorithm, applicable 
-        across all dynamic ranges and supporting dark/dim/normal surround.  
+    /*
+        TOD0: Come up with new surround compensation algorithm, applicable
+        across all dynamic ranges and supporting dark/dim/normal surround.
     */
     if (SURROUND == 0) { // Dark surround
-        /*  
-        Current tone scale is designed for dark surround environment so no 
-        adjustment is necessary. 
+        /*
+        Current tone scale is designed for dark surround environment so no
+        adjustment is necessary.
         */
     } else if (SURROUND == 1) { // Dim surround
-        // INACTIVE for HDR and crudely implemented for SDR (see comment below)        
-        if ((EOTF == 1) || (EOTF == 2) || (EOTF == 3)) { 
-            /* 
+        // INACTIVE for HDR and crudely implemented for SDR (see comment below)
+        if ((EOTF == 1) || (EOTF == 2) || (EOTF == 3)) {
+            /*
             This uses a crude logical assumption that if the EOTF is BT.1886,
             sRGB, or gamma 2.6 that the data is SDR and so the SDR gamma
-            compensation factor from v1.0 will apply. 
+            compensation factor from v1.0 will apply.
             */
             XYZ = dim_to_dark( XYZ); /*
             This uses a local dim_to_dark function that is designed to take in

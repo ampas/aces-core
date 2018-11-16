@@ -5,7 +5,7 @@
 //
 // ACES Color Space Conversion - ACES to ACEScg
 //
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
+// converts ACES2065-1 (AP0 w/ linear encoding) to
 //          ACEScg (AP1 w/ linear encoding)
 //
 
@@ -16,7 +16,7 @@ import "ACESlib.Transform_Common";
 
 
 void main
-(   
+(
     input varying float rIn,
     input varying float gIn,
     input varying float bIn,

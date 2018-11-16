@@ -5,12 +5,12 @@
 //
 // ACES Color Space Conversion - ACES to ACEScct
 //
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
+// converts ACES2065-1 (AP0 w/ linear encoding) to
 //          ACEScct (AP1 w/ logarithmic encoding)
 //
 
 // *-*-*-*-*-*-*-*-*
-// ACEScct is intended to be transient and internal to software or hardware 
+// ACEScct is intended to be transient and internal to software or hardware
 // systems, and is specifically not intended for interchange or archiving.
 // ACEScct should NOT be written into a container file in actual implementations!
 // *-*-*-*-*-*-*-*-*

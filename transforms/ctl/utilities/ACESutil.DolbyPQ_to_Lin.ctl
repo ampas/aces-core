@@ -2,9 +2,9 @@
 // <ACEStransformID>ACESutil.DolbyPQ_to_Lin.a1.0.3</ACEStransformID>
 // <ACESuserName>Dolby PQ to Linear</ACESuserName>
 
-// 
+//
 // Generic transform from SMPTE ST2084 to linear
-// 
+//
 
 
 
@@ -27,5 +27,5 @@ void main
   rOut = ST2084_2_Y( rIn );
   gOut = ST2084_2_Y( gIn );
   bOut = ST2084_2_Y( bIn );
-  aOut = aIn;  
+  aOut = aIn;
 }

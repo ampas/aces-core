@@ -27,7 +27,7 @@ const float W = 940.;
 
 
 /* ============ SUBFUNCTIONS ============ */
-float SLog2_to_lin 
+float SLog2_to_lin
 (
   float SLog,
   float b,
@@ -36,14 +36,14 @@ float SLog2_to_lin
 )
 {
   float lin;
-  
+
   if (SLog >= ab)
     lin = ( 219. * ( pow(10., ( ( ( SLog - b) / ( w - b) - 0.616596 - 0.03) / 0.432699)) - 0.037584) / 155.) * 0.9;
-  else if (SLog < ab) 
+  else if (SLog < ab)
     lin = ( ( ( SLog - b) / ( w - b) - 0.030001222851889303) / 3.53881278538813) * 0.9;
-  
+
   return lin;
-  
+
 }
 
 
@@ -74,7 +74,7 @@ void main
   lin[0] = SLog2_to_lin( SLog[0], B, AB, W);
   lin[1] = SLog2_to_lin( SLog[1], B, AB, W);
   lin[2] = SLog2_to_lin( SLog[2], B, AB, W);
-  
+
   // S-Gamut to ACES matrix
   float aces[3] = mult_f3_f33( lin, SGAMUT_DAYLIGHT_TO_ACES_MTX);
 

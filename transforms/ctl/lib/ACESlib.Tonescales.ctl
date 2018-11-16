@@ -23,7 +23,7 @@ struct SegmentedSplineParams_c5
   float coefsLow[6];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
   float coefsHigh[6];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
   SplineMapPoint minPoint; // {luminance, luminance} linear extension below this
-  SplineMapPoint midPoint; // {luminance, luminance} 
+  SplineMapPoint midPoint; // {luminance, luminance}
   SplineMapPoint maxPoint; // {luminance, luminance} linear extension above this
   float slopeLow;       // log-log slope of low linear extension
   float slopeHigh;      // log-log slope of high linear extension
@@ -34,7 +34,7 @@ struct SegmentedSplineParams_c9
   float coefsLow[10];    // coefs for B-spline between minPoint and midPoint (units of log luminance)
   float coefsHigh[10];   // coefs for B-spline between midPoint and maxPoint (units of log luminance)
   SplineMapPoint minPoint; // {luminance, luminance} linear extension below this
-  SplineMapPoint midPoint; // {luminance, luminance} 
+  SplineMapPoint midPoint; // {luminance, luminance}
   SplineMapPoint maxPoint; // {luminance, luminance} linear extension above this
   float slopeLow;       // log-log slope of low linear extension
   float slopeHigh;      // log-log slope of high linear extension
@@ -48,7 +48,7 @@ const SegmentedSplineParams_c5 RRT_PARAMS =
   // coefsHigh[6]
   { -0.7185482425, 2.0810307172, 3.6681241237, 4.0000000000, 4.0000000000, 4.0000000000 },
   { 0.18*pow(2.,-15), 0.0001},    // minPoint
-  { 0.18,                4.8},    // midPoint  
+  { 0.18,                4.8},    // midPoint
   { 0.18*pow(2., 18), 10000.},    // maxPoint
   0.0,  // slopeLow
   0.0   // slopeHigh
@@ -56,7 +56,7 @@ const SegmentedSplineParams_c5 RRT_PARAMS =
 
 
 float segmented_spline_c5_fwd
-  ( 
+  (
     varying float x,
     varying SegmentedSplineParams_c5 C = RRT_PARAMS
   )
@@ -66,11 +66,11 @@ float segmented_spline_c5_fwd
 
   // Check for negatives or zero before taking the log. If negative or zero,
   // set to HALF_MIN.
-  float logx = log10( max(x, HALF_MIN )); 
+  float logx = log10( max(x, HALF_MIN ));
 
   float logy;
 
-  if ( logx <= log10(C.minPoint.x) ) { 
+  if ( logx <= log10(C.minPoint.x) ) {
 
     logy = logx * C.slopeLow + ( log10(C.minPoint.y) - C.slopeLow * log10(C.minPoint.x) );
 
@@ -81,11 +81,11 @@ float segmented_spline_c5_fwd
     float t = knot_coord - j;
 
     float cf[ 3] = { C.coefsLow[ j], C.coefsLow[ j + 1], C.coefsLow[ j + 2]};
-    // NOTE: If the running a version of CTL < 1.5, you may get an 
-    // exception thrown error, usually accompanied by "Array index out of range" 
-    // If you receive this error, it is recommended that you update to CTL v1.5, 
-    // which contains a number of important bug fixes. Otherwise, you may try 
-    // uncommenting the below, which is longer, but equivalent to, the above 
+    // NOTE: If the running a version of CTL < 1.5, you may get an
+    // exception thrown error, usually accompanied by "Array index out of range"
+    // If you receive this error, it is recommended that you update to CTL v1.5,
+    // which contains a number of important bug fixes. Otherwise, you may try
+    // uncommenting the below, which is longer, but equivalent to, the above
     // line of code.
     //
     // float cf[ 3];
@@ -103,8 +103,8 @@ float segmented_spline_c5_fwd
     //     cf[ 0] = C.coefsLow[5];  cf[ 1] = C.coefsLow[6];  cf[ 2] = C.coefsLow[7];
     // } else if ( j == 6) {
     //     cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];
-    // } 
-    
+    // }
+
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
@@ -114,12 +114,12 @@ float segmented_spline_c5_fwd
     int j = knot_coord;
     float t = knot_coord - j;
 
-    float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]}; 
-    // NOTE: If the running a version of CTL < 1.5, you may get an 
-    // exception thrown error, usually accompanied by "Array index out of range" 
-    // If you receive this error, it is recommended that you update to CTL v1.5, 
-    // which contains a number of important bug fixes. Otherwise, you may try 
-    // uncommenting the below, which is longer, but equivalent to, the above 
+    float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]};
+    // NOTE: If the running a version of CTL < 1.5, you may get an
+    // exception thrown error, usually accompanied by "Array index out of range"
+    // If you receive this error, it is recommended that you update to CTL v1.5,
+    // which contains a number of important bug fixes. Otherwise, you may try
+    // uncommenting the below, which is longer, but equivalent to, the above
     // line of code.
     //
     // float cf[ 3];
@@ -137,34 +137,34 @@ float segmented_spline_c5_fwd
     //     cf[ 0] = C.coefsHigh[5];  cf[ 1] = C.coefsHigh[6];  cf[ 2] = C.coefsHigh[7];
     // } else if ( j == 6) {
     //     cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];
-    // } 
+    // }
 
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
-  } else { //if ( logIn >= log10(C.maxPoint.x) ) { 
+  } else { //if ( logIn >= log10(C.maxPoint.x) ) {
 
     logy = logx * C.slopeHigh + ( log10(C.maxPoint.y) - C.slopeHigh * log10(C.maxPoint.x) );
 
   }
 
   return pow10(logy);
-  
+
 }
 
 
 float segmented_spline_c5_rev
-  ( 
+  (
     varying float y,
     varying SegmentedSplineParams_c5 C = RRT_PARAMS
   )
-{  
+{
   const int N_KNOTS_LOW = 4;
   const int N_KNOTS_HIGH = 4;
 
   const float KNOT_INC_LOW = (log10(C.midPoint.x) - log10(C.minPoint.x)) / (N_KNOTS_LOW - 1.);
   const float KNOT_INC_HIGH = (log10(C.maxPoint.x) - log10(C.midPoint.x)) / (N_KNOTS_HIGH - 1.);
-  
+
   // KNOT_Y is luminance of the spline at each knot
   float KNOT_Y_LOW[ N_KNOTS_LOW];
   for (int i = 0; i < N_KNOTS_LOW; i = i+1) {
@@ -193,8 +193,8 @@ float segmented_spline_c5_rev
         cf[ 0] = C.coefsLow[1];  cf[ 1] = C.coefsLow[2];  cf[ 2] = C.coefsLow[3];  j = 1;
     } else if ( logy > KNOT_Y_LOW[ 2] && logy <= KNOT_Y_LOW[ 3]) {
         cf[ 0] = C.coefsLow[2];  cf[ 1] = C.coefsLow[3];  cf[ 2] = C.coefsLow[4];  j = 2;
-    } 
-    
+    }
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -218,8 +218,8 @@ float segmented_spline_c5_rev
         cf[ 0] = C.coefsHigh[1];  cf[ 1] = C.coefsHigh[2];  cf[ 2] = C.coefsHigh[3];  j = 1;
     } else if ( logy > KNOT_Y_HIGH[ 2] && logy <= KNOT_Y_HIGH[ 3]) {
         cf[ 0] = C.coefsHigh[2];  cf[ 1] = C.coefsHigh[3];  cf[ 2] = C.coefsHigh[4];  j = 2;
-    } 
-    
+    }
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -238,7 +238,7 @@ float segmented_spline_c5_rev
     logx = log10(C.maxPoint.x);
 
   }
-  
+
   return pow10( logx);
 
 }
@@ -255,7 +255,7 @@ const SegmentedSplineParams_c9 ODT_48nits =
   // coefsHigh[10]
   { 0.5154386965, 0.8470437783, 1.1358000000, 1.3802000000, 1.5197000000, 1.5985000000, 1.6467000000, 1.6746091357, 1.6878733390, 1.6878733390 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-6.5) ),  0.02},    // minPoint
-  {segmented_spline_c5_fwd( 0.18 ),                4.8},    // midPoint  
+  {segmented_spline_c5_fwd( 0.18 ),                4.8},    // midPoint
   {segmented_spline_c5_fwd( 0.18*pow(2.,6.5) ),   48.0},    // maxPoint
   0.0,  // slopeLow
   0.04  // slopeHigh
@@ -268,7 +268,7 @@ const SegmentedSplineParams_c9 ODT_1000nits =
   // coefsHigh[10]
   { 0.8089132070, 1.1910867930, 1.5683, 1.9483, 2.3083, 2.6384, 2.8595, 2.9872608805, 3.0127391195, 3.0127391195 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ), 0.0001},    // minPoint
-  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
+  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint
   {segmented_spline_c5_fwd( 0.18*pow(2.,10.) ),  1000.0},    // maxPoint
   3.0,  // slopeLow
   0.06  // slopeHigh
@@ -281,7 +281,7 @@ const SegmentedSplineParams_c9 ODT_2000nits =
   // coefsHigh[10]
   { 0.8019952042, 1.1980047958, 1.5943000000, 1.9973000000, 2.3783000000, 2.7684000000, 3.0515000000, 3.2746293562, 3.3274306351, 3.3274306351 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ), 0.0001},    // minPoint
-  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
+  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint
   {segmented_spline_c5_fwd( 0.18*pow(2.,11.) ),  2000.0},    // maxPoint
   3.0,  // slopeLow
   0.12  // slopeHigh
@@ -294,7 +294,7 @@ const SegmentedSplineParams_c9 ODT_4000nits =
   // coefsHigh[10]
   { 0.7973186613, 1.2026813387, 1.6093000000, 2.0108000000, 2.4148000000, 2.8179000000, 3.1725000000, 3.5344995451, 3.6696204376, 3.6696204376 },
   {segmented_spline_c5_fwd( 0.18*pow(2.,-12.) ), 0.0001},    // minPoint
-  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint  
+  {segmented_spline_c5_fwd( 0.18 ),                10.0},    // midPoint
   {segmented_spline_c5_fwd( 0.18*pow(2.,12.) ),  4000.0},    // maxPoint
   3.0,  // slopeLow
   0.3   // slopeHigh
@@ -315,21 +315,21 @@ const SegmentedSplineParams_c9 ODT_4000nits =
 
 
 float segmented_spline_c9_fwd
-  ( 
+  (
     varying float x,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{    
+{
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
   // Check for negatives or zero before taking the log. If negative or zero,
   // set to HALF_MIN.
-  float logx = log10( max(x, HALF_MIN )); 
+  float logx = log10( max(x, HALF_MIN ));
 
   float logy;
 
-  if ( logx <= log10(C.minPoint.x) ) { 
+  if ( logx <= log10(C.minPoint.x) ) {
 
     logy = logx * C.slopeLow + ( log10(C.minPoint.y) - C.slopeLow * log10(C.minPoint.x) );
 
@@ -340,11 +340,11 @@ float segmented_spline_c9_fwd
     float t = knot_coord - j;
 
     float cf[ 3] = { C.coefsLow[ j], C.coefsLow[ j + 1], C.coefsLow[ j + 2]};
-    // NOTE: If the running a version of CTL < 1.5, you may get an 
-    // exception thrown error, usually accompanied by "Array index out of range" 
-    // If you receive this error, it is recommended that you update to CTL v1.5, 
-    // which contains a number of important bug fixes. Otherwise, you may try 
-    // uncommenting the below, which is longer, but equivalent to, the above 
+    // NOTE: If the running a version of CTL < 1.5, you may get an
+    // exception thrown error, usually accompanied by "Array index out of range"
+    // If you receive this error, it is recommended that you update to CTL v1.5,
+    // which contains a number of important bug fixes. Otherwise, you may try
+    // uncommenting the below, which is longer, but equivalent to, the above
     // line of code.
     //
     // float cf[ 3];
@@ -362,8 +362,8 @@ float segmented_spline_c9_fwd
     //     cf[ 0] = C.coefsLow[5];  cf[ 1] = C.coefsLow[6];  cf[ 2] = C.coefsLow[7];
     // } else if ( j == 6) {
     //     cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];
-    // } 
-    
+    // }
+
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
@@ -373,12 +373,12 @@ float segmented_spline_c9_fwd
     int j = knot_coord;
     float t = knot_coord - j;
 
-    float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]}; 
-    // NOTE: If the running a version of CTL < 1.5, you may get an 
-    // exception thrown error, usually accompanied by "Array index out of range" 
-    // If you receive this error, it is recommended that you update to CTL v1.5, 
-    // which contains a number of important bug fixes. Otherwise, you may try 
-    // uncommenting the below, which is longer, but equivalent to, the above 
+    float cf[ 3] = { C.coefsHigh[ j], C.coefsHigh[ j + 1], C.coefsHigh[ j + 2]};
+    // NOTE: If the running a version of CTL < 1.5, you may get an
+    // exception thrown error, usually accompanied by "Array index out of range"
+    // If you receive this error, it is recommended that you update to CTL v1.5,
+    // which contains a number of important bug fixes. Otherwise, you may try
+    // uncommenting the below, which is longer, but equivalent to, the above
     // line of code.
     //
     // float cf[ 3];
@@ -396,34 +396,34 @@ float segmented_spline_c9_fwd
     //     cf[ 0] = C.coefsHigh[5];  cf[ 1] = C.coefsHigh[6];  cf[ 2] = C.coefsHigh[7];
     // } else if ( j == 6) {
     //     cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];
-    // } 
+    // }
 
     float monomials[ 3] = { t * t, t, 1. };
     logy = dot_f3_f3( monomials, mult_f3_f33( cf, M));
 
-  } else { //if ( logIn >= log10(C.maxPoint.x) ) { 
+  } else { //if ( logIn >= log10(C.maxPoint.x) ) {
 
     logy = logx * C.slopeHigh + ( log10(C.maxPoint.y) - C.slopeHigh * log10(C.maxPoint.x) );
 
   }
 
   return pow10(logy);
-  
+
 }
 
 
 float segmented_spline_c9_rev
-  ( 
+  (
     varying float y,
     varying SegmentedSplineParams_c9 C = ODT_48nits
   )
-{  
+{
   const int N_KNOTS_LOW = 8;
   const int N_KNOTS_HIGH = 8;
 
   const float KNOT_INC_LOW = (log10(C.midPoint.x) - log10(C.minPoint.x)) / (N_KNOTS_LOW - 1.);
   const float KNOT_INC_HIGH = (log10(C.maxPoint.x) - log10(C.midPoint.x)) / (N_KNOTS_HIGH - 1.);
-  
+
   // KNOT_Y is luminance of the spline at each knot
   float KNOT_Y_LOW[ N_KNOTS_LOW];
   for (int i = 0; i < N_KNOTS_LOW; i = i+1) {
@@ -461,7 +461,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_LOW[ 6] && logy <= KNOT_Y_LOW[ 7]) {
         cf[ 0] = C.coefsLow[6];  cf[ 1] = C.coefsLow[7];  cf[ 2] = C.coefsLow[8];  j = 6;
     }
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -494,7 +494,7 @@ float segmented_spline_c9_rev
     } else if ( logy > KNOT_Y_HIGH[ 6] && logy <= KNOT_Y_HIGH[ 7]) {
         cf[ 0] = C.coefsHigh[6];  cf[ 1] = C.coefsHigh[7];  cf[ 2] = C.coefsHigh[8];  j = 6;
     }
-    
+
     const float tmp[ 3] = mult_f3_f33( cf, M);
 
     float a = tmp[ 0];
@@ -513,6 +513,6 @@ float segmented_spline_c9_rev
     logx = log10(C.maxPoint.x);
 
   }
-  
+
   return pow10( logx);
 }

@@ -5,19 +5,19 @@
 //
 // ACES Color Space Conversion - ACESproxy (12-bit) to ACES
 //
-// converts ACESproxy (AP1 w/ ACESproxy encoding) to 
+// converts ACESproxy (AP1 w/ ACESproxy encoding) to
 //          ACES2065-1 (AP0 w/ linear encoding)
 //
-// This transform follows the formulas from S-2013-001. Please refer to the 
+// This transform follows the formulas from S-2013-001. Please refer to the
 // aforementioned document for the exact math and a table of reference values.
 //
 
 // *-*-*-*-*-*-*-*-*
-// ACESproxy is intended to be a transient encoding used only for signal 
+// ACESproxy is intended to be a transient encoding used only for signal
 // transmission in systems limited to 10- or 12-bit video signals.
-// ACESproxy is not intended for interchange, mastering finals, or archiving 
-// and as such should NOT be written into a container file in actual 
-// implementations! 
+// ACESproxy is not intended for interchange, mastering finals, or archiving
+// and as such should NOT be written into a container file in actual
+// implementations!
 // *-*-*-*-*-*-*-*-*
 
 
@@ -34,7 +34,7 @@ const int CVmax = 3760;
 
 
 float ACESproxy_to_lin
-( 
+(
   input varying int in,
   input varying float StepsPerStop,
   input varying float MidCVoffset,
@@ -48,7 +48,7 @@ float ACESproxy_to_lin
 
 
 void main
-(   
+(
     input varying float rIn,
     input varying float gIn,
     input varying float bIn,
@@ -60,13 +60,13 @@ void main
 )
 {
     // Prepare input values based on application bit depth handling
-    //  NOTE: This step is required for use with ctlrender. 
-    //  ctlrender scales input values from the bit depth of the input file to 
-    //  the range 0.0-1.0. For the reference images provided with the ACES 
-    //  Release, the ACESproxy files are written into a 16-bit TIFF file, and so 
-    //  will be divided by 65535 by ctlrender, resulting in values ranged 
-    //  0.0-1.0 going into this CTL transformation. Therefore, it is important 
-    //  to first scale the 0.0-1.0 ranged values to integer values appropriate 
+    //  NOTE: This step is required for use with ctlrender.
+    //  ctlrender scales input values from the bit depth of the input file to
+    //  the range 0.0-1.0. For the reference images provided with the ACES
+    //  Release, the ACESproxy files are written into a 16-bit TIFF file, and so
+    //  will be divided by 65535 by ctlrender, resulting in values ranged
+    //  0.0-1.0 going into this CTL transformation. Therefore, it is important
+    //  to first scale the 0.0-1.0 ranged values to integer values appropriate
     //  for the ACESproxy-to-linear function.
     int ACESproxy[3];
     ACESproxy[0] = rIn * 4095.0;

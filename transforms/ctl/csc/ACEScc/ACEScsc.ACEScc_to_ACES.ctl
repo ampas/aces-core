@@ -5,14 +5,14 @@
 //
 // ACES Color Space Conversion - ACEScc to ACES
 //
-// converts ACEScc (AP1 w/ ACESlog encoding) to 
+// converts ACEScc (AP1 w/ ACESlog encoding) to
 //          ACES2065-1 (AP0 w/ linear encoding)
 //
 // This transform follows the formulas from section 4.4 in S-2014-003
 //
 
 // *-*-*-*-*-*-*-*-*
-// ACEScc is intended to be transient and internal to software or hardware 
+// ACEScc is intended to be transient and internal to software or hardware
 // systems, and is specifically not intended for interchange or archiving.
 // ACEScc should NOT be written into a container file in actual implementations!
 // *-*-*-*-*-*-*-*-*
@@ -36,7 +36,7 @@ float ACEScc_to_lin( input varying float in)
 
 
 void main
-(   
+(
     input varying float rIn,
     input varying float gIn,
     input varying float bIn,
@@ -53,7 +53,7 @@ void main
     lin_AP1[2] = ACEScc_to_lin( bIn);
 
     float ACES[3] = mult_f3_f44( lin_AP1, AP1_2_AP0_MAT);
-  
+
     rOut = ACES[0];
     gOut = ACES[1];
     bOut = ACES[2];

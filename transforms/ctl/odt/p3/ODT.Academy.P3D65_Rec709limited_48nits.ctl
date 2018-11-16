@@ -2,7 +2,7 @@
 // <ACEStransformID>ODT.Academy.P3D65_709limit_48nits.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - P3D65 (Rec.709 Limited)</ACESuserName>
 
-// 
+//
 // Output Device Transform - P3D65 (Rec.709 Limited)
 //
 
@@ -11,9 +11,9 @@
 //  This transform is intended for mapping OCES onto a projector with P3
 //  primaries that has been set up such that equal neutral RGB code values
 //  sent to the projector produce a chromaticity equal to that of D65
-//  and that the peak neutral luminance is 48 nits. The assumed observer 
+//  and that the peak neutral luminance is 48 nits. The assumed observer
 //  adapted white is D65, and the viewing environment is a dark surround.
-// 
+//
 //  Color values are limited to the Rec.709 gamut for applications where a
 //  match is expected between a digital cinema projected image and a Rec.709
 //  reference monitor.
@@ -21,7 +21,7 @@
 //  A possible use case for this transform would be mastering for a theatrical
 //  release with a creative white point of D65 and ultimate delivery in Rec.709.
 //
-// Device Primaries : 
+// Device Primaries :
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.68      0.32
 //              Green:        0.265     0.69
@@ -57,11 +57,11 @@ const Chromaticities LIMITING_PRI = REC709_PRI;
 const float DISPGAMMA = 2.6;
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -95,17 +95,17 @@ void main
 
     // Constrain to limiting primaries
     XYZ = limit_to_primaries( XYZ, LIMITING_PRI);
-    
+
     // CIE XYZ to display primaries
     linearCV = mult_f3_f44( XYZ, XYZ_2_DISPLAY_PRI_MAT);
 
     // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
-  
+
     // Encode linear code values with transfer function
     float outputCV[3] = pow_f3( linearCV, 1./ DISPGAMMA);
-  
+
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

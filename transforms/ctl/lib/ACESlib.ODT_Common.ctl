@@ -3,7 +3,7 @@
 // <ACESuserName>ACES 1.0 Lib - ODT Common</ACESuserName>
 
 //
-// Contains functions and constants shared by forward and inverse ODT transforms 
+// Contains functions and constants shared by forward and inverse ODT transforms
 //
 
 
@@ -11,12 +11,12 @@
 
 // Target white and black points for cinema system tonescale
 const float CINEMA_WHITE = 48.0;
-const float CINEMA_BLACK = pow10(log10(0.02)); // CINEMA_WHITE / 2400. 
-    // CINEMA_BLACK is defined in this roundabout manner in order to be exactly equal to 
+const float CINEMA_BLACK = pow10(log10(0.02)); // CINEMA_WHITE / 2400.
+    // CINEMA_BLACK is defined in this roundabout manner in order to be exactly equal to
     // the result returned by the cinema 48-nit ODT tonescale.
-    // Though the min point of the tonescale is designed to return 0.02, the tonescale is 
-    // applied in log-log space, which loses precision on the antilog. The tonescale 
-    // return value is passed into Y_2_linCV, where CINEMA_BLACK is subtracted. If 
+    // Though the min point of the tonescale is designed to return 0.02, the tonescale is
+    // applied in log-log space, which loses precision on the antilog. The tonescale
+    // return value is passed into Y_2_linCV, where CINEMA_BLACK is subtracted. If
     // CINEMA_BLACK is defined as simply 0.02, then the return value of this subfunction
     // is very, very small but not equal to 0, and attaining a CV of 0 is then impossible.
     // For all intents and purposes, CINEMA_BLACK=0.02.
@@ -39,12 +39,12 @@ const float D60_2_D65_CAT[3][3] = calculate_cat_matrix( AP0.white, REC709_PRI.wh
 
 
 
-float Y_2_linCV( float Y, float Ymax, float Ymin) 
+float Y_2_linCV( float Y, float Ymax, float Ymin)
 {
   return (Y - Ymin) / (Ymax - Ymin);
 }
 
-float linCV_2_Y( float linCV, float Ymax, float Ymin) 
+float linCV_2_Y( float linCV, float Ymax, float Ymin)
 {
   return linCV * (Ymax - Ymin) + Ymin;
 }
@@ -69,7 +69,7 @@ float[3] linCV_2_Y_f3( float linCV[3], float Ymax, float Ymin)
 
 float[3] darkSurround_to_dimSurround( float linearCV[3])
 {
-  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT); 
+  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
   float xyY[3] = XYZ_2_xyY(XYZ);
   xyY[2] = clamp( xyY[2], 0., HALF_POS_INF);
@@ -81,7 +81,7 @@ float[3] darkSurround_to_dimSurround( float linearCV[3])
 
 float[3] dimSurround_to_darkSurround( float linearCV[3])
 {
-  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT); 
+  float XYZ[3] = mult_f3_f44( linearCV, AP1_2_XYZ_MAT);
 
   float xyY[3] = XYZ_2_xyY(XYZ);
   xyY[2] = clamp( xyY[2], 0., HALF_POS_INF);
@@ -97,7 +97,7 @@ float[3] dimSurround_to_darkSurround( float linearCV[3])
 /* ---- Functions to compress highlights ---- */
 // allow for simulated white points without clipping
 
-float roll_white_fwd( 
+float roll_white_fwd(
     float in,      // color value to adjust (white scaled to around 1.0)
     float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
     float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)
@@ -122,7 +122,7 @@ float roll_white_fwd(
     return out;
 }
 
-float roll_white_rev( 
+float roll_white_rev(
     float in,      // color value to adjust (white scaled to around 1.0)
     float new_wht, // white adjustment (e.g. 0.9 for 10% darkening)
     float width    // adjusted width (e.g. 0.25 for top quarter of the tone scale)

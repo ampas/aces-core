@@ -2,7 +2,7 @@
 // <ACEStransformID>InvODT.Academy.DCDM.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - DCDM</ACESuserName>
 
-// 
+//
 // Inverse Output Device Transform - DCDM (X'Y'Z')
 //
 
@@ -16,15 +16,15 @@ import "ACESlib.Tonescales";
 
 
 /* ----- ODT Parameters ------ */
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

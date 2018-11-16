@@ -2,18 +2,18 @@
 // <ACEStransformID>ODT.Academy.P3D60_48nits.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - P3-D60</ACESuserName>
 
-// 
+//
 // Output Device Transform - P3D60
 //
 
 //
 // Summary :
-//  This transform is intended for mapping OCES onto a P3 digital cinema 
-//  projector that is calibrated to a D60 white point at 48 cd/m^2. The assumed 
-//  observer adapted white is D60, and the viewing environment is that of a dark 
-//  theater. 
+//  This transform is intended for mapping OCES onto a P3 digital cinema
+//  projector that is calibrated to a D60 white point at 48 cd/m^2. The assumed
+//  observer adapted white is D60, and the viewing environment is that of a dark
+//  theater.
 //
-// Device Primaries : 
+// Device Primaries :
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.68      0.32
 //              Green:        0.265     0.69
@@ -43,14 +43,14 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = P3D60_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

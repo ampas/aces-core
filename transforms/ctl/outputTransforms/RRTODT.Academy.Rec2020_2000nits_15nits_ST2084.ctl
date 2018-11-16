@@ -2,34 +2,34 @@
 // <ACEStransformID>ODT.Academy.Rec2020_2000nits_15nits_ST2084.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - Rec.2020 ST2084 (2000 nits)</ACESuserName>
 
-// 
+//
 // Output Transform - Rec.2020 (2000 cd/m^2)
 //
 
 //
 // Summary :
-//  This transform maps ACES onto a Rec.2020 ST.2084 HDR display calibrated 
-//  to a D65 white point at 2000 cd/m^2. The assumed observer adapted white is 
+//  This transform maps ACES onto a Rec.2020 ST.2084 HDR display calibrated
+//  to a D65 white point at 2000 cd/m^2. The assumed observer adapted white is
 //  D65, and the viewing environment is that of a dark surround. Mid-gray
 //  luminance is targeted at 15 cd/m^2.
 //
 // NOTE :
-//  The parameterized "Output Transform" function used as basis for this 
-//  transform includes a parameter labeled "SURROUND". However, as noted in 
+//  The parameterized "Output Transform" function used as basis for this
+//  transform includes a parameter labeled "SURROUND". However, as noted in
 //  "ACESlib.OutputTransforms.ctl", this sub-module is currently a "placeholder"
-//  and as such currently only supports a rendering intended for dark surround 
-//  environments. While it is planned for future releases to fully activate the 
-//  this module and provide adjustment for dark/dim/normal surrounds, setting 
+//  and as such currently only supports a rendering intended for dark surround
+//  environments. While it is planned for future releases to fully activate the
+//  this module and provide adjustment for dark/dim/normal surrounds, setting
 //  SURROUND equal to either dim or normal will have no effect at this time.
-//  
+//
 //  That being said, these Output Transforms have been used successfully on
-//  major feature and television projects when mastering for home HDR where a 
-//  dim surround environment is assumed. Based on that, these transforms are 
+//  major feature and television projects when mastering for home HDR where a
+//  dim surround environment is assumed. Based on that, these transforms are
 //  considered adequate for use for dim surround mastering, although, as always,
 //  creative adjustments to contrast and saturation may be desirable and should
 //  be saved as a "trim pass."
 //
-// Device Primaries : 
+// Device Primaries :
 //  Primaries are those specified in Rec. ITU-R BT.2020
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.708     0.292
@@ -39,8 +39,8 @@
 //              18% Gray:     0.3127    0.329     15 cd/m^2
 //
 // Display EOTF :
-//  The reference electro-optical transfer function specified in SMPTE ST 
-//  2084-2014. This transform makes no attempt to address the Annex functions 
+//  The reference electro-optical transfer function specified in SMPTE ST
+//  2084-2014. This transform makes no attempt to address the Annex functions
 //  which address integer quantization.
 //
 // Assumed observer adapted white point:
@@ -66,7 +66,7 @@ const Chromaticities DISPLAY_PRI = REC2020_PRI; // encoding primaries (device se
 const Chromaticities LIMITING_PRI = REC2020_PRI;// limiting primaries
 
 const int EOTF = 0;                             // 0: ST-2084 (PQ)
-                                                // 1: BT.1886 (Rec.709/2020 settings) 
+                                                // 1: BT.1886 (Rec.709/2020 settings)
                                                 // 2: sRGB (mon_curve w/ presets)
                                                 // 3: gamma 2.6
                                                 // 4: linear (no EOTF)
@@ -77,7 +77,7 @@ const int SURROUND = 0;                         // 0: dark ( NOTE: this is the o
                                                 // 2: normal ( *inactive* - selecting this will have no effect )
 
 const bool STRETCH_BLACK = true;                // stretch black luminance to a PQ code value of 0
-const bool D60_SIM = false;                       
+const bool D60_SIM = false;
 const bool LEGAL_RANGE = false;
 
 

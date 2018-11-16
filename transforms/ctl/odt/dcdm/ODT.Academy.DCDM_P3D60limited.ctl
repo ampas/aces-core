@@ -2,32 +2,32 @@
 // <ACEStransformID>ODT.Academy.DCDM_P3D60.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - DCDM (P3D60 Limited)</ACESuserName>
 
-// 
+//
 // Output Device Transform - DCDM (X'Y'Z') (P3D60 Limited)
 //
 
 //
 // Summary:
-//  This ODT encodes XYZ colorimetry that is gamut-limited to P3 primaries with 
+//  This ODT encodes XYZ colorimetry that is gamut-limited to P3 primaries with
 //  a D60 whitepoint. This has two advantages:
-// 
-//   1) "Gamut mapping" is explicitly controlled by the ODT by clipping any XYZ 
-//      values that map outside of the P3 gamut. Without this step, it would be 
-//      left to the projector to handle any XYZ values outside of the P3 gamut. 
-//      In most devices, this is performed using a simple clip, but not always.   
-//      If out-of-gamut values are left to be handled by the device, different 
-//      image appearance could potentially result on different devices even 
+//
+//   1) "Gamut mapping" is explicitly controlled by the ODT by clipping any XYZ
+//      values that map outside of the P3 gamut. Without this step, it would be
+//      left to the projector to handle any XYZ values outside of the P3 gamut.
+//      In most devices, this is performed using a simple clip, but not always.
+//      If out-of-gamut values are left to be handled by the device, different
+//      image appearance could potentially result on different devices even
 //      though they have the same gamut.
 //
-//   2) Assuming the content was graded (and approved) on a projector with a 
+//   2) Assuming the content was graded (and approved) on a projector with a
 //      P3D60 gamut, limiting the colors to that gamut assures there will be
-//      no unexpected color appearance if the DCP is later viewed on a device 
+//      no unexpected color appearance if the DCP is later viewed on a device
 //      with a wider gamut.
-// 
-//  The assumed observer adapted white is D60, and the viewing environment is 
-//  that of a dark theater. 
 //
-//  This transform shall be used for a device calibrated to match the Digital 
+//  The assumed observer adapted white is D60, and the viewing environment is
+//  that of a dark theater.
+//
+//  This transform shall be used for a device calibrated to match the Digital
 //  Cinema Reference Projector Specification outlined in SMPTE RP 431-2-2007.
 //
 // Assumed observer adapted white point:
@@ -51,15 +51,15 @@ import "ACESlib.OutputTransforms";
 /* ----- ODT Parameters ------ */
 const Chromaticities LIMITING_PRI = P3D60_PRI;
 
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

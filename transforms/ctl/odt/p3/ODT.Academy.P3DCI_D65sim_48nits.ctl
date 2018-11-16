@@ -2,18 +2,18 @@
 // <ACEStransformID>ODT.Academy.P3DCI_D65sim_48nits.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - P3-DCI (D65 simulation)</ACESuserName>
 
-// 
+//
 // Output Device Transform - P3DCI (D65 Simulation)
 //
 
 //
 // Summary :
-//  This transform is intended for mapping OCES onto a P3 digital cinema 
-//  projector that is calibrated to a DCI white point at 48 cd/m^2. The assumed 
+//  This transform is intended for mapping OCES onto a P3 digital cinema
+//  projector that is calibrated to a DCI white point at 48 cd/m^2. The assumed
 //  observer adapted white is D65, and the viewing environment is that of a dark
-//  theater. 
+//  theater.
 //
-// Device Primaries : 
+// Device Primaries :
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.68      0.32
 //              Green:        0.265     0.69
@@ -44,20 +44,20 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = P3DCI_PRI;
 const float XYZ_2_DISPLAY_PRI_MAT[4][4] = XYZtoRGB( DISPLAY_PRI, 1.0);
 
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 // Rolloff white settings for P3DCI (D65 simulation)
 const float NEW_WHT = 0.908;
-const float ROLL_WIDTH = 0.5;    
+const float ROLL_WIDTH = 0.5;
 const float SCALE = 0.9575;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -83,23 +83,23 @@ void main
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
     // --- Compensate for different white point being darker  --- //
-    // This adjustment corrects for an issue that exists in ODTs where the 
-    // device is calibrated to a white chromaticity other than that of the 
+    // This adjustment corrects for an issue that exists in ODTs where the
+    // device is calibrated to a white chromaticity other than that of the
     // adapted white.
-    // In order to produce D65 on a device calibrated to DCI white (i.e. 
-    // equal display code values yield CIE x,y chromaticities of 0.314, 0.351) 
-    // the blue channel is higher than red and green to compensate for the 
-    // "greener" DCI white. This is the intended behavior but it means that 
-    // without compensation, as highlights increase, the blue channel will hit 
-    // the device maximum first and clip, resulting in a chromaticity shift as 
+    // In order to produce D65 on a device calibrated to DCI white (i.e.
+    // equal display code values yield CIE x,y chromaticities of 0.314, 0.351)
+    // the blue channel is higher than red and green to compensate for the
+    // "greener" DCI white. This is the intended behavior but it means that
+    // without compensation, as highlights increase, the blue channel will hit
+    // the device maximum first and clip, resulting in a chromaticity shift as
     // the red and green channels continue to increase.
-    // To avoid this clipping behavior, a slight scale factor is applied to 
-    // allow the ODT to simulate D65 within the DCI calibration white point. 
-    // However, the magnitude of the scale factor required was considered too 
-    // large; therefore, the scale factor was reduced and the additional 
-    // required compression was achieved via a reshaping of the highlight 
-    // rolloff in conjunction with the scale. The shape of this rolloff was 
-    // determined through subjective experiments and deemed to best reproduce 
+    // To avoid this clipping behavior, a slight scale factor is applied to
+    // allow the ODT to simulate D65 within the DCI calibration white point.
+    // However, the magnitude of the scale factor required was considered too
+    // large; therefore, the scale factor was reduced and the additional
+    // required compression was achieved via a reshaping of the highlight
+    // rolloff in conjunction with the scale. The shape of this rolloff was
+    // determined through subjective experiments and deemed to best reproduce
     // the "character" of the highlights in the P3D65 ODT.
 
     // Roll off highlights to avoid need for as much scaling

@@ -2,7 +2,7 @@
 // <ACEStransformID>InvODT.Academy.P3DCI_D65sim_48nits.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - P3-DCI (D65 simulation)</ACESuserName>
 
-// 
+//
 // Inverse Output Device Transform - P3DCI (D65 Simulation)
 //
 
@@ -19,20 +19,20 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = P3DCI_PRI;
 const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(DISPLAY_PRI,1.0);
 
-const float DISPGAMMA = 2.6; 
+const float DISPGAMMA = 2.6;
 
 // Rolloff white settings for P3DCI (D65 simulation)
 const float NEW_WHT = 0.908;
-const float ROLL_WIDTH = 0.5;    
+const float ROLL_WIDTH = 0.5;
 const float SCALE = 0.9575;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

@@ -49,22 +49,22 @@ float[3] clip_f3( float in[3])
 
 float clamp( float in, float clampMin, float clampMax)
 {
-  // Note: Numeric constants can be used in place of a min or max value (i.e. 
+  // Note: Numeric constants can be used in place of a min or max value (i.e.
   // use HALF_NEG_INF in place of clampMin or HALF_POS_INF in place of clampMax)
-  
+
   return max( clampMin, min(in, clampMax));
 }
 
 float[3] clamp_f3( float in[3], float clampMin, float clampMax)
 {
-  // Note: Numeric constants can be used in place of a min or max value (i.e. 
+  // Note: Numeric constants can be used in place of a min or max value (i.e.
   // use HALF_NEG_INF in place of clampMin or HALF_POS_INF in place of clampMax)
 
   float out[3];
   out[0] = clamp( in[0], clampMin, clampMax);
   out[1] = clamp( in[1], clampMin, clampMax);
   out[2] = clamp( in[2], clampMin, clampMax);
-      
+
   return out;
 }
 
@@ -107,12 +107,12 @@ float[3] log10_f3( float a[3])
 float round(float x)
 {
   int x1;
- 
+
   if (x < 0.0)
     x1 = x - 0.5;
   else
     x1 = x + 0.5;
- 
+
   return x1;
 }
 
@@ -124,11 +124,11 @@ float log2(float x)
 int sign( float x)
 {
     // Signum function:
-    //  sign(X) returns 1 if the element is greater than zero, 0 if it equals zero 
+    //  sign(X) returns 1 if the element is greater than zero, 0 if it equals zero
     //  and -1 if it is less than zero
 
     int y;
-    if (x < 0) { 
+    if (x < 0) {
         y = -1;
     } else if (x > 0) {
         y = 1;

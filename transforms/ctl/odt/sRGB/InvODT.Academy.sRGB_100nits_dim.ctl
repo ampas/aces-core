@@ -2,7 +2,7 @@
 // <ACEStransformID>InvODT.Academy.RGBmonitor_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - sRGB</ACESuserName>
 
-// 
+//
 // Inverse Output Device Transform - RGB computer monitor
 //
 
@@ -19,23 +19,23 @@ import "ACESlib.Tonescales";
 const Chromaticities DISPLAY_PRI = REC709_PRI;
 const float DISPLAY_PRI_2_XYZ_MAT[4][4] = RGBtoXYZ(DISPLAY_PRI,1.0);
 
-const float DISPGAMMA = 2.4; 
+const float DISPGAMMA = 2.4;
 const float OFFSET = 0.055;
 
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
     output varying float bOut,
     output varying float aOut
 )
-{  
+{
     float outputCV[3] = { rIn, gIn, bIn};
 
     // Decode to linear code values with inverse transfer function

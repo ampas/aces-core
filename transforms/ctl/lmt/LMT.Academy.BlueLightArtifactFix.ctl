@@ -3,10 +3,10 @@
 // <ACESuserName>ACES 1.0 Look - Blue Light Artifact Fix</ACESuserName>
 
 //
-// LMT for desaturating blue hues in order to reduce the artifact where bright 
-// blue colors (e.g. sirens, headlights, LED lighting, etc.) may become 
+// LMT for desaturating blue hues in order to reduce the artifact where bright
+// blue colors (e.g. sirens, headlights, LED lighting, etc.) may become
 // oversaturated or exhibit hue shifts as a result of clipping.
-// 
+//
 
 
 const float correctionMatrix[3][3] = {
@@ -16,11 +16,11 @@ const float correctionMatrix[3][3] = {
 };
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,

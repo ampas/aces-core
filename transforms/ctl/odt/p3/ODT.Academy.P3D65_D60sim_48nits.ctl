@@ -2,7 +2,7 @@
 // <ACEStransformID>ODT.Academy.P3D65_D60sim_48nits.a1.1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - P3D65 (D60 simulation)</ACESuserName>
 
-// 
+//
 // Output Device Transform - P3D65 (D60 simulation)
 //
 
@@ -10,11 +10,11 @@
 // Summary :
 //  This transform is intended for mapping OCES onto a projector with P3
 //  primaries that has been set up such that equal neutral RGB code values sent
-//  to the projector produce a chromaticity equal to that of D65 and that the 
-//  peak neutral luminance is 48 nits. The assumed observer adapted white is 
+//  to the projector produce a chromaticity equal to that of D65 and that the
+//  peak neutral luminance is 48 nits. The assumed observer adapted white is
 //  D60, and the viewing environment is a dark surround.
 //
-// Device Primaries : 
+// Device Primaries :
 //  CIE 1931 chromaticities:  x         y         Y
 //              Red:          0.68      0.32
 //              Green:        0.265     0.69
@@ -50,11 +50,11 @@ const float DISPGAMMA = 2.6;
 const float SCALE = 0.964;
 
 
-void main 
+void main
 (
-    input varying float rIn, 
-    input varying float gIn, 
-    input varying float bIn, 
+    input varying float rIn,
+    input varying float gIn,
+    input varying float bIn,
     input varying float aIn,
     output varying float rOut,
     output varying float gOut,
@@ -80,18 +80,18 @@ void main
     linearCV[2] = Y_2_linCV( rgbPost[2], CINEMA_WHITE, CINEMA_BLACK);
 
     // --- Compensate for different white point being darker  --- //
-    // This adjustment corrects for an issue that exists in ODTs where the 
-    // device is calibrated to a white chromaticity other than that of the 
+    // This adjustment corrects for an issue that exists in ODTs where the
+    // device is calibrated to a white chromaticity other than that of the
     // adapted white.
-    // In order to produce D60 on a device calibrated to D65 white point (i.e. 
-    // equal display code values yield CIE x,y chromaticities of 0.3127, 0.329) 
-    // the red channel is higher than green and blue to compensate for the 
-    // "bluer" D65 white. This is the intended behavior but it means that 
-    // without compensation, as highlights increase, the red channel will hit 
-    // the device maximum first and clip, resulting in a chromaticity shift as 
+    // In order to produce D60 on a device calibrated to D65 white point (i.e.
+    // equal display code values yield CIE x,y chromaticities of 0.3127, 0.329)
+    // the red channel is higher than green and blue to compensate for the
+    // "bluer" D65 white. This is the intended behavior but it means that
+    // without compensation, as highlights increase, the red channel will hit
+    // the device maximum first and clip, resulting in a chromaticity shift as
     // the green and blue channels continue to increase.
-    // To avoid this clipping behavior, a slight scale factor is applied to 
-    // allow the ODTs to simulate D60 within the D65 calibration white point. 
+    // To avoid this clipping behavior, a slight scale factor is applied to
+    // allow the ODTs to simulate D60 within the D65 calibration white point.
 
     // Scale and clamp white to avoid casted highlights due to D60 simulation
     linearCV[0] = min( linearCV[0], 1.0) * SCALE;
@@ -108,10 +108,10 @@ void main
     // Handle out-of-gamut values
     // Clip values < 0 or > 1 (i.e. projecting outside the display primaries)
     linearCV = clamp_f3( linearCV, 0., 1.);
-  
+
     // Encode linear code values with transfer function
     float outputCV[3] = pow_f3( linearCV, 1./ DISPGAMMA);
-  
+
     rOut = outputCV[0];
     gOut = outputCV[1];
     bOut = outputCV[2];

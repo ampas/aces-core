@@ -2,7 +2,7 @@
 // <ACEStransformID>InvRRT.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 - Inverse RRT</ACESuserName>
 
-// 
+//
 // Inverse Reference Rendering Transform (RRT)
 //
 //   Input is OCES
@@ -18,8 +18,8 @@ import "ACESlib.Tonescales";
 
 
 
-void main 
-( 
+void main
+(
   input varying float rIn,
   input varying float gIn,
   input varying float bIn,
