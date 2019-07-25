@@ -62,7 +62,7 @@ Included in ACES 1.1:
     * Miscellaneous white space, line wrap, and typo fixes
     * Miscellaneous README and CTL comment updates
     * Miscellaneous LaTeX documentation typo and code fixes
-    * Update ACEStranformIDs where appropriate
+    * Update ACEStransformIDs where appropriate
     * Update README and CHANGELOG
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
