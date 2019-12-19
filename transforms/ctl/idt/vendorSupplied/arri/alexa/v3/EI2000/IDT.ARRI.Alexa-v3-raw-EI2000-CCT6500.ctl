@@ -1,5 +1,5 @@
 
-// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI2000-CCT6500.a1.v2</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v3-raw-EI2000-CCT6500.a1.v2</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - ARRIRAW (EI2000, 6500K)</ACESuserName>
 
 // ARRI ALEXA IDT for ALEXA linear files
