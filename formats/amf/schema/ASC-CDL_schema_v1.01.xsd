@@ -1,0 +1,200 @@
+<!-- Author: Ana B. Benitez			-->
+<!-- Company: Thomson				-->
+<!-- Email: ana.benitez@thomson.net	-->
+<!-- Date: July 20, 2007			-->
+	
+<schema targetNamespace="urn:ASC:CDL:v1.01" 
+	xmlns="http://www.w3.org/2001/XMLSchema" 
+	xmlns:cdl="urn:ASC:CDL:v1.01" 
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified">
+
+	<!-- Definition of ColorDecisionList element -->
+	<element name="ColorDecisionList" type="cdl:ColorDecisionListType"/>
+
+	<!-- Definition of ColorDecisionListType type -->
+	<complexType name="ColorDecisionListType">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="InputDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element name="ViewingDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element ref="cdl:ColorDecision" minOccurs="1" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+	<!-- Definition of ColorDecision element -->
+	<element name="ColorDecision" type="cdl:ColorDecisionType"/>
+
+	<!-- Definition of ColorDecisionType type -->
+	<complexType name="ColorDecisionType">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="InputDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element name="ViewingDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element ref="cdl:MediaBase" minOccurs="0" maxOccurs="1"/>
+			<element ref="cdl:ColorCorrectionBase" minOccurs="1" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<!-- Definition of MediaBase element -->
+	<element name="MediaBase" abstract="true"/>
+
+	<!-- Definition of MediaBaseType type -->
+	<complexType name="MediaBaseType" abstract="true"/>
+
+	<!-- Definition of MediaRef element -->
+	<element name="MediaRef" type="cdl:MediaRefType" substitutionGroup="cdl:MediaBase"/>
+
+	<!-- Definition of MediaRefType type -->
+	<complexType name="MediaRefType">
+		<complexContent>
+			<extension base="cdl:MediaBaseType">
+				<attribute name="ref" type="anyURI" use="required"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<!-- Definition of ColorCorrectionCollection element -->
+	<element name="ColorCorrectionCollection" type="cdl:ColorCorrectionCollectionType"/>
+
+	<!-- Definition of ColorCorrectionCollectionType type -->
+	<complexType name="ColorCorrectionCollectionType">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="InputDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element name="ViewingDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element ref="cdl:ColorCorrection" minOccurs="1" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+	<!-- Definition of ColorCorrectionBase element -->
+	<element name="ColorCorrectionBase" abstract="true"/>
+
+	<!-- Definition of ColorCorrectionBaseType type -->
+	<complexType name="ColorCorrectionBaseType" abstract="true">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="unbounded"/>
+			<element name="InputDescription" type="string" minOccurs="0" maxOccurs="1"/>
+			<element name="ViewingDescription" type="string" minOccurs="0" maxOccurs="1"/>
+		</sequence>
+	</complexType>
+
+	<!-- Definition of ColorCorrectionRef and ASC_CC_XML elements -->
+	<element name="ColorCorrectionRef" type="cdl:ColorCorrectionRefType" substitutionGroup="cdl:ColorCorrectionBase"/>
+	<element name="ASC_CC_XML" type="cdl:ColorCorrectionRefType" substitutionGroup="cdl:ColorCorrectionRef"/>
+
+	<!-- Definition of ColorCorrectionRefType type -->
+	<complexType name="ColorCorrectionRefType">
+		<complexContent>
+			<extension base="cdl:ColorCorrectionBaseType">
+				<attribute name="ref" type="anyURI" use="required"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<!-- Definition of ColorCorrection element -->
+	<element name="ColorCorrection" type="cdl:ColorCorrectionType" substitutionGroup="cdl:ColorCorrectionBase"/>
+
+	<!-- Definition of ColorCorrectionType type -->
+	<complexType name="ColorCorrectionType">
+		<complexContent>
+			<extension base="cdl:ColorCorrectionBaseType">
+				<sequence>
+					<element ref="cdl:ColorNodeBase" minOccurs="1" maxOccurs="unbounded"/>
+				</sequence>
+				<attribute name="id" type="anyURI" use="required"/>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<!-- Definition of ColorNodeBase element -->
+	<element name="ColorNodeBase" abstract="true"/>
+
+	<!-- Definition of ColorNodeBaseType type -->
+	<complexType name="ColorNodeBaseType" abstract="true">
+		<sequence>
+			<element name="Description" type="string" minOccurs="0" maxOccurs="unbounded"/>
+		</sequence>
+	</complexType>
+
+	<!-- Definition of SOPNode and ASC_SOP elements -->
+	<element name="SOPNode" type="cdl:SOPNodeType" substitutionGroup="cdl:ColorNodeBase"/>
+	<element name="ASC_SOP" type="cdl:SOPNodeType" substitutionGroup="cdl:SOPNode"/>
+
+	<!-- Definition of SOPNodeType type -->
+	<complexType name="SOPNodeType">
+		<complexContent>
+			<extension base="cdl:ColorNodeBaseType">
+				<sequence>
+					<element name="Slope" minOccurs="1" maxOccurs="1">
+						<simpleType>
+							<restriction base="cdl:nonNegativeFloatListType">
+								<length value="3"/>
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="Offset" minOccurs="1" maxOccurs="1">
+						<simpleType>
+							<restriction base="cdl:floatListType">
+								<length value="3"/>
+							</restriction>
+						</simpleType>
+					</element>
+					<element name="Power" minOccurs="1" maxOccurs="1">
+						<simpleType>
+							<restriction base="cdl:positiveFloatListType">
+								<length value="3"/>
+							</restriction>
+						</simpleType>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<!-- Definition of SatNode and ASC_SAT elements -->
+	<element name="SatNode" type="cdl:SatNodeType" substitutionGroup="cdl:ColorNodeBase"/>
+	<element name="ASC_SAT" type="cdl:SatNodeType" substitutionGroup="cdl:SatNode"/>
+
+	<!-- Definition of SatNodeType type -->
+	<complexType name="SatNodeType">
+		<complexContent>
+			<extension base="cdl:ColorNodeBaseType">
+				<sequence>
+					<element name="Saturation" type="cdl:nonNegativeFloatType" minOccurs="1" maxOccurs="1"/>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+
+	<!-- Definition of threeNonNegativeFloatListType type -->
+	<simpleType name="nonNegativeFloatListType">
+		<list itemType="cdl:nonNegativeFloatType"/>
+	</simpleType>
+
+	<!-- Definition of floatListType type -->
+	<simpleType name="floatListType">
+		<list itemType="float"/>
+	</simpleType>
+
+	<!-- Definition of positiveFloatListType type -->
+	<simpleType name="positiveFloatListType">
+		<list itemType="cdl:positiveFloatType"/>
+	</simpleType>
+
+	<!-- Definition of nonNegativeFloatType type -->
+	<simpleType name="nonNegativeFloatType">
+		<restriction base="float">
+			<minInclusive value="0.0"/>
+		</restriction>
+	</simpleType>
+
+	<!-- Definition of positiveFloatType type -->
+	<simpleType name="positiveFloatType">
+		<restriction base="float">
+			<minExclusive value="0.0"/>
+		</restriction>
+	</simpleType>
+
+</schema>
+
