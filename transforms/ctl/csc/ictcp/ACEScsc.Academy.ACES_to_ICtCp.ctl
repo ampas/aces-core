@@ -14,13 +14,18 @@
 
 // The AP0_2_LMS_MAT is a combination of the following individual matrices:
 //   AP0_2_XYZ     : standard ACES to XYZ(D60) conversion matrix
-//   D60_2_D65_CAT : XYZ(D60) to XYZ(D65) chromatic adaptation (using HPE)
-//   XYZ_2_LMS     : Hunt-Pointer-Estevez (normalized to D65) cone primary matrix
-//   CROSSTALK     : the 4% crosstalk matrix described in Dolby ICtCp white paper
+//   D60_2_D65_CAT : XYZ(D60) to XYZ(D65) chromatic adaptation (using CAT02)
+//   XYZ_2_LMS     : Hunt-Pointer-Estevez (normalized to D65) cone primary 
+//                   matrix, using values from the Dolby ICtCp white paper:
+//                              | 0.4002 0.7076 -0.0808 |
+//                              |-0.2263 1.1653  0.0457 |
+//                              | 0      0       0.9182 |
+//   CROSSTALK     : the 4% crosstalk matrix described in the Dolby ICtCp white
+//                   paper
 const float AP0_2_LMS_MAT[3][3] = {
-  { 0.3758772462,  0.0147938370,  0.0400043704},
-  { 0.6149127676,  0.9848833209,  0.0400043704},
-  {-0.0160266520, -0.0034272592,  0.9201005200}
+  { 0.5729360781,  0.1916984459,  0.0324676922},
+  { 0.5052187675,  0.8013733145,  0.0551294631},
+  {-0.0781710859,  0.0069006377,  0.9123015294}
 };
 
 
