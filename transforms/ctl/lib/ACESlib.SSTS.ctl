@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.SSTS.a1.1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACESlib.SSTS.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES 1.0 Lib - SSTS</ACESuserName>
 
 //

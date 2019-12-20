@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESutil.OCIOshaper_to_Lin_param.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACESutil.OCIOshaper_to_Lin_param.a1.0.3</ACEStransformID>
 // <ACESuserName>OCIO Shaper to Linear (Parametric)</ACESuserName>
 
 // 

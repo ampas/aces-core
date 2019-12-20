@@ -1,5 +1,5 @@
 
-// <ACEStransformID>IDT.Sony.SLog1_SGamut_10i.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.Sony.SLog1_SGamut_10i.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - Sony SLog1</ACESuserName>
 
 //

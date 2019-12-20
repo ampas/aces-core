@@ -1,5 +1,5 @@
 
-// <ACEStransformID>IDT.ARRI.Alexa-v2-logC-EI1600-CCT2900.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v2-logC-EI1600-CCT2900.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - ARRI V2 LogC (EI1600, 2900K)</ACESuserName>
 
 // ARRI ALEXA IDT for ALEXA logC files

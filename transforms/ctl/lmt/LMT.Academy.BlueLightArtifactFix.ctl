@@ -1,5 +1,5 @@
 
-// <ACEStransformID>LMT.Academy.BlueLightArtifactFix.a1.1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:LMT.Academy.BlueLightArtifactFix.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES 1.0 Look - Blue Light Artifact Fix</ACESuserName>
 
 //

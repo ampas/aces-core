@@ -1,5 +1,5 @@
 
-// <ACEStransformID>IDT.ARRI.Alexa-v2-logC-EI500-CCT3500.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v2-logC-EI500-CCT3500.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - ARRI V2 LogC (EI500, 3500K)</ACESuserName>
 
 // ARRI ALEXA IDT for ALEXA logC files
