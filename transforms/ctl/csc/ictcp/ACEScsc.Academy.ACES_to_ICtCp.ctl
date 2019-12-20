@@ -61,6 +61,10 @@ float Y_2_ST2084( float C )
   return N;
 }
 
+// Scale factor equal to PQ_rev( lin_2_acescct( 0.18) ) / 0.18
+const float scale = 209.;
+
+
 
 void main
 (   
@@ -75,6 +79,9 @@ void main
 )
 {
     float ACES[3] = { rIn, gIn, bIn};
+    
+    // Apply scale factor
+    ACES = mult_f_f3( scale, ACES);
 
     // Calculate LMS
     float LMS[3] = mult_f3_f33( ACES, AP0_2_LMS_MAT);

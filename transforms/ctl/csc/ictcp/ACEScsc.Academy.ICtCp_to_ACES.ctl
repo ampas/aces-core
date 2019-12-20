@@ -56,6 +56,8 @@ float ST2084_2_Y( float N )
   return L * pq_C; // returns cd/m^2
 }
 
+// Scale factor equal to PQ_rev( lin_2_acescct( 0.18) ) / 0.18
+const float scale = 209.;
 
 
 
@@ -84,6 +86,9 @@ void main
 
     // Calculate ACES
     float ACES[3] = mult_f3_f33( LMS, LMS_2_AP0_MAT);
+    
+    // Scale ACES
+    ACES = mult_f_f3( 1./scale, ACES);
     
     rOut = ACES[0];
     gOut = ACES[1];
