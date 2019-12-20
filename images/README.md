@@ -31,49 +31,53 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *SonyF35.StillLife.exr* - `IDT.Sony.SLog1_SGamut_10i.a1.v1.ctl` applied to *camera/SonyF35.StillLife.dpx*
     * *syntheticChart.01.exr* - `ACESlib.Unity.ctl` applied to *camera/syntheticChart.01.exr*
   * **ACEScsc/**
-    * *SonyF35.StillLife_ACEScc.exr* - `ACEScsc.ACES_to_ACEScc.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_ACEScct.exr* - `ACEScsc.ACES_to_ACEScct.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_ACEScg.exr* - `ACEScsc.ACES_to_ACEScg.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_ACESproxy10i.tiff* - `ACEScsc.ACES_to_ACESproxy10i.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_ACESproxy12i.tiff* - `ACEScsc.ACES_to_ACESproxy12i.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_Log3G10_RWG.exr* - `ACEScsc.ACES_to_Log3G10_RWG.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_LogC_EI800_AWG.exr* - `ACEScsc.ACES_to_LogC_EI800_AWG.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_SLog3_SG3.exr* - `ACEScsc.ACES_to_SLog3_SG3.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_SLog3_SG3C.exr* - `ACEScsc.ACES_to_SLog3_SG3C.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *syntheticChart.01_ACEScc.exr* - `ACEScsc.ACES_to_ACEScc.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_ACEScct.exr* - `ACEScsc.ACES_to_ACEScct.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_ACEScg.exr* - `ACEScsc.ACES_to_ACEScg.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_ACESproxy10i.tiff* - `ACEScsc.ACES_to_ACESproxy10i.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_ACESproxy12i.tiff* - `ACEScsc.ACES_to_ACESproxy12i.ctl` applied to *ACES/syntheticChart.01.exr*    
-    * *syntheticChart.01_Log3G10_RWG.exr* - `ACEScsc.ACES_to_Log3G10_RWG.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_LogC_EI800_AWG.exr* - `ACEScsc.ACES_to_LogC_EI800_AWG.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_SLog3_SG3.exr* - `ACEScsc.ACES_to_SLog3_SG3.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_SLog3_SG3C.exr* - `ACEScsc.ACES_to_SLog3_SG3C.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *SonyF35.StillLife_ACEScc.exr* - `ACEScsc.Academy.ACES_to_ACEScc.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ACEScct.exr* - `ACEScsc.Academy.ACES_to_ACEScct.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ACEScg.exr* - `ACEScsc.Academy.ACES_to_ACEScg.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ACESproxy10i.tiff* - `ACEScsc.Academy.ACES_to_ACESproxy10i.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ACESproxy12i.tiff* - `ACEScsc.Academy.ACES_to_ACESproxy12i.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_ICtCp.exr* - `ACEScsc.Academy.ACES_to_ICtCp.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_Log3G10_RWG.exr* - `ACEScsc.Academy.ACES_to_Log3G10_RWG.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_LogC_EI800_AWG.exr* - `ACEScsc.Academy.ACES_to_LogC_EI800_AWG.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_SLog3_SG3.exr* - `ACEScsc.Academy.ACES_to_SLog3_SG3.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_SLog3_SG3C.exr* - `ACEScsc.Academy.ACES_to_SLog3_SG3C.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *syntheticChart.01_ACEScc.exr* - `ACEScsc.Academy.ACES_to_ACEScc.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_ACEScct.exr* - `ACEScsc.Academy.ACES_to_ACEScct.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_ACEScg.exr* - `ACEScsc.Academy.ACES_to_ACEScg.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_ACESproxy10i.tiff* - `ACEScsc.Academy.ACES_to_ACESproxy10i.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_ACESproxy12i.tiff* - `ACEScsc.Academy.ACES_to_ACESproxy12i.ctl` applied to *ACES/syntheticChart.01.exr*    
+    * *syntheticChart.01_ICtCp.exr* - `ACEScsc.Academy.ACES_to_ICtCp.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_Log3G10_RWG.exr* - `ACEScsc.Academy.ACES_to_Log3G10_RWG.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_LogC_EI800_AWG.exr* - `ACEScsc.Academy.ACES_to_LogC_EI800_AWG.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_SLog3_SG3.exr* - `ACEScsc.Academy.ACES_to_SLog3_SG3.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_SLog3_SG3C.exr* - `ACEScsc.Academy.ACES_to_SLog3_SG3C.ctl` applied to *ACES/syntheticChart.01.exr*
   * **InvACES/**
-    * *SonyF35.StillLife_from_ACEScc.exr* - `ACEScsc.ACEScc_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScc.exr*
-    * *SonyF35.StillLife_from_ACEScct.exr* - `ACEScsc.ACEScct_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScct.exr*
-    * *SonyF35.StillLife_from_ACEScg.exr* - `ACEScsc.ACEScg_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScg.exr*
-    * *SonyF35.StillLife_from_ACESproxy10i.exr* - `ACEScsc.ACESproxy10i_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACESproxy10i.exr*
-    * *SonyF35.StillLife_from_ACESproxy12i.exr* - `ACEScsc.ACESproxy12i_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACESproxy12i.exr*
-    * *SonyF35.StillLife_from_Log3G10_RWG.exr* - `ACEScsc.Log3G10_RWG_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_Log3G10_RWG.exr*
-    * *SonyF35.StillLife_from_LogC_EI800_AWG.exr* - `ACEScsc.LogC_EI800_AWG_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_LogC_EI800_AWG.exr*
-    * *SonyF35.StillLife_from_SLog3_SG3.exr* - `ACEScsc.SLog3_SG3_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_SLog3_SG3.exr*
-    * *SonyF35.StillLife_from_SLog3_SG3C.exr* - `ACEScsc.SLog3_SG3C_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_SLog3_SG3C.exr*
+    * *SonyF35.StillLife_from_ACEScc.exr* - `ACEScsc.Academy.ACEScc_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScc.exr*
+    * *SonyF35.StillLife_from_ACEScct.exr* - `ACEScsc.Academy.ACEScct_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScct.exr*
+    * *SonyF35.StillLife_from_ACEScg.exr* - `ACEScsc.Academy.ACEScg_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACEScg.exr*
+    * *SonyF35.StillLife_from_ACESproxy10i.exr* - `ACEScsc.Academy.ACESproxy10i_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACESproxy10i.exr*
+    * *SonyF35.StillLife_from_ACESproxy12i.exr* - `ACEScsc.Academy.ACESproxy12i_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ACESproxy12i.exr*
+    * *SonyF35.StillLife_from_ICtCp.exr* - `ACEScsc.Academy.ICtCp_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_ICtCp.exr*
+    * *SonyF35.StillLife_from_Log3G10_RWG.exr* - `ACEScsc.Academy.Log3G10_RWG_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_Log3G10_RWG.exr*
+    * *SonyF35.StillLife_from_LogC_EI800_AWG.exr* - `ACEScsc.Academy.LogC_EI800_AWG_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_LogC_EI800_AWG.exr*
+    * *SonyF35.StillLife_from_SLog3_SG3.exr* - `ACEScsc.Academy.SLog3_SG3_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_SLog3_SG3.exr*
+    * *SonyF35.StillLife_from_SLog3_SG3C.exr* - `ACEScsc.Academy.SLog3_SG3C_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_SLog3_SG3C.exr*
     * *SonyF35.StillLife_from_InvRRT.exr* - `InvRRT.ctl` applied to *OCES/SonyF35.StillLife.exr*
     * *SonyF35.StillLife_from_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff* - `InvRRTODT.Academy.P3D65_108nits_7.2nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_HLG.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_2000nits_15nits_ST2084.tiff* - `InvRRTODT.Academy.Rec2020_2000nits_15nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_2000nits_15nits_ST2084.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_4000nits_15nits_ST2084.tiff* - `InvRRTODT.Academy.Rec2020_4000nits_15nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_4000nits_15nits_ST2084.tiff**
-    * *syntheticChart.01_from_ACEScc.exr* - `ACEScsc.ACEScc_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScc.exr*
-    * *syntheticChart.01_from_ACEScct.exr* - `ACEScsc.ACEScct_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScct.exr*
-    * *syntheticChart.01_from_ACEScg.exr* - `ACEScsc.ACEScg_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScg.exr*
-    * *syntheticChart.01_from_ACESproxy10i.exr* - `ACEScsc.ACESproxy10i_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACESproxy10i.exr*
-    * *syntheticChart.01_from_ACESproxy12i.exr* - `ACEScsc.ACESproxy12i_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACESproxy12i.exr*
-    * *syntheticChart.01_from_Log3G10_RWG.exr* - `ACEScsc.Log3G10_RWG_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_Log3G10_RWG.exr*
-    * *syntheticChart.01_from_LogC_EI800_AWG.exr* - `ACEScsc.LogC_EI800_AWG_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_LogC_EI800_AWG.exr*
-    * *syntheticChart.01_from_SLog3_SG3.exr* - `ACEScsc.SLog3_SG3_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_SLog3_SG3.exr*
-    * *syntheticChart.01_from_SLog3_SG3C.exr* - `ACEScsc.SLog3_SG3C_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_SLog3_SG3C.exr*
+    * *syntheticChart.01_from_ACEScc.exr* - `ACEScsc.Academy.ACEScc_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScc.exr*
+    * *syntheticChart.01_from_ACEScct.exr* - `ACEScsc.Academy.ACEScct_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScct.exr*
+    * *syntheticChart.01_from_ACEScg.exr* - `ACEScsc.Academy.ACEScg_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACEScg.exr*
+    * *syntheticChart.01_from_ACESproxy10i.exr* - `ACEScsc.Academy.ACESproxy10i_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACESproxy10i.exr*
+    * *syntheticChart.01_from_ACESproxy12i.exr* - `ACEScsc.Academy.ACESproxy12i_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ACESproxy12i.exr*
+    * *syntheticChart.01_from_ICtCp.exr* - `ACEScsc.Academy.ICtCp_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_ICtCp.exr*
+    * *syntheticChart.01_from_Log3G10_RWG.exr* - `ACEScsc.Academy.Log3G10_RWG_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_Log3G10_RWG.exr*
+    * *syntheticChart.01_from_LogC_EI800_AWG.exr* - `ACEScsc.Academy.LogC_EI800_AWG_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_LogC_EI800_AWG.exr*
+    * *syntheticChart.01_from_SLog3_SG3.exr* - `ACEScsc.Academy.SLog3_SG3_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_SLog3_SG3.exr*
+    * *syntheticChart.01_from_SLog3_SG3C.exr* - `ACEScsc.Academy.SLog3_SG3C_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_SLog3_SG3C.exr*
     * *syntheticChart.01_from_InvRRT.exr* - `InvRRT.ctl` applied to *OCES/syntheticChart.01.exr*
     * *syntheticChart.01_from_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff* - `InvRRTODT.Academy.P3D65_108nits_7.2nits_ST2084.ctl` applied to *RRTODT/syntheticChart.01_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff**
     * *syntheticChart.01_from_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_HLG.ctl` applied to *RRTODT/syntheticChart.01_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff**
