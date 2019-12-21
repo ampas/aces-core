@@ -1,0 +1,53 @@
+% This file contains the content for a main section
+\regularsectionformat	% Change formatting to that of a main, numbered section
+%% Modify below this line %%
+\chapter{Use Cases}
+ACES Metadata Files (AMFs) are intended to contain the minimum required metadata for transferring information about ACES viewing pipelines during production, post-production, and archival.
+
+Typical use cases for AMF files are the application of ``show LUT'' LMTs in cameras and on-set systems, the capture of shot-to-shot looks generated on-set using ASC-CDL, and communication of both to dailies, editorial, VFX, and post-production mastering facilities.
+
+AMF supports the transfer of looks by embedding ASC-CDL values within the AMF file or by referencing sidecar look files containing LMTs, such as CLF (Common LUT Format) files.  In cases where the looks are stored external to the AMF, the files must be assigned a valid ACES LMT TransformID.  
+
+\section{Look Development}
+Developing a creative look prior to photography can be done to produce a pre-adjusted reference for on-set monitoring. This may happen in pre-production at a post facility, during camera testing, or on-set during production. Typically, this has involved meticulous communication of necessary files and their intention, which may include a viewing transform, CDL grades, or more. The viewing transform, commonly referred to as a ``Show LUT,'' can vary in naming convention, LUT format, input/output color space, and full/legal range scaling. Exchanging files in this way obfuscates the creative intention of their application, due to lack of metadata or standards surrounding their creation.
+
+AMF can store a creative look in order to be shared with a production to automatically recreate the look for on-set monitoring. A common way to produce a creative look in an ACES workflow is the creation of an LMT (Look Modification Transform), which separates the look from the standard ACES transforms. Further, AMF can include references to multiple LMT’s, while ensuring they are all applied in the correct order to the image.
+
+AMF offers an unambiguous description of the full ACES viewing pipeline for on-set look management software to load and display images as intended.
+
+\section{On Set}
+Before production begins, an AMF may be created and shared with production as a ``look template'' for use during on-set monitoring or look management.
+
+Cameras with AMF support can load or generate AMFs to configure or communicate the viewing pipeline of images viewed out of the camera's live video signal.
+
+On-set grading software with AMF support can load or generate AMFs based on the viewing pipeline selected and any creative look adjustments done by the DIT or DoP.
+
+In addition to defining the viewing pipeline, the AMF also describes the LMT working space (e.g. ACEScct, ACEScc, etc) in which a creative look may be applied or adjusted as desired using CDLs or other controls.
+
+\section{Dailies}
+The AMF (or collection of AMFs) from on-set should be shared with dailies in order to be applied to the OCF (original camera files) and generate proxies or other dailies deliverables. Methodologies of exchange between on-set and dailies may vary, sometimes being done using ALE or EDLs depending on the workflow preferences of the project.
+
+It is possible, or even likely, that AMFs are updated in the dailies stage. For example, a dailies colorist may choose to balance shots at this stage and update CDLs or LMTs. Another example could be that on-set monitoring was done using an HDR ODT and dailies is generating proxies using an SDR ODT.
+
+It may be that AMFs are tracked the same way that CDLs and LUTs are tracked today (such as ALE or EDL), until more robust methods exist such as embedding metadata in the various formats used.
+
+\section{VFX}
+A powerful use case of AMF is the complete and unambiguous communication of the ACES viewing pipelines or 'color recipe' of shots being sent out for VFX work. 
+
+As with on-set, this is commonly done in a bespoke manner with combinations of CDLs and LUTs in various file formats in order for VFX facilities to be able to recreate the look seen in dailies and editorial.  
+
+AMFs should be sent alongside outgoing VFX plates and describe how to view the shot along with any creative look that it associated with the shot (CDL or LUT).
+
+VFX software should have the ability to read AMF as a template for configuring its internal viewing pipeline. Given the prevalence of OpenColorIO in the VFX software space, it is likely that AMF will inform choices of OCIO configuration in order to replicate the ACES viewing pipeline described in the AMF.
+
+\section{Finishing}
+In finishing, the on-set or dailies viewing reference can be automatically recreated upon reading an AMF. This stage typically uses a higher quality display, which may warrant the use of a different ACES ODT than one specified in an ingested AMF.
+
+This would give the colorist or artist a starting point which is representative of the creative intent of the filmmakers thus far, at which point they may focus their time on new creative avenues, rather than spending time trying to recreate prior work done.
+
+\section{Archival}
+AMF enables the ability to establish a complete ACES archive, and effectively serves as a snapshot of creative intent for preservation and remastering purposes. All components required to recreate the look of an ACES archive are meaningfully described and preserved within the AMF.
+
+One possible method for this could be the utilization of SMPTE standards such as ST.2067-50 (IMF App \#5) -- commonly referred to as``ACES IMF''-- and SMPTE RDD 47 (ISXD) -- a virtual track file containing XML data -- in order to form a complete and flexible ACES archival package.
+
+Another method could be to use SMPTE ST.2067-9 (Sidecar Composition Map) which would allow linking of a single AMF to a CPL (Composition Playlist) in the case where there is a single AMF for an entire playlist.
