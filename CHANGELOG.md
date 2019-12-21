@@ -1,3 +1,26 @@
+**Version 1.2 (December 20, 2019):**
+* New Features: 
+    * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
+    * Add new version of Common LUT Format specification document (S-2014-006)
+    * Add new ACES Project Organization and Development Procedure document (P-2019-001)
+    * Add ACES Color Space Conversion transforms between:
+        * ACES and LogC (EI800) ARRI WideGamut
+        * ACES and Log3G10 REDWideGamutRGB
+        * ACES and S-Log3 S-Gamut3
+        * ACES and S-Log3 S-Gamut3.Cine
+        * ACES and ICtCp
+    * Add HDR Output Transforms (RRT+ODT):
+        * P3D65 (1000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
+    * Add vendor-supplied IDTs for Sony VENICE
+* Other:
+    * Update ACES System Versioning document (S-2014-002)
+    * Update TransformIDs of ACES reference implementation transforms
+    * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
+    * Add reference images to accompany new ACEScsc transforms
+
+
 **Version 1.1 (June 21, 2018):**
 
 * New Features: 
@@ -26,7 +49,6 @@
         * DolbyPQ_to_HLG_1000nits
         * HLG_to_DolbyPQ_1000nits
     * Add HDR Output Transforms (RRT+ODT):
-        * P3D65 (108 cd/m^2) ST.2084 - designed for use in Dolby Cinema (and inverse)
         * Rec.2020 (1000 cd/m^2) ST.2084 (and inverse)
         * Rec.2020 (2000 cd/m^2) ST.2084 (and inverse)
         * Rec.2020 (4000 cd/m^2) ST.2084 (and inverse)

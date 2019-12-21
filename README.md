@@ -14,71 +14,52 @@ This toolkit is intended to serve as a distribution mechanism for key components
 ### Package Contents ###
  
 * [`documents/`](./documents) – ACES-related documents 
+* [`formats/`](./formats) - ACES file formats code and examples
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
 
 ### Changes from Previous Release ###
 
-Though the "master" branch is 1.1, the current major version of ACES remains 1.  This means the 1.1 update adds a number of transforms but does not change the look or modify the existing core transforms (beyond addressing reported bugs and/or inconsequential formatting/whitespace changes).
+Though the "master" branch is 1.2, the current major version of ACES remains 1.  This means the 1.2 update adds a number of transforms but does not change the look or modify the existing core transforms (beyond addressing reported bugs and/or inconsequential formatting/whitespace changes).
 
 As always, you should check the hotfixes and dev branches for the latest bug fixes and new features that will ultimately be rolled into a future version of ACES.  Improvements will continue to be staged on the dev branch for testing as they become available.
 
-Included in ACES 1.1:
+Included in ACES 1.2:
 
 * New Features: 
-    * Add P3 ODTs:
-        * P3D65 (and inverse)
-        * P3D65 "D60 simulation" (i.e. D60 adapted white point) (and inverse)
-        * P3DCI "D65 simulation" (i.e. D65 adapted white point) (and inverse)
-        * P3D65 limited to Rec.709 (inverse not required)
-    * Add Rec.2020 ODTs:
-        * Rec.2020 limited to Rec.709 (inverse not required)
-        * Rec.2020 limited to P3D65 (inverse not required)
-    * Add DCDM ODT:
-        * DCDM with D65 adapted white point and limited to P3D65 (and inverse)
-    * Add new ACESlib files:
-        * SSTS: code for the Single Stage Tone Scale used in HDR Output Transforms
-        * OutputTransforms: beginning of modules needed for parameterizing Output Transforms
+    * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
+    * Add new version of Common LUT Format specification document (S-2014-006)
+    * Add new ACES Project Organization and Development Procedure document (P-2019-001)
+    * Add ACES Color Space Conversion transforms between:
+        * ACES and LogC (EI800) ARRI WideGamut
+        * ACES and Log3G10 REDWideGamutRGB
+        * ACES and S-Log3 S-Gamut3
+        * ACES and S-Log3 S-Gamut3.Cine
+        * ACES and ICtCp
     * Add HDR Output Transforms (RRT+ODT):
-        * P3D65 (108 cd/m^2) ST.2084 - designed for use in Dolby Cinema (and inverse)
-        * Rec.2020 (1000 cd/m^2) ST.2084 (and inverse)
-        * Rec.2020 (2000 cd/m^2) ST.2084 (and inverse)
-        * Rec.2020 (4000 cd/m^2) ST.2084 (and inverse)
-        * Rec.2020 (1000 cd/m^2) HLG (and inverse)
-    * Add new subfunctions to existing ACESlib files
-    * Add new ACESutil functions
-    * Remove HDR ODTs (and inverses)
-    * Rename some existing transforms for clarity:
-        * Rename `DCDM_P3D60` to `DCDM_P3D60limited`
-        * Rename `P3DCI` to `P3DCI_D60sim`
-        * Rename `RGBmonitor` to `sRGB`
-    * Add LMT that can help correct bright blue light clipping or hue shifts
-    * Add new reference images for new transforms
-    * Add documentation:
-        * TB-2018-001 - Derivation of the ACES White Point CIE Chromaticity Coordinates
-* Bug Fixes:
-    * Arri IDT - Improve linearization of LogC data
+        * P3D65 (1000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
+    * Add vendor-supplied IDTs for Sony VENICE
 * Other:
-    * Miscellaneous white space, line wrap, and typo fixes
-    * Miscellaneous README and CTL comment updates
-    * Miscellaneous LaTeX documentation typo and code fixes
-    * Update ACEStransformIDs where appropriate
-    * Update README and CHANGELOG
+    * Update ACES System Versioning document (S-2014-002)
+    * Update TransformIDs of ACES reference implementation transforms
+    * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
+    * Add reference images to accompany new ACEScsc transforms
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 
-#### Notes on New ODTs ####
+#### Notes on the new ACES Metadata Files (AMF) specification ####
+ACES 1.2 includes the new ACES Metadata File (AMF) specification that replaces the ACES Clip-level Metadata File Format (ACESclip).  AMF is documented in Academy Specification S-2019-001 and TB-2014-009 has been retracted.  AMF offers a simplified means to describe the transforms necessary to configure an ACES viewing pipeline for a collection of related ACES image files.  AMF supports a mechanism to communicate the ACES Look Transforms and the working color space in which the Looks are applied enabling the communication of Look information throughout production and post-production.  A series of new ACES Color Space Conversion (ACEScsc) transforms have been added with the expectation that these transforms may be useful working spaces for the application of ACES Look Transforms. Also included in the release is an XML schema for the AMF and example AMF files. 
 
-A series of new standard dynamic range (SDR) ODTs are included in this release.  These ODTs were added at the request of the ACES Community based on their production needs.  Examples include: P3 ODTs for devices with a D65 calibration white point, simulation of a D65 white point on a P3 device with a DCI calibration white point, and limiting of output image colorimetry to Rec.709 when using a P3D65 calibrated device.  Additional limiting ODTs were also added for Rec.2020 to restrict the image colorimetry to Rec.709 and P3.  A DCDM ODT with limiting to P3D65 were added to compliment the existing DCDM ODT with limiting to P3D60.  These transforms provide support for additional use cases not included in previous ACES releases.
+#### Notes on the updated Common LUT Format (CLF) specification ####
+ACES 1.2 also includes an updated version of the Common LUT Format (CLF) specification.  This new version includes changes based on feedback from the ACES community.  It adds additional operators to the specification and the document has been substantially revised to more clearly communicate its intent.
 
-#### Notes on New HDR Output Transforms ####
+#### Notes on the updated ACES System Versioning Documentation ####
+The ACES System Versioning Documentation has been updated to support additional vendor- and user-supplied transform types, improve TransformID format consistency, version control for the TransformID format, and to provide a means for automated systems to recognize the presence of ACES TransformIDs and identify their version.  All transforms in the ACES reference implementation have been updated to conform to the new TransformID format.
 
-ACES 1.1 also includes the first release of a series of Output Transforms that combine the RRT and an ODT into a single transform.  The new Output Transforms replace the previous HDR ODTs.  The new Output Transforms are based on a unified, parametric output function.  These individual Output Transforms pass a series of parameters to the underlying output function to improve the consistency of the image processing operations.  Examples of the parameters that that are specified in the Output Transforms include: display primaries, display white point, display max luminance, display min luminance, luminance reproduction of mid-gray, limiting primaries (if any), surround, display EOTF, etc.  In the future, this will make it trivial to generate Output Transforms for non-standard devices.  
-
-Output Transforms using the underlying parametric output function are only provided for HDR devices in dark surround environments at this time, although the transforms are suitable for use in both dark and dim surround environments (they’ve been used this way on several major motion pictures with a corresponding “trim pass” to adjust contrast and saturation). Modifying the surround parameter inside the individual HDR Output Transforms has no effect when the EOTF is set to either ST-2084(PQ) or HLG.  A functional dim surround compensation for HDR devices will be addressed in a future ACES release.  
-   
-#### Notes on rename of some existing transforms ####
-The CTL file names and values of <ACESuserName> of some of the existing ACES transforms have been modified for clarity.  In each case, the output code values from the transform remains the same.  Academy S-2014-002 states “Any transform updates that do not change the output of that transform shall not require the Transform Identifier to be incremented – e.g. whitespace changes, modifications to code comments, etc.”  For this reason, the values <ACEStransformID> have not been changed.  Implementors should take care to update their user interfaces to display the new values of <ACESuserName> where applicable and to alert end-users of the name changes in their product documentation.
+#### Notes on the new ACES Project Organization and Development Procedure ###
+In early 2019, ACES leadership established a revised organizational structure and development procedures for the ACES project.  The new structure and development procedures were modeled after those adopted by the Academy Software Foundation, with the goals of increasing visibility into the development of ACES, enabling greater global participation in the ACES development process, providing accountability mechanisms, and better documenting the decision making process.  The revised structure and development procedures are detailed in Academy Procedure P-2019-001.
 
 ### Versioning ###
  
@@ -117,7 +98,7 @@ Academy under the following terms and conditions: A worldwide, royalty-free,
 non-exclusive right to copy, modify, create derivatives, and use, in source and
 binary forms, is hereby granted, subject to acceptance of this license.
 
-Copyright 2018 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
+Copyright 2019 Academy of Motion Picture Arts and Sciences (A.M.P.A.S.).
 Portions contributed by others as indicated. All rights reserved.
 
 Performance of any of the aforementioned acts indicates acceptance to be bound
