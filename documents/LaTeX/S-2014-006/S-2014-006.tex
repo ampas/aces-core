@@ -1,5 +1,38 @@
-\documentclass[10pt]{academydoc}
+\documentclass[10pt]{AcademyDoc}
 \pagestyle{plain}
+
+\usepackage{draftwatermark}
+\usepackage{color}
+\definecolor{green}{rgb}{0.1,0.5,0.1}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\lstset{
+  basicstyle={\ttfamily\fontsize{8}{9.6}\selectfont},  
+  columns=fixed,
+  language=XML,
+  showstringspaces=false,
+  commentstyle=\color{green}\upshape
+}
+
+\lstdefinelanguage{XML}
+{
+  tabsize=2,
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\bfseries\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns, id, name, compCLFversion, inverseOf, inBitDepth, outBitDepth, style, rawHalfs, halfDomain, dim, interpolation, base, logSideSlope, logSideOffset, linSideSlope, linSideOffset, linSideBreak, linearSlope, linearOffset, exponent, offset, channel, 
+  type, minOccurs, maxOccurs, use, abstract, substitutionGroup, default, value}% list your attributes here
+}
+
+\lstset{language=XML}
+
+\def\xml#1{{\small \texttt{#1}}}
+\newcommand{\matr}[1]{\mathbf{#1}}
 
 % Document specific settings/overrides
 \renewcommand\lstlistingname{Example}
@@ -11,47 +44,44 @@
 	captionpos=b
 }
 
+
 % Set Document Details
 \doctype{spec} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
 \docname{A Common File Format for Look-Up Tables}
 \altdocname{A Common File Format for Look-Up Tables}
 \docnumber{S-2014-006}
 \committeename{Academy Color Encoding System (ACES) Project Committee}
-\docdate{March 29, 2016}
+\docdate{December 20, 2019}
 \summary{
-This document introduces a human-readable text file format for the interchange of color transformations using an XML schema. The XML format supports Look-Up Tables of several types: 1D LUTs, 3D LUTs, and 3by1D LUTs, as well as additional transformation needs such as matrices, range rescaling, and `shaper LUTs'. The document defines a processing model for color transformations where each transformation is defined by a `Node' that operates upon a stream of image pixels. A node contains the data for a transformation, and a sequence of nodes can be specified in which the output of one transform feeds into the input of another node. The XML representation allows saving in a text file both a chain of multiple nodes or a single node representing a unique transform. The format is extensible and self-contained so the XML file may be used as an archival element.
+This document specifies a human-readable text file format for the interchange of color transformations using an XML schema. The XML format supports Look-Up Tables of several types: 1D LUTs, 3D LUTs, and 3$\times$1D LUTs, as well as additional transformation needs such as matrices, range rescaling, and `shaper LUTs'. The document defines a processing model for color transformations where each transformation is defined by a `Node' that operates upon a stream of image pixels. A node contains the data for a transformation, and a sequence of nodes can be specified in which the output of one transform feeds into the input of another node. The XML representation allows saving in a text file both a chain of multiple nodes or a single node representing a unique transform. The format is extensible and self-contained so the XML file may be used as an archival element.
 }
+
 
 % Document Starts Here
 \begin{document}
 
 \maketitle
 
-\input{notices} \newpage
-\input{histanddocs} \newpage
+\input{notices.tex} \newpage
 
 \tableofcontents \newpage
 
-\input{acknowledgements} \newpage
-\input{introduction}
+\input{introduction.tex}
+\input{scope.tex}
+\input{references.tex}
 
-\input{scope}
-\input{references}
-\input{termsanddefs} \newpage
+\newpage
 
 \input{sec-specification}
-\input{sec-conventions}
-\input{sec-XMLstructure}
-\input{sec-XMLelements}
-\input{sec-examples}
+\input{sec-elements}
 \input{sec-implementation}
-\input{sec-conclusions}
+\input{sec-examples}
 
 \begin{appendices}
-    \input{appendixA}
-    \input{appendixB}
-    \input{appendixC}
-    \input{appendixD}
+    \input{appendix-schema.tex}
+    \input{appendix-interpolation.tex}    
+    \input{appendix-cineonlog.tex}    
+    \input{appendix-changes.tex}
 \end{appendices}
 
 \end{document}
