@@ -1,9 +1,9 @@
 
-// <ACEStransformID>ACEScsc.ACESproxy10i_to_ACES.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACESproxy12i_to_ACES.a1.0.3</ACEStransformID>
 // <ACESuserName>ACESproxy to ACES2065-1</ACESuserName>
 
 //
-// ACES Color Space Conversion - ACESproxy (10-bit) to ACES
+// ACES Color Space Conversion - ACESproxy (12-bit) to ACES
 //
 // converts ACESproxy (AP1 w/ ACESproxy encoding) to 
 //          ACES2065-1 (AP0 w/ linear encoding)
@@ -26,10 +26,10 @@ import "ACESlib.Transform_Common";
 
 
 
-const float StepsPerStop = 50.;
-const float MidCVoffset = 425.;
-const int CVmin = 64;
-const int CVmax = 940;
+const float StepsPerStop = 200.;
+const float MidCVoffset = 1700.;
+const int CVmin = 256;
+const int CVmax = 3760;
 
 
 
@@ -41,7 +41,7 @@ float ACESproxy_to_lin
   input varying float CVmin,
   input varying float CVmax
 )
-{  
+{
   return pow( 2., ( in - MidCVoffset)/StepsPerStop - 2.5);
 }
 
@@ -69,9 +69,9 @@ void main
     //  to first scale the 0.0-1.0 ranged values to integer values appropriate 
     //  for the ACESproxy-to-linear function.
     int ACESproxy[3];
-    ACESproxy[0] = rIn * 1023.0;
-    ACESproxy[1] = gIn * 1023.0;
-    ACESproxy[2] = bIn * 1023.0;
+    ACESproxy[0] = rIn * 4095.0;
+    ACESproxy[1] = gIn * 4095.0;
+    ACESproxy[2] = bIn * 4095.0;
 
     float lin_AP1[3];
     lin_AP1[0] = ACESproxy_to_lin( ACESproxy[0], StepsPerStop, MidCVoffset, CVmin, CVmax);

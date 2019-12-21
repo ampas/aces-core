@@ -64,12 +64,12 @@ def emitLogC2InverseFunction(EI) :
 def emitHeader(myName, EI, CCT, logC) :
     print ""
     if logC == "logc" :
-        print "// <ACEStransformID>IDT.ARRI.Alexa-v2-logC-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
+        print "// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v2-logC-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
         print "// <ACESuserName>ACES 1.0 Input - ARRI V2 LogC (EI%d, %dK)</ACESuserName>" % (EI,CCT)
         print ""
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
-        print "// <ACEStransformID>IDT.ARRI.Alexa-v2-raw-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
+        print "// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v2-raw-EI%d-CCT%d.a1.v1</ACEStransformID>" % (EI,CCT)
         print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK)</ACESuserName>" % (EI,CCT)
         print ""
         print "// ARRI ALEXA IDT for ALEXA linear files"

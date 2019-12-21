@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACEScsc.ACES_to_ACEScc.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACES_to_ACEScc.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES2065-1 to ACEScc</ACESuserName>
 
 //

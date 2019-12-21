@@ -1,5 +1,5 @@
 
-// <ACEStransformID>IDT.Sony.SLog2_SGamut_Daylight_12i.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.Sony.SLog2_SGamut_Daylight_12i.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - Sony SLog2 (daylight)</ACESuserName>
 
 //
