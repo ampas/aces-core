@@ -24,9 +24,9 @@ In order to ensure the scaling of parameter values of all \xml{ProcessNode}s in 
 
 Please note that an integer \xml{inBitDepth} or \xml{outBitDepth} of a \xml{ProcessNode} does not indicate that any clamping or quantization should be done. These attributes are strictly used to indicate the scaling of parameter and array values. As discussed in \ref{sec:process-precision}, processing precision shall be floating-point.
 
-Furthermore, because the processing precision is intended to be floating-point, the \xml{inBitDepth} and \xml{outBitDepth} only control the scaling of parameter and array values and do not impose range limits. For example, even if the \xml{outBitDepth} of a LUT \xml{Array} is 12i, it does not mean that the \xml{Array} values must be limited to [0,4095] or that they must be integer values. It simply means that in order to rescale to 32f that a scale factor of 4095 should be used (as per \ref{sec:scaling}).
+Furthermore, because the processing precision is intended to be floating-point, the \xml{inBitDepth} and \xml{outBitDepth} only control the scaling of parameter and array values and do not impose range limits. For example, even if the \xml{outBitDepth} of a LUT \xml{Array} is 12i, it does not mean that the \xml{Array} values must be limited to [0,4095] or that they must be integer values. It simply means that in order to rescale to 32f that a scale factor of $1/4095$ should be used (as per \ref{sec:scaling}).
 
-Because processing within a \xml{ProcessList} should be done at floating-point precision, applications may optionally want to rescale the interfaces all \xml{ProcessNode}s ``interior" to a \xml{ProcessList} to be 32f according to 5.1.4. As discussed in \ref{sec:processList-in-out}, applications may want to rescale the ``exterior" interfaces of the \xml{ProcessList} based on the type of pixel data being processed.
+Because processing within a \xml{ProcessList} should be done at floating-point precision, applications may optionally want to rescale the interfaces all \xml{ProcessNode}s ``interior" to a \xml{ProcessList} to be 32f according to \ref{sec:scaling}. As discussed in \ref{sec:processList-in-out}, applications may want to rescale the ``exterior" interfaces of the \xml{ProcessList} based on the type of pixel data being processed.
 
 For some applications, it may be easiest to simply rescale all \xml{ProcessNode}s to 32f input and output bit-depth when parsing the file. That way, the \xml{ProcessList} may be considered a purely 32f set of operations and the implementation therefore does not need to track or deal with bit-depth differences at the \xml{ProcessNode} level.
 
@@ -40,7 +40,7 @@ The scale factor associated with the bit-depths 16f and 32f is 1.0.
 
 To rescale \xml{Matrix}, \xml{LUT1D}, or \xml{LUT3D} \xml{Array} values when the \xml{outBitDepth} changes, the scale factor is equal to $\frac{\mathrm{newScale}}{\mathrm{oldScale}}$. For example, to convert from 12i to 10i, multiply array values by $1023/4095$.
 
-To rescale \xml{Matrix} \xml{Array} values when the \xml{inBitDepth} changes, the scale factor is equal to $\frac{\mathrm{oldScale}}{\mathrm{newScale}}$. For example, to convert from 32f to 10i, multiply array values by 1/1023.
+To rescale \xml{Matrix} \xml{Array} values when the \xml{inBitDepth} changes, the scale factor is equal to $\frac{\mathrm{oldScale}}{\mathrm{newScale}}$. For example, to convert from 32f to 10i, multiply array values by $1/1023$.
 
 To rescale \xml{Range} parameters when the \xml{inBitDepth} changes, the scale factor for \xml{minInValue} and \\ \xml{maxInValue} is $\frac{\mathrm{newScale}}{\mathrm{oldScale}}$. To rescale \xml{Range} parameters when the \xml{outBitDepth} changes, the scale factor for \xml{minOutValue} and \xml{maxOutValue} is $\frac{\mathrm{newScale}}{\mathrm{oldScale}}$.
 

@@ -1,7 +1,7 @@
 \subsection{\texttt{Range}}
 
 \emph{Description:} \par
-This node maps the input domain to the output range by scaling and offsetting values. The \xml{Range} node can also be used to clamp values on only the top or bottom end.
+This node maps the input domain to the output range by scaling and offsetting values. The \xml{Range} element can also be used to clamp values.
 
 Unless otherwise specified, the node's default behavior is to scale and offset with clamping. If clamping is not desired, the \xml{style} attribute can be set to \xml{"noClamp"}.
 
@@ -22,7 +22,7 @@ If \xml{style="Clamp"}, the output value from Eq \ref{eq:noClamp} is furthur mod
 \tabto{0.5in} MAX(${a,b}$) returns $a$ if $a > b$ and $b$ if $b \geq a$ \\[6pt]
 \tabto{0.5in} MIN(${a,b}$) returns $a$ if $a < b$ and $b$ if $b \leq a$ \\[10pt]
 
-The \xml{Range} element can also be used in to clamp values. In such instances, no offset is applied, and the formula simplifies because only one pair of min or max values are required. 
+The \xml{Range} element can also be used to clamp values on only the top or bottom end. In such instances, no offset is applied, and the formula simplifies because only one pair of min or max values are required. 
 
 If only the minimum value pair is provided, then the result shall be clamping at the low end, according to Equation \ref{eq:minclamp}.
 
