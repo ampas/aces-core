@@ -38,11 +38,14 @@ If only the maximum values pairs are provided, the result shall be clamping at t
 \tabto{0.25in} Where: \\[10pt]
 \tabto{0.5in} $bitDepthScale = \dfrac{\mathrm{SIZE}(\xml{outBitDepth})}{\mathrm{SIZE}(\xml{inBitDepth})}$\\[14pt] 
 \tabto{0.75in}and where: \\[10pt]
-\tabto{1.0in} SIZE$(a) =$ 
+\tabto{1.0in} 
+\begin{equation*}
+\mathrm{SIZE}(a) =
 \begin{cases}
-    $2^{bitDepth}-1$ & \text{when $a \in \{$\xml{"8i"},\xml{"10i"},\xml{"12i"},\xml{"16i"}$\}$} \\
-    $1.0$ & \text{when $a \in \{$\xml{"16f"},\xml{"32f"}$\}$}
+    2^{bitDepth}-1 & \text{when }a \in \{\xml{"8i"},\xml{"10i"},\xml{"12i"},\xml{"16i"}\} \\
+    1.0 & \text{when }a \in \{\xml{"16f"},\xml{"32f"}\}
 \end{cases}
+\end{equation*}
 
 In both instances, values must be set such that $\xml{maxOutValue} = \xml{maxInValue} \times bitDepthScale$.
 
