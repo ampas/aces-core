@@ -1,4 +1,4 @@
-\appendixchapter{XML Schema}{n}
+\appendixchapter{XML Schema}{i}
 \label{appendixA}
 
 \lstset{frame=none}
@@ -130,14 +130,15 @@
             <xs:extension base="clf:ProcessNodeType">
                 <xs:sequence>
                     <xs:element name="ExponentParamsType" type="clf:ExponentParamsType" 
-                        minOccurs="0" maxOccurs="3"/>
+                        minOccurs="1" maxOccurs="3"/>
                 </xs:sequence>
+                <xs:attribute name="style" type="xs:string" use="required"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     
     <xs:complexType name="ExponentParamsType">
-        <xs:attribute name="exponent" type="xs:float" use="optional" default="1.0"/>
+        <xs:attribute name="exponent" type="xs:float" use="required" default="1.0"/>
         <xs:attribute name="offset" type="xs:float" use="optional" default="0.0"/>
         <xs:attribute name="channel" type="clf:channelType" use="optional"/>
     </xs:complexType>
@@ -149,8 +150,8 @@
         <xs:complexContent>
             <xs:extension base="clf:ProcessNodeType">
                 <xs:sequence>
-                    <xs:element name="LogParamsType" type="clf:LogParamsType" minOccurs="0" 
-                        maxOccurs="1"/>
+                    <xs:element name="LogParamsType" type="clf:LogParamsType" minOccurs="1" 
+                        maxOccurs="3"/>
                 </xs:sequence>                
                 <xs:attribute name="style" type="xs:string" use="required"/>
             </xs:extension>
@@ -158,14 +159,13 @@
     </xs:complexType>
 
     <xs:complexType name="LogParamsType">
-        <xs:attribute name="base" type="xs:float" use="optional" default="10"/>
+        <xs:attribute name="base" type="xs:float" use="optional" default="2"/>
         <xs:attribute name="logSideSlope" type="xs:float" use="optional" default="1.0"/>
         <xs:attribute name="logSideOffset" type="xs:float" use="optional" default="0.0"/>
         <xs:attribute name="linSideSlope" type="xs:float" use="optional" default="1.0"/>
         <xs:attribute name="linSideOffset" type="xs:float" use="optional" default="0.0"/>
-        <xs:attribute name="linSideBreak" type="xs:float" use="optional" default="0.0"/>
+        <xs:attribute name="linSideBreak" type="xs:float" use="optional"/>
         <xs:attribute name="linearSlope" type="xs:float" use="optional"/>
-        <xs:attribute name="linearOffset" type="xs:float" use="optional"/>
         <xs:attribute name="channel" type="clf:channelType" use="optional"/>
     </xs:complexType>
     
@@ -244,7 +244,7 @@
     <xs:complexType name="ArrayType">
         <xs:simpleContent>
             <xs:extension base="clf:floatListType">
-                <xs:attribute name="dim" type="clf:dimType" use="optional"/>
+                <xs:attribute name="dim" type="clf:dimType" use="required"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
@@ -255,7 +255,7 @@
     
     <xs:simpleType name="dimType">
         <xs:restriction base="clf:positiveIntegerListType">
-            <xs:minLength value="1"/>
+            <xs:minLength value="2"/>
         </xs:restriction>
     </xs:simpleType>
     
@@ -277,4 +277,3 @@
     
 </xs:schema>
 \end{lstlisting}
-

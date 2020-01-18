@@ -22,7 +22,7 @@ If \xml{style="Clamp"}, the output value from Eq \ref{eq:noClamp} is furthur mod
 \tabto{0.5in} MAX(${a,b}$) returns $a$ if $a > b$ and $b$ if $b \geq a$ \\[6pt]
 \tabto{0.5in} MIN(${a,b}$) returns $a$ if $a < b$ and $b$ if $b \leq a$ \\[10pt]
 
-The \xml{Range} element can also be used to clamp values on only the top or bottom end. In such instances, no offset is applied, and the formula simplifies because only one pair of min or max values are required. 
+The \xml{Range} element can also be used to clamp values on only the top or bottom end. In such instances, no offset is applied, and the formula simplifies because only one pair of min or max values are required. (The \xml{style} shall not be \xml{"noClamp"} for this use-case.)
 
 If only the minimum value pair is provided, then the result shall be clamping at the low end, according to Equation \ref{eq:minclamp}.
 
@@ -56,9 +56,11 @@ At least one pair of either minimum or maximum values, or all four values, must 
 \emph{Elements:}
 \begin{xmlfields}
 	\xmlitem[minInValue][optional] The minimum input value. Required if \xml{minOutValue} is present.
-	\xmlitem[maxInValue][optional] The maximum input value. Required if \xml{maxOutValue} is present.
+	\xmlitem[maxInValue][optional] The maximum input value. Required if \xml{maxOutValue} is present. \\
+	The \xml{maxInValue} shall be greater than the \xml{minInValue}.
 	\xmlitem[minOutValue][optional] The minimum output value. Required if \xml{minInValue} is present.
-	\xmlitem[maxOutValue][optional] The maximum output value. Required if \xml{maxInValue} is present.
+	\xmlitem[maxOutValue][optional] The maximum output value. Required if \xml{maxInValue} is present. \\
+	The \xml{maxOutValue} shall be greater than or equal to the \xml{minOutValue}.
 \end{xmlfields}
 
 \emph{Attributes:}

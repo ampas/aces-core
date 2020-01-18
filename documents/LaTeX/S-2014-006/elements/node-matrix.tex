@@ -97,7 +97,7 @@ Matrices using an offset calculation will have one more column than rows. An off
 \begin{lstlisting}[caption=Example of a \xml{Matrix} node with \xml{dim="3 3 3"}]
 <Matrix id="lut-28" name="AP0 to AP1" inBitDepth="16f" outBitDepth="16f" >
 	<Description>3x3 color space conversion from AP0 to AP1</Description>
-	<Array dim="3 3 3">
+	<Array dim="3 3">
          1.45143931614567	  -0.236510746893740	-0.214928569251925
         -0.0765537733960204    1.17622969983357	    -0.0996759264375522
          0.00831614842569772  -0.00603244979102103   0.997716301365324
@@ -108,7 +108,7 @@ Matrices using an offset calculation will have one more column than rows. An off
 \begin{lstlisting}[caption=Example of a \xml{Matrix} node]
 <Matrix id="lut-25" name="colorspace conversion" inBitDepth="10i" outBitDepth="10i" >
 	<Description> 3x4 Matrix , 4th column is offset </Description>
-	<Array dim="3 4 3">
+	<Array dim="3 4">
 		1.2  	0.0  	0.0   	0.002
 		0.0 	1.03 	0.001 	-0.005
 		0.004 	-0.007 	1.004  	0.0
