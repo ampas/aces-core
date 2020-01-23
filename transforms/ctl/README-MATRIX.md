@@ -232,7 +232,7 @@ In the code, matrix is created by:
 
 and the operator would be:
   
-    const float XYZ_out[3] = mult_f3_f44( XYZ_in, CAT_MAT);
+    const float XYZ_out[3] = mult_f3_f33( XYZ_in, CAT_MAT);
 
 Equivalent math:
 
