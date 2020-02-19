@@ -241,10 +241,10 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="lookTransformWorkingSpaceType">
+	<xs:complexType name="cdlWorkingSpaceType">
 		<xs:sequence>
-			<xs:element name="toLookTransformWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="fromLookTransformWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="toCdlWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="fromCdlWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 
@@ -252,16 +252,18 @@
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
 				<xs:sequence>
-					<xs:element name="lookTransformWorkingSpace" type="aces:lookTransformWorkingSpaceType" minOccurs="1" maxOccurs="1"/>
 					<xs:choice minOccurs="1" maxOccurs="1">
 						<xs:element name="transformId" type="aces:tnLookTransform" minOccurs="1" maxOccurs="1"/>
-						<xs:choice minOccurs="1" maxOccurs="1">
-							<xs:sequence>
-								<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
-								<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
-							</xs:sequence>
-							<xs:element ref="cdl:ColorCorrectionRef"/>
-						</xs:choice>
+						<xs:sequence>
+							<xs:element name="cdlWorkingSpace" type="aces:cdlWorkingSpaceType" minOccurs="1" maxOccurs="1"/>
+							<xs:choice minOccurs="1" maxOccurs="1">
+								<xs:sequence>
+									<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
+									<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
+								</xs:sequence>
+								<xs:element ref="cdl:ColorCorrectionRef"/>
+							</xs:choice>
+						</xs:sequence>
 					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="applied" type="xs:boolean" use="required"/>

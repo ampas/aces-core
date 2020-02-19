@@ -46,11 +46,11 @@
         </aces:inputTransform>
         <aces:lookTransform applied="true">
                 <aces:description>Technical Grade</aces:description>
-                <aces:lookTransformWorkingSpace>
-                    <aces:fromLookTransformWorkingSpace>
+                <aces:cdlWorkingSpace>
+                    <aces:fromCdlWorkingSpace>
                         <aces:transformId>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACEScct_to_ACES.a1.0.3</aces:transformId>
-                    </aces:fromLookTransformWorkingSpace>
-                </aces:lookTransformWorkingSpace>
+                    </aces:fromCdlWorkingSpace>
+                </aces:cdlWorkingSpace>
                 <cdl:ASC_SOP>
                     <cdl:Slope>2.0 2.0 2.0</cdl:Slope>
                     <cdl:Offset>0.1 0.1 0.1</cdl:Offset>
