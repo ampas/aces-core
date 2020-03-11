@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<aces:acesMetadataFile 
+<aces:acesMetadataFile
     xmlns:aces="urn:ampas:aces:amf:v1.0"
     xsi:schemaLocation="urn:ampas:aces:amf:v1.0 file:acesMetadataFile.xsd"
     xmlns:cdl="urn:ASC:CDL:v1.01"
@@ -44,7 +44,7 @@
                 <aces:transformId>urn:ampas:aces:transformId:v1.5:InvRRT.a1.0.3</aces:transformId>
             </aces:inverseReferenceRenderingTransform>
         </aces:inputTransform>
-        <aces:lookTransform applied="true">
+        <aces:lookTransform applied="false">
                 <aces:description>Technical Grade</aces:description>
                 <aces:cdlWorkingSpace>
                     <aces:fromCdlWorkingSpace>
