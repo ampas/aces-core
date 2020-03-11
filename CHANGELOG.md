@@ -1,4 +1,5 @@
 **Version 1.2 (December 20, 2019):**
+
 * New Features: 
     * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
     * Add new version of Common LUT Format specification document (S-2014-006)
