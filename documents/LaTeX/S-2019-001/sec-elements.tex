@@ -22,7 +22,7 @@
     
     \textbf{Diagram:}
     \begin{figure}[H]
-        \includegraphics[width=2.5in]{\tempc}
+        \includegraphics[width=2.75in]{\tempc}
     \end{figure}
 
     \textbf{Type:} 
@@ -63,7 +63,7 @@
 }
 
 % acesMetadataFile
-\element{aces:acesMetadataFile}
+\element{aces:MetadataFile}
         {The top level element of an ACES Metadata File.  This element defines first level child elements.}
         {images/acesMetadataFile_xsd_Element_aces_acesMetadataFile.png}
         {xs:element}
@@ -72,13 +72,13 @@
         {\texttt{version="1.0", xmlns:aces="urn:ampas:aces:amf:v1.0"}}{\texttt{xmlns, xsi:schemeLocation}}
         {None}
         {\texttt{aces:pipeline, aces:archivedPipeline, aces:clipId, aces:amfInfo}}
-        { \lstinline{<aces:acesMetadataFile} \\
+        { \lstinline{<aces:MetadataFile} \\
         \lstinline{xmlns:aces="urn:ampas:aces:amf:v1.0"} \\
         \lstinline{xsi:schemaLocation="urn:ampas:aces:amf:v1.0 file:acesMetadataFile.xsd"} \\ \lstinline{xmlns:cdl="urn:ASC:CDL:v1.01"}\\
         \lstinline{xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"}\\
         \lstinline{version="1.0">}\\
         ... \\
-        \lstinline{</aces:acesMetadataFile>}}
+        \lstinline{</aces:MetadataFile>}}
         
 % amfInfo        
 \element{aces:amfInfo}
@@ -88,7 +88,7 @@
         {Required}
         {1}{1}
         {none}{none}
-        {\texttt{aces:acesMetadataFile}}
+        {\texttt{aces:MetadataFile}}
         {aces:author, aces:dateTime, aces:description, aces:uuid}
         {\lstinline{<aces:amfInfo>} \\
         ... \\
@@ -103,7 +103,7 @@
         {0}
         {unbounded}
         {none}{none}
-        {\texttt{aces:acesMetadataFile}}
+        {\texttt{aces:MetadataFile}}
         {\texttt{aces:inputTransform, aces:lookTransform, aces:outputTransform, \\ aces:pipelineInfo}}
         {\lstinline{<aces:archivedPipeline>} \\
         ... \\
@@ -115,7 +115,7 @@
         {images/acesMetadataFile_xsd_Element_aces_clipId.png}
         {aces:clipIdType}
         {Optional}{0}{1}
-        {none}{none}{\texttt{aces:acesMetadataFile}}
+        {none}{none}{\texttt{aces:MetadataFile}}
         {\texttt{aces:clipName, aces:file, aces:sequence, aces:uuid}}
         {\lstinline{<aces:clipId>} \\
         ... \\
@@ -128,8 +128,8 @@
         {aces:pipelineType}
         {Required}{1}{1}
         {none}{none}
-        {\texttt{aces:acesMetadataFile}}
-        {\texttt{aces:inputTransform, aces:lookTransform, aces:outputTransform, aces:pipelineInfo}}
+        {\texttt{aces:MetadataFile}}
+        {\texttt{aces:inputTransform, aces:lookTransform, aces:outputTransform, \\ aces:pipelineInfo}}
         {\lstinline{<aces:pipeline>} \\
         ... \\
         \lstinline{</aces:pipeline>}}
@@ -152,6 +152,32 @@
         {\texttt{xs:string}}
         {Required}{1}{1}
         {None}{None}{\texttt{aces:author}}{None}{\lstinline{<aces:name>Joe Onset</aces:name>}}
+        
+% aces:fromCdlTransformWorkingSpace  
+\element{aces:fromCdlWorkingSpace}
+        {This element contains all the elements describing the transform used to convert from the working color space in which an ASC-CDL is applied to ACES 2065-1.}
+        {images/acesMetadataFile_xsd_Element_aces_fromCdlWorkingSpace.png}
+        {\texttt{aces:workingSpaceTransformType}}
+        {Required}{1}{1}
+        {None}{None}
+        {\texttt{aces:cdlWorkingSpace}}
+        {aces:description, aces:hash, aces:transformId}
+        {\lstinline{<aces:fromCdlWorkingSpace>} \\
+        ... \\
+        \lstinline{</aces:fromCdlWorkingSpace>}}
+
+% aces:toCdlWorkingSpace
+\element{aces:toCdlWorkingSpace}
+        {This element contains all the elements describing the transform used to convert from ACES 2065-1 to the working color space in which a ASC-CDL transform is applied.  This transform shall be included when the working color space for the ASC-CDL Transform is not a working color space described in one of the Color Space Conversion transform included in the ACES core transforms.  When the working color space for the ASC-CDL Transform is a working color space described in one of the Color Space Conversion transform included in the ACES core transforms, the \texttt{aces:toCdlWorkingSpace} is optional.}
+        {images/acesMetadataFile_xsd_Element_aces_toCdlWorkingSpace.png}
+        {\texttt{aces:workingSpaceTransformType}}
+        {Optional}{0}{1}
+        {None}{None}
+        {\texttt{aces:cdlWorkingSpace}}
+        {\texttt{aces:description, aces:hash, aces:transformId}}
+        {\lstinline{<aces:toCdlWorkingSpace>} \\
+        ... \\
+        \lstinline{</aces:toCdlWorkingSpace>}}
 
 % clipName
 \element{aces:clipName}
@@ -240,7 +266,7 @@
 		{\texttt{xs:string}}
 		{Optional}{0}{1}
 		{None}{None}
-		{\texttt{aces:amfInfo, aces:piplineInfo, aces:toLookTransformWorkingSpace,\\ aces:fromLookTransformWorkingSpace, aces:inputTransform,\\ 
+		{\texttt{aces:amfInfo, aces:piplineInfo, aces:toCdlWorkingSpace,\\ aces:fromCdlWorkingSpace, aces:inputTransform,\\ 
 		  aces:lookTransform, aces:outputTransform, aces:outputDeviceTransform, \\
 		  aces:referenceRenderingTransform}}{None}
 		{\lstinline{<aces:description>Example Movie</aces:description>}\\
@@ -256,6 +282,42 @@
 		{\texttt{aces:amfInfo, aces:pipelineInfo}}{None}
 		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}} 
 
+%  aces:inverseOutputDeviceTransform
+\element{aces:inverseOutputDeviceTransform}
+        {This element contains all the elements describing the transforms associated with an inverse output device transform used to convert output referred images to ACES.}
+        {images/acesMetadataFile_xsd_Element_aces_inverseOutputDeviceTransform.png}
+        {\texttt{aces:inverseOutputDeviceTransformType}}
+        {Required}{1}{1}
+        {None}{None}
+        {aces:description, aces:hash, aces:transformId}
+        {\lstinline{<aces:inverseOutputDeviceTransform>} \\
+        ... \\
+        \lstinline{</aces:inverseOutputDeviceTransform>}}
+        
+%  aces:inverseOutputTransform
+\element{aces:inverseOutputTransform}
+        {This element contains all the elements describing the transforms associated with an inverse output  transform used to convert output referred images to ACES.}
+        {images/acesMetadataFile_xsd_Element_aces_inverseOutputTransform.png}
+        {\texttt{aces:inverseOutputTransformType}}
+        {Required}{1}{1}
+        {None}{None}
+        {aces:description, aces:hash, aces:transformId}
+        {\lstinline{<aces:inverseOutputTransform>} \\
+        ... \\
+        \lstinline{</aces:inverseOutputTransform>}}
+        
+%  aces:inverseReferenceRenderingTransform
+\element{aces:inverseReferenceRenderingTransform}
+        {This element contains all the elements describing the transforms associated with an inverse reference rendering transform used to convert output referred images to ACES.}
+        {images/acesMetadataFile_xsd_Element_aces_inverseReferenceRenderingTransform.png}
+        {\texttt{aces:inverseReferenceRenderingTransformType}}
+        {Required}{1}{1}
+        {None}{None}
+        {aces:description, aces:hash, aces:transformId}
+        {\lstinline{<aces:inverseReferenceRenderingTransform>} \\
+        ... \\
+        \lstinline{</aces:inverseReferenceRenderingTransform>}}
+        
 % aces:inputTransformType / aces:transformId	
 \element{aces:inputTransformType / aces:transformId}
         {This element is used to communicate the transformID of an ACES Input Transform that transforms images encoded in a color space of a camera native file to ACES 2065-1.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the IDT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
@@ -264,62 +326,77 @@
         {Required}{1}{1}
         {None}{None}
         {\texttt{aces:inputTransform}}{None}
-        {\lstinline{<aces:transformId>urn:ampas:aces:transformId:v1.5:IDT.Sony.F65.a1.v1</aces:transformId>}}	
+        {\lstinline{<aces:transformId>} \\
+        \lstinline{urn:ampas:aces:transformId:v1.5:IDT.Sony.F65.a1.v1} \\
+        \lstinline{</aces:transformId>}}
 
-% aces:lookTransformWorkingSpace
-\element{aces:lookTransformWorkingSpace}
-        {This element contains all the elements describing the transforms used to convert to and from the working color space in which a look transform is applied.}
-        {images/acesMetadataFile_xsd_Element_aces_lookTransformWorkingSpace.png}
-        {\texttt{aces:lookTransformWorkingSpaceType}}
+% aces:inverseOutputDeviceTransformType / aces:transformId
+\element{aces:inverseOutputDeviceTransformType / aces:transformId}
+        {This element is used to communicate the transformID of an ACES Inverse Output Device Transform that transforms images encoded in an output referred color space to OCES.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the InvODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_2.png}
+        {\texttt{aces:tnInverseDeviceOutputTransform}}
         {Required}{1}{1}
         {None}{None}
-        {\texttt{aces:lookTransform}}{\texttt{aces:fromLookTransformWorkingSpace, aces:toLookTransformWorkingSpace}}
-        {\lstinline{<aces:lookTransformWorkingSpace>} \\
+        {\texttt{aces:inputTransform}}{None}
+        {\lstinline{<aces:transformId>} \\
+        \lstinline{urn:ampas:aces:transformId:v1.5:InvODT.Academy.Rec709_100nits_dim.a1.0.3} \\
+        \lstinline{</aces:transformId>}}
+        
+% aces:inverseOutputTransformType / aces:transformId
+\element{aces:inverseOutputTransformType / aces:transformId}
+        {This element is used to communicate the transformID of an ACES Inverse Output Transform that transforms images encoded in an output referred color space to ACES 2065-1.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the InvRRTODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_2.png}
+        {\texttt{aces:tnInverseReferenceRenderingTransform}}
+        {Required}{1}{1}
+        {None}{None}
+        {\texttt{aces:inputTransform}}{None}
+        {\lstinline{<aces:transformId>}\\
+        \lstinline{urn:ampas:aces:transformId:v1.5:InvRRT.a1.0.3}\\
+        \lstinline{</aces:transformId>}}
+
+% aces:inverseReferenceRenderingTransformType / aces:transformId
+\element{aces:inverseReferenceRenderingTransformType / aces:transformId}
+        {This element is used to communicate the transformID of an ACES Inverse Reference Rendering Transform that transforms images encoded in OCES color space to ACES 2065-1.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the InvRRT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_3.png}
+        {\texttt{aces:tnInverseReferenceRenderingTransform}}
+        {Required}{1}{1}
+        {None}{None}
+        {\texttt{aces:inputTransform}}{None}
+        {\lstinline{<aces:transformId>} \\
+        \lstinline{urn:ampas:aces:transformId:v1.5:InvRRTODT.Academy.Rec2020_1000nits_15nits_ST2084.a1.1.0}\\
+        \lstinline{</aces:transformId>}}
+  
+%aces:cdlWorkingSpace
+\element{aces:cdlWorkingSpace}
+        {This element contains all the elements describing the transforms used to convert to and from the working color space in which a ASC-CDL transform is applied. This element allows for CDLs to be applied in color spaces other than ACES RGB, since CDLs cannot contain ACES transforms themselves. The input and output of the parent \texttt{<lookTransform>} element is still ACES RGB per SMPTE ST.2065-1. }
+        {images/acesMetadataFile_xsd_Element_aces_cdlWorkingSpace.png}
+        {\texttt{aces:cdlWorkingSpaceType}}
+        {Required}{1}{1}
+        {None}{None}
+        {\texttt{aces:lookTransform}}{\texttt{aces:fromCdlWorkingSpace, aces:toCdlWorkingSpace}}
+        {\lstinline{<aces:cdlWorkingSpace>} \\
         ... \\
-        \lstinline{</aces:lookTransformWorkingSpace>}}	   
+        \lstinline{</aces:cdlWorkingSpace>}}     
   
 % aces:lookTransformType / aces:transformId      
 \element{aces:lookTransformType / aces:transformId}
         {This element is used to communicate the transformID of an ACES Look Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Look Transforms (LMT).  The element is restricted to enforce the use of transformIDs that follow the LMT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
-        {images/acesMetadataFile_xsd_Element_aces_transformId_5.png}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_8.png}
         {\texttt{aces:tnLookTransform}}
         {Choice of \texttt{aces:transformId, cdl:ColorCorrectionRef}, or \texttt{cdl:SOPNode} and \\ \texttt{cdl:SatNode} required}
         {0}{1}
         {None}{None}
         {\texttt{aces:lookTransform}}
         {None}
-        {\lstinline{<aces:transformId>urn:ampas:aces:transformId:v1.5:LMT.ACME.BleachBypass.a1.v1</aces:transformId>}} 
-
-% aces:fromLookTransformWorkingSpace  
-\element{aces:fromLookTransformWorkingSpace}
-        {This element contains all the elements describing the transform used to convert from the working color space in which a look transform is applied to ACES 2065-1.}
-        {images/acesMetadataFile_xsd_Element_aces_fromLookTransformWorkingSpace.png}
-        {\texttt{aces:workingSpaceTransformType}}
-        {Required}{1}{1}
-        {None}{None}
-        {\texttt{aces:lookTransformWorkingSpace}}
-        {aces:description, aces:hash, aces:transformId}
-        {\lstinline{<aces:fromLookTransformWorkingSpace>} \\
-        ... \\
-        \lstinline{</aces:fromLookTransformWorkingSpace>}}
-
-% aces:toLookTransformWorkingSpace
-\element{aces:toLookTransformWorkingSpace}
-        {This element contains all the elements describing the transform used to convert from ACES 2065-1 to the working color space in which a look transform is applied.  This transform shall be included when the working color space for the Look Transform is not a working color space described in one of the Color Space Conversion transform included in the ACES core transforms.  When the working color space for the Look Transform is a working color space described in one of the Color Space Conversion transform included in the ACES core transforms the \texttt{aces:toLookTransformWorkingSpace} is optional.}
-        {images/acesMetadataFile_xsd_Element_aces_toLookTransformWorkingSpace.png}
-        {\texttt{aces:workingSpaceTransformType}}
-        {Optional}{0}{1}
-        {None}{None}
-        {\texttt{aces:lookTransformWorkingSpace}}
-        {\texttt{aces:description, aces:hash, aces:transformId}}
-        {\lstinline{<aces:fromLookTransformWorkingSpace>} \\
-        ... \\
-        \lstinline{</aces:fromLookTransformWorkingSpace>}}
+        {\lstinline{<aces:transformId>}\\
+        \lstinline{urn:ampas:aces:transformId:v1.5:LMT.ACME.BleachBypass.a1.v1</aces:transformId>}\\
+        \lstinline{</aces:transformId>}
+        } 
  
 % aces:outputDeviceTransformType / aces:transformId       
 \element{aces:outputDeviceTransformType / aces:transformId}
         {This element is used to communicate the transformID of the ACES Output Device Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Output Transforms (ODT).  The element is restricted to enforce the use of transformIDs that follow the ODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
-        {images/acesMetadataFile_xsd_Element_aces_transformId_2.png}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_5.png}
         {\texttt{aces:tnOutputDeviceTransform}}
         {Required}{1}{1}
         {None}{None}
@@ -332,7 +409,7 @@
         {images/acesMetadataFile_xsd_Element_aces_outputDeviceTransform.png}
         {aces:outputDeviceTransformType}
         {Choice of \texttt{aces:transformId} or \texttt{aces:outputDeviceTransform} and \\  \texttt{aces:referenceRenderingTransform} required}{1}{1}
-        {None}{None}{\texttt{aces:acesOutputTransform}}
+        {None}{None}{\texttt{aces:OutputTransform}}
         {\texttt{aces:description, aces:hash, aces:transformId}}
         {\lstinline{<aces:outputDeviceTransform>} \\
         ... \\
@@ -345,7 +422,7 @@
         {\texttt{aces:referenceRenderingTransformType}}
         {Choice of \texttt{aces:transformId} or \texttt{aces:outputDeviceTransform} and \\  \texttt{aces:referenceRenderingTransform} required}
         {1}{1}{None}{None}
-        {\texttt{aces:acesOutputTransform}}
+        {\texttt{aces:OutputTransform}}
         {\texttt{aces:description, aces:hash, aces:transformId}}
         {\lstinline{<aces:referenceRenderingTransform>} \\
         ... \\
@@ -354,13 +431,15 @@
 % aces:outputTransformType / aces:transformId
 \element{aces:outputTransformType / aces:transformId}
         {This element is used to communicate the transformID of the ACES Output Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Output Transforms (RRTODT).  The element is restricted to enforce the use of transformIDs that follow the RRTODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
-        {images/acesMetadataFile_xsd_Element_aces_transformId_3.png}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_6.png}
         {\texttt{aces:tnOutputTransform}}
         {Required}{1}{1}
         {None}{None}
         {\texttt{aces:outputTransform}}
         {None}
-        {\lstinline{<aces:transformId>urn:ampas:aces:transformId:v1.5:RRTODT.Academy.Rec2020_1000nits_15nits_HLG.a1.1.0</aces:transformId>}}
+        {\lstinline{<aces:transformId>}\\
+        \lstinline{urn:ampas:aces:transformId:v1.5:RRTODT.Academy.Rec2020_1000nits_15nits_HLG.a1.1.0}\\
+        \lstinline{</aces:transformId>}}
 
 % aces:systemVersion
 \element{aces:systemVersion}
@@ -377,7 +456,7 @@
 
 % aces:inputTransform
 \element{aces:inputTransform}
-        {This element contains all the elements containing information about the ACES input transform for a given ACES viewing pipeline.  The required \texttt{applied} attribute is used to indicate if the ACES input transform indicated has been applied to the media files or not.  If \texttt{applied="true"} the media files shall be encoded as according to SMPTE ST 2065-1. If \texttt{applied="false"} the media files may be transcoded to ACES using the transform indicated the child element \texttt{transformId}.}
+        {This element contains all the elements containing information about the ACES input transform for a given ACES viewing pipeline.  The required \texttt{applied} attribute is used to indicate if the ACES input transform indicated has been applied to the media files or not.  If \texttt{applied="true"} the media files shall be encoded as according to SMPTE ST 2065-1. If \texttt{applied="false"} the media files may be transcoded to ACES using the transform indicated in the child element \texttt{transformId}.}
         {images/acesMetadataFile_xsd_Element_aces_inputTransform.png}
         {\texttt{aces:inputTransformType}}
         {Optional}{0}{1}
@@ -390,13 +469,19 @@
 
 % aces:lookTransform 
  \element{aces:lookTransform}
-        {This element contains a look transform for a given ACES viewing pipeline.  If there are multiple \texttt{<lookTransform>} elements, they shall be applied in the order in which they are written in the AMF (top to bottom). The required \texttt{applied} attribute is used to indicate if the ACES look transform has been applied to the media files or not.  If \texttt{applied="true"} the media files shall have the look transform "baked" into the image data. If \texttt{applied="false"} shall not have the look transform "baked" into the image data.}
+        {This element contains a look transform (LMT) for a given ACES viewing pipeline.  If the AMF includes multiple \texttt{<lookTransform>} elements, they shall be applied in the order in which they are written in the AMF (top to bottom).
+
+        The required \texttt{applied} attribute is used to indicate if the ACES look transform has been applied to the media files or not.  If \texttt{applied="true"}, the media files shall have the look transform "baked" into the image data (but is still included for diagnostic purposes). If \texttt{applied="false"}, the media files shall not have the look transform "baked" into the image data. 
+        
+        The input values and output values of ACES Look Transforms are ACES 2065-1. This is to avoid linking the Look Transforms to project specific working spaces. Look Transforms may convert ACES 2065-1 to a more appropriate working space for internal look application. Care should be taken when building Look Transforms as 3D LUTs, given Look Transforms input and output values are linear. In practice, smart implementations may modify the Look Transform to avoid unnecessary conversions within the context of an ACES pipeline as long as the results match those specified by the transforms in the AMF.  
+
+        ASC-CDL does not have a mechanism to convert to a non-linear working space appropriate for the application of ASC-CDL values. For this reason, the \texttt{<aces:cdlTransformWorkingSpace>} element can be used to indicate the working space via transformsIDs in which ASC-CDL values are to be applied.}
         {images/acesMetadataFile_xsd_Element_aces_lookTransform.png}
         {\texttt{aces:lookTransformType}}
         {Optional}{0}{unbounded}
         {\texttt{applied (xs:boolean)}}{None}
         {\texttt{aces:pipeline}, \texttt{aces:archivedPipeline}}
-        {\texttt{aces:description, aces:hash, aces:lookTransformWorkingSpace,\\ aces:transformId, cdl:ColorCorrectionRef, cdl:SOPNode, cdl:SatNode}}
+        {\texttt{aces:description, aces:hash, aces:CdlWorkingSpace,\\ aces:transformId, cdl:ColorCorrectionRef, cdl:SOPNode, cdl:SatNode}}
         {\lstinline{<aces:lookTransform>} \\
         ... \\
         \lstinline{</aces:lookTransform>}} 
@@ -423,7 +508,7 @@
         {Required}{1}{1}
         {None}{None}
         {\texttt{aces:pipeline, aces:archivedPipeline}}
-        {\texttt{aces:author, aces:dateTime, aces:description, aces:systemVersion, aces:uuid}}
+        {\texttt{aces:author, aces:dateTime, aces:description, aces:systemVersion,\\ aces:uuid}}
         {\lstinline{<aces:pipelineInfo>} \\
         ... \\
         \lstinline{</aces:pipelineInfo>}}
@@ -431,13 +516,15 @@
 % aces:referenceRenderingTransform / aces:transformId
 \element{aces:referenceRenderingTransform / aces:transformId}
         {This element is used to communicate the transformID of the ACES Reference Rendering Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Reference Rendering Transform (RRT).  The element is restricted to enforce the use of transformIDs that follow the RRT naming conventions established in the versioning system specification.}
-        {images/acesMetadataFile_xsd_Element_aces_transformId_1.png}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_4.png}
         {\texttt{aces:tnReferenceRenderingTransform}}
         {Required}{1}{1}
         {None}{None}
         {\texttt{aces:outputTransform}}
         {None}
-        {\lstinline{<aces:transformId>urn:ampas:aces:transformId:v1.5:urn:ampas:aces:transformId:v1.5:RRT.a1.0.0</aces:transformId>}}
+        {\lstinline{<aces:transformId>}\\
+        \lstinline{urn:ampas:aces:transformId:v1.5:urn:ampas:aces:transformId:v1.5:RRT.a1.0.0}\\
+        \lstinline{</aces:transformId>}}
 
 % aces:hash
 \element{aces:hash}
@@ -481,16 +568,18 @@
         {/texttt{aces:systemVersion}}{None}
         {\lstinline{<aces:patchVersion>2</aces:patchVersion>}}
 
-% aces:aces:workingSpaceTransformType / aces:transformId
+% aces:workingSpaceTransformType / aces:transformId
 \element{aces:workingSpaceTransformType / aces:transformId}
         {This element is used to communicate the transformID of the ACES Color Space Conversion Transform used to convert to or from the Look Transform working space.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Reference Rendering Transform (ACEScsc).  The element is restricted to enforce the use of transformIDs that follow the ACEScsc naming conventions established in the versioning system specification.}
-        {images/acesMetadataFile_xsd_Element_aces_transformId_4.png}
-        {\texttt{aces:aces:tnColorSpaceConversionTransform}}
+        {images/acesMetadataFile_xsd_Element_aces_transformId_7.png}
+        {\texttt{aces:tnColorSpaceConversionTransform}}
         {Required}{1}{1}
         {None}{None}
-        {\texttt{aces:aces:toLookTransformWorkingSpace, aces:fromLookTransformWorkingSpace}}
+        {\texttt{aces:toCdlWorkingSpace, aces:fromCdlWorkingSpace}}
         {None}
-        {\lstinline{<aces:transformId>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACEScct_to_ACES.a1.0.3</aces:transformId>}}
+        {\lstinline{<aces:transformId>}\\
+        \lstinline{urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACEScct_to_ACES.a1.0.3}\\
+        \lstinline{</aces:transformId>}}
 
 % cdl:SOPNode
 \element{cdl:SOPNode}

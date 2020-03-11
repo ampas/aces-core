@@ -1,5 +1,9 @@
 \documentclass[10pt]{academydoc}
 \pagestyle{plain}
+% \usepackage{draftwatermark}
+% \SetWatermarkText{DRAFT}
+% \SetWatermarkScale{1}
+\usepackage{float}
 
 \lstset{language=XML,
   basicstyle=\ttfamily\small,
@@ -19,12 +23,12 @@
 
 % Set Document Details
 \doctype{spec} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
-\docname{Academy Color Encoding System Metadata File (AMF) Specification}
-\altdocname{ACES Metadata File Specification}
+\docname{ACES Metadata File (AMF)}
+\altdocname{ACES Metadata File}
 % Sets the document name used in header - usually an abbreviated document title
 \docnumber{S-2019-001}
 \committeename{Academy Color Encoding System (ACES) Project Committee}
-\docdate{December 20, 2019}
+\docdate{March 11, 2020}
 \summary{
 The ACES Metadata File (``AMF'') is a `sidecar' XML file intended to exchange the metadata required to recreate ACES viewing pipelines. This document specifies example use cases for AMF along with the data model and XML tags needed for implementation.
 
@@ -38,7 +42,8 @@ The ACES Metadata File (``AMF'') is a `sidecar' XML file intended to exchange th
 \input{notices} \newpage
 \input{histanddocs} \newpage
 
-\tableofcontents \newpage
+\tableofcontents 
+\newpage
 
 \input{references}
 \input{termsanddefs}
