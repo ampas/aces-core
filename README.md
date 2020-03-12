@@ -31,6 +31,8 @@ Included in ACES 1.2:
     * Add new version of Common LUT Format specification document (S-2014-006)
     * Add new ACES Project Organization and Development Procedure document (P-2019-001)
     * Add ACES Color Space Conversion transforms between:
+        * ACES and C-Log2 C-Gamut
+        * ACES and C-Log3 C-Gamut
         * ACES and LogC (EI800) ARRI WideGamut
         * ACES and Log3G10 REDWideGamutRGB
         * ACES and S-Log3 S-Gamut3

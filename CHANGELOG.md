@@ -5,6 +5,8 @@
     * Add new version of Common LUT Format specification document (S-2014-006)
     * Add new ACES Project Organization and Development Procedure document (P-2019-001)
     * Add ACES Color Space Conversion transforms between:
+        * ACES and C-Log2 C-Gamut
+        * ACES and C-Log3 C-Gamut
         * ACES and LogC (EI800) ARRI WideGamut
         * ACES and Log3G10 REDWideGamutRGB
         * ACES and S-Log3 S-Gamut3
@@ -15,11 +17,15 @@
         * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
         * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
     * Add vendor-supplied IDTs for Sony VENICE
+* Bug Fixes:
+	* Add missing D65 to D60 CAT to 'InvODT.Academy.P3DCI_D65sim_48nits.ctl'
 * Other:
+	* Revert function parameters of ODTs with full/legal option from 'uniform bool' to 'varying int'
     * Update ACES System Versioning document (S-2014-002)
     * Update TransformIDs of ACES reference implementation transforms
     * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
     * Add reference images to accompany new ACEScsc transforms
+    * Various minor typo fixes in document LaTeX source files
 
 
 **Version 1.1 (June 21, 2018):**
