@@ -125,6 +125,33 @@
             \begin{adjustwidth}{5mm}{}            
             \lstinline{xs:pattern value=urn:ampas:aces:transformId:v1.5:IDT\.\S+\.\S+\.a\d+\.v\d+}
             \end{adjustwidth}
+            
+% tnInverseOutputDeviceTransform
+\simpleType{aces:tnInverseOutputDeviceTransform}
+            {Type defining valid transformID strings for InverseOutputDeviceTransform transforms}
+            {Restriction of \texttt{xs:string}}
+
+            \begin{adjustwidth}{5mm}{}            
+            \lstinline{xs:pattern value=urn:ampas:aces:transformId:v1.5:(InvODT\.\S+\.\S+\.a\d+\.v\d+|InvODT\.Academy\.\S+\.a\d+\.\d+\.\d+)}
+            \end{adjustwidth}
+            
+% tnInverseOutputTransform
+\simpleType{aces:tnInverseOutputTransform}
+            {Type defining valid transformID strings for InverseOutputTransform transforms}
+            {Restriction of \texttt{xs:string}}
+
+            \begin{adjustwidth}{5mm}{}            
+            \lstinline{xs:pattern value=urn:ampas:aces:transformId:v1.5:(InvRRTODT\.\S+\.\S+\.a\d+\.v\d+|InvRRTODT\.Academy\.\S+\.a\d+\.\d+\.\d+)}
+            \end{adjustwidth}
+            
+% tnInverseReferenceRenderingTransform
+\simpleType{aces:tnInverseReferenceRenderingTransform}
+            {Type defining valid transformID strings for tnInverseReferenceRenderingTransform transforms}
+            {Restriction of \texttt{xs:string}}
+
+            \begin{adjustwidth}{5mm}{}            
+            \lstinline{xs:pattern value=urn:ampas:aces:transformId:v1.5:InvRRT\.a\d+\.\d+\.\d+}
+            \end{adjustwidth}
 
 % tnLookTransform
 \simpleType{aces:tnLookTransform}
@@ -170,6 +197,12 @@
             {\texttt{xs:sequence}}
             {aces:emailAddress, aces:name}
             
+% cdlWorkingSpaceType
+\complexType{aces:cdlWorkingSpaceType}
+            {Type defining the elements to communicate information about the transforms to and from the ASC-CDL Working Space}
+            {\texttt{xs:sequence}}
+            {aces:fromCdlWorkingSpace, aces:toCdlWorkingSpace}
+            
 % clipIdType
 \complexType{aces:clipIdType}
             {Type defining elements used to communicate information about the essence associated with the AMF}
@@ -200,19 +233,31 @@
                 {extension of \texttt{aces:transformType}}
                 {aces:description, aces:hash, aces:transformId}
                 {applied}
-        
+                
+% inverseOutputDeviceTransformType
+\complexType{aces:inverseOutputDeviceTransformType}
+                {Type defining the elements to communicate information about an ACES Inverse Output Device Transform.  This type is used to define an inverse ACES pipeline to specify how output referred image data should be converted to ACES.}
+                {extension of \texttt{aces:transformType}}
+                {aces:description, aces:hash, aces:transformId}
+                
+% inverseOutputTransformType
+\complexType{aces:inverseOutputTransformType}
+                {Type defining the elements to communicate information about an ACES Inverse Output Transform. This type is used to define an inverse ACES pipeline to specify how output referred image data should be converted to ACES.}
+                {extension of texttt{aces:transformType}}
+                {aces:description, aces:hash, aces:transformId}
+
+% inverseReferenceRenderingTransformType
+\complexType{aces:inverseReferenceRenderingTransformType}
+                {Type defining the elements to communicate information about an ACES Inverse Reference Rendering Transform.  This type is used to define an inverse ACES pipeline to specify how output referred image data should be converted to ACES.}
+                {extension of \texttt{aces:transformType}}
+                {aces:description, aces:hash, aces:transformId}
+
 % lookTransformType
 \complexTypeCWA{aces:lookTransformType}
                 {Type defining the elements to communicate information about an ACES Look Transform associated with an ACES viewing pipeline.}
                 {extension of \texttt{aces:transformType}}
                 {aces:description, aces:hash, aces:lookTransformWorkingSpace,\\ aces:transformId, cdl:ColorCorrectionRef, cdl:SOPNode, cdl:SatNode}
                 {applied}
-                
-% lookTransformType
-\complexType{aces:lookTransformWorkingSpaceType}
-                {Type defining the elements to communicate information about the transforms to and from the Look Transform Working Space}
-                {\texttt{xs:sequence}}
-                {aces:fromLookTransformWorkingSpace, aces:toLookTransformWorkingSpace}
                 
 % outputDeviceTransformType
 \complexTypeCWA{aces:outputDeviceTransformType}

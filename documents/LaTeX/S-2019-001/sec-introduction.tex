@@ -12,18 +12,16 @@ However, when exchanging ACES images during production, there is often missing i
 Examples of such information:
 \begin{itemize}
     \item ACES Version -- \textit{which version of ACES was used?}
-    \item Look Transform -- \textit{is there a creative look (CDL or LUT?)}
-    \item Output Transform -- \textit{on what display was this viewed?}
+    \item Look Transform -- \textit{is there a creative look?}
+    \item Output Transform -- \textit{how was this viewed on a display?}
 \end{itemize}
 
-For production, carriage of this information is crucial in order to unambiguously exchange ACES images, looks, and overall creative intent through its various stages (e.g. on-set, dailies, editorial, VFX, finishing).
-
-For archival, storage of this information is crucial in order to form a record of creative intent for historical and remastering purposes.
+To maintain consistent color appearance, transporting this information is crucial. Additionally, this information serves as an unambiguous archive of the creative intent.
 
 \section{What is AMF?}
 The ACES Metadata File (``AMF'') is a sidecar XML file intended to exchange the metadata required to recreate ACES viewing pipelines. It describes the transforms necessary to configure an ACES viewing pipeline for a collection of related image files.
 
-An AMF may be associated with a single frame or clip. Additionally, it may remain unassociated with an image, and existing purely as a translation of an ACES viewing pipeline, or creative look, that could be applied to any image.
+An AMF may have a specified association with a single frame or clip. Alternatively, it may exist without any association to an image, and one may apply it to an image. An application of an AMF to an image would translate its viewing pipeline to the target image.
 
 Images are formed at several stages of production and post-production, including:
 
@@ -37,7 +35,7 @@ Images are formed at several stages of production and post-production, including
 
 AMF can be compatible with any digital image, and is not restricted to those encoded in the ACES (SMPTE ST 2065-1). They may be camera native file formats or other encodings if they have associated Input Device Transforms (IDTs) (using the \texttt{\textbf{<inputTransform>}} element) so they may be displayed using an ACES viewing pipeline.
 
-AMFs may also embed creative look adjustments as one or more LMTs (using the \texttt{\textbf{<lookTransform>}} elements). These looks may be in the form of ASC CDL values, or a reference to an external look file or LUT.  Multiple \texttt{<lookTransform>} elements are allowed, and the order of operations in which they are applied shall be the order in which they appear in the AMF.
+AMFs may also embed creative look adjustments as one or more LMTs (using the \texttt{\textbf{<lookTransform>}} elements). These looks may be in the form of ASC CDL values, or a reference to an external look file, such as a CLF (Common LUT Format).  Multiple \texttt{<lookTransform>} elements are allowed, and the order of operations in which they are applied shall be the order in which they appear in the AMF.
 
 AMFs can also serve as effective archival elements. When paired with finished ACES image files, they form a complete archival record of how image content is intended to be viewed (for example, using the \texttt{\textbf{<outputTransform>}} and \texttt{\textbf{<systemVersion>}} elements).
 

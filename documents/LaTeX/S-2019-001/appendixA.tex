@@ -81,16 +81,34 @@
 			<xs:pattern value="urn:ampas:aces:transformId:v1.5:(ODT\.\S+\.\S+\.a\d+\.v\d+|ODT\.Academy\.\S+\.a\d+\.\d+\.\d+)"/>
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<xs:simpleType name="tnInverseOutputDeviceTransform">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="urn:ampas:aces:transformId:v1.5:(InvODT\.\S+\.\S+\.a\d+\.v\d+|InvODT\.Academy\.\S+\.a\d+\.\d+\.\d+)"/>
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:simpleType name="tnOutputTransform">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="urn:ampas:aces:transformId:v1.5:(RRTODT\.\S+\.\S+\.a\d+\.v\d+|RRTODT\.Academy\.\S+\.a\d+\.\d+\.\d+)"/>
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<xs:simpleType name="tnInverseOutputTransform">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="urn:ampas:aces:transformId:v1.5:(InvRRTODT\.\S+\.\S+\.a\d+\.v\d+|InvRRTODT\.Academy\.\S+\.a\d+\.\d+\.\d+)"/>
+		</xs:restriction>
+	</xs:simpleType>
 
 	<xs:simpleType name="tnReferenceRenderingTransform">
 		<xs:restriction base="xs:string">
 			<xs:pattern value="urn:ampas:aces:transformId:v1.5:RRT\.a\d+\.\d+\.\d+"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:simpleType name="tnInverseReferenceRenderingTransform">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="urn:ampas:aces:transformId:v1.5:InvRRT\.a\d+\.\d+\.\d+"/>
 		</xs:restriction>
 	</xs:simpleType>
 	
@@ -133,9 +151,20 @@
 	<xs:complexType name="inputTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
-					<xs:element name="transformId" type="aces:tnInputTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:sequence>
+						<xs:element name="transformId" type="aces:tnInputTransform" minOccurs="1" maxOccurs="1"/>
+					</xs:sequence>
+					<xs:choice>
+						<xs:sequence>
+							<xs:element name="inverseOutputTransform" type="aces:inverseOutputTransformType" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+						<xs:sequence>
+							<xs:element name="inverseOutputDeviceTransform" type="aces:inverseOutputDeviceTransformType" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="inverseReferenceRenderingTransform" type="aces:inverseReferenceRenderingTransformType" minOccurs="1" maxOccurs="1"/>
+						</xs:sequence>
+					</xs:choice>
+				</xs:choice>
 				<xs:attribute name="applied" type="xs:boolean" use="required"/>
 			</xs:extension>
 		</xs:complexContent>
@@ -160,6 +189,26 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:complexType name="inverseReferenceRenderingTransformType">
+		<xs:complexContent>
+			<xs:extension base="aces:transformType">
+				<xs:sequence>
+					<xs:element name="transformId" type="aces:tnInverseReferenceRenderingTransform" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="inverseOutputDeviceTransformType">
+		<xs:complexContent>
+			<xs:extension base="aces:transformType">
+				<xs:sequence>
+					<xs:element name="transformId" type="aces:tnInverseOutputDeviceTransform" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 	<xs:complexType name="outputTransformType">
 		<xs:complexContent>
@@ -176,6 +225,16 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:complexType name="inverseOutputTransformType">
+		<xs:complexContent>
+			<xs:extension base="aces:transformType">
+				<xs:sequence>
+					<xs:element name="transformId" type="aces:tnInverseOutputTransform" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
 
 	<xs:complexType name="workingSpaceTransformType">
 		<xs:complexContent>
@@ -187,10 +246,10 @@
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:complexType name="lookTransformWorkingSpaceType">
+	<xs:complexType name="cdlWorkingSpaceType">
 		<xs:sequence>
-			<xs:element name="toLookTransformWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="fromLookTransformWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="toCdlWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="fromCdlWorkingSpace" type="aces:workingSpaceTransformType" minOccurs="1" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 
@@ -198,16 +257,18 @@
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
 				<xs:sequence>
-					<xs:element name="lookTransformWorkingSpace" type="aces:lookTransformWorkingSpaceType" minOccurs="1" maxOccurs="1"/>
 					<xs:choice minOccurs="1" maxOccurs="1">
 						<xs:element name="transformId" type="aces:tnLookTransform" minOccurs="1" maxOccurs="1"/>
-						<xs:choice minOccurs="1" maxOccurs="1">
-							<xs:sequence>
-								<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
-								<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
-							</xs:sequence>
-							<xs:element ref="cdl:ColorCorrectionRef"/>
-						</xs:choice>
+						<xs:sequence>
+							<xs:element name="cdlWorkingSpace" type="aces:cdlWorkingSpaceType" minOccurs="1" maxOccurs="1"/>
+							<xs:choice minOccurs="1" maxOccurs="1">
+								<xs:sequence>
+									<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
+									<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
+								</xs:sequence>
+								<xs:element ref="cdl:ColorCorrectionRef"/>
+							</xs:choice>
+						</xs:sequence>
 					</xs:choice>
 				</xs:sequence>
 				<xs:attribute name="applied" type="xs:boolean" use="required"/>
@@ -272,4 +333,5 @@
 	</xs:element>
 
 </xs:schema>
+
 \end{lstlisting}
