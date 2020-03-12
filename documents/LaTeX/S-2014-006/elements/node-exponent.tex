@@ -121,11 +121,13 @@ This node contains parameters for processing pixels through a power law function
 		\emph{Attributes:}
 		\begin{xmlfields}
 		    \xmlitem["exponent"][required] the power to which the value is to be raised \\
-
+		    If \xml{style} is any of the ``monCurve'' types, the valid range is [1.0, 10.0]. The nominal value is 1.0.
+		    
 		    \note{When using a ``monCurve'' style, a value of 1.0 assigned to \xml{exponent} could result in a divide-by-zero error. Implementors should protect against this case.}
 		    
 		    \xmlitem["offset"][optional] the offset value to use \\
 		    If \xml{offset} is used, the enclosing \xml{Exponent} element's style attribute must be set to one of the ``monCurve'' types. Offset is not allowed when \xml{style} is any of the ``basic'' types.\\
+            The valid range is [0.0, 0.9]. The nominal value is 0.0.
 		    
 		    \note{If zero is provided as a value for \xml{offset}, the calculation of $xBreak$ or $yBreak$ could result in a divide-by-zero error. Implementors should protect against this case.}
 		    
@@ -140,29 +142,29 @@ This node contains parameters for processing pixels through a power law function
 
 \emph{Examples:}
 \begin{lstlisting}[caption=Using \xml{Exponent} node for applying a 2.2 gamma.]
-<Exponent inBitDepth="32f'' outBitDepth="32f'' style="basicFwd">
+<Exponent inBitDepth="32f" outBitDepth="32f" style="basicFwd">
 	<Description>Basic 2.2 Gamma</Description>
-	<ExponentParams exponent="2.2'' />
+	<ExponentParams exponent="2.2"/>
 </Exponent>
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Using \xml{Exponent} node for applying the intended EOTF found in IEC 61966-2-1:1999 (sRGB).]
-<Exponent inBitDepth="32f'' outBitDepth="32f'' style="monCurveFwd">
+<Exponent inBitDepth="32f" outBitDepth="32f" style="monCurveFwd">
 	<Description>EOTF (sRGB)</Description>
-	<ExponentParams exponent="2.4'' offset="0.055'' />
+	<ExponentParams exponent="2.4" offset="0.055" />
 </Exponent>
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Using \xml{Exponent} node to apply CIE L* formula.]
-<Exponent inBitDepth="32f'' outBitDepth="32f'' style="monCurveRev">
+<Exponent inBitDepth="32f" outBitDepth="32f" style="monCurveRev">
 	<Description>CIE L*</Description>
-	<ExponentParams exponent="3.0'' offset="0.16'' />
+	<ExponentParams exponent="3.0" offset="0.16" />
 </Exponent>
 \end{lstlisting}
 
 \begin{lstlisting}[caption=Using \xml{Exponent} node to apply Rec. 709 OETF.]
-<Exponent inBitDepth="32f'' outBitDepth="32f'' style="monCurveRev">
+<Exponent inBitDepth="32f" outBitDepth="32f" style="monCurveRev">
 	<Description>Rec. 709 OETF</Description>
-	<ExponentParams exponent="1/0.45'' offset="0.099'' />
+	<ExponentParams exponent="1/0.45" offset="0.099" />
 </Exponent>
 \end{lstlisting}

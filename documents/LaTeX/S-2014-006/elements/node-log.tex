@@ -13,11 +13,26 @@ This node contains parameters for processing pixels through a logarithmic or ant
 \emph{Attributes:}
 \begin{xmlfields}
 	\xmlitem[style][required] specifies the form of the of log function to be applied \par
-	Supported values are: 
+	Supported values for "style" are: 
+        \begin{itemize}
+            \item[-] \xml{"log10"}
+            \item[-] \xml{"antiLog10"}
+            \item[-] \xml{"log2"}
+            \item[-] \xml{"antiLog2"}
+            \item[-] \xml{"linToLog"}
+            \item[-] \xml{"logToLin"}
+            \item[-] \xml{"cameraLinToLog"}
+            \item[-] \xml{"cameraLogToLin"}
+        \end{itemize}
+            
+	The formula to be applied for each style is described by the equations below, for all of which: \\[6pt]
+        \tabto{0.75in} $\texttt{FLT\_MIN} = 1.175494\mathrm{e}{-38}$\\[6pt]
+        \tabto{0.75in} MAX(${a,b}$) returns $a$ if $a > b$ and $b$ if $b \geq a$
+
 	    \begin{itemize}
             \item[-] \xml{"log10"}: applies a base 10 logarithm according to
             	\begin{equation}
-					y = \text{log}_{10}(x)
+					y = \text{log}_{10}(\mathrm{MAX}(x,\texttt{FLT\_MIN}))
 				\end{equation}
 				
             \item[-] \xml{"antiLog10"}: applies a base 10 anti-logarithm according to
@@ -27,7 +42,7 @@ This node contains parameters for processing pixels through a logarithmic or ant
 				
             \item[-] \xml{"log2"}: applies a base 2 logarithm according to
 				\begin{equation}
-					y = \text{log}_{2}(x)
+					y = \text{log}_{2}(\mathrm{MAX}(x,\texttt{FLT\_MIN}))
 				\end{equation}
 				
             \item[-] \xml{"antiLog2"}: applies a base 2 anti-logarithm according to
@@ -37,7 +52,7 @@ This node contains parameters for processing pixels through a logarithmic or ant
             
             \item[-] \xml{"linToLog"}: applies a logarithm according to
                 \begin{equation} \label{eq:linToLog}
-                    y = \var{logSideSlope} \times \text{log}_{\var{base}}( \var{linSideSlope} \times x + \var{linSideOffset}) + \var{logSideOffset}
+                    y = \var{logSideSlope} \times \text{log}_{\var{base}}(\mathrm{MAX}( \var{linSideSlope} \times x + \var{linSideOffset},\texttt{FLT\_MIN})) + \var{logSideOffset}
                 \end{equation}            
             
             \item[-] \xml{"logToLin"}: applies an anti-logarithm according to
@@ -48,11 +63,11 @@ This node contains parameters for processing pixels through a logarithmic or ant
             \item[-] \xml{"cameraLinToLog"}: applies a piecewise function with logarithmic and linear segments on linear values, converting them to non-linear values \par
 
                 \begin{equation} \label{eq:camLinToLog}
-            \resizebox{.75\hsize}{!}{$
+                \resizebox{.85\hsize}{!}{$
                     y = 
                     \begin{dcases}
                         \var{linearSlope} \times x + \var{linearOffset} & \text{if } x \leq \var{linSideBreak} \\
-                        \var{logSideSlope} \times \text{log}_{\var{base}}( \var{linSideSlope} \times x + \var{linSideOffset}) + \var{logSideOffset} & \text{otherwise} \\
+                        \var{logSideSlope} \times \text{log}_{\var{base}}(\mathrm{MAX}(\var{linSideSlope} \times x + \var{linSideOffset},\texttt{FLT\_MIN})) + \var{logSideOffset} & \text{otherwise} \\
                     \end{dcases}
                     $}
                 \end{equation}
@@ -101,7 +116,7 @@ This node contains parameters for processing pixels through a logarithmic or ant
 
 \end{xmlfields}
 
-\note{  \emph{linearOffset} is the offset of the linear segment of the piecewise function. This value is calculated using the value of \xml{linSideBreak} and the derivative of the logarithmic portion of the curve at the break-point, in order to ensure that the linear portion is continuous in slope with the logarithmic portion of the curve. Equations \ref{eq:logSideBreak}-\ref{eq:k} describe the steps for calculating \emph{linearOffset}.
+\note{  \emph{linearOffset} is the offset of the linear segment of the piecewise function. This value is calculated using the position of the break point and the linear slope in order to ensure continuity of the two segments. Equations \ref{eq:logSideBreak}-\ref{eq:k} describe the steps for calculating \emph{linearOffset}.
         
 First, the value of the break-point on the log-axis is calculated using the value of \xml{linSideBreak} as input to the logarithmic segment of Eq. \ref{eq:camLinToLog}, as shown in Eq. \ref{eq:logSideBreak}.
     	\begin{equation} \label{eq:logSideBreak}

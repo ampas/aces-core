@@ -50,7 +50,7 @@ _**Image and Metadata Containers**_
 * ACESclip
 	* [TB-2014-009](http://j.mp/TB-2014-009) Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage
 * Common LUT Format
-	* _**DRAFT**_ [S-2014-006](http://j.mp/S-2014-006) A Common File Format for Look-Up Tables 
+	* [S-2014-006](http://j.mp/S-2014-006) Common LUT Format (CLF) - A Common File Format for Look-Up Tables 
 * Look Transforms (LMTs)
 	* [TB-2014-010](http://j.mp/TB-2014-010) Design, Integration and Use of ACES Look Modification Transforms
 

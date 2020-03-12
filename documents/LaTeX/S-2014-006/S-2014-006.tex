@@ -46,11 +46,11 @@
 
 % Set Document Details
 \doctype{spec} % spec, proc, tb (Specification, Procedure, Technical Bulletin)
-\docname{A Common File Format for Look-Up Tables}
-\altdocname{A Common File Format for Look-Up Tables}
+\docname{Common LUT Format (CLF) - A Common File Format for Look-Up Tables}
+\altdocname{Common LUT Format (CLF)}
 \docnumber{S-2014-006}
 \committeename{Academy Color Encoding System (ACES) Project Committee}
-\docdate{December 20, 2019}
+\docdate{January 17, 2020}
 \summary{
 This document specifies a human-readable text file format for the interchange of color transformations using an XML schema. The XML format supports Look-Up Tables of several types: 1D LUTs, 3D LUTs, and 3$\times$1D LUTs, as well as additional transformation needs such as matrices, range rescaling, and `shaper LUTs'. The document defines a processing model for color transformations where each transformation is defined by a `Node' that operates upon a stream of image pixels. A node contains the data for a transformation, and a sequence of nodes can be specified in which the output of one transform feeds into the input of another node. The XML representation allows saving in a text file both a chain of multiple nodes or a single node representing a unique transform. The format is extensible and self-contained so the XML file may be used as an archival element.
 }
