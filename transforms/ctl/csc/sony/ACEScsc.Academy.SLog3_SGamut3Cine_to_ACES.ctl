@@ -1,6 +1,6 @@
 
-// <ACEStransformID>ACEScsc.SLog3_SG3C_to_ACES.a1.v1</ACEStransformID>
-// <ACESuserName>SLog3 SG3C to ACES2065-1</ACESuserName>
+// <ACEStransformID>ACEScsc.SLog3_SGamut3Cine_to_ACES.a1.v1</ACEStransformID>
+// <ACESuserName>SLog3 SGamut3Cine to ACES2065-1</ACESuserName>
 
 //
 // ACES Color Space Conversion - S-Log3 S-Gamut3.Cine to ACES

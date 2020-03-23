@@ -1,20 +1,20 @@
 
-// <ACEStransformID>ACEScsc.ACES_to_SLog3_SG3.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to SLog3 SG3</ACESuserName>
+// <ACEStransformID>ACEScsc.ACES_to_SLog3_SGamut3Cine.a1.v1</ACEStransformID>
+// <ACESuserName>ACES2065-1 to SLog3 SGamut3Cine</ACESuserName>
 
 //
-// ACES Color Space Conversion - ACES to S-Log3 S-Gamut3
+// ACES Color Space Conversion - ACES to S-Log3 S-Gamut3.Cine
 //
 // converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          S-Log3, S-Gamut3
+//          S-Log3, S-Gamut3.Cine
 //
 
 
 
-const float AP0_2_SG3_MAT[3][3] = {
-  { 1.3316572111, -0.0280131244,  0.0125574528},
-  {-0.1875611006,  0.9887375645, -0.0050679052},
-  {-0.1440961106,  0.0392755599,  0.9925104526}
+const float AP0_2_SG3C_MAT[3][3] = {
+  { 1.5554591070,  0.0090216145,  0.0442640666},
+  {-0.3932807985,  0.9185569566,  0.0118502607},
+  {-0.1621783087,  0.0724214290,  0.9438856727}
 };
 
 
@@ -49,10 +49,10 @@ void main
 {
     float ACES[3] = { rIn, gIn, bIn};
 
-    float lin_SG3[3] = mult_f3_f33( ACES, AP0_2_SG3_MAT);
+    float lin_SG3C[3] = mult_f3_f33( ACES, AP0_2_SG3C_MAT);
 
-    rOut = lin_to_SLog3( lin_SG3[0]);
-    gOut = lin_to_SLog3( lin_SG3[1]);
-    bOut = lin_to_SLog3( lin_SG3[2]);
+    rOut = lin_to_SLog3( lin_SG3C[0]);
+    gOut = lin_to_SLog3( lin_SG3C[1]);
+    bOut = lin_to_SLog3( lin_SG3C[2]);
     aOut = aIn;
 }
