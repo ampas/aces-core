@@ -393,6 +393,16 @@
         \lstinline{</aces:transformId>}
         } 
  
+% aces:lookTransformType / aces:uuid      
+\element{aces:lookTransformType / aces:uuid}
+		{This element is used to communicate a UUID associated with externally referenced ASC-CDLs.}
+		{images/acesMetadataFile_xsd_Element_aces_uuid.png}
+		{\texttt{dcml:UUIDType}}
+		{Optional}{0}{1}
+		{None}{None}
+		{\texttt{aces:lookTransform}}{None}
+		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}    
+ 
 % aces:outputDeviceTransformType / aces:transformId       
 \element{aces:outputDeviceTransformType / aces:transformId}
         {This element is used to communicate the transformID of the ACES Output Device Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Output Transforms (ODT).  The element is restricted to enforce the use of transformIDs that follow the ODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
@@ -481,7 +491,7 @@
         {Optional}{0}{unbounded}
         {\texttt{applied (xs:boolean)}}{None}
         {\texttt{aces:pipeline}, \texttt{aces:archivedPipeline}}
-        {\texttt{aces:description, aces:hash, aces:CdlWorkingSpace,\\ aces:transformId, cdl:ColorCorrectionRef, cdl:SOPNode, cdl:SatNode}}
+        {\texttt{aces:description, aces:hash, aces:CdlWorkingSpace, aces:transformId,\\  cdl:ColorCorrectionRef, aces:uuid, cdl:SOPNode, cdl:SatNode}}
         {\lstinline{<aces:lookTransform>} \\
         ... \\
         \lstinline{</aces:lookTransform>}} 
