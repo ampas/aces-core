@@ -14,49 +14,49 @@
 
 \newcommand\elementcontinued[3]{
     \subsection{\textbf{ {\texttt{\tempa}} }}
-    
-    \textbf{Description:} 
+
+    \textbf{Description:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         \tempb
     \end{adjustwidth}
-    
+
     \textbf{Diagram:}
     \begin{figure}[H]
         \includegraphics[width=2.75in]{\tempc}
     \end{figure}
 
-    \textbf{Type:} 
+    \textbf{Type:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         \texttt{\tempd}
     \end{adjustwidth}
-    
-    \textbf{Required or Optional:} 
+
+    \textbf{Required or Optional:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         \tempe
     \end{adjustwidth}
-    
-    \textbf{Occurrences:} 
+
+    \textbf{Occurrences:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         Min: \tempf~Max: \tempg
     \end{adjustwidth}
-    
-    \textbf{Attributes:} 
+
+    \textbf{Attributes:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         Required: \texttt{\temph} \\
         Optional: \texttt{\tempi}
     \end{adjustwidth}
-    
-    \textbf{Parent:} 
+
+    \textbf{Parent:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         #1
     \end{adjustwidth}
 
-    \textbf{Children:} 
+    \textbf{Children:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         #2
     \end{adjustwidth}
-    
-    \textbf{Example:} 
+
+    \textbf{Example:}
     \begin{adjustwidth}{5mm}{} \vspace{-1.5mm}
         #3
     \end{adjustwidth}
@@ -79,8 +79,8 @@
         \lstinline{version="1.0">}\\
         ... \\
         \lstinline{</aces:MetadataFile>}}
-        
-% amfInfo        
+
+% amfInfo
 \element{aces:amfInfo}
         {This element contains all the elements containing information about the AMF itself including date and time information, a description element, and a UUID element.}
         {images/acesMetadataFile_xsd_Element_aces_amfInfo.png}
@@ -94,7 +94,7 @@
         ... \\
         \lstinline{</aces:amfInfo>}}
 
-% archivedPipeline        
+% archivedPipeline
  \element{aces:archivedPipeline}
         {This element contains all the elements describing an ACES viewing pipeline archived for historical purposes.}
         {images/acesMetadataFile_xsd_Element_aces_archivedPipeline.png}
@@ -107,7 +107,7 @@
         {\texttt{aces:inputTransform, aces:lookTransform, aces:outputTransform, \\ aces:pipelineInfo}}
         {\lstinline{<aces:archivedPipeline>} \\
         ... \\
-        \lstinline{</aces:archivedPipeline>}}  
+        \lstinline{</aces:archivedPipeline>}}
 
 % clipId
 \element{aces:clipId}
@@ -119,9 +119,9 @@
         {\texttt{aces:clipName, aces:file, aces:sequence, aces:uuid}}
         {\lstinline{<aces:clipId>} \\
         ... \\
-        \lstinline{</aces:clipId>}}        
+        \lstinline{</aces:clipId>}}
 
-% pipeline 
+% pipeline
 \element{aces:pipeline}
         {This element contains all the elements describing the ACES viewing pipeline.}
         {images/acesMetadataFile_xsd_Element_aces_pipeline.png}
@@ -152,8 +152,8 @@
         {\texttt{xs:string}}
         {Required}{1}{1}
         {None}{None}{\texttt{aces:author}}{None}{\lstinline{<aces:name>Joe Onset</aces:name>}}
-        
-% aces:fromCdlTransformWorkingSpace  
+
+% aces:fromCdlTransformWorkingSpace
 \element{aces:fromCdlWorkingSpace}
         {This element contains all the elements describing the transform used to convert from the working color space in which an ASC-CDL is applied to ACES 2065-1.}
         {images/acesMetadataFile_xsd_Element_aces_fromCdlWorkingSpace.png}
@@ -205,7 +205,7 @@
         {\texttt{idx}, \texttt{min}, \texttt{max}}{None}{\texttt{aces:clipId}}{None}
         {\lstinline{<aces:sequence idx="#" min="1" max="240">A01_C012_AE0306_###.exr</aces:sequence>}}
 
-% aces:clipIdType / aces:uuid        
+% aces:clipIdType / aces:uuid
 \element{aces:clipIdType / aces:uuid}
 		{This element is used to communicate a UUID associated with the media files referred to in the ClipID.}
 		{images/acesMetadataFile_xsd_Element_aces_uuid.png}
@@ -213,9 +213,9 @@
 		{Choice of \texttt{aces:file}, \texttt{aces:sequence} or \texttt{aces:uuid} is required}{1}{1}
 		{None}{None}
 		{\texttt{aces:clipId}}{None}
-		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}        
- 
-% creationDateTime        
+		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}
+
+% creationDateTime
 \element{aces:creationDateTime}
 		{This element is used to communicate the creation date and time of an AMF file or an ACES pipeline.}
 		{images/acesMetadataFile_xsd_Element_aces_creationDateTime.png}
@@ -223,9 +223,9 @@
 		{Required}{1}{1}
 		{None}{None}
 		{\texttt{aces:dateTime}}{None}
-		{\lstinline{<aces:creationDateTime>2020-11-10T13:20:00Z</aces:creationDateTime>}}        
+		{\lstinline{<aces:creationDateTime>2020-11-10T13:20:00Z</aces:creationDateTime>}}
 
-% modificationDateTime        
+% modificationDateTime
 \element{aces:modificationDateTime}
 		{This element is used to communicate the most recent modification date and time of an AMF file or an ACES pipeline.}
 		{images/acesMetadataFile_xsd_Element_aces_modificationDateTime.png}
@@ -233,7 +233,7 @@
 		{Required}{1}{1}
 		{None}{None}
 		{\texttt{aces:dateTime}}{None}
-		{\lstinline{<aces:modificationDateTime>2020-11-10T13:20:00Z</aces:modificationDateTime>}}       
+		{\lstinline{<aces:modificationDateTime>2020-11-10T13:20:00Z</aces:modificationDateTime>}}
 
 % author
 \element{aces:author}
@@ -245,9 +245,9 @@
 		{\texttt{aces:amfInfo}}{\texttt{aces:name, aces:emailAddress}}
 		{\lstinline{<aces:author>} \\
         ... \\
-        \lstinline{</aces:author>}}       
-                
-% dateTime        
+        \lstinline{</aces:author>}}
+
+% dateTime
 \element{aces:dateTime}
 		{This element contains all the elements describing the date and time of the creation and modification of the AMF.}
 		{images/acesMetadataFile_xsd_Element_aces_dateTime.png}
@@ -257,22 +257,22 @@
 		{\texttt{aces:amfInfo}}{\texttt{aces:creationDateTime, modificationDateTime}}
 		{\lstinline{<aces:dateTime>} \\
         ... \\
-        \lstinline{</aces:dateTime>}}             
+        \lstinline{</aces:dateTime>}}
 
-% description        
+% description
 \element{aces:description}
 		{This element is used to communicate description information for an AMF file, an ACES pipeline, or various ACES viewing transforms.}
 		{images/acesMetadataFile_xsd_Element_aces_description.png}
 		{\texttt{xs:string}}
 		{Optional}{0}{1}
 		{None}{None}
-		{\texttt{aces:amfInfo, aces:piplineInfo, aces:toCdlWorkingSpace,\\ aces:fromCdlWorkingSpace, aces:inputTransform,\\ 
+		{\texttt{aces:amfInfo, aces:piplineInfo, aces:toCdlWorkingSpace,\\ aces:fromCdlWorkingSpace, aces:inputTransform,\\
 		  aces:lookTransform, aces:outputTransform, aces:outputDeviceTransform, \\
 		  aces:referenceRenderingTransform}}{None}
 		{\lstinline{<aces:description>Example Movie</aces:description>}\\
-		 \lstinline{<aces:description>Technical Grade</aces:description>}}   
+		 \lstinline{<aces:description>Technical Grade</aces:description>}}
 
-% aces:infoType / aces:uuid        
+% aces:infoType / aces:uuid
 \element{aces:infoType / aces:uuid}
 		{This element is used to communicate a UUID associated with the AMF or an ACES pipeline.}
 		{images/acesMetadataFile_xsd_Element_aces_uuid.png}
@@ -280,7 +280,7 @@
 		{Optional}{0}{1}
 		{None}{None}
 		{\texttt{aces:amfInfo, aces:pipelineInfo}}{None}
-		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}} 
+		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}
 
 %  aces:inverseOutputDeviceTransform
 \element{aces:inverseOutputDeviceTransform}
@@ -293,7 +293,7 @@
         {\lstinline{<aces:inverseOutputDeviceTransform>} \\
         ... \\
         \lstinline{</aces:inverseOutputDeviceTransform>}}
-        
+
 %  aces:inverseOutputTransform
 \element{aces:inverseOutputTransform}
         {This element contains all the elements describing the transforms associated with an inverse output  transform used to convert output referred images to ACES.}
@@ -305,7 +305,7 @@
         {\lstinline{<aces:inverseOutputTransform>} \\
         ... \\
         \lstinline{</aces:inverseOutputTransform>}}
-        
+
 %  aces:inverseReferenceRenderingTransform
 \element{aces:inverseReferenceRenderingTransform}
         {This element contains all the elements describing the transforms associated with an inverse reference rendering transform used to convert output referred images to ACES.}
@@ -317,8 +317,8 @@
         {\lstinline{<aces:inverseReferenceRenderingTransform>} \\
         ... \\
         \lstinline{</aces:inverseReferenceRenderingTransform>}}
-        
-% aces:inputTransformType / aces:transformId	
+
+% aces:inputTransformType / aces:transformId
 \element{aces:inputTransformType / aces:transformId}
         {This element is used to communicate the transformID of an ACES Input Transform that transforms images encoded in a color space of a camera native file to ACES 2065-1.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the IDT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
         {images/acesMetadataFile_xsd_Element_aces_transformId.png}
@@ -341,7 +341,7 @@
         {\lstinline{<aces:transformId>} \\
         \lstinline{urn:ampas:aces:transformId:v1.5:InvODT.Academy.Rec709_100nits_dim.a1.0.3} \\
         \lstinline{</aces:transformId>}}
-        
+
 % aces:inverseOutputTransformType / aces:transformId
 \element{aces:inverseOutputTransformType / aces:transformId}
         {This element is used to communicate the transformID of an ACES Inverse Output Transform that transforms images encoded in an output referred color space to ACES 2065-1.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Input Transforms.  The element is restricted to enforce the use of transformIDs that follow the InvRRTODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
@@ -365,7 +365,7 @@
         {\lstinline{<aces:transformId>} \\
         \lstinline{urn:ampas:aces:transformId:v1.5:InvRRTODT.Academy.Rec2020_1000nits_15nits_ST2084.a1.1.0}\\
         \lstinline{</aces:transformId>}}
-  
+
 %aces:cdlWorkingSpace
 \element{aces:cdlWorkingSpace}
         {This element contains all the elements describing the transforms used to convert to and from the working color space in which a ASC-CDL transform is applied. This element allows for CDLs to be applied in color spaces other than ACES RGB, since CDLs cannot contain ACES transforms themselves. The input and output of the parent \texttt{<lookTransform>} element is still ACES RGB per SMPTE ST.2065-1. }
@@ -376,9 +376,9 @@
         {\texttt{aces:lookTransform}}{\texttt{aces:fromCdlWorkingSpace, aces:toCdlWorkingSpace}}
         {\lstinline{<aces:cdlWorkingSpace>} \\
         ... \\
-        \lstinline{</aces:cdlWorkingSpace>}}     
-  
-% aces:lookTransformType / aces:transformId      
+        \lstinline{</aces:cdlWorkingSpace>}}
+
+% aces:lookTransformType / aces:transformId
 \element{aces:lookTransformType / aces:transformId}
         {This element is used to communicate the transformID of an ACES Look Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Look Transforms (LMT).  The element is restricted to enforce the use of transformIDs that follow the LMT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
         {images/acesMetadataFile_xsd_Element_aces_transformId_8.png}
@@ -391,9 +391,9 @@
         {\lstinline{<aces:transformId>}\\
         \lstinline{urn:ampas:aces:transformId:v1.5:LMT.ACME.BleachBypass.a1.v1</aces:transformId>}\\
         \lstinline{</aces:transformId>}
-        } 
- 
-% aces:lookTransformType / aces:uuid      
+        }
+
+% aces:lookTransformType / aces:uuid
 \element{aces:lookTransformType / aces:uuid}
 		{This element is used to communicate a UUID associated with externally referenced ASC-CDLs.}
 		{images/acesMetadataFile_xsd_Element_aces_uuid.png}
@@ -401,9 +401,9 @@
 		{Optional}{0}{1}
 		{None}{None}
 		{\texttt{aces:lookTransform}}{None}
-		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}    
- 
-% aces:outputDeviceTransformType / aces:transformId       
+		{\lstinline{<aces:uuid>urn:uuid:797c7cd8-4eb1-4f67-afce-af2b0a1d0285</aces:uuid>}}
+
+% aces:outputDeviceTransformType / aces:transformId
 \element{aces:outputDeviceTransformType / aces:transformId}
         {This element is used to communicate the transformID of the ACES Output Device Transform.  For more information on transformIDs see S-2014-002 Academy Color Encoding System -- Versioning system.  Valid transforms for this element are Output Transforms (ODT).  The element is restricted to enforce the use of transformIDs that follow the ODT naming conventions established in the versioning system specification.  As noted in the versioning system specification, manufacturer and user created transforms shall be assigned a transformID according to patterns established in the document.}
         {images/acesMetadataFile_xsd_Element_aces_transformId_5.png}
@@ -477,13 +477,13 @@
         ... \\
         \lstinline{</aces:inputTransform>}}
 
-% aces:lookTransform 
+% aces:lookTransform
  \element{aces:lookTransform}
         {This element contains a look transform (LMT) for a given ACES viewing pipeline.  If the AMF includes multiple \texttt{<lookTransform>} elements, they shall be applied in the order in which they are written in the AMF (top to bottom).
 
-        The required \texttt{applied} attribute is used to indicate if the ACES look transform has been applied to the media files or not.  If \texttt{applied="true"}, the media files shall have the look transform "baked" into the image data (but is still included for diagnostic purposes). If \texttt{applied="false"}, the media files shall not have the look transform "baked" into the image data. 
-        
-        The input values and output values of ACES Look Transforms are ACES 2065-1. This is to avoid linking the Look Transforms to project specific working spaces. Look Transforms may convert ACES 2065-1 to a more appropriate working space for internal look application. Care should be taken when building Look Transforms as 3D LUTs, given Look Transforms input and output values are linear. In practice, smart implementations may modify the Look Transform to avoid unnecessary conversions within the context of an ACES pipeline as long as the results match those specified by the transforms in the AMF.  
+        The required \texttt{applied} attribute is used to indicate if the ACES look transform has been applied to the media files or not.  If \texttt{applied="true"}, the media files shall have the look transform "baked" into the image data (but is still included for diagnostic purposes). If \texttt{applied="false"}, the media files shall not have the look transform "baked" into the image data.
+
+        The input values and output values of ACES Look Transforms are ACES 2065-1. This is to avoid linking the Look Transforms to project specific working spaces. Look Transforms may convert ACES 2065-1 to a more appropriate working space for internal look application. Care should be taken when building Look Transforms as 3D LUTs, given Look Transforms input and output values are linear. In practice, smart implementations may modify the Look Transform to avoid unnecessary conversions within the context of an ACES pipeline as long as the results match those specified by the transforms in the AMF.
 
         ASC-CDL does not have a mechanism to convert to a non-linear working space appropriate for the application of ASC-CDL values. For this reason, the \texttt{<aces:cdlTransformWorkingSpace>} element can be used to indicate the working space via transformsIDs in which ASC-CDL values are to be applied.}
         {images/acesMetadataFile_xsd_Element_aces_lookTransform.png}
@@ -494,7 +494,7 @@
         {\texttt{aces:description, aces:hash, aces:CdlWorkingSpace, aces:transformId,\\  cdl:ColorCorrectionRef, aces:uuid, cdl:SOPNode, cdl:SatNode}}
         {\lstinline{<aces:lookTransform>} \\
         ... \\
-        \lstinline{</aces:lookTransform>}} 
+        \lstinline{</aces:lookTransform>}}
 
 % aces:outputTransform
  \element{aces:outputTransform}
@@ -508,7 +508,7 @@
         aces:referenceRenderingTransform, aces:transformId}}
         {\lstinline{<aces:outputTransform>} \\
         ... \\
-        \lstinline{</aces:outputTransform>}} 
+        \lstinline{</aces:outputTransform>}}
 
 % aces:pipelineInfo
 \element{aces:pipelineInfo}
@@ -625,61 +625,11 @@
 \element{cdl:ColorCorrectionRef}
         {This element is imported from the ASC-CDL schema (\texttt{ASC-CDL\_schema\_v1.01.xsd}).  It defines a Color Correction Reference node for referencing ASC-CDL values that exist in transport containers other than the AMF.  \texttt{<cdl:ColorCorrectionRef>} may be substituted with \texttt{<cdl:ASC\_CC\_XML>}.  It is recommended the \texttt{cdl:InputDescription} and \texttt{cdl:ViewingDescription} nodes not be used as this information is included in other locations within the AMF.  See the ASC-CDL documentation for more information on the usage of this node.}
         {images/ASC-CDL_schema_v1_01_xsd_Element_cdl_ColorCorrectionRef.png}
-        {Choice of \texttt{aces:transformId, cdl:ColorCorrectionRef}, or \texttt{cdl:SOPNode} and \\ \texttt{cdl:SatNode} required}
         {\texttt{cdl:ColorCorrectionRefType}}
+        {Choice of \texttt{aces:transformId, cdl:ColorCorrectionRef}, or \texttt{cdl:SOPNode} and \\ \texttt{cdl:SatNode} required}
         {1}{1}{\texttt{ref} (xs:anyURI)}{None}
         {\texttt{aces:lookTransform}}
         {\texttt{cdl:Description, cdl:InputDescription, cdl:ViewingDescription}}
         {\lstinline{<cdl:ColorCorrectionRef ref="file:///foo.edl>}\\
                     \lstinline{<cdl:Description>Technical Grade</cdl:Description>}\\
                     \lstinline{</cdl:ColorCorrectionRef>}}
-
-
-
-
-
-
-
-
-
-% \subsection{\textbf{\texttt{cdl:ColorCorrectionRef} }}
-
-% % \begin{table}[H]
-% %     \begin{tabularx}{\textwidth}{X}
-% %         \textbf{Description:} \par
-% %             \begin{cellindent} 
-% %             This element is imported from the ASC-CDL schema (\texttt{ASC-CDL\_schema\_v1.01.xsd}).  It defines a Color Correction Reference node for referencing ASC-CDL values that exist in transport containers other than the AMF.  See the ASC-CDL documentation for more information on its usage. 
-% %             \end{cellindent} \par
-% %         \textbf{Diagram:} \par
-% %             \includegraphics[width=3.5in]{images/ASC-CDL_schema_v1_01_xsd_Element_cdl_ColorCorrectionRef.png} \par
-% %         \textbf{Type:} \par
-% %             \begin{cellindent} 
-% %                 \texttt{cdl:ColorCorrectionRefType}
-% %             \end{cellindent} \par
-% %         \textbf{Required or Optional:} \par
-% %             \begin{cellindent} 
-% %                 Choice of \texttt{cdl:ColorCorrectionRef} or \texttt{cdl:SOPNode} and \texttt{cdl:SatNode} required
-% %             \end{cellindent} \par
-% %         \textbf{Occurrences:}
-% %             \begin{cellindent} 
-% %                 Min : 1
-% %                 Max : 1
-% %             \end{cellindent} \par
-% %         \textbf{Attributes:}
-% %             \begin{cellindent} 
-% %                 Required: \texttt{ref}
-% %                 Optional: none
-% %             \end{cellindent} \par
-% %         \textbf{Parent:} \par
-% %             \begin{cellindent} 
-% %                 \texttt{aces:asc-cdl}
-% %             \end{cellindent} \par
-% %         \textbf{Children:} \par
-% %             \begin{cellindent}
-% %                 \texttt{cdl:Description, cdl:InputDescription, cdl:ViewingDescription}
-% %             \end{cellindent} \par
-% %     \end{tabularx}
-% % \end{table}
-
-
-
