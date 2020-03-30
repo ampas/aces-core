@@ -1,20 +1,15 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_SLog3_SGamut3.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to SLog3 SGamut3</ACESuserName>
-
-//
-// ACES Color Space Conversion - ACES to S-Log3 S-Gamut3
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          S-Log3, S-Gamut3
-//
+// <ACESuserName>ACES2065-1 to S-Log3 S-Gamut3</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";
 
 
 const float AP0_2_SGAMUT3_MAT[3][3] = 
-						calculate_rgb_to_rgb_matrix( AP0, SONY_SGAMUT3_PRI);
+                        calculate_rgb_to_rgb_matrix( AP0, 
+                                                     SONY_SGAMUT3_PRI, 
+                                                     CONE_RESP_MAT_CAT02);
 
 
 float lin_to_SLog3( input varying float in)

@@ -1,13 +1,6 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_SLog3_SGamut3Cine.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to SLog3 SGamut3Cine</ACESuserName>
-
-//
-// ACES Color Space Conversion - ACES to S-Log3 S-Gamut3.Cine
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          S-Log3, S-Gamut3.Cine
-//
+// <ACESuserName>ACES2065-1 to S-Log3 S-Gamut3.Cine</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";

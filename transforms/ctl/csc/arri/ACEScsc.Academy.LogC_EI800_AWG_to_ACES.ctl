@@ -2,13 +2,6 @@
 // <ACEStransformID>ACEScsc.LogC_EI800_AWG_to_ACES.a1.v1</ACEStransformID>
 // <ACESuserName>LogC EI800 AWG to ACES2065-1</ACESuserName>
 
-//
-// ACES Color Space Conversion - LogC (EI800) AWG to ACES
-//
-// converts ALEXA LogC (EI800) ALEXA Wide Gamut to 
-//          ACES2065-1 (AP0 w/ linear encoding)
-//
-
 
 import "ACESlib.Utilities_Color";
 

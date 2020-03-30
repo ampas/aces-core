@@ -1,13 +1,6 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_CLog3_CGamut.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to CLog3 CGamut</ACESuserName>
-
-//
-// ACES Color Space Conversion - ACES to CLog3 CGamut
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          Canon Log 3, Cinema Gamut
-//
+// <ACESuserName>ACES2065-1 to Canon Log 3 Cinema Gamut</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";
@@ -17,7 +10,7 @@ const float AP0_2_CGAMUT_MAT[3][3] =
                         calculate_rgb_to_rgb_matrix( AP0, 
                                                      CANON_CGAMUT_PRI, 
                                                      CONE_RESP_MAT_CAT02 );
-                                                     
+
 
 float lin_to_CLog3( input varying float in)
 {

@@ -2,13 +2,6 @@
 // <ACEStransformID>ACEScsc.ACES_to_ICtCp.a1.v1</ACEStransformID>
 // <ACESuserName>ACES2065-1 to ICtCp</ACESuserName>
 
-//
-// ACES Color Space Conversion - ACES to ICtCp
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          ICtCp
-//
-
 
 
 

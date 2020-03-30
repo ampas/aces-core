@@ -1,13 +1,6 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_CLog2_CGamut.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to CLog2 CGamut</ACESuserName>
-
-//
-// ACES Color Space Conversion - ACES to CLog2 CGamut
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          Canon Log 2, Cinema Gamut
-//
+// <ACESuserName>ACES2065-1 to Canon Log 2 Cinema Gamut</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";
