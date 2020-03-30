@@ -10,6 +10,14 @@
 //
 
 
+import "ACESlib.Utilities_Color";
+
+
+const float AP0_2_AWG_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( AP0, 
+                                                     ARRI_ALEXA_WG_PRI, 
+                                                     CONE_RESP_MAT_CAT02);
+
 
 const float midGraySignal = 0.01;
 const float cut = 1.0 / 9.0;
@@ -20,14 +28,6 @@ const float gain = 800.0 / 400.0;
 const float encGain = 0.2471896383;
 const float gray = 0.005;
 const float nz = 0.0522722750;
-
-const float AP0_2_AWG_MAT[3][3] = {
-  { 1.5159863829, -0.1283275799, -0.0105107561},
-  {-0.3613418588,  1.0193145873,  0.0608329325},
-  {-0.1546444592,  0.1090123949,  0.9496764954}
-};
-
-
 
 float lin_to_LogC( input varying float in)
 {

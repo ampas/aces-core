@@ -10,13 +10,13 @@
 //
 
 
+import "ACESlib.Utilities_Color";
 
-const float AP0_2_SG3C_MAT[3][3] = {
-  { 1.5554591070,  0.0090216145,  0.0442640666},
-  {-0.3932807985,  0.9185569566,  0.0118502607},
-  {-0.1621783087,  0.0724214290,  0.9438856727}
-};
 
+const float AP0_2_SGAMUT3_CINE_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( AP0, 
+                                                     SONY_SGAMUT3_CINE_PRI, 
+                                                     CONE_RESP_MAT_CAT02);
 
 
 float lin_to_SLog3( input varying float in)
@@ -49,10 +49,10 @@ void main
 {
     float ACES[3] = { rIn, gIn, bIn};
 
-    float lin_SG3C[3] = mult_f3_f33( ACES, AP0_2_SG3C_MAT);
+    float lin_SGamut3Cine[3] = mult_f3_f33( ACES, AP0_2_SGAMUT3_CINE_MAT);
 
-    rOut = lin_to_SLog3( lin_SG3C[0]);
-    gOut = lin_to_SLog3( lin_SG3C[1]);
-    bOut = lin_to_SLog3( lin_SG3C[2]);
+    rOut = lin_to_SLog3( lin_SGamut3Cine[0]);
+    gOut = lin_to_SLog3( lin_SGamut3Cine[1]);
+    bOut = lin_to_SLog3( lin_SGamut3Cine[2]);
     aOut = aIn;
 }

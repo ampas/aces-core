@@ -86,6 +86,38 @@ const Chromaticities RIMMROMM_PRI =
   { 0.3457,  0.3585}
 };
 
+const Chromaticities SONY_SGAMUT3_PRI =
+{
+  { 0.730,  0.280},
+  { 0.140,  0.855},
+  { 0.100, -0.050},
+  { 0.3127,  0.3290}
+};
+
+const Chromaticities SONY_SGAMUT3_CINE_PRI =
+{
+  { 0.766,  0.275},
+  { 0.225,  0.800},
+  { 0.089, -0.087},
+  { 0.3127,  0.3290}
+};
+
+const Chromaticities CANON_CGAMUT_PRI =
+{
+  { 0.7400,  0.2700},
+  { 0.1700,  1.1400},
+  { 0.0800, -0.1000},
+  { 0.3127,  0.3290}
+};
+
+const Chromaticities RED_WIDEGAMUTRGB_PRI =
+{
+  { 0.780308,  0.304253},
+  { 0.121595,  1.493994},
+  { 0.095612, -0.084589},
+  { 0.3127,  0.3290}
+};
+
 
 
 
@@ -209,6 +241,44 @@ float[3][3] calculate_cat_matrix
 }
 
 
+
+float[3][3] calculate_rgb_to_rgb_matrix
+  ( Chromaticities SOURCE_PRIMARIES,
+    Chromaticities DEST_PRIMARIES,
+    float coneRespMat[3][3] = CONE_RESP_MAT_BRADFORD
+  )
+{
+  //
+  // Calculates and returns a 3x3 RGB-to-RGB matrix from the source primaries to the 
+  // destination primaries. The returned matrix is effectively a concatenation of a 
+  // conversion of the source RGB values into CIE XYZ tristimulus values, conversion to
+  // cone response values or other space in which reconciliation of the encoding white is 
+  // done, a conversion back to CIE XYZ tristimulus values, and finally conversion from 
+  // CIE XYZ tristimulus values to the destination RGB values.
+  //
+  // By default, coneRespMat is set to CONE_RESP_MAT_BRADFORD. 
+  // The default coneRespMat can be overridden at runtime. 
+  //
+
+	const float RGBtoXYZ_44[4][4] = RGBtoXYZ( SOURCE_PRIMARIES, 1.0);
+	const float RGBtoXYZ_MAT[3][3] = 
+		{ {RGBtoXYZ_44[0][0], RGBtoXYZ_44[0][1], RGBtoXYZ_44[0][2]}, 
+		  {RGBtoXYZ_44[1][0], RGBtoXYZ_44[1][1], RGBtoXYZ_44[1][2]}, 
+		  {RGBtoXYZ_44[2][0], RGBtoXYZ_44[2][1], RGBtoXYZ_44[2][2]} };
+
+	// Chromatic adaptation from ACES white to camera encoding white chromaticity
+	// Bradford cone response matrix is the default method
+	const float CAT[3][3] = calculate_cat_matrix( SOURCE_PRIMARIES.white, 
+													DEST_PRIMARIES.white );
+
+	const float XYZtoRGB_44[4][4] = XYZtoRGB( DEST_PRIMARIES, 1.0);
+	const float XYZtoRGB_MAT[3][3] = 
+		{ {XYZtoRGB_44[0][0], XYZtoRGB_44[0][1], XYZtoRGB_44[0][2]}, 
+		  {XYZtoRGB_44[1][0], XYZtoRGB_44[1][1], XYZtoRGB_44[1][2]}, 
+		  {XYZtoRGB_44[2][0], XYZtoRGB_44[2][1], XYZtoRGB_44[2][2]}};
+
+	return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
+}
 
 
 

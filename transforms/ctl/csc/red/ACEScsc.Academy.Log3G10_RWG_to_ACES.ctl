@@ -10,19 +10,18 @@
 //
 
 
+import "ACESlib.Utilities_Color";
+
+
+const float RWG_2_AP0_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( RED_WIDEGAMUTRGB_PRI, 
+                                                     AP0);
+
 
 const float a = 0.224282;
 const float b = 155.975327;
 const float c = 0.01;
 const float g = 15.1927;
-
-const float RWG_2_AP0_MAT[3][3] = {
-  { 0.7850585442,  0.0231738066, -0.0737605663},
-  { 0.0838583156,  1.0878975877, -0.3145898729},
-  { 0.1310821505, -0.1110709153,  1.3883506702}
-};
-
-
 
 float Log3G10_to_lin( input varying float in)
 {

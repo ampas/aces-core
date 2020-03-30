@@ -10,13 +10,13 @@
 //
 
 
+import "ACESlib.Utilities_Color";
 
-const float AP0_2_CGamut_MAT[3][3] = {
-  { 1.310079315, -0.198398113, -0.111681202},
-  {-0.003385627,  0.920234663,  0.083150964},
-  { 0.009436126,  0.162159018,  0.828404856}
-};
 
+const float AP0_2_CGAMUT_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( AP0, 
+                                                     CANON_CGAMUT_PRI, 
+                                                     CONE_RESP_MAT_CAT02 );
 
 
 float lin_to_CLog2( input varying float in)
@@ -48,7 +48,7 @@ void main
 {
     float ACES[3] = { rIn, gIn, bIn};
 
-    float lin_CGamut[3] = mult_f3_f33( ACES, AP0_2_CGamut_MAT);
+    float lin_CGamut[3] = mult_f3_f33( ACES, AP0_2_CGAMUT_MAT);
 
     rOut = lin_to_CLog2( lin_CGamut[0] / 0.9);
     gOut = lin_to_CLog2( lin_CGamut[1] / 0.9);
