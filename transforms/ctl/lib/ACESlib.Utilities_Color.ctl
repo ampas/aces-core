@@ -260,24 +260,24 @@ float[3][3] calculate_rgb_to_rgb_matrix
   // The default coneRespMat can be overridden at runtime. 
   //
 
-	const float RGBtoXYZ_44[4][4] = RGBtoXYZ( SOURCE_PRIMARIES, 1.0);
-	const float RGBtoXYZ_MAT[3][3] = 
-		{ {RGBtoXYZ_44[0][0], RGBtoXYZ_44[0][1], RGBtoXYZ_44[0][2]}, 
-		  {RGBtoXYZ_44[1][0], RGBtoXYZ_44[1][1], RGBtoXYZ_44[1][2]}, 
-		  {RGBtoXYZ_44[2][0], RGBtoXYZ_44[2][1], RGBtoXYZ_44[2][2]} };
+  const float RGBtoXYZ_44[4][4] = RGBtoXYZ( SOURCE_PRIMARIES, 1.0);
+  const float RGBtoXYZ_MAT[3][3] = 
+    { {RGBtoXYZ_44[0][0], RGBtoXYZ_44[0][1], RGBtoXYZ_44[0][2]}, 
+      {RGBtoXYZ_44[1][0], RGBtoXYZ_44[1][1], RGBtoXYZ_44[1][2]}, 
+      {RGBtoXYZ_44[2][0], RGBtoXYZ_44[2][1], RGBtoXYZ_44[2][2]} };
 
-	// Chromatic adaptation from ACES white to camera encoding white chromaticity
-	// Bradford cone response matrix is the default method
-	const float CAT[3][3] = calculate_cat_matrix( SOURCE_PRIMARIES.white, 
-													DEST_PRIMARIES.white );
+  // Chromatic adaptation from source white to destination white chromaticity
+  // Bradford cone response matrix is the default method
+  const float CAT[3][3] = calculate_cat_matrix( SOURCE_PRIMARIES.white, 
+                                              DEST_PRIMARIES.white );
 
-	const float XYZtoRGB_44[4][4] = XYZtoRGB( DEST_PRIMARIES, 1.0);
-	const float XYZtoRGB_MAT[3][3] = 
-		{ {XYZtoRGB_44[0][0], XYZtoRGB_44[0][1], XYZtoRGB_44[0][2]}, 
-		  {XYZtoRGB_44[1][0], XYZtoRGB_44[1][1], XYZtoRGB_44[1][2]}, 
-		  {XYZtoRGB_44[2][0], XYZtoRGB_44[2][1], XYZtoRGB_44[2][2]}};
+  const float XYZtoRGB_44[4][4] = XYZtoRGB( DEST_PRIMARIES, 1.0);
+  const float XYZtoRGB_MAT[3][3] = 
+    { {XYZtoRGB_44[0][0], XYZtoRGB_44[0][1], XYZtoRGB_44[0][2]}, 
+      {XYZtoRGB_44[1][0], XYZtoRGB_44[1][1], XYZtoRGB_44[1][2]}, 
+      {XYZtoRGB_44[2][0], XYZtoRGB_44[2][1], XYZtoRGB_44[2][2]}};
 
-	return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
+return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
 }
 
 
