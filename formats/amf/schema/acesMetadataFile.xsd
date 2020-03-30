@@ -261,7 +261,10 @@
 									<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
 									<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
 								</xs:sequence>
-								<xs:element ref="cdl:ColorCorrectionRef"/>
+								<xs:sequence>
+									<xs:element ref="cdl:ColorCorrectionRef"/>
+									<xs:element name="uuid" type="dcml:UUIDType" minOccurs="0" maxOccurs="1"/>
+								</xs:sequence>
 							</xs:choice>
 						</xs:sequence>
 					</xs:choice>
