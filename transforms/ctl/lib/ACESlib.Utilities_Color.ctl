@@ -277,7 +277,8 @@ float[3][3] calculate_rgb_to_rgb_matrix
   // Chromatic adaptation from source white to destination white chromaticity
   // Bradford cone response matrix is the default method
   const float CAT[3][3] = calculate_cat_matrix( SOURCE_PRIMARIES.white, 
-                                              DEST_PRIMARIES.white );
+                                                DEST_PRIMARIES.white,
+                                                coneRespMat );
 
   const float XYZtoRGB_44[4][4] = XYZtoRGB( DEST_PRIMARIES, 1.0);
   const float XYZtoRGB_MAT[3][3] = 
@@ -286,6 +287,7 @@ float[3][3] calculate_rgb_to_rgb_matrix
       {XYZtoRGB_44[2][0], XYZtoRGB_44[2][1], XYZtoRGB_44[2][2]}};
 
 return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
+  return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
 }
 
 
