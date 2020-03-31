@@ -1,28 +1,20 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_Log3G10_RWG.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to Log3G10 RWG</ACESuserName>
+// <ACESuserName>ACES2065-1 to RED Log3G10 REDWideGamutRGB</ACESuserName>
 
-//
-// ACES Color Space Conversion - ACES to RED Log3G10 RWG
-//
-// converts ACES2065-1 (AP0 w/ linear encoding) to 
-//          RED Log3G10, RED Wide Gamut
-//
 
+import "ACESlib.Utilities_Color";
+
+
+const float AP0_2_RWG_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( AP0, 
+                                                     RED_WIDEGAMUTRGB_PRI);
 
 
 const float a = 0.224282;
 const float b = 155.975327;
 const float c = 0.01;
 const float g = 15.1927;
-
-const float AP0_2_RWG_MAT[3][3] = {
-  { 1.2655392805, -0.0205691227,  0.0625750095},
-  {-0.1352322515,  0.9431709627,  0.2065308369},
-  {-0.1303056816,  0.0773976700,  0.7308939479}
-};
-
-
 
 float lin_to_Log3G10( input varying float in)
 {
@@ -33,7 +25,7 @@ float lin_to_Log3G10( input varying float in)
     }
     else
     {
-    out = a * log10((out * b) + 1.0);
+        out = a * log10((out * b) + 1.0);
     }
     return out;
 }
