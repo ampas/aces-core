@@ -1,6 +1,6 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_SLog3_SGamut3Cine.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to S-Log3 S-Gamut3.Cine</ACESuserName>
+// <ACESuserName>ACES2065-1 to Sony S-Log3 S-Gamut3.Cine</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";

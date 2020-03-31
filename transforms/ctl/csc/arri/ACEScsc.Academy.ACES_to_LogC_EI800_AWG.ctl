@@ -1,6 +1,6 @@
 
 // <ACEStransformID>ACEScsc.ACES_to_LogC_EI800_AWG.a1.v1</ACEStransformID>
-// <ACESuserName>ACES2065-1 to LogC EI800 AWG</ACESuserName>
+// <ACESuserName>ACES2065-1 to ARRI LogC EI800 AWG</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";

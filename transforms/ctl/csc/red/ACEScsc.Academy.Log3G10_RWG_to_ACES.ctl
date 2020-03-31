@@ -1,6 +1,6 @@
 
 // <ACEStransformID>ACEScsc.Log3G10_RWG_to_ACES.a1.v1</ACEStransformID>
-// <ACESuserName>Log3G10 REDWideGamutRGB to ACES2065-1</ACESuserName>
+// <ACESuserName>RED Log3G10 REDWideGamutRGB to ACES2065-1</ACESuserName>
 
 
 import "ACESlib.Utilities_Color";
