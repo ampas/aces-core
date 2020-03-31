@@ -8,8 +8,7 @@ import "ACESlib.Utilities_Color";
 
 const float VGAMUT_2_AP0_MAT[3][3] = 
                         calculate_rgb_to_rgb_matrix( PANASONIC_VGAMUT_PRI, 
-                                                     AP0,
-                                                     CONE_RESP_MAT_CAT02 );
+                                                     AP0 );
 
 
 const float cut2 = 0.181;
