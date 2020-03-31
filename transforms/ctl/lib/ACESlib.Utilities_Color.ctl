@@ -118,6 +118,14 @@ const Chromaticities RED_WIDEGAMUTRGB_PRI =
   { 0.3127,  0.3290}
 };
 
+const Chromaticities PANASONIC_VGAMUT_PRI =
+{
+  { 0.7400,  0.2700},
+  { 0.1700,  1.1400},
+  { 0.0800, -0.1000},
+  { 0.3127,  0.3290}
+};
+
 
 
 

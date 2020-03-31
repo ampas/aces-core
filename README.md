@@ -31,13 +31,13 @@ Included in ACES 1.2:
     * Add new version of Common LUT Format specification document (S-2014-006)
     * Add new ACES Project Organization and Development Procedure document (P-2019-001)
     * Add ACES Color Space Conversion transforms between:
-        * ACES and C-Log2 C-Gamut
-        * ACES and C-Log3 C-Gamut
-        * ACES and LogC (EI800) ARRI WideGamut
-        * ACES and Log3G10 REDWideGamutRGB
-        * ACES and S-Log3 S-Gamut3
-        * ACES and S-Log3 S-Gamut3.Cine
-        * ACES and ICtCp
+        * ACES and Canon Canon Log 2 Cinema Gamut
+        * ACES and Canon Canon Log 3 Cinema Gamut
+        * ACES and ARRI ALEXA LogC (EI800) WideGamut
+        * ACES and RED Log3G10 REDWideGamutRGB
+        * ACES and Sony S-Log3 S-Gamut3
+        * ACES and Sony S-Log3 S-Gamut3.Cine
+        * ACES and Panasonic Varicam V-Log V-Gamut
     * Add HDR Output Transforms (RRT+ODT):
         * P3D65 (1000 cd/m^2) ST.2084 (and inverse)
         * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
