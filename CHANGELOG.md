@@ -1,4 +1,4 @@
-**Version 1.2 (March 31, 2020):**
+**Version 1.2 (April 1, 2020):**
 
 * New Features: 
     * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
