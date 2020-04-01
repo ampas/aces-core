@@ -1,5 +1,5 @@
 
-// <ACEStransformID>InvODT.Academy.P3DCI_D65sim_48nits.a1.1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:InvODT.Academy.P3DCI_D65sim_48nits.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - P3-DCI (D65 simulation)</ACESuserName>
 
 // 
@@ -48,6 +48,9 @@ void main
     // Convert from display primary encoding
     // Display primaries to CIE XYZ
     float XYZ[3] = mult_f3_f44( linearCV, DISPLAY_PRI_2_XYZ_MAT);
+
+    // Apply CAT from assumed observer adapted white to ACES white point
+    XYZ = mult_f3_f33( XYZ, invert_f33( D60_2_D65_CAT));
 
     // CIE XYZ to rendering space RGB
     linearCV = mult_f3_f44( XYZ, XYZ_2_AP1_MAT);

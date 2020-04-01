@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESutil.premultAlpha_to_straightAlpha.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACESutil.premultAlpha_to_straightAlpha.a1.0.3</ACEStransformID>
 // <ACESuserName>Pre-multiplied Alpha to Straight Alpha</ACESuserName>
 
 // 

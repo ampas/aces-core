@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESlib.Transform_Common.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACESlib.Transform_Common.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Lib - Transform Common</ACESuserName>
 
 //

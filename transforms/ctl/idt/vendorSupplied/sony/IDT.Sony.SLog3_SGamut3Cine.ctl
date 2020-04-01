@@ -1,4 +1,4 @@
-// <ACEStransformID>IDT.Sony.SLog3_SGamut3Cine.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.Sony.SLog3_SGamut3Cine.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - Sony SLog3 SGamut3Cine</ACESuserName>
 
 // Provided by Sony Electronics Corp.

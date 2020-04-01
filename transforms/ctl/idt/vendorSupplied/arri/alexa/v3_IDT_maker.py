@@ -78,16 +78,16 @@ def emitLogCInverseFunction(EI) :
 def emitHeader(myName, EI, CCT, logC, ND) :
     print ""
     if logC == "logc" :
-        print "// <ACEStransformID>IDT.ARRI.Alexa-v3-logC-EI%d.a1.v2</ACEStransformID>" % EI
+        print "// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v3-logC-EI%d.a1.v2</ACEStransformID>" % EI
         print "// <ACESuserName>ACES 1.0 Input - ARRI V3 LogC (EI%d)</ACESuserName>" % EI
         print ""
         print "// ARRI ALEXA IDT for ALEXA logC files"
     else :
         if ND == "nd-1pt3" : 
-            print "// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d-ND1pt3.a1.v2</ACEStransformID>" % (EI,CCT)
+            print "// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d-ND1pt3.a1.v2</ACEStransformID>" % (EI,CCT)
             print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK, ND1.3)</ACESuserName>" % (EI,CCT)
         else :
-            print "// <ACEStransformID>IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d.a1.v2</ACEStransformID>" % (EI,CCT)
+            print "// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.ARRI.Alexa-v3-raw-EI%d-CCT%d.a1.v2</ACEStransformID>" % (EI,CCT)
             print "// <ACESuserName>ACES 1.0 Input - ARRIRAW (EI%d, %dK)</ACESuserName>" % (EI,CCT)
         print ""
         print "// ARRI ALEXA IDT for ALEXA linear files"

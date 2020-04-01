@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ODT.Academy.Rec2020_Rec709limited_100nits.a1.1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ODT.Academy.Rec2020_Rec709limited_100nits.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES 1.0 Output - Rec.2020 (Rec.709 Limited)</ACESuserName>
 
 // 
@@ -82,7 +82,7 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input uniform bool legalRange = false
+    input varying int legalRange = 0
 )
 {
     float oces[3] = { rIn, gIn, bIn};
@@ -132,7 +132,7 @@ void main
     outputCV[2] = bt1886_r( linearCV[2], DISPGAMMA, L_W, L_B);
 
     // Default output is full range, check if legalRange param was set to true
-    if (legalRange) {
+    if (legalRange == 1) {
         outputCV = fullRange_to_smpteRange_f3( outputCV);
     }
 

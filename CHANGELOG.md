@@ -1,3 +1,33 @@
+**Version 1.2 (April 1, 2020):**
+
+* New Features: 
+    * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
+    * Add new version of Common LUT Format specification document (S-2014-006)
+    * Add new ACES Project Organization and Development Procedure document (P-2019-001)
+    * Add ACES Color Space Conversion transforms between:
+        * ACES and Canon Canon Log 2 Cinema Gamut
+        * ACES and Canon Canon Log 3 Cinema Gamut
+        * ACES and ARRI ALEXA LogC (EI800) WideGamut
+        * ACES and RED Log3G10 REDWideGamutRGB
+        * ACES and Sony S-Log3 S-Gamut3
+        * ACES and Sony S-Log3 S-Gamut3.Cine
+        * ACES and Panasonic Varicam V-Log V-Gamut
+    * Add HDR Output Transforms (RRT+ODT):
+        * P3D65 (1000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
+        * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
+    * Add vendor-supplied IDTs for Sony VENICE
+* Bug Fixes:
+	* Add missing D65 to D60 CAT to 'InvODT.Academy.P3DCI_D65sim_48nits.ctl'
+* Other:
+	* Revert function parameters of ODTs with full/legal option from 'uniform bool' to 'varying int'
+    * Update ACES System Versioning document (S-2014-002)
+    * Update TransformIDs of ACES reference implementation transforms
+    * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
+    * Add reference images to accompany new ACEScsc transforms
+    * Various minor typo fixes in document LaTeX source files
+
+
 **Version 1.1 (June 21, 2018):**
 
 * New Features: 
@@ -26,7 +56,6 @@
         * DolbyPQ_to_HLG_1000nits
         * HLG_to_DolbyPQ_1000nits
     * Add HDR Output Transforms (RRT+ODT):
-        * P3D65 (108 cd/m^2) ST.2084 - designed for use in Dolby Cinema (and inverse)
         * Rec.2020 (1000 cd/m^2) ST.2084 (and inverse)
         * Rec.2020 (2000 cd/m^2) ST.2084 (and inverse)
         * Rec.2020 (4000 cd/m^2) ST.2084 (and inverse)
@@ -57,7 +86,7 @@
     * Miscellaneous typo fixes in CTL transform comments
     * Miscellaneous README and CTL comment updates
     * Miscellaneous LaTeX documentation typo and code fixes
-    * Update ACEStranformIDs where appropriate
+    * Update ACEStransformIDs where appropriate
     * Update README and CHANGELOG
 
 **Version 1.0.3 (September 20, 2016):**

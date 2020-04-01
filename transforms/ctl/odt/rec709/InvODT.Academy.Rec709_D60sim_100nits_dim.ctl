@@ -1,5 +1,5 @@
 
-// <ACEStransformID>InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.3</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:InvODT.Academy.Rec709_D60sim_100nits_dim.a1.0.3</ACEStransformID>
 // <ACESuserName>ACES 1.0 Inverse Output - Rec.709 (D60 sim.)</ACESuserName>
 
 // 
@@ -37,13 +37,13 @@ void main
     output varying float gOut,
     output varying float bOut,
     output varying float aOut,
-    input uniform bool legalRange = false
+    input varying int legalRange = 0
 )
 {  
     float outputCV[3] = { rIn, gIn, bIn};
 
     // Default output is full range, check if legalRange param was set to true
-    if (legalRange) {
+    if (legalRange == 1) {
         outputCV = smpteRange_to_fullRange_f3( outputCV);
     }
 
