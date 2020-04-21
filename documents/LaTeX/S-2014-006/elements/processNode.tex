@@ -7,12 +7,12 @@ A \xml{ProcessNode} element represents an operation to be applied to the image d
 \emph{Attributes:}
 \label{sec:process-node-attr}
 \begin{xmlfields}
-	\xmlitem[id][optional]  a unique identifier for the \xml{ProcessNode}
-	\xmlitem[name][optional] a concise string defining a name for the \xml{ProcessNode} that can be used by an application for display in a user interface
-	\xmlitem[inBitDepth][required] a string that is used by some \xml{ProcessNode}s to indicate how array or parameter values have been scaled
-	\xmlitem[outBitDepth][required] a string that is used by some \xml{ProcessNode}s to indicate how array or parameter values have been scaled
-	The supported values for both \xml{inBitDepth} and \xml{outBitDepth} are the same:
-	    \begin{itemize}
+    \xmlitem[id][optional]  a unique identifier for the \xml{ProcessNode}
+    \xmlitem[name][optional] a concise string defining a name for the \xml{ProcessNode} that can be used by an application for display in a user interface
+    \xmlitem[inBitDepth][required] a string that is used by some \xml{ProcessNode}s to indicate how array or parameter values have been scaled
+    \xmlitem[outBitDepth][required] a string that is used by some \xml{ProcessNode}s to indicate how array or parameter values have been scaled
+    The supported values for both \xml{inBitDepth} and \xml{outBitDepth} are the same:
+        \begin{itemize}
             \item[-] ``\xml{8i}'': 8-bit unsigned integer
             \item[-] ``\xml{10i}'': 10-bit unsigned integer
             \item[-] ``\xml{12i}'': 12-bit unsigned integer
@@ -25,5 +25,5 @@ A \xml{ProcessNode} element represents an operation to be applied to the image d
 \emph{Elements:}
 \label{sec:process-node-elements}
 \begin{xmlfields}
-	\xmlitem[Description][optional] an arbitrary string for describing the function, usage, or notes about the \xml{ProcessNode}. A \xml{ProcessNode} can contain one or more \xml{Description}s.
+    \xmlitem[Description][optional] an arbitrary string for describing the function, usage, or notes about the \xml{ProcessNode}. A \xml{ProcessNode} can contain one or more \xml{Description}s.
 \end{xmlfields}
