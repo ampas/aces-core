@@ -10,10 +10,9 @@ The ASC CDL equations are designed to work on an input domain of floating-point 
 \emph{Attributes:}
 \begin{xmlfields}
     \xmlitem[id][optional] This should match the id attribute of the ColorCorrection element in the ASC CDL XML format.
-    \xmlitem[style][optional] Determines the formula applied by the operator. The valid options are:
+    \xmlitem[style][required] Determines the formula applied by the operator. The valid options are:
         \begin{xmlfields}
-            \xmlitemd["Fwd"] implementation of v1.2 ASC CDL equation. \\
-            This is the default value for \xml{style}.
+            \xmlitemd["Fwd"] implementation of v1.2 ASC CDL equation
             \xmlitemd["Rev"] inverse equation
             \xmlitemd["FwdNoClamp"] similar to the \xml{Fwd} equation, but without clamping
             \xmlitemd["RevNoClamp"] inverse equation, without clamping
