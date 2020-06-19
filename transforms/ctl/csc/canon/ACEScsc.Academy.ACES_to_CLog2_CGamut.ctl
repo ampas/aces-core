@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACEScsc.ACES_to_CLog2_CGamut.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACES_to_CLog2_CGamut.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES2065-1 to Canon Log 2 Cinema Gamut</ACESuserName>
 
 

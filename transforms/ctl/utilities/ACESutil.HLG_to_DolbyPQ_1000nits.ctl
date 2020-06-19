@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACESutil.HLG_to_DolbyPQ_1000nits.a1.1.0</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACESutil.HLG_to_DolbyPQ_1000nits.a1.1.0</ACEStransformID>
 // <ACESuserName>HLG to Dolby PQ</ACESuserName>
 
 

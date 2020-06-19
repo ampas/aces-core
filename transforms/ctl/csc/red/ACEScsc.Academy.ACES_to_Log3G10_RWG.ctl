@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACEScsc.ACES_to_Log3G10_RWG.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACES_to_Log3G10_RWG.a1.1.0</ACEStransformID>
 // <ACESuserName>ACES2065-1 to RED Log3G10 REDWideGamutRGB</ACESuserName>
 
 

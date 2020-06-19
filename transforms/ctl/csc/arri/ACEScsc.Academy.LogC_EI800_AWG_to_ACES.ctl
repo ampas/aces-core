@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACEScsc.LogC_EI800_AWG_to_ACES.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.LogC_EI800_AWG_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>ARRI LogC EI800 AWG to ACES2065-1</ACESuserName>
 
 
