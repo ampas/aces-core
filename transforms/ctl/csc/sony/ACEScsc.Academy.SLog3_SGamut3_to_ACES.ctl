@@ -1,5 +1,5 @@
 
-// <ACEStransformID>ACEScsc.SLog3_SGamut3_to_ACES.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.SLog3_SGamut3_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>Sony S-Log3 S-Gamut3 to ACES2065-1</ACESuserName>
 
 
