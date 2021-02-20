@@ -2,6 +2,14 @@
 // <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.SLog3_SGamut3Cine_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>Sony S-Log3 S-Gamut3.Cine to ACES2065-1</ACESuserName>
 
+//
+// ACES Color Space Conversion - Sony S-Log3 S-Gamut3.Cine to ACES
+//
+// converts Sony S-Log3 S-Gamut3.Cine to
+//          ACES2065-1 (AP0 w/ linear encoding)
+//
+
+
 
 import "ACESlib.Utilities_Color";
 

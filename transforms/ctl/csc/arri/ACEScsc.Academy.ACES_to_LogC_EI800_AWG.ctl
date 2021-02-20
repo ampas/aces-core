@@ -1,6 +1,14 @@
 
 // <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.ACES_to_LogC_EI800_AWG.a1.1.0</ACEStransformID>
-// <ACESuserName>ACES2065-1 to ARRI LogC EI800 AWG</ACESuserName>
+// <ACESuserName>ACES2065-1 to ARRI LogC EI800 ALEXA Wide Gamut</ACESuserName>
+
+//
+// ACES Color Space Conversion - ACES to ARRI LogC EI800 ALEXA Wide Gamut
+//
+// converts ACES2065-1 (AP0 w/ linear encoding) to
+//          ARRI LogC EI800 ALEXA Wide Gamut
+//
+
 
 
 import "ACESlib.Utilities_Color";
