@@ -2,6 +2,14 @@
 // <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.Log3G10_RWG_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>RED Log3G10 REDWideGamutRGB to ACES2065-1</ACESuserName>
 
+//
+// ACES Color Space Conversion - RED Log3G10 REDWideGamutRGB to ACES
+//
+// converts RED Log3G10 REDWideGamutRGB to
+//          ACES2065-1 (AP0 w/ linear encoding)
+//
+
+
 
 import "ACESlib.Utilities_Color";
 
