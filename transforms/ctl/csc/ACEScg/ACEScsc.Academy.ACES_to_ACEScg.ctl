@@ -29,8 +29,6 @@ void main
 {
     float ACES[3] = { rIn, gIn, bIn};
 
-    ACES = clamp_f3( ACES, 0.0, HALF_POS_INF);
-
     float ACEScg[3] = mult_f3_f44( ACES, AP0_2_AP1_MAT);
 
     rOut = ACEScg[0];
