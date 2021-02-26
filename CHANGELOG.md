@@ -1,3 +1,16 @@
+**Version 1.3 Release Candidate 1 (February 26, 2021):**
+
+* New Features: 
+    * Add gamut compression function to assist with remapping problematic colorimetry into AP1
+* Bug fixes:
+    * Remove clamp in ACES to ACEScg conversion transform
+    * Correct typos in TransformIDs of the CSC files added in v1.2
+* Other:
+    * Add reference images to accompany new gamut compress transform
+    * Update reference image for ACES <--> ACEScg conversion transforms
+    * Rename `outputTransforms` directory to `outputTransform` (singular)
+    * Add color primary subdirectories to `outputTransform` directory to be consistent with the `odt` directory
+
 **Version 1.2 (April 1, 2020):**
 
 * New Features: 
@@ -18,9 +31,9 @@
         * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
     * Add vendor-supplied IDTs for Sony VENICE
 * Bug Fixes:
-	* Add missing D65 to D60 CAT to 'InvODT.Academy.P3DCI_D65sim_48nits.ctl'
+    * Add missing D65 to D60 CAT to 'InvODT.Academy.P3DCI_D65sim_48nits.ctl'
 * Other:
-	* Revert function parameters of ODTs with full/legal option from 'uniform bool' to 'varying int'
+    * Revert function parameters of ODTs with full/legal option from 'uniform bool' to 'varying int'
     * Update ACES System Versioning document (S-2014-002)
     * Update TransformIDs of ACES reference implementation transforms
     * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
