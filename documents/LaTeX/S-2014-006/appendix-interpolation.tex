@@ -10,10 +10,10 @@ With a table of the sampled input values in $inValue[i]$ where $i$ ranges from $
 
 \begin{center}
 \begin{tabularx}{3in}{ccXcc}
-	index $i$ & inValue && index $j$ & outValue \\ \hline
-	0 & 0 && 0 & 0 \\
-	$\vdots$ & $\vdots$ && $\vdots$ & $\vdots$ \\
-	$n-1$ & 1 && $n-1$ & 1000 \\
+    index $i$ & inValue && index $j$ & outValue \\ \hline
+    0 & 0 && 0 & 0 \\
+    $\vdots$ & $\vdots$ && $\vdots$ & $\vdots$ \\
+    $n-1$ & 1 && $n-1$ & 1000 \\
 \end{tabularx}
 \end{center}
 
@@ -22,7 +22,7 @@ the $output$ resulting from $input$ can be calculated after finding the nearest 
 When $inValue[i] = input$, the result is evaluated directly.
 
 \begin{center}
-$output = \dfrac{input-inValue[i]}{inValue[i+1]-inValue[i]} \times (outValue[j+1]-outValue[j])+outValue[j]$	
+$output = \dfrac{input-inValue[i]}{inValue[i+1]-inValue[i]} \times (outValue[j+1]-outValue[j])+outValue[j]$ 
 \end{center}
 
 \section{Trilinear Interpolation}
