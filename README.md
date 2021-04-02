@@ -23,15 +23,18 @@ Though the "master" branch is 1.3, the current major version of ACES remains 1. 
 
 The dev branch always reflects the "bleeding edge" and indicates new features or updates that will ultimately be rolled into a future release version of ACES.  Improvements are staged on the dev branch for testing as they become available.
 
-Included in ACES 1.3 Release Candidate 1:
+Included in ACES 1.3 Release Candidate 2:
 
 * New Features: 
     * Add gamut compression function to assist with remapping problematic colorimetry into AP1
+    * Add Sony Venice-specific CSC transforms
 * Bug fixes:
     * Remove clamp in ACES to ACEScg conversion transform
     * Correct typos in TransformIDs of the CSC files added in v1.2
 * Other:
+    * Relocate ACES documentation to its own repository
     * Add reference images to accompany new gamut compress transform
+    * Add reference images to accompany Sony Venice CSC transforms
     * Update reference image for ACES <--> ACEScg conversion transforms
     * Rename `outputTransforms` directory to `outputTransform` (singular)
     * Add color primary subdirectories to `outputTransform` directory to be consistent with the `odt` directory

@@ -1,12 +1,15 @@
-**Version 1.3 Release Candidate 1 (February 26, 2021):**
+**Version 1.3 Release Candidate 2 (April 2, 2021):**
 
 * New Features: 
     * Add gamut compression function to assist with remapping problematic colorimetry into AP1
+    * Add Sony Venice-specific CSC transforms
 * Bug fixes:
     * Remove clamp in ACES to ACEScg conversion transform
     * Correct typos in TransformIDs of the CSC files added in v1.2
 * Other:
+    * Relocate ACES documentation to its own repository
     * Add reference images to accompany new gamut compress transform
+    * Add reference images to accompany Sony Venice CSC transforms
     * Update reference image for ACES <--> ACEScg conversion transforms
     * Rename `outputTransforms` directory to `outputTransform` (singular)
     * Add color primary subdirectories to `outputTransform` directory to be consistent with the `odt` directory
