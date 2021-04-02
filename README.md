@@ -20,48 +20,27 @@ This toolkit is intended to serve as a distribution mechanism for key components
 
 ### Changes from Previous Release ###
 
-Though the "master" branch is 1.2, the current major version of ACES remains 1.  This means the 1.2 update adds a number of transforms but does not change the look or modify the existing core transforms (beyond addressing reported bugs and/or inconsequential formatting/whitespace changes).
+Though the "master" branch is 1.3, the current major version of ACES remains 1.  The 1.3 update adds a transforms but does not change the look or modify the existing core transforms (beyond addressing reported bugs and/or inconsequential formatting/whitespace changes).
 
-As always, you should check the hotfixes and dev branches for the latest bug fixes and new features that will ultimately be rolled into a future version of ACES.  Improvements will continue to be staged on the dev branch for testing as they become available.
+The dev branch always reflects the "bleeding edge" and indicates new features or updates that will ultimately be rolled into a future release version of ACES.  Improvements are staged on the dev branch for testing as they become available.
 
-Included in ACES 1.2:
+Included in ACES 1.3 Release Candidate 1:
 
 * New Features: 
-    * Add ACES Metadata File specification document (S-2019-001), XML schema, and example files
-    * Add new version of Common LUT Format specification document (S-2014-006)
-    * Add new ACES Project Organization and Development Procedure document (P-2019-001)
-    * Add ACES Color Space Conversion transforms between:
-        * ACES and Canon Canon Log 2 Cinema Gamut
-        * ACES and Canon Canon Log 3 Cinema Gamut
-        * ACES and ARRI ALEXA LogC (EI800) WideGamut
-        * ACES and RED Log3G10 REDWideGamutRGB
-        * ACES and Sony S-Log3 S-Gamut3
-        * ACES and Sony S-Log3 S-Gamut3.Cine
-        * ACES and Panasonic Varicam V-Log V-Gamut
-    * Add HDR Output Transforms (RRT+ODT):
-        * P3D65 (1000 cd/m^2) ST.2084 (and inverse)
-        * P3D65 (2000 cd/m^2) ST.2084 (and inverse)
-        * P3D65 (4000 cd/m^2) ST.2084 (and inverse)
-    * Add vendor-supplied IDTs for Sony VENICE
+    * Add gamut compression function to assist with remapping problematic colorimetry into AP1
+* Bug fixes:
+    * Remove clamp in ACES to ACEScg conversion transform
+    * Correct typos in TransformIDs of the CSC files added in v1.2
 * Other:
-    * Update ACES System Versioning document (S-2014-002)
-    * Update TransformIDs of ACES reference implementation transforms
-    * Remove "Academy Color Encoding System (ACES) Clip-level Metadata File Format Definition and Usage" (TB-2014-009)
-    * Add reference images to accompany new ACEScsc transforms
+    * Add reference images to accompany new gamut compress transform
+    * Update reference image for ACES <--> ACEScg conversion transforms
+    * Rename `outputTransforms` directory to `outputTransform` (singular)
+    * Add color primary subdirectories to `outputTransform` directory to be consistent with the `odt` directory
 
 For a more detailed list of changes see the [CHANGELOG](./CHANGELOG.md) and in the [commit history](https://github.com/ampas/aces-dev/commits/master).
 
-#### Notes on the new ACES Metadata Files (AMF) specification ####
-ACES 1.2 includes the new ACES Metadata File (AMF) specification that replaces the ACES Clip-level Metadata File Format (ACESclip).  AMF is documented in Academy Specification S-2019-001 and TB-2014-009 has been retracted.  AMF offers a simplified means to describe the transforms necessary to configure an ACES viewing pipeline for a collection of related ACES image files.  AMF supports a mechanism to communicate the ACES Look Transforms and the working color space in which ASC-CDL based Looks are applied enabling the communication of Look information throughout production and post-production.  A series of new ACES Color Space Conversion (ACEScsc) transforms have been added with the expectation that these transforms may be useful working spaces for the application of ACES ASC-CDL based Look Transforms. Also included in the release is an XML schema for the AMF and example AMF files. 
+#### Notes on the gamut compress function ####
 
-#### Notes on the updated Common LUT Format (CLF) specification ####
-ACES 1.2 also includes an updated version of the Common LUT Format (CLF) specification.  This new version includes changes based on feedback from the ACES community.  It adds additional operators to the specification and the document has been substantially revised to more clearly communicate its intent.
-
-#### Notes on the updated ACES System Versioning Documentation ####
-The ACES System Versioning Documentation has been updated to support additional vendor- and user-supplied transform types, improve TransformID format consistency, version control for the TransformID format, and to provide a means for automated systems to recognize the presence of ACES TransformIDs and identify their version.  All transforms in the ACES reference implementation have been updated to conform to the new TransformID format.
-
-#### Notes on the new ACES Project Organization and Development Procedure ###
-In early 2019, ACES leadership established a revised organizational structure and development procedures for the ACES project.  The new structure and development procedures were modeled after those adopted by the Academy Software Foundation, with the goals of increasing visibility into the development of ACES, enabling greater global participation in the ACES development process, providing accountability mechanisms, and better documenting the decision making process.  The revised structure and development procedures are detailed in Academy Procedure P-2019-001.
 
 ### Versioning ###
  
@@ -70,21 +49,21 @@ can be found at [https://github.com/ampas/aces-dev/releases](https://github.com/
 
 Source code is version controlled using the [git version control system](http://git-scm.com/) and hosted on GitHub at [https://github.com/ampas/aces-dev/](https://github.com/ampas/aces-dev/).
 
-Individual files now conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
+File names conform to the ACES System Versioning Specification.  Details can be found in the Academy Specification "S-2014-002 - Academy Color Encoding System - Versioning System" included in [`documents/`](./documents)
 
 ### Branch Structure ###
 
 __Master Branch__
  
-The current release version of ACES can always be found at the HEAD of the master branch.  The master branch contains no intermediate commits and all commits on the master branch are tagged to represent a release of ACES.
+The current official release version of ACES can always be found at the HEAD of the master branch.  The master branch contains no intermediate commits and all commits on the master branch are tagged to represent a release of ACES.
 
 __Dev Branch__
  
-Intermediate commits between releases will be staged on the dev branch.  Commits staged on the dev branch, but not yet merged into the master, should be considered as "planned for inclusion" in the next release version.  Commits on the dev branch will ultimately be merged into the master branch as part of a future release.
+Intermediate commits between releases are staged on the dev branch.  Commits staged on the dev branch, but not yet merged into the master, should be considered as "planned for inclusion" in the next release version.  These represent the "bleeding edge" and development and, in turn, pull requests should be based against the dev branch. 
 
 __Hotfixes Branch__
 
-In some instances it may be necessary to create a hotfixes branch.  The hotfixes branch will include important, but not fully tested, fixes for bugs found in a particular release.  Hotfixes should only be implemented by developers if the bug they are intending to correct is encountered in the course of production and is deemed to be a barrier to using a particular ACES release.  Hotfixes, once fully tested, will be merged into the dev branch, and ultimately the master.
+In some instances it may be necessary to create a hotfixes branch.  The hotfixes branch will include critical fixes for bugs found in a particular release.  Hotfixes should only be implemented by developers if the bug they are intending to correct is encountered in the course of production and is deemed to be a barrier to using a particular ACES release.  Hotfixes, once fully tested, will be merged into the dev branch, and ultimately the master.
 
 ## Prerequisites ##
 
