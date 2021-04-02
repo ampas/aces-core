@@ -7,13 +7,12 @@ The basic ACES components are:
 * Color encoding and metric specifications, file format specifications, color
 transformations, and an open source reference implementation 
 * A set of reference images and calibration targets for film scanners and recorders 
-* Documentation on the system and software tools
+* Documentation on the system and software tools can be found in ['aces-docs'](https://github.com/ampas/aces-docs)
 
 This toolkit is intended to serve as a distribution mechanism for key components of the system, including the reference implementation transforms, reference images, and documentation.
 
 ### Package Contents ###
  
-* [`documents/`](./documents) – ACES-related documents 
 * [`formats/`](./formats) - ACES file formats code and examples
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
