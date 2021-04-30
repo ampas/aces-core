@@ -147,10 +147,12 @@
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
 				<xs:choice minOccurs="1" maxOccurs="1">
-					<xs:sequence>
+					<xs:choice minOccurs="1" maxOccurs="1">
+						<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 						<xs:element name="transformId" type="aces:tnInputTransform" minOccurs="1" maxOccurs="1"/>
-					</xs:sequence>
-					<xs:choice>
+					</xs:choice>
+					<xs:choice minOccurs="1" maxOccurs="1">
 						<xs:sequence>
 							<xs:element name="inverseOutputTransform" type="aces:inverseOutputTransformType" minOccurs="1" maxOccurs="1"/>
 						</xs:sequence>
@@ -168,9 +170,11 @@
 	<xs:complexType name="referenceRenderingTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnReferenceRenderingTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -178,9 +182,11 @@
 	<xs:complexType name="outputDeviceTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnOutputDeviceTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -188,9 +194,11 @@
 	<xs:complexType name="inverseReferenceRenderingTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnInverseReferenceRenderingTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -198,9 +206,11 @@
 	<xs:complexType name="inverseOutputDeviceTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnInverseOutputDeviceTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -209,9 +219,11 @@
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
 				<xs:choice minOccurs="1" maxOccurs="1">
-					<xs:sequence>
+					<xs:choice minOccurs="1" maxOccurs="1">
+						<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+						<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 						<xs:element name="transformId" type="aces:tnOutputTransform" minOccurs="1" maxOccurs="1"/>
-					</xs:sequence>
+					</xs:choice>
 					<xs:sequence>
 						<xs:element name="referenceRenderingTransform" type="aces:referenceRenderingTransformType" minOccurs="1" maxOccurs="1"/>
 						<xs:element name="outputDeviceTransform" type="aces:outputDeviceTransformType" minOccurs="1" maxOccurs="1"/>
@@ -224,9 +236,11 @@
 	<xs:complexType name="inverseOutputTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnInverseOutputTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -234,9 +248,11 @@
 	<xs:complexType name="workingSpaceTransformType">
 		<xs:complexContent>
 			<xs:extension base="aces:transformType">
-				<xs:sequence>
+				<xs:choice minOccurs="1" maxOccurs="1">
+					<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
 					<xs:element name="transformId" type="aces:tnColorSpaceConversionTransform" minOccurs="1" maxOccurs="1"/>
-				</xs:sequence>
+				</xs:choice>
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -253,7 +269,11 @@
 			<xs:extension base="aces:transformType">
 				<xs:sequence>
 					<xs:choice minOccurs="1" maxOccurs="1">
-						<xs:element name="transformId" type="aces:tnLookTransform" minOccurs="1" maxOccurs="1"/>
+						<xs:choice minOccurs="1" maxOccurs="1">
+							<xs:element name="uuid" type="dcml:UUIDType" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="file" type="xs:anyURI" minOccurs="1" maxOccurs="1"/>
+							<xs:element name="transformId" type="aces:tnLookTransform" minOccurs="1" maxOccurs="1"/>
+						</xs:choice>
 						<xs:sequence>
 							<xs:element name="cdlWorkingSpace" type="aces:cdlWorkingSpaceType" minOccurs="1" maxOccurs="1"/>
 							<xs:choice minOccurs="1" maxOccurs="1">
@@ -261,10 +281,7 @@
 									<xs:element ref="cdl:SOPNode" minOccurs="1" maxOccurs="1"/>
 									<xs:element ref="cdl:SatNode" minOccurs="1" maxOccurs="1"/>
 								</xs:sequence>
-								<xs:sequence>
 									<xs:element ref="cdl:ColorCorrectionRef"/>
-									<xs:element name="uuid" type="dcml:UUIDType" minOccurs="0" maxOccurs="1"/>
-								</xs:sequence>
 							</xs:choice>
 						</xs:sequence>
 					</xs:choice>

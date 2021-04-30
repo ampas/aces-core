@@ -1,6 +1,14 @@
 
-// <ACEStransformID>ACEScsc.CLog3_CGamut_to_ACES.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.CLog3_CGamut_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>Canon Log 3 Cinema Gamut to ACES2065-1</ACESuserName>
+
+//
+// ACES Color Space Conversion - Canon Log 3 Cinema Gamut to ACES
+//
+// converts Canon Log 3 Cinema Gamut to
+//          ACES2065-1 (AP0 w/ linear encoding)
+//
+
 
 
 import "ACESlib.Utilities_Color";

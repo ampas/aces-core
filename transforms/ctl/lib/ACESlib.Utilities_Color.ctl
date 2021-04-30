@@ -102,6 +102,25 @@ const Chromaticities SONY_SGAMUT3_CINE_PRI =
   { 0.3127,  0.3290}
 };
 
+// Note: No official published primaries exist as of this day for the
+// Sony VENICE SGamut3 and Sony VENICE SGamut3.Cine colorspaces. The primaries
+// have thus been derived from the IDT matrices.
+const Chromaticities SONY_VENICE_SGAMUT3_PRI =
+{
+  { 0.740464264304292,  0.279364374750660},
+  { 0.089241145423286,  0.893809528608105},
+  { 0.110488236673827, -0.052579333080476},
+  { 0.312700000000000,  0.329000000000000}
+};
+
+const Chromaticities SONY_VENICE_SGAMUT3_CINE_PRI =
+{
+  { 0.775901871567345,  0.274502392854799},
+  { 0.188682902773355,  0.828684937020288},
+  { 0.101337382499301, -0.089187517306263},
+  { 0.312700000000000,  0.329000000000000}
+};
+
 const Chromaticities CANON_CGAMUT_PRI =
 {
   { 0.7400,  0.2700},

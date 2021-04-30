@@ -1,11 +1,11 @@
 
-// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.SLog3_SGamut3Cine_to_ACES.a1.1.0</ACEStransformID>
-// <ACESuserName>Sony S-Log3 S-Gamut3.Cine to ACES2065-1</ACESuserName>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.SLog3_Venice_SGamut3_to_ACES.a1.1.0</ACEStransformID>
+// <ACESuserName>Sony S-Log3 VENICE S-Gamut3 to ACES2065-1</ACESuserName>
 
 //
-// ACES Color Space Conversion - Sony S-Log3 S-Gamut3.Cine to ACES
+// ACES Color Space Conversion - Sony S-Log3 VENICE S-Gamut3 to ACES
 //
-// converts Sony S-Log3 S-Gamut3.Cine to
+// converts Sony S-Log3 VENICE S-Gamut3 to
 //          ACES2065-1 (AP0 w/ linear encoding)
 //
 
@@ -14,8 +14,8 @@
 import "ACESlib.Utilities_Color";
 
 
-const float SGAMUT3_CINE_2_AP0_MAT[3][3] = 
-                        calculate_rgb_to_rgb_matrix( SONY_SGAMUT3_CINE_PRI, 
+const float VENICE_SGAMUT3_2_AP0_MAT[3][3] =
+                        calculate_rgb_to_rgb_matrix( SONY_VENICE_SGAMUT3_PRI,
                                                      AP0, 
                                                      CONE_RESP_MAT_CAT02);
 
@@ -48,12 +48,12 @@ void main
     output varying float aOut
 )
 {
-    float lin_SGamut3Cine[3];
-    lin_SGamut3Cine[0] = SLog3_to_lin( rIn);
-    lin_SGamut3Cine[1] = SLog3_to_lin( gIn);
-    lin_SGamut3Cine[2] = SLog3_to_lin( bIn);
+    float lin_SGamut3[3];
+    lin_SGamut3[0] = SLog3_to_lin( rIn);
+    lin_SGamut3[1] = SLog3_to_lin( gIn);
+    lin_SGamut3[2] = SLog3_to_lin( bIn);
 
-    float ACES[3] = mult_f3_f33( lin_SGamut3Cine, SGAMUT3_CINE_2_AP0_MAT);
+    float ACES[3] = mult_f3_f33( lin_SGamut3, VENICE_SGAMUT3_2_AP0_MAT);
   
     rOut = ACES[0];
     gOut = ACES[1];

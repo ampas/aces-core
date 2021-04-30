@@ -1,6 +1,14 @@
 
-// <ACEStransformID>ACEScsc.VLog_VGamut_to_ACES.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:ACEScsc.Academy.VLog_VGamut_to_ACES.a1.1.0</ACEStransformID>
 // <ACESuserName>Panasonic Varicam V-Log V-Gamut to ACES2065-1</ACESuserName>
+
+//
+// ACES Color Space Conversion - Panasonic Varicam V-Log V-Gamut to ACES
+//
+// converts Panasonic Varicam V-Log V-Gamut to
+//          ACES2065-1 (AP0 w/ linear encoding)
+//
+
 
 
 import "ACESlib.Utilities_Color";
