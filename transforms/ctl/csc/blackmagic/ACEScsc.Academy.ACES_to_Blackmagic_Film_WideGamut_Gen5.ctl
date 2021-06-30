@@ -11,26 +11,14 @@
 
 
 
-// import "ACESlib.Utilities_Color";
-// Normally we'd use the above import, but for testing to make the CTL run independent, pasting the chromaticity definitions here
-const Chromaticities BMD_CAM_WG_GEN5_PRI =
-{
-  { 0.7177215,  0.3171181},
-  { 0.2280410,  0.8615690},
-  { 0.1005841, -0.0820452},
-  { 0.3127170,  0.3290312}
-};
+import "ACESlib.Utilities_Color";
+
 
 
 const float AP0_TO_BMD_CAM_WG_GEN5_PRI_MAT[3][3] = 
                         calculate_rgb_to_rgb_matrix( AP0,
                                                      BMD_CAM_WG_GEN5_PRI,
                                                      CONE_RESP_MAT_CAT02 );
-// const float AP0_TO_BMD_CAM_WG_GEN5_PRI_MAT[3][3] = {
-//    { 1.576428952385813, -0.097431329959358,  0.032116624891220},
-//    {-0.387910620476483,  1.005825323128847,  0.063501106840154},
-//    {-0.188518331909330,  0.091606006830511,  0.904382268268626}
-// };
 
 const float A = 0.08692876065491224;
 const float B = 0.005494072432257808;

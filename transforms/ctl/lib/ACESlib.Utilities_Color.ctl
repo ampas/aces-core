@@ -145,6 +145,13 @@ const Chromaticities PANASONIC_VGAMUT_PRI =
   { 0.3127,  0.3290}
 };
 
+const Chromaticities BMD_CAM_WG_GEN5_PRI =
+{
+  { 0.7177215,  0.3171181},
+  { 0.2280410,  0.8615690},
+  { 0.1005841, -0.0820452},
+  { 0.3127170,  0.3290312}
+};
 
 
 
