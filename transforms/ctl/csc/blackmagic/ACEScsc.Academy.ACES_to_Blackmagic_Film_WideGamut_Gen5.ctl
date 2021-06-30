@@ -39,17 +39,6 @@ float lin_to_BMDFilm_Gen5( input varying float x) {
     return y;
 }
 
-// Inverse OETF
-float BMDFilm_Gen5_to_lin( input varying float y) {
-    float x;
-    if ( y < LOG_CUT ) {
-        x = (y - E) / D;
-    } else {
-        x = exp((y - C)/A) - B;
-    }
-    return x;
-}
-
 
 
 void main

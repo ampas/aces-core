@@ -28,17 +28,6 @@ const float E = 0.09246575342465753;
 const float LIN_CUT = 0.005;
 const float LOG_CUT = D * LIN_CUT + E;
 
-// Forward OETF
-float lin_to_BMDFilm_Gen5( input varying float x) {
-    float y;
-    if ( x < LIN_CUT ) {
-        y = D * x + E;
-    } else {
-        y = A * log(x + B) + C;
-    }
-    return y;
-}
-
 // Inverse OETF
 float BMDFilm_Gen5_to_lin( input varying float y) {
     float x;
