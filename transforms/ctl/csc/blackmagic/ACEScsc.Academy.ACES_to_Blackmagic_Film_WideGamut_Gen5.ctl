@@ -26,7 +26,6 @@ const float C = 0.5300133392291939;
 const float D = 8.283605932402494;
 const float E = 0.09246575342465753;
 const float LIN_CUT = 0.005;
-const float LOG_CUT = D * LIN_CUT + E;
 
 // Forward OETF
 float lin_to_BMDFilm_Gen5( input varying float x) {
