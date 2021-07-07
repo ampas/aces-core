@@ -1,5 +1,5 @@
 
-// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.Blackmagic.BMDFilm_WideGamut_Gen5.a1.v1</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:IDT.BlackmagicDesign.BMDFilm_WideGamut_Gen5.a1.v1</ACEStransformID>
 // <ACESuserName>ACES 1.0 Input - Blackmagic Film Wide Gamut (Gen 5)</ACESuserName>
 
 //
