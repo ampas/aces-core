@@ -1,5 +1,5 @@
-// <ACEStransformID>urn:ampas:aces:transformId:v1.5:LMT.Academy.GamutCompress.a1.3.0</ACEStransformID>
-// <ACESuserName>ACES 1.3 Look - Gamut Compress</ACESuserName>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:LMT.Academy.ReferenceGamutCompress.a1.3.0</ACEStransformID>
+// <ACESuserName>ACES 1.3 Look - Reference Gamut Compress</ACESuserName>
 
 //
 // Gamut compression algorithm to bring out-of-gamut scene-referred values into AP1
