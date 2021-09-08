@@ -40,7 +40,7 @@ const float PWR = 1.2;
 
 
 // Calculate compressed distance
-float compress(float dist, float lim, float thr, float pwr, bool invert)
+float uncompress(float dist, float lim, float thr, float pwr)
 {
     float comprDist;
     float scl;
@@ -58,16 +58,11 @@ float compress(float dist, float lim, float thr, float pwr, bool invert)
         nd = (dist - thr) / scl;
         p = pow(nd, pwr);
 
-        if (!invert) {
-            comprDist = thr + scl * nd / (pow(1.0 + p, 1.0 / pwr)); // Compress
+        if (dist > (thr + scl)) {
+            comprDist = dist; // Avoid singularity
         }
         else {
-            if (dist > (thr + scl)) {
-                comprDist = dist; // Avoid singularity
-            }
-            else {
-                comprDist = thr + scl * pow(-(p / (p - 1.0)), 1.0 / pwr); // Uncompress
-            }
+            comprDist = thr + scl * pow(-(p / (p - 1.0)), 1.0 / pwr); // Uncompress
         }
     }
 
@@ -85,8 +80,7 @@ void main
     output varying float rOut,
     output varying float gOut,
     output varying float bOut,
-    output varying float aOut,
-    input uniform bool invert = true
+    output varying float aOut
 ) 
 { 
     // Source values
@@ -113,9 +107,9 @@ void main
 
     // Compress distance with parameterized shaper function
     float comprDist[3] = {
-        compress(dist[0], LIM_CYAN, THR_CYAN, PWR, invert),
-        compress(dist[1], LIM_MAGENTA, THR_MAGENTA, PWR, invert),
-        compress(dist[2], LIM_YELLOW, THR_YELLOW, PWR, invert)
+        uncompress(dist[0], LIM_CYAN, THR_CYAN, PWR),
+        uncompress(dist[1], LIM_MAGENTA, THR_MAGENTA, PWR),
+        uncompress(dist[2], LIM_YELLOW, THR_YELLOW, PWR)
     };
 
     // Recalculate RGB from compressed distance and achromatic
