@@ -1,4 +1,4 @@
-// <ACEStransformID>urn:ampas:aces:transformId:v1.5:InvLMT.Academy.ReferenceGamutCompress.a1.3.0</ACEStransformID>
+// <ACEStransformID>urn:ampas:aces:transformId:v1.5:InvLMT.Academy.ReferenceGamutCompress.a1.v1.0</ACEStransformID>
 // <ACESuserName>ACES 1.3 Inverse Look - Reference Gamut Compress</ACESuserName>
 
 //
