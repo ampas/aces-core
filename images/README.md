@@ -75,7 +75,7 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *SonyF35.StillLife_from_Venice_SLog3_SGamut3Cine.exr* - `ACEScsc.Academy.Venice_SLog3_SGamut3Cine_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_Venice_SLog3_SGamut3Cine.exr*
     * *SonyF35.StillLife_from_VLog_VGamut_.exr* - `ACEScsc.Academy.VLog_VGamut_to_ACES.ctl` applied to *ACEScsc/SonyF35.StillLife_VLog_VGamut.exr*
     * *SonyF35.StillLife_from_InvRRT.exr* - `InvRRT.ctl` applied to *OCES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_from_LMT.Academy.GamutCompress.exr* - `LMT.Academy.GamutCompress.ctl` applied with `invert = true` to *LMT/SonyF35.StillLife_LMT.Academy.GamutCompress.exr*
+    * *SonyF35.StillLife_from_LMT.Academy.ReferenceGamutCompress.exr* - `InvLMT.Academy.ReferenceGamutCompress.ctl` applied to *LMT/SonyF35.StillLife_LMT.Academy.ReferenceGamutCompress.exr*
     * *SonyF35.StillLife_from_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff* - `InvRRTODT.Academy.P3D65_108nits_7.2nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_HLG.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff**
     * *SonyF35.StillLife_from_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_ST2084.ctl` applied to *RRTODT/SonyF35.StillLife_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff**
@@ -96,7 +96,7 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *syntheticChart.01_from_Venice_SLog3_SGamut3Cine.exr* - `ACEScsc.Academy.Venice_SLog3_SGamut3Cine_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_Venice_SLog3_SGamut3Cine.exr*
     * *syntheticChart.01_from_VLog_VGamut.exr* - `ACEScsc.Academy.VLog_VGamut_to_ACES.ctl` applied to *ACEScsc/syntheticChart.01_VLog_VGamut.exr*
     * *syntheticChart.01_from_InvRRT.exr* - `InvRRT.ctl` applied to *OCES/syntheticChart.01.exr*
-    * *syntheticChart.01_from_LMT.Academy.GamutCompress.exr* - `LMT.Academy.GamutCompress.ctl` applied with `invert = true` to *LMT/syntheticChart.01_LMT.Academy.GamutCompress.exr*
+    * *syntheticChart.01_from_LMT.Academy.ReferenceGamutCompress.exr* - `InvLMT.Academy.ReferenceGamutCompress.ctl` applied to *LMT/syntheticChart.01_LMT.Academy.ReferenceGamutCompress.exr*
     * *syntheticChart.01_from_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff* - `InvRRTODT.Academy.P3D65_108nits_7.2nits_ST2084.ctl` applied to *RRTODT/syntheticChart.01_RRTODT.Academy.P3D65_108nits_7.2nits_ST2084.tiff**
     * *syntheticChart.01_from_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_HLG.ctl` applied to *RRTODT/syntheticChart.01_RRTODT.Academy.Rec2020_1000nits_15nits_HLG.tiff**
     * *syntheticChart.01_from_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff* - `InvRRTODT.Academy.Rec2020_1000nits_15nits_ST2084.ctl` applied to *RRTODT/syntheticChart.01_RRTODT.Academy.Rec2020_1000nits_15nits_ST2084.tiff**
@@ -140,12 +140,12 @@ ACEScc and ACESproxy image data is **NOT** intended to be written out to image f
     * *SonyF35.StillLife_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *SonyF35.StillLife_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *SonyF35.StillLife_LMT.Academy.BlueLightArtifactFix.exr* - `LMT.Academy.BlueLightArtifactFix.ctl` applied to *ACES/SonyF35.StillLife.exr*
-    * *SonyF35.StillLife_LMT.Academy.GamutCompress.exr* - `LMT.Academy.GamutCompress.ctl` applied to *ACES/SonyF35.StillLife.exr*
+    * *SonyF35.StillLife_LMT.Academy.ReferenceGamutCompress.exr* - `LMT.Academy.ReferenceGamutCompress.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *syntheticChart.01_LMT.Academy.ACES_0_1_1.exr* - `LMT.Academy.ACES_0_1_1.ctl` applied to *ACES/syntheticChart.01.exr*
     * *syntheticChart.01_LMT.Academy.ACES_0_2_2.exr* - `LMT.Academy.ACES_0_2_2.ctl` applied to *ACES/syntheticChart.01.exr*
     * *syntheticChart.01_LMT.Academy.ACES_0_7_1.exr* - `LMT.Academy.ACES_0_7_1.ctl` applied to *ACES/syntheticChart.01.exr*
     * *syntheticChart.01_LMT.Academy.BlueLightArtifactFix.exr* - `LMT.Academy.BlueLightArtifactFix.ctl` applied to *ACES/syntheticChart.01.exr*
-    * *syntheticChart.01_LMT.Academy.GamutCompress.exr* - `LMT.Academy.GamutCompress.ctl` applied to *ACES/syntheticChart.01.exr*
+    * *syntheticChart.01_LMT.Academy.ReferenceGamutCompress.exr* - `LMT.Academy.ReferenceGamutCompress.ctl` applied to *ACES/syntheticChart.01.exr*
   * **OCES/**
     * *SonyF35.StillLife.exr* - `RRT.ctl` applied to *ACES/SonyF35.StillLife.exr*
     * *syntheticChart.01.exr* - `RRT.ctl` applied to *ACES/syntheticChart.01.exr*
