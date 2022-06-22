@@ -1,1 +1,29 @@
-Canon Input Device Transform (IDT) files are published on the following websites. Set "OS Version" to Windows 7 to see them.* Canon EOS C100 - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c100* Canon EOS C100 Mark II - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c100-mark-ii* Canon EOS C200 - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c200* Canon EOS C200B - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c200b* Canon EOS C300 - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c300* Canon EOS C300 PL - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c300-pl* Canon EOS C300 Mark II - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c300-mark-ii* Canon EOS C300 Mark II PL -https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c300-mark-ii-pl* Canon EOS C500 - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c500* Canon EOS C500 PL - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c500-pl* Canon EOS C500 Mark II - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/cinema-eos-c500-mark-ii* Canon EOS C700 - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c700* Canon EOS C700 FF - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c700-ff* Canon EOS C700 FF PL - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c700-ff-pl* Canon EOS C700 GS PL - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c700-gs-pl* Canon EOS C700 PL - https://www.usa.canon.com/internet/portal/us/home/support/details/cameras/cinema-eos/eos-c700-pl
+# Latest IDTs
+
+The latest Canon IDTs are provided here and have been unified to be classified by color space (rather than per camera).
+* Supported gamma : **Canon Log 2**, **Canon Log 3**
+* Supported color gamut : **Cinema Gamut**, **BT.2020 Gamut**
+
+Note: There is no difference in the resulting image between the latest IDTs and legacy IDTs. Replacing legacy IDTs with the latest IDTs for the same color space should result in the same ACES image.
+
+The latest IDTs are available for the following models:
+* EOS C70
+* EOS C200
+* EOS C200B
+* EOS C300 Mark II
+* EOS C300 Mark II PL
+* EOS C300 Mark III
+* EOS C500 Mark II
+* EOS C700
+* EOS C700 FF
+* EOS C700 FF PL
+* EOS C700 GS PL
+* EOS C700 PL
+* EOS-1D X Mark III
+* EOS R3
+* EOS R5
+* EOS R5 C
+* EOS R6
+* and models released after 2022.
+
+These latest IDTs are for Canon Log 2 or Canon Log 3, so if you need IDTs for Canon Log, see [“LegacyIDTs.md”](LegacyIDTs.md)
