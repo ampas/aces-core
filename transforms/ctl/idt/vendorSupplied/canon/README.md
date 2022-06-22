@@ -22,6 +22,7 @@ The latest IDTs are available for the following models:
 * EOS-1D X Mark III
 * EOS R3
 * EOS R5
+* EOS R5 C
 * EOS R6
 * and models released after 2022.
 
