@@ -4,15 +4,15 @@
 // ARRI IDT for ARRI LogC4
 
 
-// Constants
-const float a = (pow(2.0, 18.0) - 16.0) / 117.45;
-const float b = (1023.0 - 95.0) / 1023.0;
-const float c = 95.0 / 1023.0;
-const float s = (7.0 * log(2.0) * pow(2.0, 7.0 - 14.0 * c / b)) / (a * b);
-const float t = (pow(2.0, 14.0 * (-c / b) + 6.0) - 64.0) / a;
-
 // LogC4 Curve Decoding Function
 float normalizedLogC4ToRelativeSceneLinear( float x) {
+
+    // Constants
+    const float a = (pow(2.0, 18.0) - 16.0) / 117.45;
+    const float b = (1023.0 - 95.0) / 1023.0;
+    const float c = 95.0 / 1023.0;
+    const float s = (7.0 * log(2.0) * pow(2.0, 7.0 - 14.0 * c / b)) / (a * b);
+    const float t = (pow(2.0, 14.0 * (-c / b) + 6.0) - 64.0) / a;
 
     if (x < 0.0) {
         return x * s + t;
@@ -38,9 +38,9 @@ void main
 	float b_lin = normalizedLogC4ToRelativeSceneLinear(bIn);
 
     // Matrix AWG4 D65 --CAT02--> ACES AP0 D60
-	rOut = r_lin *  0.7509573628 + g_lin *  0.1444227867 + b_lin *  0.1046198505;
-	gOut = r_lin *  0.0008218371 + g_lin *  1.0073975849 + b_lin * -0.0082194220;
-	bOut = r_lin * -0.0004999521 + g_lin * -0.0008541772 + b_lin *  1.0013541294;
+	rOut = r_lin *  0.750957362824734131 + g_lin *  0.144422786709757084 + b_lin *  0.104619850465508965;
+	gOut = r_lin *  0.000821837079380207 + g_lin *  1.007397584885003194 + b_lin * -0.008219421964383583;
+	bOut = r_lin * -0.000499952143533471 + g_lin * -0.000854177231436971 + b_lin *  1.001354129374970370;
 	aOut = 1.0;
 
 }
