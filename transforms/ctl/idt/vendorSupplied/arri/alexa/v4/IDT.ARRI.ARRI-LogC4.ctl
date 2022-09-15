@@ -37,7 +37,7 @@ void main
 	float g_lin = normalizedLogC4ToRelativeSceneLinear(gIn);
 	float b_lin = normalizedLogC4ToRelativeSceneLinear(bIn);
 
-    // Matrix AWG4 D65 --CAT02--> ACES AP0 D60
+    // Matrix AWG4 D65 --CAT02--> ACES AP0 ACES White Point
 	rOut = r_lin *  0.750957362824734131 + g_lin *  0.144422786709757084 + b_lin *  0.104619850465508965;
 	gOut = r_lin *  0.000821837079380207 + g_lin *  1.007397584885003194 + b_lin * -0.008219421964383583;
 	bOut = r_lin * -0.000499952143533471 + g_lin * -0.000854177231436971 + b_lin *  1.001354129374970370;
