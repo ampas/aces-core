@@ -15,9 +15,9 @@ import "ACESlib.Utilities_Color";
 
 
 
-const float AP0_TO_BMD_CAM_WG_GEN5_PRI_MAT[3][3] = 
-                        calculate_rgb_to_rgb_matrix( AP0,
-                                                     BMD_CAM_WG_GEN5_PRI,
+const float BMD_CAM_WG_GEN5_PRI_TO_AP0_MAT[3][3] = 
+                        calculate_rgb_to_rgb_matrix( BMD_CAM_WG_GEN5_PRI,
+                                                     AP0,
                                                      CONE_RESP_MAT_CAT02 );
 
 const float A = 0.08692876065491224;
