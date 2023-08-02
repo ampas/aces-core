@@ -70,6 +70,14 @@ const Chromaticities ARRI_ALEXA_WG_PRI =
   { 0.31270,  0.32900}
 };
 
+const Chromaticities ARRI_ALEXA_WG4_PRI =
+{
+  { 0.73470,  0.26530},
+  { 0.14240,  0.85760},
+  { 0.09910, -0.03080},
+  { 0.31270,  0.32900}
+};
+
 const Chromaticities REC2020_PRI = 
 {
   { 0.70800,  0.29200},
