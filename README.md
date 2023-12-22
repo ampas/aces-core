@@ -13,7 +13,6 @@ This toolkit is intended to serve as a distribution mechanism for key components
 
 ### Package Contents ###
  
-* [`formats/`](./formats) - ACES file formats code and examples
 * [`images/`](./images) - "golden" images created using the reference implementation transforms
 * [`transforms/`](./transforms) - ACES reference implementation transforms
 
