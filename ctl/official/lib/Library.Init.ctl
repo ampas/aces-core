@@ -19,11 +19,6 @@ float[3] RGB_to_JMh( float RGB[3],
 //     float XYZ_w[3] = mult_f3_f33( RGB_w, RGB_TO_XYZ_M );
     float XYZ_w[3] = {95.0456, 100., 108.906};  // D65
     float JMh[3] = XYZ_to_Hellwig2022_JMh( XYZ, XYZ_w );
-//     print( "\n");
-//     print( "lumRGB:\t"); print_f3( luminanceRGB);
-//     print( "XYZ:\t"); print_f3( XYZ);
-//     print_f3( XYZ_w);
-//     print( "JMh:\t"); print_f3( JMh);
 
     return JMh;
 }
@@ -37,11 +32,7 @@ float[3] JMh_to_RGB( float JMh[3],
     float luminanceXYZ[3] = Hellwig2022_JMh_to_XYZ( JMh, XYZ_w );
     float luminanceRGB[3] = mult_f3_f33( luminanceXYZ, XYZ_TO_RGB_M );
     float RGB[3] = mult_f_f3( 1./ 100., luminanceRGB);
-//     print( "XYZ_w:\t"); print_f3( XYZ_w);
-//     print_f33( XYZ_TO_RGB_M);
-//     print( "lumXYZ:\t"); print_f3( luminanceXYZ);
-//     print( "lumRGB:\t"); print_f3( luminanceRGB);
-//     print_f3( RGB);
+
     return RGB;
 }
 
@@ -473,17 +464,6 @@ ODTParams init_ODTParams(
          {OUTPUT_XYZ_TO_RGB[1][0], OUTPUT_XYZ_TO_RGB[1][1], OUTPUT_XYZ_TO_RGB[1][2]},
          {OUTPUT_XYZ_TO_RGB[2][0], OUTPUT_XYZ_TO_RGB[2][1], OUTPUT_XYZ_TO_RGB[2][2]}},
         {XYZ_w_output[0],XYZ_w_output[1],XYZ_w_output[2]},
-    
-        // Gamut Compression parameters
-//         1.3,    // float cuspMidBlend;
-//         0.24,   // float smoothCusps;
-//         0.058,  // float smoothJ;
-//         0.188,  // float smoothM;
-// 
-//         0.2,    // float focusGainBlend;
-//         0.55,   // float focusAdjustGain;
-//         1.35,   // float focusDistance;
-//         1.75,    // float focusDistanceScaling;
         
         1.14    // lowerHullGamma
     };

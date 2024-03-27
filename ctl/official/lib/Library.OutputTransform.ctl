@@ -9,6 +9,9 @@ const float focusAdjustGain = 0.55;
 const float focusDistance = 1.35;
 const float focusDistanceScaling = 1.75;
 
+// Values for CompressPowerP used in gamut mapping
+const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
+
 
 struct ODTParams {
         float peakLuminance;
@@ -900,8 +903,6 @@ float[3] compressGamut( float JMh[3],
     float JMboundary[2] = {boundaryReturn[0], boundaryReturn[1]};
     float project_to[2] = {boundaryReturn[2], 0.};
     projectJ = boundaryReturn[2];
-
-    const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
 
     float JMh_reachBoundary[3] = getReachBoundary( JMboundary[0], 
                                                    JMboundary[1], 
