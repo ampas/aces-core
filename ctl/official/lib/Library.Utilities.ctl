@@ -161,6 +161,11 @@ float copysign( float x,
 	return sign(y) * fabs(x);
 }
 
+void print_f2( float m[2] )
+{
+    print( m[0], ",\t", m[1], "\n");
+}
+
 void print_f3( float m[3] )
 {
     print( m[0], ",\t", m[1], ",\t", m[2], "\n");
@@ -337,4 +342,11 @@ float smin(float a, float b, float s)
 {
     float h = max(s - fabs(a - b), 0.0) / s;
     return min(a, b) - h * h * h * s * (1.0 / 6.0);
+}
+
+bool f2_equal_to_tolerance( float a[2], 
+                            float b[2], 
+                            float tolerance ) 
+{
+    return ( fabs(a[0]-b[0]) <= tolerance && fabs(a[1]-b[1]) <= tolerance );
 }

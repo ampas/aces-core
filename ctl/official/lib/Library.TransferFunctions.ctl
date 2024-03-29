@@ -1,6 +1,32 @@
 /* ---- Signal encode/decode functions ---- */
 
 
+// if (PARAMS.XYZ_w_limit[0] == PARAMS.XYZ_w_output[0]) { // use outputWhite as displayWhite
+
+
+
+float[3] scale_white( float XYZluminance[3], 
+                      ODTParams PARAMS, 
+                      bool invert )
+{
+    float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
+    float RGB_w_f[3] = mult_f_f3( 1/100., RGB_w);
+    float largestChannel = max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]);
+
+//     print( "RGB_w:\t"); print_f3( RGB_w);
+//     print( "RGB_w_f:\t"); print_f3( RGB_w_f);
+//     print( "largestChannel:\t"); print( largestChannel, "\n");
+
+    if (invert) {
+        return mult_f_f3( largestChannel, XYZluminance);
+    } else {
+        print( "return:\t"); print_f3( mult_f_f3( 1./largestChannel, XYZluminance));
+        return mult_f_f3( 1./largestChannel, XYZluminance);
+    }
+}
+
+
+
 // Forward monitor curve - moncurve_f() with gamma=2.4 and offset=0.055 matches the inverse EOTF found in IEC 61966-2-1:1999 (sRGB)
 float moncurve_fwd( float x, 
                     float gamma, 
@@ -18,7 +44,7 @@ float moncurve_fwd( float x,
 }
 
 // Reverse monitor curve - moncurve_r() with gamma=2.4 and offset=0.055 matches the inverse EOTF found in IEC 61966-2-1:1999 (sRGB)
-float moncurve_rev( float y, 
+float moncurve_inv( float y, 
                     float gamma, 
                     float offs )
 {
@@ -44,14 +70,14 @@ float[3] moncurve_fwd_f3( float x[3],
     return y;
 }
 
-float[3] moncurve_rev_f3( float y[3], 
+float[3] moncurve_inv_f3( float y[3], 
                           float gamma, 
                           float offs )
 {
     float x[3];
-    x[0] = moncurve_rev( y[0], gamma, offs);
-    x[1] = moncurve_rev( y[1], gamma, offs);
-    x[2] = moncurve_rev( y[2], gamma, offs);
+    x[0] = moncurve_inv( y[0], gamma, offs);
+    x[1] = moncurve_inv( y[1], gamma, offs);
+    x[2] = moncurve_inv( y[2], gamma, offs);
     return x;
 }
 
@@ -60,8 +86,8 @@ float[3] moncurve_rev_f3( float y[3],
 // L = a(max[(V+b),0])^g
 float bt1886_fwd( float V, 
                   float gamma, 
-                  float Lw, 
-                  float Lb )
+                  float Lw = 1.0, 
+                  float Lb = 0.0 )
 {
     float a = pow( pow( Lw, 1./gamma) - pow( Lb, 1./gamma), gamma);
     float b = pow( Lb, 1./gamma) / ( pow( Lw, 1./gamma) - pow( Lb, 1./gamma));
@@ -71,10 +97,10 @@ float bt1886_fwd( float V,
 
 // The reverse EOTF specified in Rec. ITU-R BT.1886
 // L = a(max[(V+b),0])^g
-float bt1886_rev( float L, 
+float bt1886_inv( float L, 
                   float gamma, 
-                  float Lw, 
-                  float Lb )
+                  float Lw = 1.0, 
+                  float Lb = 0.0 )
 {
     float a = pow( pow( Lw, 1./gamma) - pow( Lb, 1./gamma), gamma);
     float b = pow( Lb, 1./gamma) / ( pow( Lw, 1./gamma) - pow( Lb, 1./gamma));
@@ -84,8 +110,8 @@ float bt1886_rev( float L,
 
 float[3] bt1886_fwd_f3( float V[3], 
                       float gamma, 
-                      float Lw, 
-                      float Lb )
+                      float Lw = 1.0, 
+                      float Lb = 0.0 )
 {
     float L[3];
     L[0] = bt1886_fwd( V[0], gamma, Lw, Lb);
@@ -94,15 +120,15 @@ float[3] bt1886_fwd_f3( float V[3],
     return L;
 }
 
-float[3] bt1886_rev_f3( float L[3], 
+float[3] bt1886_inv_f3( float L[3], 
                         float gamma, 
-                        float Lw, 
-                        float Lb )
+                        float Lw = 1.0,  
+                        float Lb = 0.0 )
 {
     float V[3];
-    V[0] = bt1886_rev( L[0], gamma, Lw, Lb);
-    V[1] = bt1886_rev( L[1], gamma, Lw, Lb);
-    V[2] = bt1886_rev( L[2], gamma, Lw, Lb);
+    V[0] = bt1886_inv( L[0], gamma, Lw, Lb);
+    V[1] = bt1886_inv( L[1], gamma, Lw, Lb);
+    V[2] = bt1886_inv( L[2], gamma, Lw, Lb);
     return V;
 }
 
@@ -185,7 +211,7 @@ const float pq_C = 10000.0;
 // Note that this is in float, and assumes normalization from 0 - 1
 // (0 - pq_C for linear) and does not handle the integer coding in the Annex 
 // sections of SMPTE ST 2084-2014
-float ST2084_2_Y( float N )
+float ST2084_to_Y( float N )
 {
   // Note that this does NOT handle any of the signal range
   // considerations from 2084 - this assumes full range (0 - 1)
@@ -202,7 +228,7 @@ float ST2084_2_Y( float N )
 // Note that this is in float, and assumes normalization from 0 - 1
 // (0 - pq_C for linear) and does not handle the integer coding in the Annex 
 // sections of SMPTE ST 2084-2014
-float Y_2_ST2084( float C )
+float Y_to_ST2084( float C )
 {
   // Note that this does NOT handle any of the signal range
   // considerations from 2084 - this returns full range (0 - 1)
@@ -214,33 +240,33 @@ float Y_2_ST2084( float C )
 }
 
 // converts from linear cd/m^2 to PQ code values
-float[3] Y_2_ST2084_f3( float in[3] )
+float[3] Y_to_ST2084_f3( float in[3] )
 {  
   float out[3];
-  out[0] = Y_2_ST2084( in[0]);
-  out[1] = Y_2_ST2084( in[1]);
-  out[2] = Y_2_ST2084( in[2]);
+  out[0] = Y_to_ST2084( in[0]);
+  out[1] = Y_to_ST2084( in[1]);
+  out[2] = Y_to_ST2084( in[2]);
 
   return out;
 }
 
 // converts from PQ code values to linear cd/m^2
-float[3] ST2084_2_Y_f3( float in[3] )
+float[3] ST2084_to_Y_f3( float in[3] )
 {
   float out[3];
-  out[0] = ST2084_2_Y( in[0]);
-  out[1] = ST2084_2_Y( in[1]);
-  out[2] = ST2084_2_Y( in[2]);
+  out[0] = ST2084_to_Y( in[0]);
+  out[1] = ST2084_to_Y( in[1]);
+  out[2] = ST2084_to_Y( in[2]);
 
   return out;
 }
 
 
 // Conversion of PQ signal to HLG, as detailed in Section 7 of ITU-R BT.2390-0
-float[3] ST2084_2_HLG_1000nits_f3( float PQ[3] ) 
+float[3] ST2084_to_HLG_1000nits_f3( float PQ[3] ) 
 {
     // ST.2084 EOTF (non-linear PQ to display light)
-    float displayLinear[3] = ST2084_2_Y_f3( PQ);
+    float displayLinear[3] = ST2084_to_Y_f3( PQ);
 
     // HLG Inverse EOTF (i.e. HLG inverse OOTF followed by the HLG OETF)
     // HLG Inverse OOTF (display linear to scene linear)
@@ -293,7 +319,7 @@ float[3] ST2084_2_HLG_1000nits_f3( float PQ[3] )
 
 
 // Conversion of HLG to PQ signal, as detailed in Section 7 of ITU-R BT.2390-0
-float[3] HLG_2_ST2084_1000nits_f3( float HLG[3]) 
+float[3] HLG_to_ST2084_1000nits_f3( float HLG[3]) 
 {
     const float a = 0.17883277;
     const float b = 0.28466892; // 1.-4.*a;
@@ -333,7 +359,54 @@ float[3] HLG_2_ST2084_1000nits_f3( float HLG[3])
     displayLinear[2] = alpha * pow( Y_s, gamma-1.) * sceneLinear[2] + beta;
         
     // ST.2084 Inverse EOTF
-    float PQ[3] = Y_2_ST2084_f3( displayLinear);
+    float PQ[3] = Y_to_ST2084_f3( displayLinear);
 
     return PQ;
 }
+
+
+
+
+
+float[3] eotf_inv( float rgb_linear[3],
+                   int eotf_enum )
+{
+    if (eotf_enum == 0) {               // BT.1886 with gamma 2.4
+        return bt1886_inv_f3( clamp_f3( rgb_linear, 0.0, 1.0), 2.4, 1.0, 0.0 );
+    } else if (eotf_enum == 1) {        // sRGB IEC 61966-2-1:1999
+        return moncurve_inv_f3( clamp_f3( rgb_linear, 0.0, 1.0), 2.4, 0.055);
+    } else if (eotf_enum == 2) {        // gamma 2.2
+        return pow_f3( clamp_f3( rgb_linear, 0.0, 1.0), 1/2.2);
+    } else if (eotf_enum == 3) {        // gamma 2.4
+        return pow_f3( clamp_f3( rgb_linear, 0.0, 1.0), 1/2.6);
+    } else if (eotf_enum == 4) {        // ST. 2084
+        return Y_to_ST2084_f3( mult_f_f3( 100., rgb_linear) );
+    } else if (eotf_enum == 5) {        // HLG
+        float PQ[3] = Y_to_ST2084_f3( mult_f_f3( 100., rgb_linear) );
+        return ST2084_to_HLG_1000nits_f3( PQ );
+    } else {        // display linear
+        return rgb_linear;
+    }
+}
+
+float[3] eotf( float rgb_cv[3],
+               int eotf_enum )
+{
+    if (eotf_enum == 0) {               // BT.1886 with gamma 2.4
+        return bt1886_fwd_f3( rgb_cv, 2.4, 1.0, 0.0 );
+    } else if (eotf_enum == 1) {        // sRGB IEC 61966-2-1:1999
+        return moncurve_fwd_f3( rgb_cv, 2.4, 0.055);
+    } else if (eotf_enum == 2) {        // gamma 2.2
+        return pow_f3( rgb_cv, 2.2);
+    } else if (eotf_enum == 3) {        // gamma 2.4
+        return pow_f3( rgb_cv, 2.6);
+    } else if (eotf_enum == 4) {        // ST. 2084
+        return mult_f_f3( 1/100., ST2084_to_Y_f3( rgb_cv ));
+    } else if (eotf_enum == 5) {        // HLG
+        float PQ[3] = HLG_to_ST2084_1000nits_f3( rgb_cv);
+        return mult_f_f3( 1/100., ST2084_to_Y_f3( PQ ));
+    } else {                            // display linear
+        return rgb_cv;
+    }
+}
+
