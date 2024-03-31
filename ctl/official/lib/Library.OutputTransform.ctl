@@ -12,7 +12,7 @@ const float focusDistanceScaling = 1.75;
 // Values for CompressPowerP used in gamut mapping
 const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
 
-const int gamutCuspTableSize = 360;
+const int gamutTableSize = 360;
 
 const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
 {
@@ -1051,15 +1051,15 @@ bool any_below_zero( float newLimitRGB[3])
     return (newLimitRGB[0] < 0. || newLimitRGB[1] < 0. || newLimitRGB[2] < 0.);
 }
 
-float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
+float[gamutTableSize][3] make_gamut_table( Chromaticities C,
                                                float peakLuminance ) {
 
     const float RGB_TO_XYZ_M[3][3] = RGBtoXYZ_f33( C, 1.0);
 
-    float gamutCuspTableUnsorted[gamutCuspTableSize][3];
+    float gamutCuspTableUnsorted[gamutTableSize][3];
     
     int i;
-    for (i = 0; i < gamutCuspTableSize; i=i+1) {
+    for (i = 0; i < gamutTableSize; i=i+1) {
         float i_float = i;
         float hNorm = i_float / gamutCuspTableUnsorted.size;
     
@@ -1075,14 +1075,14 @@ float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
     }
 
     int minhIndex = 0;
-    for (i = 0; i < gamutCuspTableSize; i=i+1) {
+    for (i = 0; i < gamutTableSize; i=i+1) {
         if ( gamutCuspTableUnsorted[i][2] < gamutCuspTableUnsorted[minhIndex][2])
             minhIndex = i;
     }
 
-    float gamutCuspTable[gamutCuspTableSize][3];
-    for (i = 0; i < gamutCuspTableSize; i=i+1) {
-        gamutCuspTable[i] = gamutCuspTableUnsorted[(minhIndex+i) % gamutCuspTableSize];
+    float gamutCuspTable[gamutTableSize][3];
+    for (i = 0; i < gamutTableSize; i=i+1) {
+        gamutCuspTable[i] = gamutCuspTableUnsorted[(minhIndex+i) % gamutTableSize];
 //         print_f3(gamutCuspTable[i]);
     }
     
@@ -1090,20 +1090,20 @@ float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
 }
 
 
-float[gamutCuspTableSize] make_gamut_reach_table( Chromaticities C,
+float[gamutTableSize] make_gamut_reach_table( Chromaticities C,
                                                   float limitJmax, 
                                                   float peakLuminance )
 {
     const float XYZ_TO_RGB_M[3][3] = XYZtoRGB_f33( C, 1.0);
 
-    float gamutReachTable[gamutCuspTableSize];
+    float gamutReachTable[gamutTableSize];
 
 //     print( "\ngamutReachTable: \n");
 
     int i;
-    for (i = 0; i < gamutCuspTableSize; i=i+1) {
+    for (i = 0; i < gamutTableSize; i=i+1) {
         float i_float = i;
-        float hue = base_hue_for_position( i, gamutCuspTableSize);
+        float hue = base_hue_for_position( i, gamutTableSize);
 
         float search_range = 50.;
         float low = 0.;
@@ -1197,7 +1197,7 @@ bool evaluate_gamma_fit( float JMcusp[2],
 }
 
 
-float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], 
+float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], 
                                                  ODTParams PARAMS,
                                                  float peakLuminance ) {
     // Find upper hull gamma values for the gamut mapper
@@ -1211,9 +1211,9 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
 
     const int test_count = 3;
     float testPositions[test_count] = {0.01, 0.5, 0.99};
-    float gamutTopGamma[gamutCuspTableSize];
+    float gamutTopGamma[gamutTableSize];
 
-    for (int i = 0; i < gamutCuspTableSize; i = i + 1)
+    for (int i = 0; i < gamutTableSize; i = i + 1)
 //     for (int i = 0; i < 1; i = i + 1)
     {
 //         print( "\n\n\nBEGINNING HUE " , i, "\n");
@@ -1222,7 +1222,7 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
         gamutTopGamma[i] = -1.;
         
         // get cusp from cusp table at hue position
-        float hue = base_hue_for_position(i, gamutCuspTableSize);
+        float hue = base_hue_for_position(i, gamutTableSize);
         float JMcusp[2] = cuspFromTable( hue, gamutCuspTable);
         
         float testJMh[test_count][3];
@@ -1391,4 +1391,97 @@ ODTParams init_ODTParams(
     };
 
     return ODTPARAMS;
+}
+
+float[3] outputTransform_fwd( float aces[3],
+                              float peakLuminance,
+                              ODTParams PARAMS,
+                              Chromaticities limitingPri,
+                              int surround_enum )
+{ 
+    // Build tables
+    // Reach gamut JMh
+    const float REACH_GAMUT_TABLE[gamutTableSize][3] = make_gamut_table( REACH_PRI, 
+                                                                         peakLuminance );
+
+    // Reach cusps at maxJ
+    const float REACH_TABLE[gamutTableSize] = make_gamut_reach_table( REACH_PRI, 
+                                                                      PARAMS.limitJmax, 
+                                                                      peakLuminance );
+
+    // JMh of limiting gamut (used for final gamut mapping)
+    const float GAMUT_CUSP_TABLE[gamutTableSize][3] = make_gamut_table( limitingPri, 
+                                                                        peakLuminance );
+
+    // Gammas to use for approximating boundaries
+    const float GAMUT_TOP_GAMMA[gamutTableSize] = make_upper_hull_gamma( GAMUT_CUSP_TABLE, 
+                                                                         PARAMS, 
+                                                                         peakLuminance );
+
+    float JMh[3] = aces_to_JMh( aces, 
+                                peakLuminance );
+
+    float tonemappedJMh[3] = tonemapAndCompress_fwd( JMh, 
+                                                     PARAMS, 
+                                                     REACH_GAMUT_TABLE, 
+                                                     REACH_TABLE );    
+
+    float compressedJMh[3] = gamutMap_fwd( tonemappedJMh, 
+                                           PARAMS,
+                                           GAMUT_CUSP_TABLE, 
+                                           GAMUT_TOP_GAMMA, 
+                                           REACH_GAMUT_TABLE );
+
+    float XYZ[3] = JMh_to_output_XYZ( compressedJMh, 
+                                      PARAMS,
+                                      surround_enum );
+
+    return XYZ;
+}
+
+float[3] outputTransform_inv( float XYZ[3],
+                              float peakLuminance,
+                              ODTParams PARAMS,
+                              Chromaticities limitingPri,
+                              int surround_enum )
+{ 
+    // Build tables
+    // Reach gamut JMh
+    const float REACH_GAMUT_TABLE[gamutTableSize][3] = make_gamut_table( REACH_PRI, 
+                                                                         peakLuminance );
+
+    // Reach cusps at maxJ
+    const float REACH_TABLE[gamutTableSize] = make_gamut_reach_table( REACH_PRI, 
+                                                                      PARAMS.limitJmax, 
+                                                                      peakLuminance );
+
+    // JMh of limiting gamut (used for final gamut mapping)
+    const float GAMUT_CUSP_TABLE[gamutTableSize][3] = make_gamut_table( limitingPri, 
+                                                                        peakLuminance );
+
+    // Gammas to use for approximating boundaries
+    const float GAMUT_TOP_GAMMA[gamutTableSize] = make_upper_hull_gamma( GAMUT_CUSP_TABLE, 
+                                                                         PARAMS, 
+                                                                         peakLuminance );
+
+    float compressedJMh[3] = XYZ_output_to_JMh( XYZ, 
+                                                PARAMS,
+                                                surround_enum );
+
+    float tonemappedJMh[3] = gamutMap_inv( compressedJMh, 
+                                           PARAMS,
+                                           GAMUT_CUSP_TABLE, 
+                                           GAMUT_TOP_GAMMA, 
+                                           REACH_GAMUT_TABLE );
+
+    float JMh[3] = tonemapAndCompress_inv( tonemappedJMh, 
+                                           PARAMS, 
+                                           REACH_GAMUT_TABLE, 
+                                           REACH_TABLE );    
+    
+    float aces[3] = JMh_to_aces( JMh, 
+                                 peakLuminance );
+
+
+    return XYZ;
 }
