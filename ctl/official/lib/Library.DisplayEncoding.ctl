@@ -20,7 +20,7 @@ float[3] scale_white( float XYZluminance[3],
     if (invert) {
         return mult_f_f3( largestChannel, XYZluminance);
     } else {
-        print( "return:\t"); print_f3( mult_f_f3( 1./largestChannel, XYZluminance));
+//         print( "return:\t"); print_f3( mult_f_f3( 1./largestChannel, XYZluminance));
         return mult_f_f3( 1./largestChannel, XYZluminance);
     }
 }
@@ -170,30 +170,6 @@ float[3] fullRange_to_smpteRange_f3( float rgbIn[3] )
     return rgbOut;
 }
 
-
-// SMPTE 431-2 defines the DCDM color encoding equations. 
-// Note: Here the 4095 12-bit scalar is not used since the output of CTL is 0-1.
-// Decodes gamma and scaled XYZ' to linear XYZ
-float[3] dcdm_decode_f3( float XYZp[3] )
-{
-    float XYZ[3];
-    XYZ[0] = (52.37/48.0) * pow( XYZp[0], 2.6);  
-    XYZ[1] = (52.37/48.0) * pow( XYZp[1], 2.6);  
-    XYZ[2] = (52.37/48.0) * pow( XYZp[2], 2.6);  
-
-    return XYZ;
-}
-
-// Encodes linear XYZ to XYZ' (gamma and scaled)
-float[3] dcdm_encode_f3( float XYZ[3] )
-{
-    float XYZp[3];
-    XYZp[0] = pow( (48./52.37) * XYZ[0], 1./2.6);
-    XYZp[1] = pow( (48./52.37) * XYZ[1], 1./2.6);
-    XYZp[2] = pow( (48./52.37) * XYZ[2], 1./2.6);
-
-    return XYZp;
-}
 
 
 // Base functions from SMPTE ST 2084-2014

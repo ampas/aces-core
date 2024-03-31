@@ -47,7 +47,23 @@ const float ac_resp = 1.0;
 const float ra = 2. * ac_resp;
 const float ba = 0.05 + (2. - ra);
 
-const float surround[3] = { 0.9, 0.59, 0.9 };
+// const float surround[3] = { 0.9, 0.59, 0.9 };
+
+float[3] viewingConditionsToSurround( int viewingConditions = 1) {
+    float newSurround[3];
+
+    // hack to turn incoming int value into surround coeffs
+    if (viewingConditions == 0) {                 // "Dark"
+        newSurround[0] = 0.8; newSurround[1] = 0.525; newSurround[2] = 0.8;
+    } else if (viewingConditions == 1) {         // "Dim
+        newSurround[0] = 0.9; newSurround[1] = 0.59; newSurround[2] = 0.9;
+    } else if (viewingConditions == 2) {        // "Average"
+        newSurround[0] = 1.0; newSurround[1] = 0.69; newSurround[2] = 1.0;
+    } else {
+            
+    }
+    return newSurround;
+}
 
 const Chromaticities CAM16_PRI = 
     {
@@ -182,8 +198,11 @@ float[3] post_adaptation_non_linear_response_compression_inverse( float RGB[3], 
 
 
 float[3] XYZ_to_Hellwig2022_JMh( float XYZ[3], 
-                                 float XYZ_w[3] )
+                                 float XYZ_w[3],
+                                 int viewingConditions = 1)
 {
+    float surround[3] = viewingConditionsToSurround( viewingConditions );
+
     float Y_w = XYZ_w[1];
 
     // Step 0 - Converting CIE XYZ tristimulus values to sharpened RGB values
@@ -251,8 +270,11 @@ float[3] XYZ_to_Hellwig2022_JMh( float XYZ[3],
 
 
 float[3] Hellwig2022_JMh_to_XYZ( float JMh[3], 
-                                 float XYZ_w[3] ) 
+                                 float XYZ_w[3],
+                                 int viewingConditions = 1 ) 
 {
+    float surround[3] = viewingConditionsToSurround( viewingConditions );
+
     float J = JMh[0];
     float M = JMh[1];
     float h = JMh[2];
@@ -412,41 +434,32 @@ float[3] JMh_to_aces( float JMh[3],
 }
 
 float[3] JMh_to_output_XYZ( float JMh[3],
-                            ODTParams PARAMS )
+                            ODTParams PARAMS,
+                            int viewingConditions )
 {
 //     float RGB_w[3] = {100., 100., 100.};
 //     float XYZ_w[3] = mult_f3_f33( RGB_w, PARAMS.OUTPUT_RGB_TO_XYZ );
 
     float XYZluminance[3] = Hellwig2022_JMh_to_XYZ( JMh, 
-                                                    PARAMS.XYZ_w_limit );
+                                                    PARAMS.XYZ_w_limit,
+                                                    viewingConditions );
 
-    print( "XYZlum:\t"); print_f3( XYZluminance);
+//     print( "XYZlum:\t"); print_f3( XYZluminance);
     float XYZ[3] = mult_f_f3( 1/100., XYZluminance);
-    print( "XYZ:\t"); print_f3( XYZ);
+//     print( "XYZ:\t"); print_f3( XYZ);
     
     return XYZ;
 }
 
 float[3] XYZ_output_to_JMh( float XYZ[3], 
-                            ODTParams PARAMS )
+                            ODTParams PARAMS,
+                            int viewingConditions )
 {
     float XYZluminance[3] = mult_f_f3( 100., XYZ);
 
-    float JMh[3];
-    if (PARAMS.XYZ_w_limit[0] == PARAMS.XYZ_w_output[0]) { // use outputWhite as displayWhite
-        JMh = XYZ_to_Hellwig2022_JMh( XYZluminance, 
-                                      PARAMS.XYZ_w_output );
-    } else {  // "creative white" so use limitWhite as displayWhite
-        JMh = XYZ_to_Hellwig2022_JMh( XYZluminance, 
-                                      PARAMS.XYZ_w_limit );
-
-        float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
-
-        float RGB_w_f[3] = mult_f_f3( 1/100., RGB_w);
-        float largestChannel = max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]);
-        XYZluminance = mult_f_f3( 1./largestChannel, XYZluminance);
-    }
-        
+    float JMh[3] = XYZ_to_Hellwig2022_JMh( XYZluminance, 
+                                           PARAMS.XYZ_w_limit );
+    
     return JMh;
 }
     
@@ -1271,42 +1284,6 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
 }
 
 
-float[3] viewingConditionsToSurround( int viewingConditions = 1) {
-    float surround[3];
-
-    // hack to turn incoming int value into surround coeffs
-    if (viewingConditions == 0) {                // "Dark"
-        surround[0] = 0.8; surround[1] = 0.525; surround[2] = 0.8;
-    } else if (viewingConditions == 1) {         // "Dim
-        surround[0] = 0.9; surround[1] = 0.59; surround[2] = 0.9;
-    } else if (viewingConditions == 2) {         // "Average"
-        surround[0] = 1.0; surround[1] = 0.69; surround[2] = 1.0;
-    } else {
-        
-    }
-    return surround;
-}
-
-
-struct CAMParams
-{
-    // CAM
-    float referenceLuminance;
-    float L_A;                  // luminance of adapting field
-    float Y_b;                  // luminance of background
-
-    float ac_resp;              // achromatic response
-    float ra;
-    float ba;
-    
-    float surround[3];          
-    
-    float MATRIX_16[3][3];      // LMS matrix from custom CAM primaries
-    float panlrcm[3][3];        // Matrix for Hellwig inverse
-    
-    float XYZ_w_in[3];
-};
-
 
 
 
@@ -1317,7 +1294,6 @@ ODTParams init_ODTParams(
     float viewingConditions = 1         // 0 = "dark"; 1 = "dim"; 2 = "average"
 )
 {
-//     CAMParams CAMPARAMS = init_CAMParams( viewingConditions);
     TSParams TSPARAMS = init_TSParams( peakLuminance);
 
     float limitJmax = Y_to_Hellwig_J( peakLuminance );
@@ -1344,7 +1320,7 @@ ODTParams init_ODTParams(
     const float sat = max(0.2, chroma_expand - (chroma_expand * chroma_expand_fact) * log_peak);
     const float sat_thr = chroma_expand_thr / TSPARAMS.n;
 
-    const float surround[3] = surround;
+    const float surround[3] = viewingConditionsToSurround( viewingConditions);
     const float model_gamma = 1. / (surround[1] * (1.48 + sqrt( Y_b / L_A )));
 
     const float focusDist = focusDistance + 
