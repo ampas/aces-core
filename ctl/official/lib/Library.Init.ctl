@@ -1,6 +1,14 @@
 
 const int gamutCuspTableSize = 360;
 
+// Table generation
+const Chromaticities REACH_PRI =    // equal to ACES "AP1" primaries
+{
+    { 0.713,    0.293},
+    { 0.165,    0.830},
+    { 0.128,    0.044},
+    { 0.32168,  0.33767}
+};  
 
 
 const float AP0_XYZ_TO_RGB[3][3] = XYZtoRGB_f33( AP0, 1.0);
@@ -11,27 +19,34 @@ const float AP1_XYZ_TO_RGB[3][3] = XYZtoRGB_f33( AP1, 1.0);
 
 
 float[3] RGB_to_JMh( float RGB[3], 
-                     float RGB_TO_XYZ_M[3][3] )
+                     float RGB_TO_XYZ_M[3][3],
+                     float peakLuminance )
 {
-    float luminanceRGB[3] = mult_f_f3( 100., RGB);
+    float luminanceRGB[3] = mult_f_f3( peakLuminance, RGB);
     float XYZ[3] = mult_f3_f33( luminanceRGB, RGB_TO_XYZ_M );
-//     float RGB_w[3] = {100., 100., 100.};
-//     float XYZ_w[3] = mult_f3_f33( RGB_w, RGB_TO_XYZ_M );
-    float XYZ_w[3] = {95.0456, 100., 108.906};  // D65
+    
+    float RGB_w[3] = {100., 100., 100.};
+    float XYZ_w[3] = mult_f3_f33( RGB_w, RGB_TO_XYZ_M );
+//     float XYZ_w[3] = {95.0456, 100., 108.906};  // D65
     float JMh[3] = XYZ_to_Hellwig2022_JMh( XYZ, XYZ_w );
+//     print( "lumRGB\t", luminanceRGB[0], "\t", luminanceRGB[1], "\t", luminanceRGB[2], "\n");
+//     print( "XYZ\t", XYZ[0], "\t", XYZ[1], "\t", XYZ[2], "\n");
+//     print( "limitWhite\t", XYZ_w[0], "\t", XYZ_w[1], "\t", XYZ_w[2], "\n");
+//     print( "JMh\t", JMh[0], "\t", JMh[1], "\t", JMh[2], "\n\n");
 
     return JMh;
 }
 
 float[3] JMh_to_RGB( float JMh[3], 
-                     float XYZ_TO_RGB_M[3][3] )
+                     float XYZ_TO_RGB_M[3][3],
+                     float peakLuminance )
 {
-//     float RGB_w[3] = {1., 1., 1.};
-//     float XYZ_w[3] = mult_f3_f33( RGB_w, invert_f33( XYZ_TO_RGB_M) );
-    float XYZ_w[3] = {95.0456, 100., 108.906};  // D65
+    float RGB_w[3] = {100., 100., 100.};
+    float XYZ_w[3] = mult_f3_f33( RGB_w, invert_f33( XYZ_TO_RGB_M) );
+//     float XYZ_w[3] = {95.0456, 100., 108.906};  // D65
     float luminanceXYZ[3] = Hellwig2022_JMh_to_XYZ( JMh, XYZ_w );
     float luminanceRGB[3] = mult_f3_f33( luminanceXYZ, XYZ_TO_RGB_M );
-    float RGB[3] = mult_f_f3( 1./ 100., luminanceRGB);
+    float RGB[3] = mult_f_f3( 1./ peakLuminance, luminanceRGB);
 
     return RGB;
 }
@@ -61,7 +76,11 @@ float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
         float RGB[3] = HSV_to_RGB( HSV); 
 
         gamutCuspTableUnsorted[i] = RGB_to_JMh( RGB, 
-                                                RGB_TO_XYZ_M );
+                                                RGB_TO_XYZ_M,
+                                                peakLuminance );
+//         print( "HSV\t", HSV[0], "\t", HSV[1], "\t", HSV[2], "\n");
+//         print( "RGB\t", RGB[0], "\t", RGB[1], "\t", RGB[2], "\n");
+//         print( "JMh\t", gamutCuspTableUnsorted[i][0], "\t", gamutCuspTableUnsorted[i][1], "\t", gamutCuspTableUnsorted[i][2], "\n");
     }
 
     int minhIndex = 0;
@@ -73,6 +92,7 @@ float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
     float gamutCuspTable[gamutCuspTableSize][3];
     for (i = 0; i < gamutCuspTableSize; i=i+1) {
         gamutCuspTable[i] = gamutCuspTableUnsorted[(minhIndex+i) % gamutCuspTableSize];
+//         print_f3(gamutCuspTable[i]);
     }
     
     return gamutCuspTable;
@@ -80,16 +100,14 @@ float[gamutCuspTableSize][3] make_gamut_table( Chromaticities C,
 
 
 float[gamutCuspTableSize] make_gamut_reach_table( Chromaticities C,
-                                                  float limitJmax )
+                                                  float limitJmax, 
+                                                  float peakLuminance )
 {
-    const float XYZ_TO_RGB_M[3][3] = XYZtoRGB_f33( C, 100.0);
-//     print( "XYZ_TO_RGB_M = \n");
-//     print_f33( transpose_f33(XYZ_TO_RGB_M) );
-
-//     print( "RGB_TO_XYZ_M = \n");
-//     print_f33( transpose_f33( invert_f33(XYZ_TO_RGB_M)) );
+    const float XYZ_TO_RGB_M[3][3] = XYZtoRGB_f33( C, 1.0);
 
     float gamutReachTable[gamutCuspTableSize];
+
+//     print( "\ngamutReachTable: \n");
 
     int i;
     for (i = 0; i < gamutCuspTableSize; i=i+1) {
@@ -105,7 +123,8 @@ float[gamutCuspTableSize] make_gamut_reach_table( Chromaticities C,
         {
             float searchJMh[3] = { limitJmax, high, hue };
             float newLimitRGB[3] = JMh_to_RGB( searchJMh, 
-                                               XYZ_TO_RGB_M );
+                                               XYZ_TO_RGB_M,
+                                               peakLuminance );
             outside = any_below_zero( newLimitRGB);
             if (outside == false) {
                 low = high;
@@ -113,12 +132,13 @@ float[gamutCuspTableSize] make_gamut_reach_table( Chromaticities C,
             }
         }
 
-        while (high-low > 1e-3) 
+        while (high-low > 1e-2) 
         {
             float sampleM = (high + low) / 2.;
             float searchJMh[3] = { limitJmax, sampleM, hue };
             float newLimitRGB[3] = JMh_to_RGB( searchJMh, 
-                                               XYZ_TO_RGB_M );
+                                               XYZ_TO_RGB_M,
+                                               peakLuminance );
             outside = any_below_zero( newLimitRGB);
             if (outside) {
                 high = sampleM;
@@ -128,6 +148,7 @@ float[gamutCuspTableSize] make_gamut_reach_table( Chromaticities C,
         }
         
         gamutReachTable[i] = low;
+//         print(gamutReachTable[i],"\n");
     }
     return gamutReachTable;
     
@@ -148,20 +169,22 @@ bool outside_hull( float newLimitRGB[3] )
 bool evaluate_gamma_fit( float JMcusp[2], 
                          float testJMh[][3], 
                          ODTParams PARAMS, 
-                         int test_count, 
-                         float topGamma )
+                         float topGamma,
+                         float peakLuminance )
 {
     float midJ = PARAMS.midJ;
     float limitJmax = PARAMS.limitJmax;
     float lowerHullGamma = PARAMS.lowerHullGamma;
+    float focusDist = PARAMS.focusDist;
 
     float focusJ = lerp(JMcusp[0], midJ, min(1.0, cuspMidBlend - (JMcusp[0] / limitJmax)));
 
-    for (int testIndex = 0; testIndex < test_count; testIndex = testIndex + 1)
+//     print( "size\n", testJMh.size, "\n");
+    for (int testIndex = 0; testIndex < testJMh.size; testIndex = testIndex + 1)
     {
-        float slope_gain = limitJmax * focusDistance * getFocusGain( testJMh[testIndex][0], 
-                                                                     JMcusp[0], 
-                                                                     limitJmax );
+        float slope_gain = limitJmax * focusDist * getFocusGain( testJMh[testIndex][0], 
+                                                                 JMcusp[0], 
+                                                                 limitJmax );
         float approxLimit[3] = findGamutBoundaryIntersection( testJMh[testIndex], 
                                                               JMcusp, 
                                                               focusJ, 
@@ -172,7 +195,8 @@ bool evaluate_gamma_fit( float JMcusp[2],
         float approximate_JMh[3] = { approxLimit[0], approxLimit[1], testJMh[testIndex][2] };
 
         float newLimitRGB[3] = JMh_to_RGB( approximate_JMh, 
-                                           PARAMS.LIMIT_XYZ_TO_RGB );
+                                           PARAMS.LIMIT_XYZ_TO_RGB, 
+                                           peakLuminance );
 
         if (!outside_hull(newLimitRGB)) {
            return false;
@@ -182,7 +206,9 @@ bool evaluate_gamma_fit( float JMcusp[2],
 }
 
 
-float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], ODTParams PARAMS ) {
+float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], 
+                                                 ODTParams PARAMS,
+                                                 float peakLuminance ) {
     // Find upper hull gamma values for the gamut mapper
     // Start by taking a h angle
     // Get the cusp J value for that angle
@@ -210,7 +236,7 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], ODTP
         
         float testJMh[test_count][3];
         // create test values halfway between the cusp and the Jmax
-        for (int testIndex = 0; testIndex < test_count; testIndex = testIndex + 1) {
+        for (int testIndex = 0; testIndex < testJMh.size; testIndex = testIndex + 1) {
             float testJ = JMcusp[0] + ((PARAMS.limitJmax - JMcusp[0]) * testPositions[testIndex]);
             testJMh[testIndex][0] = testJ;
             testJMh[testIndex][1] = JMcusp[1];
@@ -227,8 +253,8 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], ODTP
             bool gammaFound = evaluate_gamma_fit( JMcusp, 
                                                   testJMh, 
                                                   PARAMS,
-                                                  test_count, 
-                                                  high );
+                                                  high, 
+                                                  peakLuminance );
             if (!gammaFound) {
                 low = high;
                 high = high + search_range;
@@ -242,11 +268,12 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], ODTP
         while ( (high-low) > 1e-5)
         {
             testGamma = (high + low) / 2.;
+//             print( "low\t", low, "\thigh\t", high, "\n");
             bool gammaFound = evaluate_gamma_fit( JMcusp, 
                                                   testJMh, 
                                                   PARAMS, 
-                                                  test_count, 
-                                                  testGamma );
+                                                  testGamma,
+                                                  peakLuminance );
             if (gammaFound) {
                 high = testGamma;
                 gamutTopGamma[i] = high;
@@ -259,6 +286,7 @@ float[gamutCuspTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], ODTP
             print( "Did not find top gamma for hue: ", hue, "\n");
         }
 //         print( "hue " , hue, ":\t\t",gamutTopGamma[i], "\n");
+//         print( gamutTopGamma[i], "\n");
     }
 
     return gamutTopGamma;
@@ -303,71 +331,6 @@ struct CAMParams
 
 
 
-CAMParams init_CAMParams( int viewingConditions = 1)
-{
-    const float referenceLuminance = 100.;
-    const float L_A = 100.;
-    const float Y_b = 20.;
-
-    const float ac_resp = 1.0;
-    const float ra = 2. * ac_resp;
-    const float ba = 0.05 + (2. - ra);
-
-    float surround[3] = viewingConditionsToSurround( viewingConditions );
-
-    const Chromaticities CAM16_PRI = 
-        {
-          { 0.8336,  0.1735 },
-          { 2.3854, -1.4659 },
-          { 0.13  , -0.14   },
-          { 0.333 ,  0.333  }
-        };
-            
-    float MATRIX_16[3][3] = XYZtoRGB_f33( CAM16_PRI, 1.0);
-    const float panlrcm[3][3] = generate_panlrcm( ra, ba);   // Matrix for Hellwig inverse
-
-    const float v[3] = {100., 100., 100.};
-    const float XYZ_w_in[3] = mult_f3_f33( v, AP0_RGB_TO_XYZ);
-
-    const CAMParams params = {
-        referenceLuminance,
-        L_A,
-        Y_b,
-        ac_resp,
-        ra,
-        ba,
-        {surround[0], surround[1], surround[2]}, 
-        {{MATRIX_16[0][0], MATRIX_16[0][1], MATRIX_16[0][2]},
-         {MATRIX_16[1][0], MATRIX_16[1][1], MATRIX_16[1][2]},
-         {MATRIX_16[2][0], MATRIX_16[2][1], MATRIX_16[2][2]}},
-        {{panlrcm[0][0], panlrcm[0][1], panlrcm[0][2]},
-         {panlrcm[1][0], panlrcm[1][1], panlrcm[1][2]},
-         {panlrcm[2][0], panlrcm[2][1], panlrcm[2][2]}},
-        {XYZ_w_in[0], XYZ_w_in[1], XYZ_w_in[2]}
-    };
-    return params;
-}
-
-const CAMParams CAM_PARAMS = init_CAMParams( 1);
-
-
-
-
-
-
-// const ODTParams ODT_PARAMS = {
-//     { init_CAMParams },
-//     { init_tonescale( peakLuminance) },
-//     { CHROMA_COMPRESS_PARAMS },
-//     { TABLES },
-//     { GAMUT_COMPRESS_PARAMS }
-// };
-
-
-
-
-
-
 
 ODTParams init_ODTParams( 
     float peakLuminance,
@@ -376,7 +339,7 @@ ODTParams init_ODTParams(
     float viewingConditions = 1         // 0 = "dark"; 1 = "dim"; 2 = "average"
 )
 {
-    CAMParams CAMPARAMS = init_CAMParams( viewingConditions);
+//     CAMParams CAMPARAMS = init_CAMParams( viewingConditions);
     TSParams TSPARAMS = init_TSParams( peakLuminance);
 
     float limitJmax = Y_to_Hellwig_J( peakLuminance );
@@ -392,9 +355,9 @@ ODTParams init_ODTParams(
     
     // Chroma compress presets
     const float chroma_compress = 2.4;
-    const float chroma_compress_fact = 5.0;
+    const float chroma_compress_fact = 3.3;
     const float chroma_expand = 1.3;
-    const float chroma_expand_fact = 0.78;
+    const float chroma_expand_fact = 0.69;
     const float chroma_expand_thr = 0.5;
 
     // Calculated chroma compress variables
@@ -403,8 +366,11 @@ ODTParams init_ODTParams(
     const float sat = max(0.2, chroma_expand - (chroma_expand * chroma_expand_fact) * log_peak);
     const float sat_thr = chroma_expand_thr / TSPARAMS.n;
 
-    const float surround[3] = CAMPARAMS.surround;
-    const float model_gamma = 1. / (surround[1] * (1.48 + sqrt( CAMPARAMS.Y_b / CAMPARAMS.L_A )));
+    const float surround[3] = surround;
+    const float model_gamma = 1. / (surround[1] * (1.48 + sqrt( Y_b / L_A )));
+
+    const float focusDist = focusDistance + 
+                            focusDistance * focusDistanceScaling * log_peak;
 
     const float RGB_w[3] = {100., 100., 100.};
 
@@ -446,6 +412,8 @@ ODTParams init_ODTParams(
         sat,
         sat_thr,
         compr,
+        
+        focusDist,
         
         // Limit
         {{LIMIT_RGB_TO_XYZ[0][0], LIMIT_RGB_TO_XYZ[0][1], LIMIT_RGB_TO_XYZ[0][2]},
