@@ -386,3 +386,42 @@ float[3] eotf( float rgb_cv[3],
     }
 }
 
+float[3] display_encoding( float XYZ[3],
+                           ODTParams PARAMS,
+                           Chromaticities limitingPri, 
+                           Chromaticities encodingPri, 
+                           int eotf_enum )
+{
+    float XYZ_scaled[3] = XYZ;
+    
+    // White scaling    
+    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
+        XYZ_scaled = scale_white( XYZ, PARAMS, false);
+    }
+
+    // XYZ to display RGB
+    float RGB_display_linear[3] = mult_f3_f33( XYZ_scaled, PARAMS.OUTPUT_XYZ_TO_RGB );
+
+    // Apply inverse EOTF
+    float out[3] = eotf_inv( RGB_display_linear, eotf_enum);  
+    
+    return out;
+}
+
+float[3] display_decoding( float cv[3],
+                           ODTParams PARAMS, 
+                           Chromaticities limitingPri, 
+                           Chromaticities encodingPri,
+                           int eotf_enum )
+{
+    float RGB_display_linear[3] = eotf( cv, eotf_enum);
+    
+    // Display RGB to XYZ
+    float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
+
+    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
+        XYZ = scale_white( XYZ, PARAMS, true);
+    }
+    
+    return XYZ;
+}
