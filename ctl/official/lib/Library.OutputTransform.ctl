@@ -480,7 +480,7 @@ float compressPowerP( float v,
     float vCompressed;
 
     if (invert) {
-        if (v < thr || lim < 1.0001 || v < thr + s) {
+        if (v < thr || lim < 1.0001 || v > thr + s) {
             vCompressed = v;
         } else {
             vCompressed = thr + s * pow(-(pow((v - thr) / s, power) / (pow((v - thr) / s, power) - 1.)), 1. / power);
