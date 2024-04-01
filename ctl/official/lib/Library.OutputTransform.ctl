@@ -12,7 +12,7 @@ const float focusDistanceScaling = 1.75;
 // Values for CompressPowerP used in gamut mapping
 const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
 
-const int gamutTableSize = 360;
+const int gamutTableSize = 361;
 
 const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
 {
@@ -497,6 +497,12 @@ float compressPowerP( float v,
 }
 
 
+int midpoint( int low, int high )
+{
+    return ( low + high ) / 2;
+}
+
+
 float[2] cuspFromTable( float h, 
                         float table[][3] )
 {
@@ -507,17 +513,25 @@ float[2] cuspFromTable( float h,
         lo = table[table.size-1];
         lo[2] = lo[2]-360.0;
         hi = table[0];
-    } else if (h >= table[table.size-1][2]) {
-        lo = table[table.size-1];
+    } else if (h >= table[gamutTableSize-1][2]) {
+        lo = table[gamutTableSize-1];
         hi = table[0];
-        hi[2] = hi[2]+360.0;
+        hi[2] = hi[2] + 360.;
     } else {
-        for (int i = 1; i < table.size; i = i+1) {
-            if (h <= table[i][2] && h > table[i-1][2]) {
-                lo = table[i-1];
-                hi = table[i];
+        int low_i = 0;
+        int high_i = gamutTableSize; // allowed as we have an extra entry in the table
+        int i = hue_position_in_uniform_table( h, gamutTableSize );
+        
+        while (low_i + 1 < high_i) {
+            if (h > table[i][2]) {
+                low_i = i;
+            } else {
+                high_i = i;
             }
+            i = midpoint( low_i, high_i );
         }
+        lo = table[high_i-1];
+        hi = table[high_i];
     }
     
     float t = (h - lo[2]) / (hi[2] - lo[2]);
@@ -808,7 +822,7 @@ float hueDependentUpperHullGamma( float h,
     const int i_hi = next_position_in_table(i_lo, gamma_table.size);
 
     const float base_hue = base_hue_for_position(i_lo, gamma_table.size);
-    const float t = h - base_hue;
+    const float t = wrap_to_360(h) - base_hue;
 
     return lerp( gamma_table[i_lo], gamma_table[i_hi], t);
 }
@@ -899,12 +913,18 @@ float[3] compressGamut( float JMh[3],
     float slope_gain = limitJmax * focusDist * getFocusGain( Jx, 
                                                              JMcusp[0],
                                                              limitJmax );
+//     print("focusJ:\t", focusJ,"\n\t");
+//     print("slopeGain:\t", slope_gain,"\n\t");
 
     float projectJ = solve_J_intersect( project_from[0], project_from[1], focusJ, limitJmax, slope_gain);
+
     
     // Find gamut intersection    
     float gamma_top = hueDependentUpperHullGamma( JMh[2], gamutTopGamma);
     float gamma_bottom = 1.14;
+
+//     print("projectJ:\t", projectJ,"\n\t");
+//     print("gamma_top:\t", gamma_top,"\n\t");
 
     float boundaryReturn[3] = findGamutBoundaryIntersection( JMh, 
                                                              JMcusp, 
@@ -913,7 +933,9 @@ float[3] compressGamut( float JMh[3],
                                                              slope_gain, 
                                                              gamma_top, 
                                                              gamma_bottom );
-                                                                                                                         
+
+//     print("boundaryReturn:\t"); print_f3( boundaryReturn);
+                                                                                                                             
     float JMboundary[2] = {boundaryReturn[0], boundaryReturn[1]};
     float project_to[2] = {boundaryReturn[2], 0.};
     projectJ = boundaryReturn[2];
@@ -927,8 +949,7 @@ float[3] compressGamut( float JMh[3],
     float difference = max(1.0001, locusMax / JMboundary[1] );
     float threshold = max( compressionFuncParams[0], 1. / difference);
 
-    float interpolatedCompressionFuncParams[4] = {threshold, difference, difference, compressionFuncParams[3]};
-
+//     print("JMH_reachBoundary:\t"); print_f3( JMh_reachBoundary);
 
 
     // Compress the out of gamut color along the projection line
@@ -936,13 +957,16 @@ float[3] compressGamut( float JMh[3],
 
     if (JMh[0] < limitJmax && JMh[1] > 0.0) {
         float v = project_from[1] / JMboundary[1];
+//     print("difference:\t", difference,"\n\t");
+//     print("threshold:\t", threshold,"\n\t");
+// 
+//     print("limitJmax:\t", limitJmax,"\n\t");
         v = compressPowerP( v, 
-                            interpolatedCompressionFuncParams[0], 
-                            lerp( interpolatedCompressionFuncParams[2], 
-                                  interpolatedCompressionFuncParams[1], 
-                                  projectJ / limitJmax),
-                            interpolatedCompressionFuncParams[3],
+                            threshold, 
+                            difference, 
+                            compressionFuncParams[3],
                             invert );
+//     print("v:\t", v,"\n\t");
         JMcompressed[0] = project_to[0] + v * (JMboundary[0] - project_to[0]);
         JMcompressed[1] = project_to[1] + v * (JMboundary[1] - project_to[1]);
     } else {
@@ -951,6 +975,8 @@ float[3] compressGamut( float JMh[3],
     }
 
     float return_JMh[3] = { JMcompressed[0], JMcompressed[1], JMh[2] };
+
+//     print("return_JMh:\t"); print_f3( return_JMh);
     
     return return_JMh;
 }
@@ -1069,9 +1095,6 @@ float[gamutTableSize][3] make_gamut_table( Chromaticities C,
         gamutCuspTableUnsorted[i] = RGB_to_JMh( RGB, 
                                                 RGB_TO_XYZ_M,
                                                 peakLuminance );
-//         print( "HSV\t", HSV[0], "\t", HSV[1], "\t", HSV[2], "\n");
-//         print( "RGB\t", RGB[0], "\t", RGB[1], "\t", RGB[2], "\n");
-//         print( "JMh\t", gamutCuspTableUnsorted[i][0], "\t", gamutCuspTableUnsorted[i][1], "\t", gamutCuspTableUnsorted[i][2], "\n");
     }
 
     int minhIndex = 0;
@@ -1083,23 +1106,23 @@ float[gamutTableSize][3] make_gamut_table( Chromaticities C,
     float gamutCuspTable[gamutTableSize][3];
     for (i = 0; i < gamutTableSize; i=i+1) {
         gamutCuspTable[i] = gamutCuspTableUnsorted[(minhIndex+i) % gamutTableSize];
-//         print_f3(gamutCuspTable[i]);
     }
+    
+    gamutCuspTable[gamutTableSize-1] = gamutCuspTable[0];
+    gamutCuspTable[gamutTableSize-1][2] = gamutCuspTable[gamutTableSize-1][2] + 360.;
     
     return gamutCuspTable;
 }
 
 
 float[gamutTableSize] make_gamut_reach_table( Chromaticities C,
-                                                  float limitJmax, 
-                                                  float peakLuminance )
+                                              float limitJmax, 
+                                              float peakLuminance )
 {
     const float XYZ_TO_RGB_M[3][3] = XYZtoRGB_f33( C, 1.0);
 
     float gamutReachTable[gamutTableSize];
-
-//     print( "\ngamutReachTable: \n");
-
+    
     int i;
     for (i = 0; i < gamutTableSize; i=i+1) {
         float i_float = i;
@@ -1139,8 +1162,8 @@ float[gamutTableSize] make_gamut_reach_table( Chromaticities C,
         }
         
         gamutReachTable[i] = low;
-//         print(gamutReachTable[i],"\n");
     }
+    
     return gamutReachTable;
     
 }
@@ -1200,14 +1223,15 @@ bool evaluate_gamma_fit( float JMcusp[2],
 float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], 
                                                  ODTParams PARAMS,
                                                  float peakLuminance ) {
-    // Find upper hull gamma values for the gamut mapper
+    // Find upper hull gamma values for the gamut mapper.
     // Start by taking a h angle
     // Get the cusp J value for that angle
     // Find a J value halfway to the Jmax
-    // Iterate through gamma values until the approximate max M is negative through the actual boundary
+    // Iterate through gamma values until the approximate max M is 
+    // negative through the actual boundary
 
-    // positions between the cusp and Jmax we will check
-    // variables that get set as we iterate through, once all are set to true we break the loop
+    // positions between the cusp and Jmax we will check variables that get 
+    // set as we iterate through, once all are set to true we break the loop
 
     const int test_count = 3;
     float testPositions[test_count] = {0.01, 0.5, 0.99};
@@ -1216,9 +1240,8 @@ float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
     for (int i = 0; i < gamutTableSize; i = i + 1)
 //     for (int i = 0; i < 1; i = i + 1)
     {
-//         print( "\n\n\nBEGINNING HUE " , i, "\n");
-        // default value. This will get overridden as we loop, but can be a good diagnostic 
-        // to make sure things are working
+        // Default value. This will get overridden as we loop, 
+        // but can be a good diagnostic to make sure things are working
         gamutTopGamma[i] = -1.;
         
         // get cusp from cusp table at hue position
@@ -1482,6 +1505,10 @@ float[3] outputTransform_inv( float XYZ[3],
     float aces[3] = JMh_to_aces( JMh, 
                                  peakLuminance );
 
+//     print("inv_compressedJMh:\n\t"); print_f3( compressedJMh);
+//     print("inv_tonemappedJMh:\n\t"); print_f3( tonemappedJMh);
+//     print("inv_JMh:\n\t"); print_f3( JMh);
 
-    return XYZ;
+
+    return aces;
 }
