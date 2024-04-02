@@ -12,15 +12,10 @@ float[3] scale_white( float XYZluminance[3],
     float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
     float RGB_w_f[3] = mult_f_f3( 1/100., RGB_w);
     float largestChannel = max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]);
-
-//     print( "RGB_w:\t"); print_f3( RGB_w);
-//     print( "RGB_w_f:\t"); print_f3( RGB_w_f);
-//     print( "largestChannel:\t"); print( largestChannel, "\n");
-
+    
     if (invert) {
         return mult_f_f3( largestChannel, XYZluminance);
     } else {
-//         print( "return:\t"); print_f3( mult_f_f3( 1./largestChannel, XYZluminance));
         return mult_f_f3( 1./largestChannel, XYZluminance);
     }
 }
@@ -353,7 +348,7 @@ float[3] eotf_inv( float rgb_linear[3],
         return moncurve_inv_f3( clamp_f3( rgb_linear, 0.0, 1.0), 2.4, 0.055);
     } else if (eotf_enum == 2) {        // gamma 2.2
         return pow_f3( clamp_f3( rgb_linear, 0.0, 1.0), 1/2.2);
-    } else if (eotf_enum == 3) {        // gamma 2.4
+    } else if (eotf_enum == 3) {        // gamma 2.6
         return pow_f3( clamp_f3( rgb_linear, 0.0, 1.0), 1/2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
         return Y_to_ST2084_f3( mult_f_f3( 100., rgb_linear) );
@@ -374,7 +369,7 @@ float[3] eotf( float rgb_cv[3],
         return moncurve_fwd_f3( rgb_cv, 2.4, 0.055);
     } else if (eotf_enum == 2) {        // gamma 2.2
         return pow_f3( rgb_cv, 2.2);
-    } else if (eotf_enum == 3) {        // gamma 2.4
+    } else if (eotf_enum == 3) {        // gamma 2.6
         return pow_f3( rgb_cv, 2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
         return mult_f_f3( 1/100., ST2084_to_Y_f3( rgb_cv ));
@@ -390,7 +385,8 @@ float[3] display_encoding( float XYZ[3],
                            ODTParams PARAMS,
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri, 
-                           int eotf_enum )
+                           int eotf_enum,
+                           float linear_scale = 1.0 )
 {
     float XYZ_scaled[3] = XYZ;
     
@@ -402,6 +398,9 @@ float[3] display_encoding( float XYZ[3],
     // XYZ to display RGB
     float RGB_display_linear[3] = mult_f3_f33( XYZ_scaled, PARAMS.OUTPUT_XYZ_TO_RGB );
 
+    // Linear scale factor
+    RGB_display_linear = mult_f_f3( linear_scale, RGB_display_linear);
+    
     // Apply inverse EOTF
     float out[3] = eotf_inv( RGB_display_linear, eotf_enum);  
     
@@ -412,9 +411,13 @@ float[3] display_decoding( float cv[3],
                            ODTParams PARAMS, 
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri,
-                           int eotf_enum )
+                           int eotf_enum, 
+                           float linear_scale = 1.0 )
 {
     float RGB_display_linear[3] = eotf( cv, eotf_enum);
+
+    // Linear scale factor
+    RGB_display_linear = mult_f_f3( 1./linear_scale, RGB_display_linear);
     
     // Display RGB to XYZ
     float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
@@ -422,6 +425,6 @@ float[3] display_decoding( float cv[3],
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
         XYZ = scale_white( XYZ, PARAMS, true);
     }
-    
+
     return XYZ;
 }
