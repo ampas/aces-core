@@ -1,8 +1,10 @@
-/* ---- Signal encode/decode functions ---- */
 
+// <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.DisplayEncoding.a2.v1</ACEStransformID>
+// <ACESuserName>Display Encoding Functions</ACESuserName>
 
-// if (PARAMS.XYZ_w_limit[0] == PARAMS.XYZ_w_output[0]) { // use outputWhite as displayWhite
-
+// 
+// Library File with functions used for the display encoding/decoding steps
+//
 
 
 float[3] scale_white( float XYZluminance[3], 

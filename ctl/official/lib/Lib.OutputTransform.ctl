@@ -1,3 +1,13 @@
+
+// <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.DisplayEncoding.a2.v1</ACEStransformID>
+// <ACESuserName>Display Encoding Functions</ACESuserName>
+
+// 
+// Library File with functions and presets used for the forward and inverse output 
+// transform 
+//
+
+
 // Gamut compression constants
 const float smoothCusps = 0.18;
 const float smoothJ = 0.02;
@@ -12,9 +22,10 @@ const float focusDistanceScaling = 1.75;
 // Values for CompressPowerP used in gamut mapping
 const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
 
-const int gamutTableSize = 361;
+const int gamutTableSize = 361; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
 
-const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
+// Academy Primaries 0 (i.e. "ACES" Primaries from SMPTE ST2065-1)
+const Chromaticities AP0 = 
 {
     { 0.73470,  0.26530},
     { 0.00000,  1.00000},
@@ -22,7 +33,8 @@ const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
     { 0.32168,  0.33767}
 };
 
-const Chromaticities AP1 = // Working space and rendering primaries for ACES 1.0
+// Academy Primaries 1
+const Chromaticities AP1 = 
 {
     { 0.713,    0.293},
     { 0.165,    0.830},

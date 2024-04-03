@@ -1,3 +1,14 @@
+
+// <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.Tonescale.a2.v1</ACEStransformID>
+// <ACESuserName>Tonescale Functions</ACESuserName>
+
+// 
+// Library File with functions used for pre-calculating the tonescale parameters and 
+// applying the fwd/inv tonescale function
+//
+
+
+
 struct TSParams 
 {
 	float n;
@@ -9,6 +20,7 @@ struct TSParams
 	float u_2;
 	float m_2;
 };
+
 
 // Tonescale pre-calculations
 TSParams init_TSParams( float peakLuminance) {
