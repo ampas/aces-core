@@ -12,7 +12,7 @@ float[3] scale_white( float XYZluminance[3],
                       bool invert )
 {
     float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
-    float RGB_w_f[3] = mult_f_f3( 1/100., RGB_w);
+    float RGB_w_f[3] = mult_f_f3( 1./referenceLuminance, RGB_w);
     float largestChannel = max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]);
     
     if (invert) {
@@ -353,9 +353,9 @@ float[3] eotf_inv( float rgb_linear[3],
     } else if (eotf_enum == 3) {        // gamma 2.6
         return pow_f3( rgb_linear, 1/2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
-        return Y_to_ST2084_f3( mult_f_f3( 100., rgb_linear) );
+        return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
     } else if (eotf_enum == 5) {        // HLG
-        float PQ[3] = Y_to_ST2084_f3( mult_f_f3( 100., rgb_linear) );
+        float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
         return ST2084_to_HLG_1000nits_f3( PQ );
     } else {        // display linear
         return rgb_linear;
@@ -374,10 +374,10 @@ float[3] eotf( float rgb_cv[3],
     } else if (eotf_enum == 3) {        // gamma 2.6
         return pow_f3( rgb_cv, 2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
-        return mult_f_f3( 1/100., ST2084_to_Y_f3( rgb_cv ));
+        return mult_f_f3( 1./referenceLuminance, ST2084_to_Y_f3( rgb_cv ));
     } else if (eotf_enum == 5) {        // HLG
         float PQ[3] = HLG_to_ST2084_1000nits_f3( rgb_cv);
-        return mult_f_f3( 1/100., ST2084_to_Y_f3( PQ ));
+        return mult_f_f3( 1/referenceLuminance, ST2084_to_Y_f3( PQ ));
     } else {                            // display linear
         return rgb_cv;
     }
@@ -394,13 +394,13 @@ float[3] display_encoding( float XYZ[3],
 
     // Clamp to relative peakLuminance in RGB space prior to white scaling
     float rgb[3] = mult_f3_f33( XYZ_scaled, PARAMS.LIMIT_XYZ_TO_RGB);
-    rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/100. );
+    rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
     XYZ_scaled = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
                 
-    // White scaling
-    // NOTE: While the white scaling will work for any differences in white 
-    // chromaticities, the Magnitude of the effect of the scale is ok for D65->D60, but 
-    // might be too great in other instances, such as DCI->D60. 
+    // White point scaling
+    // NOTE: While the white point scaling will work for any differences in white 
+    // chromaticity, and the magnitude of the effect of the scale is acceptable
+    // for D65->D60, it might be too great in other instances, such as DCI->D60. 
     // Additional parsing logic might be added in the future if use cases demand it. 
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
         XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
