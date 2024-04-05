@@ -1,6 +1,6 @@
 
-// <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.DisplayEncoding.a2.v1</ACEStransformID>
-// <ACESuserName>Display Encoding Functions</ACESuserName>
+// <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.OutputTransform.a2.v1</ACEStransformID>
+// <ACESuserName>Output Transform Functions</ACESuserName>
 
 // 
 // Library File with functions and presets used for the forward and inverse output 
