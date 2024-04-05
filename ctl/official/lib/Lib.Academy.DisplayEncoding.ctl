@@ -7,21 +7,22 @@
 //
 
 
+
 float[3] scale_white( float XYZluminance[3], 
                       ODTParams PARAMS, 
                       bool invert )
 {
     float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
     float RGB_w_f[3] = mult_f_f3( 1./referenceLuminance, RGB_w);
-    float largestChannel = max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]);
-    
+    float scale = 1. / max( max(RGB_w_f[0], RGB_w_f[1]), RGB_w_f[2]); 
+    // scale factor is equal to 1/largestChannel
+            
     if (invert) {
-        return mult_f_f3( largestChannel, XYZluminance);
+        return mult_f_f3( 1./scale, XYZ);
     } else {
-        return mult_f_f3( 1./largestChannel, XYZluminance);
+        return mult_f_f3( scale, XYZ);
     }
 }
-
 
 
 // Forward monitor curve - moncurve_f() with gamma=2.4 and offset=0.055 matches the inverse EOTF found in IEC 61966-2-1:1999 (sRGB)
@@ -398,10 +399,6 @@ float[3] display_encoding( float XYZ[3],
     XYZ_scaled = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
                 
     // White point scaling
-    // NOTE: While the white point scaling will work for any differences in white 
-    // chromaticity, and the magnitude of the effect of the scale is acceptable
-    // for D65->D60, it might be too great in other instances, such as DCI->D60. 
-    // Additional parsing logic might be added in the future if use cases demand it. 
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
         XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
     }
