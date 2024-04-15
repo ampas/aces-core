@@ -920,10 +920,12 @@ float[3] compressGamut( float JMh[3],
 
     float project_from[2] = {JMh[0], JMh[1]};
     float JMcusp[2] = cuspFromTable(JMh[2], gamutCuspTable);
-    
-    if (project_from[1] == 0.0)
-        return JMh;
-    
+
+    if ( JMh[1] < 0.0001 || JMh[0] > limitJmax ) {
+        float JMh_return[3] = {JMh[0], 0.0, JMh[2]};
+        return JMh_return;    
+    }
+
     // Calculate where the out of gamut color is projected to
     float focusJ = lerp( JMcusp[0], midJ, min(1., cuspMidBlend - (JMcusp[0] / limitJmax)));
 
@@ -931,12 +933,10 @@ float[3] compressGamut( float JMh[3],
                                                              JMcusp[0],
                                                              limitJmax );
 
-    float projectJ = solve_J_intersect( project_from[0], project_from[1], focusJ, limitJmax, slope_gain);
-
     // Find gamut intersection    
     float gamma_top = hueDependentUpperHullGamma( JMh[2], gamutTopGamma);
-    float gamma_bottom = 1.14;
-
+    float gamma_bottom = PARAMS.lowerHullGamma;
+    
     float boundaryReturn[3] = findGamutBoundaryIntersection( JMh, 
                                                              JMcusp, 
                                                              focusJ, 
@@ -946,34 +946,33 @@ float[3] compressGamut( float JMh[3],
                                                              gamma_bottom );
 
     float JMboundary[2] = {boundaryReturn[0], boundaryReturn[1]};
-    float project_to[2] = {boundaryReturn[2], 0.};
-    projectJ = boundaryReturn[2];
+    float project_to[2] = {boundaryReturn[2], 0.0};
+    float projectJ = boundaryReturn[2];
 
-    float JMh_reachBoundary[3] = getReachBoundary( JMboundary[0], 
-                                                   JMboundary[1], 
-                                                   JMh[2], 
-                                                   PARAMS,
-                                                   reachGamutTable);
-    float locusMax = JMh_reachBoundary[1];
-    float difference = max(1.0001, locusMax / JMboundary[1] );
+    // Calculate AP1 reach boundary 
+    float reachBoundary[3] = getReachBoundary( JMboundary[0], 
+                                               JMboundary[1], 
+                                               JMh[2],
+                                               PARAMS,
+                                               gamutCuspTable, 
+                                               reachTable ); 
+    
+    float difference = max(1.0001, reachBoundary[1] / JMboundary[1] );
     float threshold = max( compressionFuncParams[0], 1. / difference);
 
     // Compress the out of gamut color along the projection line
-    float JMcompressed[2] = project_from;
+    float v = project_from[1] / JMboundary[1]; 
+    
+    v = compressPowerP( v, 
+                        threshold, 
+                        difference, 
+                        compressionFuncParams[3],
+                        invert );
 
-    if (JMh[0] < limitJmax && JMh[1] > 0.0) {
-        float v = project_from[1] / JMboundary[1];
-        v = compressPowerP( v, 
-                            threshold, 
-                            difference, 
-                            compressionFuncParams[3],
-                            invert );
-        JMcompressed[0] = project_to[0] + v * (JMboundary[0] - project_to[0]);
-        JMcompressed[1] = project_to[1] + v * (JMboundary[1] - project_to[1]);
-    } else {
-        JMcompressed[0] = JMh[0];
-        JMcompressed[1] = 0.;
-    }
+    float JMcompressed[2];
+    JMcompressed[0] = project_to[0] + v * (JMboundary[0] - project_to[0]);
+    JMcompressed[1] = project_to[1] + v * (JMboundary[1] - project_to[1]);
+
 
     float return_JMh[3] = { JMcompressed[0], JMcompressed[1], JMh[2] };
 
