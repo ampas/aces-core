@@ -346,16 +346,22 @@ float[3] eotf_inv( float rgb_linear[3],
                    int eotf_enum )
 {
     if (eotf_enum == 0) {               // BT.1886 with gamma 2.4
-        return bt1886_inv_f3( rgb_linear, 2.4, 1.0, 0.0 );
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
+        return bt1886_inv_f3( rgb_clamped, 2.4, 1.0, 0.0 );
     } else if (eotf_enum == 1) {        // sRGB IEC 61966-2-1:1999
-        return moncurve_inv_f3( clamp_f3(rgb_linear, 0, 1), 2.4, 0.055);
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
+        return moncurve_inv_f3( rgb_clamped, 2.4, 0.055);
     } else if (eotf_enum == 2) {        // gamma 2.2
-        return pow_f3( rgb_linear, 1/2.2);
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
+        return pow_f3( rgb_clamped, 1/2.2);
     } else if (eotf_enum == 3) {        // gamma 2.6
-        return pow_f3( rgb_linear, 1/2.6);
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
+        return pow_f3( rgb_clamped, 1/2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
         return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
     } else if (eotf_enum == 5) {        // HLG
+        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
         float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
         return ST2084_to_HLG_1000nits_f3( PQ );
     } else {        // display linear
