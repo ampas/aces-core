@@ -881,7 +881,9 @@ float[3] getReachBoundary( float J,
 
     const float reachMaxM = lerp(lo[1], hi[1], t);
 
-    float JMcusp[2] = cuspFromTable( h, reachTable );
+//     print( "\n\treachMaxM:\t", reachMaxM);
+
+    float JMcusp[2] = cuspFromTable(h, gamutCuspTable);
     float focusJ = lerp( JMcusp[0], 
                          midJ, 
                          min(1.0, cuspMidBlend - (JMcusp[0] / limitJmax)) );
