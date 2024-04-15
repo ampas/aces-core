@@ -428,6 +428,7 @@ float[3] display_decoding( float cv[3],
                            int eotf_enum, 
                            float linear_scale = 1.0 )
 {
+    // Apply EOTF
     float RGB_display_linear[3] = eotf( cv, eotf_enum);
 
     // Linear scale factor
