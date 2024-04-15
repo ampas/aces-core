@@ -18,9 +18,9 @@ float[3] scale_white( float XYZluminance[3],
     // scale factor is equal to 1/largestChannel
             
     if (invert) {
-        return mult_f_f3( 1./scale, XYZ);
+        return mult_f_f3( 1./scale, XYZluminance);
     } else {
-        return mult_f_f3( scale, XYZ);
+        return mult_f_f3( scale, XYZluminance);
     }
 }
 
