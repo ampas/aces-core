@@ -22,7 +22,7 @@ const float focusDistanceScaling = 1.75;
 // Values for CompressPowerP used in gamut mapping
 const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
 
-const int gamutTableSize = 361; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
+const int gamutTableSize = 360; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
 
 // Academy Primaries 0 (i.e. "ACES" Primaries from SMPTE ST2065-1)
 const Chromaticities AP0 = 
