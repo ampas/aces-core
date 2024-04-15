@@ -162,31 +162,6 @@ float copysign( float x,
 	return sign(y) * fabs(x);
 }
 
-void print_f2( float m[2] )
-{
-    print( m[0], ",\t", m[1], "\n");
-}
-
-void print_f3( float m[3] )
-{
-    print( m[0], ",\t", m[1], ",\t", m[2], "\n");
-}
-
-void print_f33( float m[3][3] )
-{
-    print( "{ {", m[0][0], ",\t", m[0][1], ",\t", m[0][2], "},\n");
-    print( "  {", m[1][0], ",\t", m[1][1], ",\t", m[1][2], "},\n");
-    print( "  {", m[2][0], ",\t", m[2][1], ",\t", m[2][2], "} };\n");
-}
-
-void print_f44( float m[4][4] )
-{
-    print( "{ { ", m[0][0], ",\t", m[0][1], ",\t", m[0][2], ",\t", m[0][3], "},\n");
-    print( "  { ", m[1][0], ",\t", m[1][1], ",\t", m[1][2], ",\t", m[1][3], "},\n");
-    print( "  { ", m[2][0], ",\t", m[2][1], ",\t", m[2][2], ",\t", m[2][3], "},\n");
-    print( "  { ", m[3][0], ",\t", m[3][1], ",\t", m[3][2], ",\t", m[3][3], "} };\n");
-}
-
 float ceil( float a )
 {
 	return floor( a + 1.0 );
@@ -350,4 +325,38 @@ bool f2_equal_to_tolerance( float a[2],
                             float tolerance ) 
 {
     return ( fabs(a[0]-b[0]) <= tolerance && fabs(a[1]-b[1]) <= tolerance );
+}
+
+// Print functions for various data types
+void print_f2( float m[2] )
+{
+    print( m[0], ",\t", m[1], "\n");
+}
+
+void print_f3( float m[3] )
+{
+    print( m[0], ",\t", m[1], ",\t", m[2], "\n");
+}
+
+void print_f33( float m[3][3] )
+{
+    print( "{ {", m[0][0], ",\t", m[0][1], ",\t", m[0][2], "},\n");
+    print( "  {", m[1][0], ",\t", m[1][1], ",\t", m[1][2], "},\n");
+    print( "  {", m[2][0], ",\t", m[2][1], ",\t", m[2][2], "} };\n");
+}
+
+void print_f44( float m[4][4] )
+{
+    print( "{ { ", m[0][0], ",\t", m[0][1], ",\t", m[0][2], ",\t", m[0][3], "},\n");
+    print( "  { ", m[1][0], ",\t", m[1][1], ",\t", m[1][2], ",\t", m[1][3], "},\n");
+    print( "  { ", m[2][0], ",\t", m[2][1], ",\t", m[2][2], ",\t", m[2][3], "},\n");
+    print( "  { ", m[3][0], ",\t", m[3][1], ",\t", m[3][2], ",\t", m[3][3], "} };\n");
+}
+
+void print_table_f3( float t[][3] )
+{
+    print( "\n");
+    for (int i = 0; i < t.size; i = i + 1) {
+        print( t[i][0], "\t", t[i][1], "\t", t[i][2], "\n");
+    }
 }
