@@ -7,6 +7,66 @@
 //
 
 
+// Convert between CIE XYZ tristimulus values and CIE x,y chromaticity coordinates
+float[3] XYZ_2_xyY( float XYZ[3] )
+{  
+  float xyY[3];
+  float divisor = (XYZ[0] + XYZ[1] + XYZ[2]);
+  if (divisor == 0.) divisor = 1e-10;
+  xyY[0] = XYZ[0] / divisor;
+  xyY[1] = XYZ[1] / divisor;  
+  xyY[2] = XYZ[1];
+  
+  return xyY;
+}
+
+float[3] xyY_2_XYZ( float xyY[3] )
+{
+  float XYZ[3];
+  XYZ[0] = xyY[0] * xyY[2] / max( xyY[1], 1e-10);
+  XYZ[1] = xyY[2];  
+  XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / max( xyY[1], 1e-10);
+
+  return XYZ;
+}
+
+
+float[3] surround_adjust( float XYZ_norm[3], 
+                          int surround_enum, 
+                          bool invert )
+{
+    print("XYZ_norm:\t"); print_f3( XYZ_norm);
+    
+    float SURROUND_GAMMA = 0.98;
+    
+    float surround_gamma;
+    if (surround_enum == 0 ) { 
+        surround_gamma = SURROUND_GAMMA;        // dark
+    } else if (surround_enum == 2) {
+        surround_gamma = 1/SURROUND_GAMMA;      // average
+    } else {
+        surround_gamma = 1.0;                   // dim (normal)
+    }
+
+    float xyY[3] = XYZ_2_xyY( XYZ_norm);
+
+    print("xyY:\t"); print_f3( xyY);
+    print("surroundGamma:\t", surround_gamma, "\n");
+    
+    if (invert) {
+        xyY[2] = pow( xyY[2], 1./surround_gamma );
+    } else {
+        xyY[2] = pow( xyY[2], surround_gamma );
+    }
+
+    print("xyY:\t"); print_f3( xyY);
+
+    float XYZ_out[3] = xyY_2_XYZ( xyY);
+
+    print("XYZ_out:\t"); print_f3( XYZ_out);
+
+    return XYZ_out;
+}
 
 float[3] scale_white( float XYZluminance[3], 
                       ODTParams PARAMS, 
@@ -394,6 +454,7 @@ float[3] display_encoding( float XYZ[3],
                            ODTParams PARAMS,
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri, 
+                           int surround_enum, 
                            int eotf_enum,
                            float linear_scale = 1.0 )
 {
@@ -403,6 +464,11 @@ float[3] display_encoding( float XYZ[3],
     float rgb[3] = mult_f3_f33( XYZ_scaled, PARAMS.LIMIT_XYZ_TO_RGB);
     rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
     XYZ_scaled = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+
+    print("XYZ_scaled:\t"); print_f3(XYZ_scaled);
+
+    // Apply surround adjustment
+    XYZ_scaled = surround_adjust( XYZ_scaled, surround_enum, 0);
                 
     // White point scaling
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
@@ -425,6 +491,7 @@ float[3] display_decoding( float cv[3],
                            ODTParams PARAMS, 
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri,
+                           int surround_enum, 
                            int eotf_enum, 
                            float linear_scale = 1.0 )
 {
@@ -441,6 +508,9 @@ float[3] display_decoding( float cv[3],
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
         XYZ = scale_white( XYZ, PARAMS, true);
     }
+
+    // Apply surround adjustment
+    XYZ = surround_adjust( XYZ, surround_enum, 0);
 
     return XYZ;
 }

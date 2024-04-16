@@ -445,12 +445,10 @@ float[3] JMh_to_aces( float JMh[3],
 }
 
 float[3] JMh_to_output_XYZ( float JMh[3],
-                            ODTParams PARAMS,
-                            int viewingConditions )
+                            ODTParams PARAMS )
 {
     float XYZluminance[3] = Hellwig2022_JMh_to_XYZ( JMh, 
-                                                    PARAMS.XYZ_w_limit,
-                                                    viewingConditions );
+                                                    PARAMS.XYZ_w_limit );
 
     float XYZ[3] = mult_f_f3( 1./referenceLuminance, XYZluminance);
     
@@ -458,8 +456,7 @@ float[3] JMh_to_output_XYZ( float JMh[3],
 }
 
 float[3] XYZ_output_to_JMh( float XYZ[3], 
-                            ODTParams PARAMS,
-                            int viewingConditions )
+                            ODTParams PARAMS )
 {
     float XYZluminance[3] = mult_f_f3( referenceLuminance, XYZ);
 
@@ -1408,8 +1405,7 @@ ODTParams init_ODTParams(
 float[3] outputTransform_fwd( float aces[3],
                               float peakLuminance,
                               ODTParams PARAMS,
-                              Chromaticities limitingPri,
-                              int surround_enum )
+                              Chromaticities limitingPri )
 { 
     // Build tables
     // Reach gamut JMh
@@ -1446,8 +1442,7 @@ float[3] outputTransform_fwd( float aces[3],
                                            REACH_CUSP_TABLE );
 
     float XYZ[3] = JMh_to_output_XYZ( compressedJMh, 
-                                      PARAMS,
-                                      surround_enum );
+                                      PARAMS );
 
     return XYZ;
 }
@@ -1455,8 +1450,7 @@ float[3] outputTransform_fwd( float aces[3],
 float[3] outputTransform_inv( float XYZ[3],
                               float peakLuminance,
                               ODTParams PARAMS,
-                              Chromaticities limitingPri,
-                              int surround_enum )
+                              Chromaticities limitingPri )
 { 
     // Build tables
     // Reach gamut JMh
@@ -1478,8 +1472,7 @@ float[3] outputTransform_inv( float XYZ[3],
                                                                          peakLuminance );
 
     float compressedJMh[3] = XYZ_output_to_JMh( XYZ, 
-                                                PARAMS,
-                                                surround_enum );
+                                                PARAMS );
 
     float tonemappedJMh[3] = gamutMap_inv( compressedJMh, 
                                            PARAMS,
