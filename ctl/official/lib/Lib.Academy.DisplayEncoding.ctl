@@ -35,35 +35,26 @@ float[3] surround_adjust( float XYZ_norm[3],
                           int surround_enum, 
                           bool invert )
 {
-    print("XYZ_norm:\t"); print_f3( XYZ_norm);
-    
     float SURROUND_GAMMA = 0.98;
     
     float surround_gamma;
     if (surround_enum == 0 ) { 
-        surround_gamma = SURROUND_GAMMA;        // dark
+        surround_gamma = 1.0/SURROUND_GAMMA;    // dark
     } else if (surround_enum == 2) {
-        surround_gamma = 1/SURROUND_GAMMA;      // average
+        surround_gamma = SURROUND_GAMMA;        // average
     } else {
         surround_gamma = 1.0;                   // dim (normal)
     }
 
     float xyY[3] = XYZ_2_xyY( XYZ_norm);
 
-    print("xyY:\t"); print_f3( xyY);
-    print("surroundGamma:\t", surround_gamma, "\n");
-    
     if (invert) {
         xyY[2] = pow( xyY[2], 1./surround_gamma );
     } else {
         xyY[2] = pow( xyY[2], surround_gamma );
     }
 
-    print("xyY:\t"); print_f3( xyY);
-
     float XYZ_out[3] = xyY_2_XYZ( xyY);
-
-    print("XYZ_out:\t"); print_f3( XYZ_out);
 
     return XYZ_out;
 }
@@ -458,18 +449,18 @@ float[3] display_encoding( float XYZ[3],
                            int eotf_enum,
                            float linear_scale = 1.0 )
 {
-    float XYZ_scaled[3] = XYZ;
-
     // Clamp to relative peakLuminance in RGB space prior to white scaling
-    float rgb[3] = mult_f3_f33( XYZ_scaled, PARAMS.LIMIT_XYZ_TO_RGB);
+    float rgb[3] = mult_f3_f33( XYZ, PARAMS.LIMIT_XYZ_TO_RGB);
     rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
-    XYZ_scaled = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+    float XYZ_clamped[3] = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
 
-    print("XYZ_scaled:\t"); print_f3(XYZ_scaled);
-
+    // Temporarily scale tone scale 0-1
+    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ_clamped);
     // Apply surround adjustment
-    XYZ_scaled = surround_adjust( XYZ_scaled, surround_enum, 0);
-                
+    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 0);
+    // Undo temporary scale
+    float XYZ_scaled[3] = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
+    
     // White point scaling
     if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
         XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
@@ -480,7 +471,7 @@ float[3] display_encoding( float XYZ[3],
 
     // Linear scale factor
     RGB_display_linear = mult_f_f3( linear_scale, RGB_display_linear);
-    
+
     // Apply inverse EOTF
     float out[3] = eotf_inv( RGB_display_linear, eotf_enum);  
     
@@ -509,8 +500,13 @@ float[3] display_decoding( float cv[3],
         XYZ = scale_white( XYZ, PARAMS, true);
     }
 
-    // Apply surround adjustment
-    XYZ = surround_adjust( XYZ, surround_enum, 0);
+    // Temporarily scale tone scale 0-1
+    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ);
+    // Undo surround adjustment
+    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 1);
+    // Undo temporary scale
+    XYZ = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
+
 
     return XYZ;
 }
