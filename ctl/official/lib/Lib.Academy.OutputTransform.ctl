@@ -874,7 +874,7 @@ float[3] getReachBoundary( float J,
     const float lo[3] = reachTable[i_lo];
     const float hi[3] = reachTable[i_hi];
 
-    const float t = (h - lo[2]) / (hi[2] - lo[2]);
+    const float t = (h - lo[2]) / (360. / reachTable.size);
 
     const float reachMaxM = lerp(lo[1], hi[1], t);
 
