@@ -9,9 +9,9 @@
 
 
 // Gamut compression constants
-const float smoothCusps = 0.18;
-const float smoothJ = 0.02;
-const float smoothM = 0.18;
+const float smoothCusps = 0.12;
+const float smoothJ = 0.0;  // could be eliminated
+const float smoothM = 0.25;
 const float cuspMidBlend = 1.3;
 
 const float focusGainBlend = 0.3;
@@ -20,7 +20,7 @@ const float focusDistance = 1.35;
 const float focusDistanceScaling = 1.75;
 
 // Values for CompressPowerP used in gamut mapping
-const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.2};
+const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.0};
 
 const int gamutTableSize = 360; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
 
@@ -791,7 +791,7 @@ float[3] findGamutBoundaryIntersection( float JMh_s[3],
 
     float s = max(0.000001, smoothCusps);
     float JM_cusp[2];
-    JM_cusp[0] = JM_cusp_in[0] * (1.0 + smoothJ * s);   // J
+    JM_cusp[0] = JM_cusp_in[0] * (1.0 + smoothJ * s);   // JM_cusp[0] = JM_cusp_in[0] when smoothJ=0
     JM_cusp[1] = JM_cusp_in[1] * (1.0 + smoothM * s);   // M
 
     float J_intersect_source = solve_J_intersect( JMh_s[0], 
@@ -1346,6 +1346,8 @@ ODTParams init_ODTParams(
     const float INPUT_XYZ_TO_RGB[3][3] = XYZtoRGB_f33( INPUT_PRI, 1.0);
     float XYZ_w_in[3] = mult_f3_f33( RGB_w, INPUT_RGB_TO_XYZ );
 
+    const float lowerHullGamma = 1.145;
+
     // Limiting Primaries
     const float LIMIT_RGB_TO_XYZ[3][3] = RGBtoXYZ_f33( limitingPrimaries, 1.0);
     const float LIMIT_XYZ_TO_RGB[3][3] = XYZtoRGB_f33( limitingPrimaries, 1.0);
@@ -1396,7 +1398,7 @@ ODTParams init_ODTParams(
          {OUTPUT_XYZ_TO_RGB[2][0], OUTPUT_XYZ_TO_RGB[2][1], OUTPUT_XYZ_TO_RGB[2][2]}},
         {XYZ_w_output[0],XYZ_w_output[1],XYZ_w_output[2]},
 
-        1.14    // lowerHullGamma
+        lowerHullGamma    // lowerHullGamma
     };
 
     return ODTPARAMS;
