@@ -1,3 +1,21 @@
+**Version 2.0 Developer Release 1 (April 19, 2024):**
+* Reorganization of code:
+    * This repository (`aces-dev`) will be renamed (`aces-core`) and houses the main rendering algorithms for ACES.
+    * Output Transforms moved to [aces-output](https://github.com/ampas/aces-output)
+    * Input Transforms moved to [aces-input-and-colorspaces](https://github.com/ampas/aces-input-and-colorspaces)
+    * Look Transforms moved to [aces-look](https://github.com/ampas/aces-look)
+    * AMF schema and example files moved to [aces-amf](https://github.com/ampas/aces-amf)
+    * Documentation tracked at [aces-docs](https://github.com/ampas/aces-docs) and published using mkdocs to [ACEScentral](docs.acescentral.com)
+* All TransformIDs have been conformed to the v2 TransformID specification
+* New core rendering algorithm:
+    * New tonescale function with a lower default contrast and adaptability to produce output for any peak luminance between 100-10000 nits.
+    * A hue-preserving rendering transform, applying luminance mapping mostly independent of color adjustments.
+    * Gamut mapping to mostly avoid undesirable clipping but still allow for reaching the edges of the display gamut volume.
+    * Invertibility up to at least P3 gamut
+* Reference images have been moved to be tied to their respective transform repositories
+
+
+
 **Version 1.3 (April 30, 2021):**
 
 * New Features: 
