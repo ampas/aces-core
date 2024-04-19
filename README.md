@@ -1,4 +1,6 @@
-## Academy Color Encoding System Developer Resources ##
+## Academy Color Encoding System Core Transforms ##
+
+[![CLA assistant](https://cla-assistant.io/readme/badge/ampas/aces-dev)](https://cla-assistant.io/ampas/aces-dev)
 
 The Academy Color Encoding System (ACES) is a set of components that facilitates a wide range of motion picture and television workflows while eliminating the ambiguity of legacy file formats.  The system is designed to support both all-digital and hybrid film-digital motion picture workflows.
 
