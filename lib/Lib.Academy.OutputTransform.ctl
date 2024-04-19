@@ -11,7 +11,7 @@
 // Gamut compression constants
 const float smoothCusps = 0.12;
 const float smoothJ = 0.0;  // could be eliminated
-const float smoothM = 0.25;
+const float smoothM = 0.27;
 const float cuspMidBlend = 1.3;
 
 const float focusGainBlend = 0.3;
@@ -1346,7 +1346,7 @@ ODTParams init_ODTParams(
     const float INPUT_XYZ_TO_RGB[3][3] = XYZtoRGB_f33( INPUT_PRI, 1.0);
     float XYZ_w_in[3] = mult_f3_f33( RGB_w, INPUT_RGB_TO_XYZ );
 
-    const float lowerHullGamma = 1.145;
+    const float lowerHullGamma = 1.14;
 
     // Limiting Primaries
     const float LIMIT_RGB_TO_XYZ[3][3] = RGBtoXYZ_f33( limitingPrimaries, 1.0);
