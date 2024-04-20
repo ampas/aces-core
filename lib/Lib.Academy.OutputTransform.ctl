@@ -1407,27 +1407,12 @@ ODTParams init_ODTParams(
 float[3] outputTransform_fwd( float aces[3],
                               float peakLuminance,
                               ODTParams PARAMS,
-                              Chromaticities limitingPri )
+                              Chromaticities limitingPri,
+                              float GAMUT_CUSP_TABLE[][3], 
+                              float GAMUT_TOP_GAMMA[], 
+                              float REACH_GAMUT_TABLE[][3],
+                              float REACH_CUSP_TABLE[][3] )
 { 
-    // Build tables
-    // Reach gamut JMh
-    const float REACH_GAMUT_TABLE[gamutTableSize][3] = make_gamut_table( REACH_PRI, 
-                                                                         peakLuminance );
-
-    // Reach cusps at maxJ
-    const float REACH_CUSP_TABLE[gamutTableSize][3] = make_reach_cusp_table( REACH_PRI, 
-                                                                      PARAMS.limitJmax, 
-                                                                      peakLuminance );
-
-    // JMh of limiting gamut (used for final gamut mapping)
-    const float GAMUT_CUSP_TABLE[gamutTableSize][3] = make_gamut_table( limitingPri, 
-                                                                        peakLuminance );
-
-    // Gammas to use for approximating boundaries
-    const float GAMUT_TOP_GAMMA[gamutTableSize] = make_upper_hull_gamma( GAMUT_CUSP_TABLE, 
-                                                                         PARAMS, 
-                                                                         peakLuminance );
-
     float JMh[3] = aces_to_JMh( aces, 
                                 peakLuminance );
 
@@ -1452,27 +1437,12 @@ float[3] outputTransform_fwd( float aces[3],
 float[3] outputTransform_inv( float XYZ[3],
                               float peakLuminance,
                               ODTParams PARAMS,
-                              Chromaticities limitingPri )
+                              Chromaticities limitingPri, 
+                              float GAMUT_CUSP_TABLE[][3], 
+                              float GAMUT_TOP_GAMMA[], 
+                              float REACH_GAMUT_TABLE[][3],
+                              float REACH_CUSP_TABLE[][3] )
 { 
-    // Build tables
-    // Reach gamut JMh
-    const float REACH_GAMUT_TABLE[gamutTableSize][3] = make_gamut_table( REACH_PRI, 
-                                                                         peakLuminance );
-
-    // Reach cusps at maxJ
-    const float REACH_CUSP_TABLE[gamutTableSize][3] = make_reach_cusp_table( REACH_PRI, 
-                                                                      PARAMS.limitJmax, 
-                                                                      peakLuminance );
-
-    // JMh of limiting gamut (used for final gamut mapping)
-    const float GAMUT_CUSP_TABLE[gamutTableSize][3] = make_gamut_table( limitingPri, 
-                                                                        peakLuminance );
-
-    // Gammas to use for approximating boundaries
-    const float GAMUT_TOP_GAMMA[gamutTableSize] = make_upper_hull_gamma( GAMUT_CUSP_TABLE, 
-                                                                         PARAMS, 
-                                                                         peakLuminance );
-
     float compressedJMh[3] = XYZ_output_to_JMh( XYZ, 
                                                 PARAMS );
 
@@ -1490,11 +1460,6 @@ float[3] outputTransform_inv( float XYZ[3],
     
     float aces[3] = JMh_to_aces( JMh, 
                                  peakLuminance );
-
-//     print("inv_compressedJMh:\n\t"); print_f3( compressedJMh);
-//     print("inv_tonemappedJMh:\n\t"); print_f3( tonemappedJMh);
-//     print("inv_JMh:\n\t"); print_f3( JMh);
-
 
     return aces;
 }
