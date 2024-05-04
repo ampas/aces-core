@@ -58,14 +58,6 @@ const Chromaticities P3DCI_PRI =
   { 0.31400,  0.35100}
 };
 
-const Chromaticities ARRI_ALEXA_WG_PRI =
-{
-  { 0.68400,  0.31300},
-  { 0.22100,  0.84800},
-  { 0.08610, -0.10200},
-  { 0.31270,  0.32900}
-};
-
 const Chromaticities REC2020_PRI = 
 {
   { 0.70800,  0.29200},
@@ -80,73 +72,6 @@ const Chromaticities RIMMROMM_PRI =
   { 0.1596,  0.8404},
   { 0.0366,  0.0001},
   { 0.3457,  0.3585}
-};
-
-const Chromaticities SONY_SGAMUT3_PRI =
-{
-  { 0.730,  0.280},
-  { 0.140,  0.855},
-  { 0.100, -0.050},
-  { 0.3127,  0.3290}
-};
-
-const Chromaticities SONY_SGAMUT3_CINE_PRI =
-{
-  { 0.766,  0.275},
-  { 0.225,  0.800},
-  { 0.089, -0.087},
-  { 0.3127,  0.3290}
-};
-
-// Note: No official published primaries exist as of this day for the
-// Sony VENICE SGamut3 and Sony VENICE SGamut3.Cine colorspaces. The primaries
-// have thus been derived from the IDT matrices.
-const Chromaticities SONY_VENICE_SGAMUT3_PRI =
-{
-  { 0.740464264304292,  0.279364374750660},
-  { 0.089241145423286,  0.893809528608105},
-  { 0.110488236673827, -0.052579333080476},
-  { 0.312700000000000,  0.329000000000000}
-};
-
-const Chromaticities SONY_VENICE_SGAMUT3_CINE_PRI =
-{
-  { 0.775901871567345,  0.274502392854799},
-  { 0.188682902773355,  0.828684937020288},
-  { 0.101337382499301, -0.089187517306263},
-  { 0.312700000000000,  0.329000000000000}
-};
-
-const Chromaticities CANON_CGAMUT_PRI =
-{
-  { 0.7400,  0.2700},
-  { 0.1700,  1.1400},
-  { 0.0800, -0.1000},
-  { 0.3127,  0.3290}
-};
-
-const Chromaticities RED_WIDEGAMUTRGB_PRI =
-{
-  { 0.780308,  0.304253},
-  { 0.121595,  1.493994},
-  { 0.095612, -0.084589},
-  { 0.3127,  0.3290}
-};
-
-const Chromaticities PANASONIC_VGAMUT_PRI =
-{
-  { 0.730,  0.280},
-  { 0.165,  0.840},
-  { 0.100, -0.030},
-  { 0.3127,  0.3290}
-};
-
-const Chromaticities BMD_CAM_WG_GEN5_PRI =
-{
-  { 0.7177215,  0.3171181},
-  { 0.2280410,  0.8615690},
-  { 0.1005841, -0.0820452},
-  { 0.3127170,  0.3290312}
 };
 
 
