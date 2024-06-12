@@ -462,7 +462,7 @@ float[3] display_encoding( float XYZ[3],
     float XYZ_scaled[3] = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
     
     // White point scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
+    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5) && linear_scale == 1.0) {
         XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
     }
 
@@ -496,7 +496,7 @@ float[3] display_decoding( float cv[3],
     float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
 
     // White scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
+    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5) && linear_scale == 1.0) {
         XYZ = scale_white( XYZ, PARAMS, true);
     }
 
