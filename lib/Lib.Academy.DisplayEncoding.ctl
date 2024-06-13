@@ -410,7 +410,7 @@ float[3] eotf_inv( float rgb_linear[3],
         return pow_f3( rgb_clamped, 1/2.6);
     } else if (eotf_enum == 4) {        // ST. 2084
         float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
-        return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
+        return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_clamped) );
     } else if (eotf_enum == 5) {        // HLG
         float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
         float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
