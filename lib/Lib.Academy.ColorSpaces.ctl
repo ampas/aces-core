@@ -1,78 +1,11 @@
 
 // <ACEStransformID>urn:ampas:aces:transformId:v2.0:Lib.Academy.ColorSpaces.a2.v1</ACEStransformID>
-// <ACESuserName>Color Space and Conversion Matrices</ACESuserName>
+// <ACESuserName>Color Space Conversion</ACESuserName>
 
 //
-// Constants and functions for assorted common color spaces
+// Functions for assorted color space operations
 //
 
-
-
-/* ---- Chromaticities of some common primary sets ---- */
-
-const Chromaticities AP0 = // ACES Primaries from SMPTE ST2065-1
-{
-  { 0.73470,  0.26530},
-  { 0.00000,  1.00000},
-  { 0.00010, -0.07700},
-  { 0.32168,  0.33767}
-};
-
-const Chromaticities AP1 = // Working space and rendering primaries for ACES 1.0
-{
-  { 0.713,    0.293},
-  { 0.165,    0.830},
-  { 0.128,    0.044},
-  { 0.32168,  0.33767}
-};
-
-const Chromaticities REC709_PRI =
-{
-  { 0.64000,  0.33000},
-  { 0.30000,  0.60000},
-  { 0.15000,  0.06000},
-  { 0.31270,  0.32900}
-};
-
-const Chromaticities P3D60_PRI =
-{
-  { 0.68000,  0.32000},
-  { 0.26500,  0.69000},
-  { 0.15000,  0.06000},
-  { 0.32168,  0.33767}
-};
-
-const Chromaticities P3D65_PRI =
-{
-  { 0.68000,  0.32000},
-  { 0.26500,  0.69000},
-  { 0.15000,  0.06000},
-  { 0.31270,  0.32900}
-};
-
-const Chromaticities P3DCI_PRI =
-{
-  { 0.68000,  0.32000},
-  { 0.26500,  0.69000},
-  { 0.15000,  0.06000},
-  { 0.31400,  0.35100}
-};
-
-const Chromaticities REC2020_PRI = 
-{
-  { 0.70800,  0.29200},
-  { 0.17000,  0.79700},
-  { 0.13100,  0.04600},
-  { 0.31270,  0.32900}
-};
-
-const Chromaticities RIMMROMM_PRI = 
-{
-  { 0.7347,  0.2653},
-  { 0.1596,  0.8404},
-  { 0.0366,  0.0001},
-  { 0.3457,  0.3585}
-};
 
 
 /* ---- Conversion Functions ---- */
@@ -188,15 +121,3 @@ float[3][3] calculate_rgb_to_rgb_matrix
 
   return mult_f33_f33( RGBtoXYZ_MAT, mult_f33_f33( CAT, XYZtoRGB_MAT));
 }
-
-
-/* ---- Chromaticities of some common primary sets ---- */
-
-const float AP0_2_XYZ_MAT[4][4] = RGBtoXYZ( AP0, 1.0);
-const float XYZ_2_AP0_MAT[4][4] = XYZtoRGB( AP0, 1.0);
-
-const float AP1_2_XYZ_MAT[4][4] = RGBtoXYZ( AP1, 1.0);
-const float XYZ_2_AP1_MAT[4][4] = XYZtoRGB( AP1, 1.0);
-
-const float AP0_2_AP1_MAT[4][4] = mult_f44_f44( AP0_2_XYZ_MAT, XYZ_2_AP1_MAT);
-const float AP1_2_AP0_MAT[4][4] = mult_f44_f44( AP1_2_XYZ_MAT, XYZ_2_AP0_MAT);
