@@ -59,9 +59,9 @@ float[3] surround_adjust( float XYZ_norm[3],
     return XYZ_out;
 }
 
-float[3] scale_white( float XYZluminance[3], 
-                      ODTParams PARAMS, 
-                      bool invert )
+float[3] apply_white_scale( float XYZluminance[3], 
+                            ODTParams PARAMS, 
+                            bool invert )
 {
     float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
     float RGB_w_f[3] = mult_f_f3( 1./referenceLuminance, RGB_w);
@@ -445,6 +445,7 @@ float[3] display_encoding( float XYZ[3],
                            ODTParams PARAMS,
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri, 
+                           bool scale_white, 
                            int surround_enum, 
                            int eotf_enum,
                            float linear_scale = 1.0 )
@@ -462,8 +463,8 @@ float[3] display_encoding( float XYZ[3],
     float XYZ_scaled[3] = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
     
     // White point scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
-        XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
+    if (scale_white) {
+        XYZ_scaled = apply_white_scale( XYZ_scaled, PARAMS, false);
     }
 
     // XYZ to display RGB
@@ -482,6 +483,7 @@ float[3] display_decoding( float cv[3],
                            ODTParams PARAMS, 
                            Chromaticities limitingPri, 
                            Chromaticities encodingPri,
+                           bool scale_white, 
                            int surround_enum, 
                            int eotf_enum, 
                            float linear_scale = 1.0 )
@@ -496,8 +498,8 @@ float[3] display_decoding( float cv[3],
     float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
 
     // White scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
-        XYZ = scale_white( XYZ, PARAMS, true);
+    if (scale_white) {
+        XYZ = apply_white_scale( XYZ, PARAMS, true);
     }
 
     // Temporarily scale tone scale 0-1
