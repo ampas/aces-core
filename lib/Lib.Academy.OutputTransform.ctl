@@ -512,30 +512,21 @@ float[2] cuspFromTable( float h,
     float lo[3];
     float hi[3];
     
-    if (h <= table[0][2]) {
-        lo = table[table.size-1];
-        lo[2] = lo[2]-360.0;
-        hi = table[0];
-    } else if (h >= table[gamutTableSize-1][2]) {
-        lo = table[gamutTableSize-1];
-        hi = table[0];
-        hi[2] = hi[2] + 360.;
-    } else {
-        int low_i = 0;
-        int high_i = gamutTableSize; // allowed as we have an extra entry in the table
-        int i = hue_position_in_uniform_table( h, gamutTableSize );
+    int baseIndex = 1;
+    int low_i = 0;
+    int high_i = baseIndex + gamutTableSize; // allowed as we have an extra entry in the table
+    int i = hue_position_in_uniform_table( h, gamutTableSize ) + baseIndex;
         
-        while (low_i + 1 < high_i) {
-            if (h > table[i][2]) {
-                low_i = i;
-            } else {
-                high_i = i;
-            }
-            i = midpoint( low_i, high_i );
+    while (low_i + 1 < high_i) {
+        if (h > table[i][2]) {
+            low_i = i;
+        } else {
+            high_i = i;
         }
-        lo = table[high_i-1];
-        hi = table[high_i];
+        i = midpoint( low_i, high_i );
     }
+    lo = table[high_i-1];
+    hi = table[high_i];
     
     float t = (h - lo[2]) / (hi[2] - lo[2]);
     float cuspJ = lerp( lo[0], hi[0], t);
@@ -1054,7 +1045,7 @@ bool any_below_zero( float newLimitRGB[3])
     return (newLimitRGB[0] < 0. || newLimitRGB[1] < 0. || newLimitRGB[2] < 0.);
 }
 
-float[gamutTableSize][3] make_gamut_table( Chromaticities C,
+float[totalTableSize][3] make_gamut_table( Chromaticities C,
                                            float peakLuminance ) 
 {
     const float RGB_TO_XYZ_M[3][3] = RGBtoXYZ_f33( C, 1.0);
@@ -1080,10 +1071,20 @@ float[gamutTableSize][3] make_gamut_table( Chromaticities C,
             minhIndex = i;
     }
 
-    float gamutCuspTable[gamutTableSize][3];
+    float gamutCuspTable[totalTableSize][3];  // allocate 2 extra entries to ease the code to handle hues wrapping around
     for (i = 0; i < gamutTableSize; i=i+1) {
-        gamutCuspTable[i] = gamutCuspTableUnsorted[(minhIndex+i) % gamutTableSize];
+        gamutCuspTable[i+baseIndex] = gamutCuspTableUnsorted[(minhIndex+i) % gamutTableSize];
     }
+
+    // Copy last populated entry to first empty spot
+    gamutCuspTable[0] = gamutCuspTable[baseIndex + gamutTableSize-1];
+
+    // Copy first populated entry to last empty spot
+    gamutCuspTable[baseIndex + gamutTableSize] = gamutCuspTable[baseIndex];
+
+    // Wrap the hues, to maintain monotonicity. These entries will fall outside [0.0, 360.0]
+    gamutCuspTable[0][2] = gamutCuspTable[0][2] - 360.0;
+    gamutCuspTable[gamutTableSize+1][2] = gamutCuspTable[gamutTableSize+1][2] + 360.0;
         
     return gamutCuspTable;
 }
