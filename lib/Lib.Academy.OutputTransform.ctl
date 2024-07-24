@@ -23,6 +23,14 @@ const float focusDistanceScaling = 1.75;
 const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.0};
 
 const int gamutTableSize = 360; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
+const int additionalTableEntries = 2; // allots for extra entries to wrap the hues without special cases
+const int totalTableSize = gamutTableSize + additionalTableEntries;  
+const int baseIndex = 1;  // array index for smallest hue, which is not necessarily a 0.0 hue angle
+
+const float gammaMinimum = 0.0;
+const float gammaMaximum = 5.0;
+const float gammaSearchStep = 0.4;
+const float gammaAccuracy = 1e-5;
 
 // Academy Primaries 0 (i.e. "ACES" Primaries from SMPTE ST2065-1)
 const Chromaticities AP0 = 
@@ -810,11 +818,11 @@ float[3] findGamutBoundaryIntersection( float JMh_s[3],
 float hueDependentUpperHullGamma( float h, 
                                   float gamma_table[] )
 {
+    const int i_lo = hue_position_in_uniform_table(h, gamutTableSize) + baseIndex;
+    const int i_hi = next_position_in_table(i_lo, gamma_table.size) ;
 
-    const int i_lo = hue_position_in_uniform_table(h, gamma_table.size);
-    const int i_hi = next_position_in_table(i_lo, gamma_table.size);
+    const float base_hue = base_hue_for_position(i_lo - baseIndex, gamutTableSize);
 
-    const float base_hue = base_hue_for_position(i_lo, gamma_table.size);
     const float t = wrap_to_360(h) - base_hue;
 
     return lerp( gamma_table[i_lo], gamma_table[i_hi], t);
@@ -1195,9 +1203,9 @@ bool evaluate_gamma_fit( float JMcusp[2],
 }
 
 
-float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3], 
-                                             ODTParams PARAMS,
-                                             float peakLuminance ) {
+float[totalTableSize] make_upper_hull_gamma_table( float gamutCuspTable[][3], 
+                                                   ODTParams PARAMS,
+                                                   float peakLuminance ) {
     // Find upper hull gamma values for the gamut mapper.
     // Start by taking a h angle
     // Get the cusp J value for that angle
@@ -1210,13 +1218,14 @@ float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
 
     const int test_count = 3;
     float testPositions[test_count] = {0.01, 0.5, 0.99};
-    float gamutTopGamma[gamutTableSize];
+    float gammaTable[gamutTableSize];
+    float gamutTopGamma[totalTableSize];
 
     for (int i = 0; i < gamutTableSize; i = i + 1)
     {
         // Default value. This will get overridden as we loop, 
         // but can be a good diagnostic to make sure things are working
-        gamutTopGamma[i] = -1.;
+        gammaTable[i] = -1.;
         
         // get cusp from cusp table at hue position
         float hue = base_hue_for_position(i, gamutTableSize);
@@ -1231,8 +1240,8 @@ float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
             testJMh[testIndex][2] = hue;
         }
 
-        float search_range = 0.4;
-        float low = 0.;
+        float search_range = gammaSearchStep;
+        float low = gammaMinimum;
         float high = low + search_range;
         bool outside = false;
         
@@ -1253,7 +1262,7 @@ float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
         }
         
         float testGamma = -1.0;
-        while ( (high-low) > 1e-5)
+        while ( (high-low) > gammaAccuracy)
         {
             testGamma = (high + low) / 2.;
             bool gammaFound = evaluate_gamma_fit( JMcusp, 
@@ -1263,16 +1272,25 @@ float[gamutTableSize] make_upper_hull_gamma( float gamutCuspTable[][3],
                                                   peakLuminance );
             if (gammaFound) {
                 high = testGamma;
-                gamutTopGamma[i] = high;
+                gammaTable[i] = high;
             } else {
                 low = testGamma;
             }
         }
 
-        if (gamutTopGamma[i] < 0.) {
+        if (gammaTable[i] < 0.) {
             print( "Did not find top gamma for hue: ", hue, "\n");
         }
+
+        // Duplicate gamma value to array, leaving empty entries at first and last position
+        gamutTopGamma[i+baseIndex] = gammaTable[i];
     }
+
+    // Copy last populated entry to first empty spot
+    gamutTopGamma[0] = gammaTable[gamutTableSize-1];
+
+    // Copy first populated entry to last empty spot
+    gamutTopGamma[totalTableSize-1] = gammaTable[0];
 
     return gamutTopGamma;
 }
