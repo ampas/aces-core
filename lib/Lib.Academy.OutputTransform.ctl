@@ -10,7 +10,6 @@
 
 // Gamut compression constants
 const float smoothCusps = 0.12;
-const float smoothJ = 0.0;  // could be eliminated
 const float smoothM = 0.27;
 const float cuspMidBlend = 1.3;
 
@@ -775,8 +774,7 @@ float[3] findGamutBoundaryIntersection( float JMh_s[3],
     float slope = 0.0;
 
     float s = max(0.000001, smoothCusps);
-    float JM_cusp[2];
-    JM_cusp[0] = JM_cusp_in[0] * (1.0 + smoothJ * s);   // JM_cusp[0] = JM_cusp_in[0] when smoothJ=0
+    float JM_cusp[2] = JM_cusp_in;
     JM_cusp[1] = JM_cusp_in[1] * (1.0 + smoothM * s);   // M
 
     float J_intersect_source = solve_J_intersect( JMh_s[0], 
