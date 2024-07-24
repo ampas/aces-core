@@ -34,11 +34,11 @@ TSParams init_TSParams( float peakLuminance) {
     const float c_d = 10.013;   // output luminance of 18% grey (in nits)
     const float w_g = 0.14;     // change in grey between different peak luminance
     const float t_1 = 0.04;     // shadow toe or flare/glare compensation
-    const float r_hit_min = 128.;	// scene-referred value "hitting the roof"
-    const float r_hit_max = 896.;   // scene-referred value "hitting the roof"
+    const float r_hit_min = 128.;	// scene-referred value "hitting the roof" for SDR (e.g. when n = 100 nits)
+    const float r_hit_max = 896.;   // scene-referred value "hitting the roof" for when n = 10000 nits
 
     // Calculate output constants
-    const float r_hit = r_hit_min + r_hit_max * (log(n/n_r)/log(10000./100.));
+    const float r_hit = r_hit_min + (r_hit_max - r_hit_min) * (log(n/n_r)/log(10000./100.));
     const float m_0 = (n / n_r);
     const float m_1 = 0.5 * (m_0 + sqrt(m_0 * (m_0 + 4. * t_1)));
     const float u = pow((r_hit/m_1)/((r_hit/m_1)+1),g);
