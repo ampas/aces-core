@@ -19,8 +19,8 @@ const float focusAdjustGain = 0.55;
 const float focusDistance = 1.35;
 const float focusDistanceScaling = 1.75;
 
-// Values for CompressPowerP used in gamut mapping
-const float compressionFuncParams[4] = {0.75, 1.1, 1.3, 1.0};
+// Constant used in gamut mapping
+const float compressionThreshold = 0.75;
 
 const int gamutTableSize = 360; // add 1 extra entry at end that is to duplicate first entry for wrapped hue
 const int additionalTableEntries = 2; // allots for extra entries to wrap the hues without special cases
@@ -475,18 +475,13 @@ float[3] XYZ_output_to_JMh( float XYZ[3],
 }
     
 
-// "PowerP" compression function (also used in the ACES Reference Gamut Compression)
-// values of v above 'threshold' are compressed by a 'power' function
-// so that an input value of 'limit' results in an output of 1.0
-float compressPowerP( float v, 
-                      float thr, 
-                      float lim, 
-                      float power,
-                      bool invert = false )
+float compressionFunction( float v, 
+                           float thr, 
+                           float lim, 
+                           bool invert = false) 
 {
-    float s = (lim-thr) / pow( pow( (1.0-thr) / (lim-thr), -power) - 1.0, 1.0/power);
+    float s = (lim - thr) * (1.0 - thr) / (lim - 1.0);
     float nd = (v - thr) / s;
-    float p = pow(nd, power);
 
     float vCompressed;
 
@@ -494,13 +489,13 @@ float compressPowerP( float v,
         if (v < thr || lim < 1.0001 || v > thr + s) {
             vCompressed = v;
         } else {
-            vCompressed = thr + s * pow(-(pow((v - thr) / s, power) / (pow((v - thr) / s, power) - 1.)), 1. / power);
+            vCompressed = thr + s * (-nd / (nd - 1));
         }
     } else {
-        if ( v < thr || lim < 1.0001) {
+        if (v < thr || lim < 1.0001) {
             vCompressed = v;
         } else {
-            vCompressed = thr + s * nd / ( pow(1.0 + p, 1.0 / power));
+            vCompressed = thr + s * nd / (1.0 + nd);
         }
     }
 
@@ -935,15 +930,14 @@ float[3] compressGamut( float JMh[3],
                                                reachTable ); 
     
     float difference = max(1.0001, reachBoundary[1] / JMboundary[1] );
-    float threshold = max( compressionFuncParams[0], 1. / difference);
+    float threshold = max( compressionThreshold, 1. / difference);
 
     // Compress the out of gamut color along the projection line
     float v = project_from[1] / JMboundary[1]; 
-    
-    v = compressPowerP( v, 
+
+    v = compressionFunction( v, 
                         threshold, 
                         difference, 
-                        compressionFuncParams[3],
                         invert );
 
     float JMcompressed[2];
