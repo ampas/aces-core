@@ -592,11 +592,12 @@ float toe(float x,
 // Compresses colors inside the gamut with the aim for colorfulness to have an
 // appropriate rate of change from display black to display white, and from
 // achromatic outward to purer colors.
-float chromaCompression_fwd(float JMh[3],
-                            float origJ,
-                            ODTParams PARAMS,
-                            float REACH_GAMUT_TABLE[][3],
-                            float REACHM_TABLE[])
+float chromaCompression(float JMh[3],
+                        float origJ,
+                        ODTParams PARAMS,
+                        float REACH_GAMUT_TABLE[][3],
+                        float REACHM_TABLE[],
+                        bool invert = false)
 {
     float J = JMh[0];
     float M = JMh[1];
@@ -612,74 +613,60 @@ float chromaCompression_fwd(float JMh[3],
     float Mnorm = cuspFromTable(h, REACH_GAMUT_TABLE)[1];
     float limit = pow(nJ, PARAMS.model_gamma) * reachMFromTable(h, REACHM_TABLE) / Mnorm;
 
-    // Rescaling of M with the tonescaled J to get the M to the same range as
-    // J after the tonescale.  The rescaling uses the Hellwig2022 model gamma to
-    // keep the M/J ratio correct (keeping the chromaticities constant).
-    M = M * pow(J / origJ, PARAMS.model_gamma);
+    float toe_limit = limit - 0.001;
+    float toe_snJ_sat = snJ * PARAMS.sat;
+    float toe_sqrt_nJ_sat_thr = sqrt(nJ * nJ + PARAMS.sat_thr);
+    float toe_nJ_compr = nJ * PARAMS.compr;
 
-    // Normalize M with the rendering space cusp M
-    M = M / Mnorm;
+    if (!invert) { // Forward chroma compression
+        // Rescaling of M with the tonescaled J to get the M to the same range as
+        // J after the tonescale.  The rescaling uses the Hellwig2022 model gamma to
+        // keep the M/J ratio correct (keeping the chromaticities constant).
+        M = M * pow(J / origJ, PARAMS.model_gamma);
 
-    // Expand the colorfulness by running the toe function in reverse.  The goal is to
-    // expand less saturated colors less and more saturated colors more.  The expansion
-    // increases saturation in the shadows and mid-tones but not in the highlights.
-    // The 0.001 offset starts the expansions slightly above zero.  The sat_thr makes
-    // the toe less aggressive near black to reduce the expansion of noise.
-    M = limit - toe(limit - M,
-                    limit - 0.001,
-                    snJ * PARAMS.sat,
-                    sqrt(nJ * nJ + PARAMS.sat_thr),
-                    false);
+        // Normalize M with the rendering space cusp M
+        M = M / Mnorm;
 
-    // Compress the colorfulness.  The goal is to compress less saturated colors more and
-    // more saturated colors less, especially in the highlights.  This step creates the
-    // saturation roll-off in the highlights, but attemps to preserve pure colors.  This
-    // mostly affects highlights and mid-tones, and does not compress shadows.
-    M = toe(M,
-            limit,
-            nJ * PARAMS.compr,
-            snJ,
-            false);
+        // Expand the colorfulness by running the toe function in reverse.  The goal is to
+        // expand less saturated colors less and more saturated colors more.  The expansion
+        // increases saturation in the shadows and mid-tones but not in the highlights.
+        // The 0.001 offset starts the expansions slightly above zero.  The sat_thr makes
+        // the toe less aggressive near black to reduce the expansion of noise.
+        M = limit - toe(limit - M,
+                        toe_limit,
+                        toe_snJ_sat,
+                        toe_sqrt_nJ_sat_thr,
+                        false);
 
-    // Denormalize
-    M = M * Mnorm;
+        // Compress the colorfulness.  The goal is to compress less saturated colors more and
+        // more saturated colors less, especially in the highlights.  This step creates the
+        // saturation roll-off in the highlights, but attemps to preserve pure colors.  This
+        // mostly affects highlights and mid-tones, and does not compress shadows.
+        M = toe(M,
+                limit,
+                toe_nJ_compr,
+                snJ,
+                false);
 
-    return M;
-}
-
-float chromaCompression_inv(float JMh[3],
-                            float origJ,
-                            ODTParams PARAMS,
-                            float REACH_GAMUT_TABLE[][3],
-                            float REACHM_TABLE[])
-{
-    float J = JMh[0];
-    float M = JMh[1];
-    float h = JMh[2];
-
-    if (M == 0.0)
-    {
-        return M;
+        // Denormalize
+        M = M * Mnorm;
     }
-
-    float nJ = J / PARAMS.limitJmax;
-    float snJ = max(0., 1. - nJ);
-    float Mnorm = cuspFromTable(h, REACH_GAMUT_TABLE)[1];
-    float limit = pow(nJ, PARAMS.model_gamma) * reachMFromTable(h, REACHM_TABLE) / Mnorm;
-
-    M = M / Mnorm;
-    M = toe(M,
-            limit,
-            nJ * PARAMS.compr,
-            snJ,
-            true);
-    M = limit - toe(limit - M,
-                    limit - 0.001,
-                    snJ * PARAMS.sat,
-                    sqrt(nJ * nJ + PARAMS.sat_thr),
-                    true);
-    M = M * Mnorm;
-    M = M * pow(J / origJ, -PARAMS.model_gamma);
+    else
+    {
+        M = M / Mnorm;
+        M = toe(M,
+                limit,
+                toe_nJ_compr,
+                snJ,
+                true);
+        M = limit - toe(limit - M,
+                        toe_limit,
+                        toe_snJ_sat,
+                        toe_sqrt_nJ_sat_thr,
+                        true);
+        M = M * Mnorm;
+        M = M * pow(J / origJ, -PARAMS.model_gamma);
+    }
 
     return M;
 }
@@ -701,11 +688,12 @@ float[3] tonemapAndCompress_fwd(float inputJMh[3],
     float tonemappedJMh[3] = {tonemappedJ, inputJMh[1], inputJMh[2]};
 
     outputJMh = tonemappedJMh;
-    outputJMh[1] = chromaCompression_fwd(outputJMh,
-                                         inputJMh[0],
-                                         PARAMS,
-                                         REACH_GAMUT_TABLE,
-                                         REACHM_TABLE);
+    outputJMh[1] = chromaCompression(outputJMh,
+                                     inputJMh[0],
+                                     PARAMS,
+                                     REACH_GAMUT_TABLE,
+                                     REACHM_TABLE,
+                                     false);
 
     return outputJMh;
 }
@@ -727,11 +715,12 @@ float[3] tonemapAndCompress_inv(float JMh[3],
     float untonemappedColorJMh[3] = {untonemappedJ, tonemappedJMh[1], tonemappedJMh[2]};
 
     // Chroma compression
-    untonemappedColorJMh[1] = chromaCompression_inv(tonemappedJMh,
-                                                    untonemappedColorJMh[0],
-                                                    PARAMS,
-                                                    REACH_GAMUT_TABLE,
-                                                    REACHM_TABLE);
+    untonemappedColorJMh[1] = chromaCompression(tonemappedJMh,
+                                                untonemappedColorJMh[0],
+                                                PARAMS,
+                                                REACH_GAMUT_TABLE,
+                                                REACHM_TABLE,
+                                                true);
 
     return untonemappedColorJMh;
 }
