@@ -522,7 +522,6 @@ float[2] cuspFromTable(float h,
     float lo[3];
     float hi[3];
 
-    int baseIndex = 1;
     int low_i = 0;
     int high_i = baseIndex + gamutTableSize; // allowed as we have an extra entry in the table
     int i = hue_position_in_uniform_table(h, gamutTableSize) + baseIndex;
