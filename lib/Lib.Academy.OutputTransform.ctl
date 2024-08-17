@@ -858,7 +858,8 @@ float[3] getReachBoundary(float J,
                           float M,
                           float h,
                           ODTParams PARAMS,
-                          float gamutCuspTable[][3],
+                          float JMcusp[2],
+                          float focusJ,
                           float reachTable[])
 {
     float limitJmax = PARAMS.limitJmax;
@@ -868,10 +869,6 @@ float[3] getReachBoundary(float J,
 
     const float reachMaxM = reachMFromTable(h, reachTable);
 
-    float JMcusp[2] = cuspFromTable(h, gamutCuspTable);
-    float focusJ = lerp(JMcusp[0],
-                        midJ,
-                        min(1.0, cuspMidBlend - (JMcusp[0] / limitJmax)));
     float slope_gain = limitJmax * focusDist * getFocusGain(J, JMcusp[0], limitJmax);
 
     float intersectJ = solve_J_intersect(J, M, focusJ, limitJmax, slope_gain);
@@ -938,7 +935,8 @@ float[3] compressGamut(float JMh[3],
                                               JMboundary[1],
                                               JMh[2],
                                               PARAMS,
-                                              gamutCuspTable,
+                                              JMcusp,
+                                              focusJ,
                                               reachTable);
 
     float difference = max(1.0001, reachBoundary[1] / JMboundary[1]);
