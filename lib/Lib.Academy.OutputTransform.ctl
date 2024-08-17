@@ -583,7 +583,9 @@ float toe(float x,
     }
     else
     {
-        return 0.5 * (k3 * x - k1 + sqrt((k3 * x - k1) * (k3 * x - k1) + 4. * k2 * k3 * x));
+        const float minus_b = k3 * x - k1;
+        const float minus_c = k2 * k3 * x;
+        return 0.5 * (minus_b + sqrt(minus_b * minus_b + 4. * minus_c));
     }
 }
 
