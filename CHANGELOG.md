@@ -1,21 +1,26 @@
-**Version 2.0 Developer Release 2 (July xx, 2024):**
+**Version 2.0 Developer Release 2 (August 19, 2024):**
 * Bugs
   * Correct a mistyped value used in pre-calculation of r_hit in the tone scale function init
-  * Add a missing clamp to range [0 - peakLuminance] when applying PQ or HLG encoding. Without this NaNs could result from negative numbers making it into the PQ function.
+  * Add a clamp to range [0 - peakLuminance] and remove explicit clamp in inverse EOTF function
 * Enhancements / simplifications
+  * Set upper limit clamp value in AP1 clamping step to a value equal to 3 stops (8x) the minimum value required to reach maximum output from the tone scale function
   * Update table generation and lookup code to assure that hue values falling in the "wrap-around" hue region are handled correctly
     * Add two extra table entries in gamut cusp and upper gamma hull approximation tables that are duplicates of the first and last entries
     * Update indexing and lookup functions to expect a baseIndex offset to maintain proper indexing where 360 entries are assumed
   * Add a bool to determine whether white scaling should be applied - This allows the user to control when the white is or isn't applied, and is clearer and more robust than relying on a mismatch in the white point chromaticities. For example, a DCDM P3D65 ODT already has white point fitting handled by a 48/52.37 scale factor, so wouldn't need that additional white scaling that would otherwise be applied because the encoding white and limiting white would differ.
-  * Reorder the enum values for EOTF encoding/decoding to be less haphazard
   * Remove unused smoothJ value
   * Simply compressFuncParams and compressPowerP function 
     * Unused values in the 4-element compressionFuncParams were removed, retaining the one value that is used and renaming it to compressionThreshold to better describe what it controls
     * The compressionFuncParams related to power equaled 1, so the compressPowerP function was simplified where many of the pow() functions could be solved out when power=1
   * Rename REACH_CUSP_TABLE as REACHM_TABLE, because it represents the M value for the reach gamut at limitJmax. Also reduce REACHM_TABLE to only 1 column (M) since M is the only value that needs pre-computation (i.e. J is constant and always equal to limitJmax and hue is uniformly spaced and corresponds to row index)
+  * Refactor the white scaling step as a discrete operator before display encoding on forward (plus a clamp) and immediately after display decoding on inverse
+  * Reorder the enum values for EOTF encoding/decoding to be less haphazard
+  * Remove unused parameters from display encoding/decoding function
+  * Remove unused functions for applying surround parameter - The implementation was unvalidated and would need to be changed anyway if implemented in a future release, so the inactive code and supporting functions were removed to avoid any confusion for implementers.
+  * Other minor refactorings of code for improved readability
 * Other ACES repos
   * Output Transforms
-    * Make all TransformIDs verbosely defined from transform parameter settings
+    * Update all TransformIDs to be more verbosely defined from transform parameter settings
     * Change default list of transforms
       * Add:
         * HLG 1000 nit
@@ -25,9 +30,10 @@
       * Remove: 
         * Rec2020 100 nit
         * P3-DCI
-  * Input Transforms
+  * Input and Color Space Conversion Transforms
     * Set name space in Panasonic IDT to Panasonic
     * Update Sony Venice TransformIDs to be more consistent
+    * Add a few missing transforms to provide to/from conversion to provided inputs 
     * Add "Unity" transform
 
 
