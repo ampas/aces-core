@@ -403,11 +403,16 @@ float Y_to_Hellwig_J(float Y,
 }
 
 float[3] clamp_XYZ_to_AP1(float XYZ[3],
-                          float XYZ_to_AP1_matrix[4][4])
+                          float XYZ_to_AP1_matrix[4][4],
+                          float peakLuminance)
 {
     float ap1[3] = mult_f3_f44(XYZ, XYZ_to_AP1_matrix);
 
-    float ap1_clamped[3] = clamp_f3(ap1, 0., HALF_POS_INF);
+    const float upper_clamp_limit = 8. * (128 + 768 * (log(peakLuminance/100.)/log(10000./100.))); 
+    // limit to nice power of 2 (3 stops) above that needed to max out
+    // note the quantity (128 + ...) is the definition of r_hit from the tonescale constants
+
+    float ap1_clamped[3] = clamp_f3(ap1, 0., upper_clamp_limit);
     float XYZ_clamped[3] = mult_f3_f44(ap1_clamped, invert_f44(XYZ_to_AP1_matrix));
 
     return XYZ_clamped;
@@ -423,7 +428,7 @@ float[3] aces_to_JMh(float aces[3],
 
     // Clamp to half float range
     const float AP1_XYZ_TO_RGB[4][4] = XYZtoRGB(AP1, 1.0);
-    XYZ = clamp_XYZ_to_AP1(XYZ, AP1_XYZ_TO_RGB);
+    XYZ = clamp_XYZ_to_AP1(XYZ, AP1_XYZ_TO_RGB, peakLuminance);
 
     // XYZ to JMh
     float RGB_w[3] = {referenceLuminance, referenceLuminance, referenceLuminance};
