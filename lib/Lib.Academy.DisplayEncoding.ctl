@@ -410,53 +410,89 @@ float[3] eotf( float rgb_cv[3],
     }
 }
 
-float[3] display_encoding( float XYZ[3],
-                           ODTParams PARAMS,
-                           bool scale_white, 
-                           int eotf_enum,
-                           float linear_scale = 1.0 )
+float[3] clamp_zero_to_peakLuminance(float XYZ_in[3],
+                                     ODTParams PARAMS)
 {
+    float rgb[3] = mult_f3_f33(XYZ_in, PARAMS.LIMIT_XYZ_TO_RGB);
+
     // Clamp to relative peakLuminance in RGB space prior to white scaling
-    float rgb[3] = mult_f3_f33( XYZ, PARAMS.LIMIT_XYZ_TO_RGB);
-    rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
-    float XYZ[3] = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+    rgb = clamp_f3(rgb, 0.0, PARAMS.peakLuminance / referenceLuminance);
+
+    float XYZ[3] = mult_f3_f33(rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+
+    return XYZ;
+}
+
+float[3] white_limiting(float XYZ_in[3],
+                        ODTParams PARAMS,
+                        bool scale_white,
+                        bool invert = false)
+{
+    // In the forward direction, the white limiting step clamps the output to
+    // between zero and the peak luminance value so that values do not exceed
+    // the maximum value of the tonescale (because the tonescale extends
+    // slightly above the peak luminance so that it crosses through the peak
+    // luminance value with some slope and does not approach an asymptote). If
+    // the creative white differs from the calibration white of the display,
+    // unequal display code values will be required to produce the neutral of
+    // the creative white. Without scaling, one channel would hit the max value
+    // first while the other channels continue to increase, resulting in a hue
+    // shift. To avoid this, the white scaling finds the largest channel and
+    // applies a scale factor to force the point where this channel hits max to
+    // 1.0, assuring that all three channels "fit" within the peak value.
+    // In the inverse direction, the white scaling is removed.
+
+    float XYZ[3] = XYZ_in;
+
+    // Clamp to peak luminance in the forward direction
+    if (!invert)
+        XYZ = clamp_zero_to_peakLuminance(XYZ, PARAMS);
 
     // White point scaling
-    if (scale_white) {
-        XYZ = apply_white_scale( XYZ, PARAMS, false);
+    if (scale_white)
+    {
+        if (invert)
+        { // Remove white scaling
+            XYZ = apply_white_scale(XYZ, PARAMS, true);
+        }
+        else
+        { // Apply white scaling
+            XYZ = apply_white_scale(XYZ, PARAMS, false);
+        }
     }
+    return XYZ;
+}
 
+float[3] display_encoding(float XYZ[3],
+                          ODTParams PARAMS,
+                          int eotf_enum,
+                          float linear_scale = 1.0)
+{
     // XYZ to display RGB
-    float RGB_display_linear[3] = mult_f3_f33( XYZ, PARAMS.OUTPUT_XYZ_TO_RGB );
+    float RGB_display_linear[3] = mult_f3_f33(XYZ, PARAMS.OUTPUT_XYZ_TO_RGB);
 
     // Linear scale factor
-    RGB_display_linear = mult_f_f3( linear_scale, RGB_display_linear);
+    RGB_display_linear = mult_f_f3(linear_scale, RGB_display_linear);
 
     // Apply inverse EOTF
-    float out[3] = eotf_inv( RGB_display_linear, eotf_enum);  
-    
+    float out[3] = eotf_inv(RGB_display_linear, eotf_enum);
+
     return out;
 }
 
-float[3] display_decoding( float cv[3],
-                           ODTParams PARAMS, 
-                           bool scale_white, 
-                           int eotf_enum, 
-                           float linear_scale = 1.0 )
+float[3] display_decoding(float cv[3],
+                          ODTParams PARAMS,
+                          int eotf_enum,
+                          float linear_scale = 1.0)
 {
     // Apply EOTF
-    float RGB_display_linear[3] = eotf( cv, eotf_enum);
+    float RGB_display_linear[3] = eotf(cv, eotf_enum);
 
     // Linear scale factor
-    RGB_display_linear = mult_f_f3( 1./linear_scale, RGB_display_linear);
-    
-    // Display RGB to XYZ
-    float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
+    RGB_display_linear = mult_f_f3(1. / linear_scale, RGB_display_linear);
 
-    // White scaling
-    if (scale_white) {
-        XYZ = apply_white_scale( XYZ, PARAMS, true);
-    }
+    // Display RGB to XYZ
+    float XYZ[3] = mult_f3_f33(RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ);
 
     return XYZ;
 }
