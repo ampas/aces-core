@@ -7,58 +7,6 @@
 //
 
 
-// Convert between CIE XYZ tristimulus values and CIE x,y chromaticity coordinates
-float[3] XYZ_2_xyY( float XYZ[3] )
-{  
-  float xyY[3];
-  float divisor = (XYZ[0] + XYZ[1] + XYZ[2]);
-  if (divisor == 0.) divisor = 1e-10;
-  xyY[0] = XYZ[0] / divisor;
-  xyY[1] = XYZ[1] / divisor;  
-  xyY[2] = XYZ[1];
-  
-  return xyY;
-}
-
-float[3] xyY_2_XYZ( float xyY[3] )
-{
-  float XYZ[3];
-  XYZ[0] = xyY[0] * xyY[2] / max( xyY[1], 1e-10);
-  XYZ[1] = xyY[2];  
-  XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / max( xyY[1], 1e-10);
-
-  return XYZ;
-}
-
-
-float[3] surround_adjust( float XYZ_norm[3], 
-                          int surround_enum, 
-                          bool invert )
-{
-    float SURROUND_GAMMA = 0.98;
-    
-    float surround_gamma;
-    if (surround_enum == 0 ) { 
-        surround_gamma = 1.0/SURROUND_GAMMA;    // dark
-    } else if (surround_enum == 2) {
-        surround_gamma = SURROUND_GAMMA;        // average
-    } else {
-        surround_gamma = 1.0;                   // dim (normal)
-    }
-
-    float xyY[3] = XYZ_2_xyY( XYZ_norm);
-
-    if (invert) {
-        xyY[2] = pow( xyY[2], 1./surround_gamma );
-    } else {
-        xyY[2] = pow( xyY[2], surround_gamma );
-    }
-
-    float XYZ_out[3] = xyY_2_XYZ( xyY);
-
-    return XYZ_out;
-}
-
 float[3] apply_white_scale( float XYZluminance[3], 
                             ODTParams PARAMS, 
                             bool invert )
@@ -464,32 +412,22 @@ float[3] eotf( float rgb_cv[3],
 
 float[3] display_encoding( float XYZ[3],
                            ODTParams PARAMS,
-                           Chromaticities limitingPri, 
-                           Chromaticities encodingPri, 
                            bool scale_white, 
-                           int surround_enum, 
                            int eotf_enum,
                            float linear_scale = 1.0 )
 {
     // Clamp to relative peakLuminance in RGB space prior to white scaling
     float rgb[3] = mult_f3_f33( XYZ, PARAMS.LIMIT_XYZ_TO_RGB);
     rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
-    float XYZ_clamped[3] = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+    float XYZ[3] = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
 
-    // Temporarily scale tone scale 0-1
-    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ_clamped);
-    // Apply surround adjustment
-    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 0);
-    // Undo temporary scale
-    float XYZ_scaled[3] = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
-    
     // White point scaling
     if (scale_white) {
-        XYZ_scaled = apply_white_scale( XYZ_scaled, PARAMS, false);
+        XYZ = apply_white_scale( XYZ, PARAMS, false);
     }
 
     // XYZ to display RGB
-    float RGB_display_linear[3] = mult_f3_f33( XYZ_scaled, PARAMS.OUTPUT_XYZ_TO_RGB );
+    float RGB_display_linear[3] = mult_f3_f33( XYZ, PARAMS.OUTPUT_XYZ_TO_RGB );
 
     // Linear scale factor
     RGB_display_linear = mult_f_f3( linear_scale, RGB_display_linear);
@@ -502,10 +440,7 @@ float[3] display_encoding( float XYZ[3],
 
 float[3] display_decoding( float cv[3],
                            ODTParams PARAMS, 
-                           Chromaticities limitingPri, 
-                           Chromaticities encodingPri,
                            bool scale_white, 
-                           int surround_enum, 
                            int eotf_enum, 
                            float linear_scale = 1.0 )
 {
@@ -522,14 +457,6 @@ float[3] display_decoding( float cv[3],
     if (scale_white) {
         XYZ = apply_white_scale( XYZ, PARAMS, true);
     }
-
-    // Temporarily scale tone scale 0-1
-    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ);
-    // Undo surround adjustment
-    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 1);
-    // Undo temporary scale
-    XYZ = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
-
 
     return XYZ;
 }
