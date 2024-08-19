@@ -7,61 +7,9 @@
 //
 
 
-// Convert between CIE XYZ tristimulus values and CIE x,y chromaticity coordinates
-float[3] XYZ_2_xyY( float XYZ[3] )
-{  
-  float xyY[3];
-  float divisor = (XYZ[0] + XYZ[1] + XYZ[2]);
-  if (divisor == 0.) divisor = 1e-10;
-  xyY[0] = XYZ[0] / divisor;
-  xyY[1] = XYZ[1] / divisor;  
-  xyY[2] = XYZ[1];
-  
-  return xyY;
-}
-
-float[3] xyY_2_XYZ( float xyY[3] )
-{
-  float XYZ[3];
-  XYZ[0] = xyY[0] * xyY[2] / max( xyY[1], 1e-10);
-  XYZ[1] = xyY[2];  
-  XYZ[2] = (1.0 - xyY[0] - xyY[1]) * xyY[2] / max( xyY[1], 1e-10);
-
-  return XYZ;
-}
-
-
-float[3] surround_adjust( float XYZ_norm[3], 
-                          int surround_enum, 
-                          bool invert )
-{
-    float SURROUND_GAMMA = 0.98;
-    
-    float surround_gamma;
-    if (surround_enum == 0 ) { 
-        surround_gamma = 1.0/SURROUND_GAMMA;    // dark
-    } else if (surround_enum == 2) {
-        surround_gamma = SURROUND_GAMMA;        // average
-    } else {
-        surround_gamma = 1.0;                   // dim (normal)
-    }
-
-    float xyY[3] = XYZ_2_xyY( XYZ_norm);
-
-    if (invert) {
-        xyY[2] = pow( xyY[2], 1./surround_gamma );
-    } else {
-        xyY[2] = pow( xyY[2], surround_gamma );
-    }
-
-    float XYZ_out[3] = xyY_2_XYZ( xyY);
-
-    return XYZ_out;
-}
-
-float[3] scale_white( float XYZluminance[3], 
-                      ODTParams PARAMS, 
-                      bool invert )
+float[3] apply_white_scale( float XYZluminance[3], 
+                            ODTParams PARAMS, 
+                            bool invert )
 {
     float RGB_w[3] = mult_f3_f33( PARAMS.XYZ_w_limit, PARAMS.OUTPUT_XYZ_TO_RGB);
     float RGB_w_f[3] = mult_f_f3( 1./referenceLuminance, RGB_w);
@@ -392,121 +340,153 @@ float[3] HLG_to_ST2084_1000nits_f3( float HLG[3])
 
 
 
+//  0 - display linear
+//  1 - ST.2084
+//  2 - HLG
+//  3 - gamma 2.6
+//  4 - BT.1886 with gamma 2.4
+//  5 - gamma 2.2
+//  6 - sRGB IEC 61966-2-1:1999
 
 float[3] eotf_inv( float rgb_linear[3],
                    int eotf_enum )
 {
-    if (eotf_enum == 0) {               // BT.1886 with gamma 2.4
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
-        return bt1886_inv_f3( rgb_clamped, 2.4, 1.0, 0.0 );
-    } else if (eotf_enum == 1) {        // sRGB IEC 61966-2-1:1999
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
-        return moncurve_inv_f3( rgb_clamped, 2.4, 0.055);
-    } else if (eotf_enum == 2) {        // gamma 2.2
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
-        return pow_f3( rgb_clamped, 1/2.2);
-    } else if (eotf_enum == 3) {        // gamma 2.6
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, 1.0);
-        return pow_f3( rgb_clamped, 1/2.6);
-    } else if (eotf_enum == 4) {        // ST. 2084
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
+    if (eotf_enum == 0) {
+        // display linear
+        return rgb_linear;
+    } else if (eotf_enum == 1) {
+        // ST. 2084
         return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
-    } else if (eotf_enum == 5) {        // HLG
-        float rgb_clamped[3] = clamp_f3( rgb_linear, 0.0, referenceLuminance);
+    } else if (eotf_enum == 2) {
+        // HLG
         float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
         return ST2084_to_HLG_1000nits_f3( PQ );
-    } else {        // display linear
-        return rgb_linear;
+    } else if (eotf_enum == 3) {
+        // gamma 2.6
+        return pow_f3( rgb_linear, 1/2.6);
+    } else if (eotf_enum == 4) {
+        // BT.1886 with gamma 2.4
+        return bt1886_inv_f3( rgb_linear, 2.4, 1.0, 0.0 );
+    } else if (eotf_enum == 5) {
+        // gamma 2.2
+        return pow_f3( rgb_linear, 1/2.2);
+    } else {
+        // sRGB IEC 61966-2-1:1999
+        return moncurve_inv_f3( rgb_linear, 2.4, 0.055);
     }
 }
 
 float[3] eotf( float rgb_cv[3],
                int eotf_enum )
 {
-    if (eotf_enum == 0) {               // BT.1886 with gamma 2.4
-        return bt1886_fwd_f3( rgb_cv, 2.4, 1.0, 0.0 );
-    } else if (eotf_enum == 1) {        // sRGB IEC 61966-2-1:1999
-        return moncurve_fwd_f3( rgb_cv, 2.4, 0.055);
-    } else if (eotf_enum == 2) {        // gamma 2.2
-        return pow_f3( rgb_cv, 2.2);
-    } else if (eotf_enum == 3) {        // gamma 2.6
-        return pow_f3( rgb_cv, 2.6);
-    } else if (eotf_enum == 4) {        // ST. 2084
+    if (eotf_enum == 0) {
+        // display linear
+        return rgb_cv;
+    } else if (eotf_enum == 1) {
+        // ST. 2084
         return mult_f_f3( 1./referenceLuminance, ST2084_to_Y_f3( rgb_cv ));
-    } else if (eotf_enum == 5) {        // HLG
+    } else if (eotf_enum == 2) {
+        // HLG
         float PQ[3] = HLG_to_ST2084_1000nits_f3( rgb_cv);
         return mult_f_f3( 1/referenceLuminance, ST2084_to_Y_f3( PQ ));
-    } else {                            // display linear
-        return rgb_cv;
+    } else if (eotf_enum == 3) {
+        // gamma 2.6
+        return pow_f3( rgb_cv, 2.6);
+    } else if (eotf_enum == 4) {
+        // BT.1886 with gamma 2.4
+        return bt1886_fwd_f3( rgb_cv, 2.4, 1.0, 0.0 );
+    } else if (eotf_enum == 5) {
+        // gamma 2.2
+        return pow_f3( rgb_cv, 2.2);
+    } else {
+        // sRGB IEC 61966-2-1:1999
+        return moncurve_fwd_f3( rgb_cv, 2.4, 0.055);
     }
 }
 
-float[3] display_encoding( float XYZ[3],
-                           ODTParams PARAMS,
-                           Chromaticities limitingPri, 
-                           Chromaticities encodingPri, 
-                           int surround_enum, 
-                           int eotf_enum,
-                           float linear_scale = 1.0 )
+float[3] clamp_zero_to_peakLuminance(float XYZ_in[3],
+                                     ODTParams PARAMS)
 {
+    float rgb[3] = mult_f3_f33(XYZ_in, PARAMS.LIMIT_XYZ_TO_RGB);
+
     // Clamp to relative peakLuminance in RGB space prior to white scaling
-    float rgb[3] = mult_f3_f33( XYZ, PARAMS.LIMIT_XYZ_TO_RGB);
-    rgb = clamp_f3( rgb, 0.0, PARAMS.peakLuminance/referenceLuminance );
-    float XYZ_clamped[3] = mult_f3_f33( rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+    rgb = clamp_f3(rgb, 0.0, PARAMS.peakLuminance / referenceLuminance);
 
-    // Temporarily scale tone scale 0-1
-    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ_clamped);
-    // Apply surround adjustment
-    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 0);
-    // Undo temporary scale
-    float XYZ_scaled[3] = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
-    
+    float XYZ[3] = mult_f3_f33(rgb, PARAMS.LIMIT_RGB_TO_XYZ);
+
+    return XYZ;
+}
+
+float[3] white_limiting(float XYZ_in[3],
+                        ODTParams PARAMS,
+                        bool scale_white,
+                        bool invert = false)
+{
+    // In the forward direction, the white limiting step clamps the output to
+    // between zero and the peak luminance value so that values do not exceed
+    // the maximum value of the tonescale (because the tonescale extends
+    // slightly above the peak luminance so that it crosses through the peak
+    // luminance value with some slope and does not approach an asymptote). If
+    // the creative white differs from the calibration white of the display,
+    // unequal display code values will be required to produce the neutral of
+    // the creative white. Without scaling, one channel would hit the max value
+    // first while the other channels continue to increase, resulting in a hue
+    // shift. To avoid this, the white scaling finds the largest channel and
+    // applies a scale factor to force the point where this channel hits max to
+    // 1.0, assuring that all three channels "fit" within the peak value.
+    // In the inverse direction, the white scaling is removed.
+
+    float XYZ[3] = XYZ_in;
+
+    // Clamp to peak luminance in the forward direction
+    if (!invert)
+        XYZ = clamp_zero_to_peakLuminance(XYZ, PARAMS);
+
     // White point scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
-        XYZ_scaled = scale_white( XYZ_scaled, PARAMS, false);
+    if (scale_white)
+    {
+        if (invert)
+        { // Remove white scaling
+            XYZ = apply_white_scale(XYZ, PARAMS, true);
+        }
+        else
+        { // Apply white scaling
+            XYZ = apply_white_scale(XYZ, PARAMS, false);
+        }
     }
+    return XYZ;
+}
 
+float[3] display_encoding(float XYZ[3],
+                          ODTParams PARAMS,
+                          int eotf_enum,
+                          float linear_scale = 1.0)
+{
     // XYZ to display RGB
-    float RGB_display_linear[3] = mult_f3_f33( XYZ_scaled, PARAMS.OUTPUT_XYZ_TO_RGB );
+    float RGB_display_linear[3] = mult_f3_f33(XYZ, PARAMS.OUTPUT_XYZ_TO_RGB);
 
     // Linear scale factor
-    RGB_display_linear = mult_f_f3( linear_scale, RGB_display_linear);
+    RGB_display_linear = mult_f_f3(linear_scale, RGB_display_linear);
 
     // Apply inverse EOTF
-    float out[3] = eotf_inv( RGB_display_linear, eotf_enum);  
-    
+    float out[3] = eotf_inv(RGB_display_linear, eotf_enum);
+
     return out;
 }
 
-float[3] display_decoding( float cv[3],
-                           ODTParams PARAMS, 
-                           Chromaticities limitingPri, 
-                           Chromaticities encodingPri,
-                           int surround_enum, 
-                           int eotf_enum, 
-                           float linear_scale = 1.0 )
+float[3] display_decoding(float cv[3],
+                          ODTParams PARAMS,
+                          int eotf_enum,
+                          float linear_scale = 1.0)
 {
     // Apply EOTF
-    float RGB_display_linear[3] = eotf( cv, eotf_enum);
+    float RGB_display_linear[3] = eotf(cv, eotf_enum);
 
     // Linear scale factor
-    RGB_display_linear = mult_f_f3( 1./linear_scale, RGB_display_linear);
-    
+    RGB_display_linear = mult_f_f3(1. / linear_scale, RGB_display_linear);
+
     // Display RGB to XYZ
-    float XYZ[3] = mult_f3_f33( RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ );
-
-    // White scaling
-    if (!f2_equal_to_tolerance(limitingPri.white, encodingPri.white, 1e-5)) {
-        XYZ = scale_white( XYZ, PARAMS, true);
-    }
-
-    // Temporarily scale tone scale 0-1
-    float XYZ_scaled_0to1[3] = mult_f_f3( referenceLuminance/PARAMS.peakLuminance, XYZ);
-    // Undo surround adjustment
-    XYZ_scaled_0to1 = surround_adjust( XYZ_scaled_0to1, surround_enum, 1);
-    // Undo temporary scale
-    XYZ = mult_f_f3( PARAMS.peakLuminance/referenceLuminance, XYZ_scaled_0to1);
-
+    float XYZ[3] = mult_f3_f33(RGB_display_linear, PARAMS.OUTPUT_RGB_TO_XYZ);
 
     return XYZ;
 }

@@ -353,6 +353,14 @@ void print_f44( float m[4][4] )
     print( "  { ", m[3][0], ",\t", m[3][1], ",\t", m[3][2], ",\t", m[3][3], "} };\n");
 }
 
+void print_table_f( float t[] )
+{
+    print( "\n");
+    for (int i = 0; i < t.size; i = i + 1) {
+        print( t[i], "\n");
+    }
+}
+
 void print_table_f3( float t[][3] )
 {
     print( "\n");
