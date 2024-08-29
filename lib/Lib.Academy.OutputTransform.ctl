@@ -917,7 +917,6 @@ float[3] compressGamut(float JMh[3],
                        float Jx,
                        float gamutCuspTable[][3],
                        float gamutTopGamma[],
-                       float reachGamutTable[][3],
                        float reachTable[],
                        bool invert = false)
 {
@@ -989,7 +988,6 @@ float[3] gamutMap_fwd(float JMh[3],
                       ODTParams PARAMS,
                       float gamutCuspTable[][3],
                       float gamutTopGamma[],
-                      float reachGamutTable[][3],
                       float reachTable[])
 {
     return compressGamut(JMh,
@@ -997,7 +995,6 @@ float[3] gamutMap_fwd(float JMh[3],
                          JMh[0],
                          gamutCuspTable,
                          gamutTopGamma,
-                         reachGamutTable,
                          reachTable,
                          false);
 }
@@ -1006,7 +1003,6 @@ float[3] gamutMap_inv(float JMh[3],
                       ODTParams PARAMS,
                       float gamutCuspTable[][3],
                       float gamutTopGamma[],
-                      float reachGamutTable[][3],
                       float reachTable[])
 {
     float JMcusp[2] = cuspFromTable(JMh[2], gamutCuspTable);
@@ -1019,7 +1015,6 @@ float[3] gamutMap_inv(float JMh[3],
                              Jx,
                              gamutCuspTable,
                              gamutTopGamma,
-                             reachGamutTable,
                              reachTable,
                              true);
 
@@ -1029,7 +1024,6 @@ float[3] gamutMap_inv(float JMh[3],
                        Jx,
                        gamutCuspTable,
                        gamutTopGamma,
-                       reachGamutTable,
                        reachTable,
                        true)[0];
     return compressGamut(JMh,
@@ -1037,7 +1031,6 @@ float[3] gamutMap_inv(float JMh[3],
                          Jx,
                          gamutCuspTable,
                          gamutTopGamma,
-                         reachGamutTable,
                          reachTable,
                          true);
 }
@@ -1439,7 +1432,6 @@ float[3] outputTransform_fwd(float aces[3],
                              Chromaticities limitingPri,
                              float GAMUT_CUSP_TABLE[][3],
                              float GAMUT_TOP_GAMMA[],
-                             float REACH_GAMUT_TABLE[][3],
                              float REACHM_TABLE[])
 {
     float JMh[3] = aces_to_JMh(aces,
@@ -1453,7 +1445,6 @@ float[3] outputTransform_fwd(float aces[3],
                                           PARAMS,
                                           GAMUT_CUSP_TABLE,
                                           GAMUT_TOP_GAMMA,
-                                          REACH_GAMUT_TABLE,
                                           REACHM_TABLE);
 
     float XYZ[3] = JMh_to_output_XYZ(compressedJMh,
@@ -1468,7 +1459,6 @@ float[3] outputTransform_inv(float XYZ[3],
                              Chromaticities limitingPri,
                              float GAMUT_CUSP_TABLE[][3],
                              float GAMUT_TOP_GAMMA[],
-                             float REACH_GAMUT_TABLE[][3],
                              float REACHM_TABLE[])
 {
     float compressedJMh[3] = XYZ_output_to_JMh(XYZ,
@@ -1478,7 +1468,6 @@ float[3] outputTransform_inv(float XYZ[3],
                                           PARAMS,
                                           GAMUT_CUSP_TABLE,
                                           GAMUT_TOP_GAMMA,
-                                          REACH_GAMUT_TABLE,
                                           REACHM_TABLE);
 
     float JMh[3] = tonemapAndCompress_inv(tonemappedJMh,
