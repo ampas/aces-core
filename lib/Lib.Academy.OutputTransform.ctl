@@ -633,7 +633,6 @@ float chromaCompressionNorm(float h,
 float chromaCompression(float JMh[3],
                         float origJ,
                         ODTParams PARAMS,
-                        float REACH_GAMUT_TABLE[][3],
                         float REACHM_TABLE[],
                         bool invert = false)
 {
@@ -711,7 +710,6 @@ float chromaCompression(float JMh[3],
 
 float[3] tonemapAndCompress_fwd(float inputJMh[3],
                                 ODTParams PARAMS,
-                                float REACH_GAMUT_TABLE[][3],
                                 float REACHM_TABLE[])
 {
     float outputJMh[3];
@@ -729,7 +727,6 @@ float[3] tonemapAndCompress_fwd(float inputJMh[3],
     outputJMh[1] = chromaCompression(outputJMh,
                                      inputJMh[0],
                                      PARAMS,
-                                     REACH_GAMUT_TABLE,
                                      REACHM_TABLE,
                                      false);
 
@@ -738,7 +735,6 @@ float[3] tonemapAndCompress_fwd(float inputJMh[3],
 
 float[3] tonemapAndCompress_inv(float JMh[3],
                                 ODTParams PARAMS,
-                                float REACH_GAMUT_TABLE[][3],
                                 float REACHM_TABLE[])
 {
     float tonemappedJMh[3] = JMh;
@@ -756,7 +752,6 @@ float[3] tonemapAndCompress_inv(float JMh[3],
     untonemappedColorJMh[1] = chromaCompression(tonemappedJMh,
                                                 untonemappedColorJMh[0],
                                                 PARAMS,
-                                                REACH_GAMUT_TABLE,
                                                 REACHM_TABLE,
                                                 true);
 
@@ -1452,7 +1447,6 @@ float[3] outputTransform_fwd(float aces[3],
 
     float tonemappedJMh[3] = tonemapAndCompress_fwd(JMh,
                                                     PARAMS,
-                                                    REACH_GAMUT_TABLE,
                                                     REACHM_TABLE);
 
     float compressedJMh[3] = gamutMap_fwd(tonemappedJMh,
@@ -1489,7 +1483,6 @@ float[3] outputTransform_inv(float XYZ[3],
 
     float JMh[3] = tonemapAndCompress_inv(tonemappedJMh,
                                           PARAMS,
-                                          REACH_GAMUT_TABLE,
                                           REACHM_TABLE);
 
     float aces[3] = JMh_to_aces(JMh,
