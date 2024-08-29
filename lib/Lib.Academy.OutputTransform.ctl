@@ -148,6 +148,7 @@ struct ODTParams
     float sat;
     float sat_thr;
     float compr;
+    float chromaCompressScale;
 
     float focusDist;
 
@@ -594,6 +595,36 @@ float toe(float x,
     }
 }
 
+// Chroma compression
+//
+// Compresses colors inside the gamut with the aim for colorfulness to have an
+// appropriate rate of change from display black to display white, and from
+// achromatic outward to purer colors.
+//
+float chromaCompressionNorm(float h,
+                            ODTParams PARAMS)
+{
+
+    float hr = degrees_to_radians(h);
+
+    float a = cos(hr);
+    float b = sin(hr);
+    float cos_hr2 = a * a - b * b;
+    float sin_hr2 = 2.0 * a * b;
+    float cos_hr3 = 4.0 * a * a * a - 3.0 * a;
+    float sin_hr3 = 3.0 * b - 4.0 * b * b * b;
+
+    float M = 11.34072 * a +
+              16.46899 * cos_hr2 +
+              7.88380 * cos_hr3 +
+              14.66441 * b +
+              -6.37224 * sin_hr2 +
+              9.19364 * sin_hr3 +
+              77.12896;
+
+    return M * PARAMS.chromaCompressScale;
+}
+
 // In-gamut chroma compression
 //
 // Compresses colors inside the gamut with the aim for colorfulness to have an
@@ -617,7 +648,7 @@ float chromaCompression(float JMh[3],
 
     float nJ = J / PARAMS.limitJmax;
     float snJ = max(0., 1. - nJ);
-    float Mnorm = cuspFromTable(h, REACH_GAMUT_TABLE)[1];
+    float Mnorm = chromaCompressionNorm(h, PARAMS);
     float limit = pow(nJ, PARAMS.model_gamma) * reachMFromTable(h, REACHM_TABLE) / Mnorm;
 
     float toe_limit = limit - 0.001;
@@ -1333,6 +1364,7 @@ ODTParams init_ODTParams(
     const float compr = chroma_compress + (chroma_compress * chroma_compress_fact) * log_peak;
     const float sat = max(0.2, chroma_expand - (chroma_expand * chroma_expand_fact) * log_peak);
     const float sat_thr = chroma_expand_thr / TSPARAMS.n;
+    const float chromaCompressScale = pow(0.03379 * peakLuminance, 0.30596) - 0.45135;
 
     const float surround[3] = viewingConditionsToSurround(viewingConditions);
     const float model_gamma = 1. / (surround[1] * (1.48 + sqrt(Y_b / L_A)));
@@ -1378,6 +1410,7 @@ ODTParams init_ODTParams(
         sat,
         sat_thr,
         compr,
+        chromaCompressScale,
 
         focusDist,
 
