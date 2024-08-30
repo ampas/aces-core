@@ -1352,7 +1352,7 @@ ODTParams init_ODTParams(
     const float compr = chroma_compress + (chroma_compress * chroma_compress_fact) * log_peak;
     const float sat = max(0.2, chroma_expand - (chroma_expand * chroma_expand_fact) * log_peak);
     const float sat_thr = chroma_expand_thr / TSPARAMS.n;
-    const float chromaCompressScale = pow(0.03379 * peakLuminance, 0.30596) - 0.45135;
+    const float chromaCompressScale = pow(0.03379 * TSPARAMS.n, 0.30596) - 0.45135;
 
     const float surround[3] = viewingConditionsToSurround(viewingConditions);
     const float model_gamma = 1. / (surround[1] * (1.48 + sqrt(Y_b / L_A)));
