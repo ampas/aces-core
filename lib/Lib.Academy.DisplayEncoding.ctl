@@ -422,25 +422,22 @@ float[3] white_limiting(float XYZ_in[3],
                         bool scale_white,
                         bool invert = false)
 {
-    // In the forward direction, the white limiting step clamps the output to
-    // between zero and the peak luminance value so that values do not exceed
-    // the maximum value of the tonescale (because the tonescale extends
-    // slightly above the peak luminance so that it crosses through the peak
-    // luminance value with some slope and does not approach an asymptote). If
-    // the creative white differs from the calibration white of the display,
+    // The white limiting step clamps the output to between zero and the peak
+    // luminance value so that values do not exceed the maximum value of the
+    // tonescale. 
+    // If the creative white differs from the calibration white of the display,
     // unequal display code values will be required to produce the neutral of
     // the creative white. Without scaling, one channel would hit the max value
     // first while the other channels continue to increase, resulting in a hue
     // shift. To avoid this, the white scaling finds the largest channel and
     // applies a scale factor to force the point where this channel hits max to
-    // 1.0, assuring that all three channels "fit" within the peak value.
-    // In the inverse direction, the white scaling is removed.
+    // 1.0, assuring that all three channels "fit" within the peak value. In the
+    // inverse direction, the white scaling is removed.
 
     float XYZ[3] = XYZ_in;
 
-    // Clamp to peak luminance in the forward direction
-    if (!invert)
-        XYZ = clamp_zero_to_peakLuminance(XYZ, PARAMS);
+    // Clamp to peak luminance
+    XYZ = clamp_zero_to_peakLuminance(XYZ, PARAMS);
 
     // White point scaling
     if (scale_white)
