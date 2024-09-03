@@ -356,10 +356,10 @@ float[3] eotf_inv( float rgb_linear[3],
         return rgb_linear;
     } else if (eotf_enum == 1) {
         // ST. 2084
-        return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
+        return Y_to_ST2084_f3( clamp_f3( mult_f_f3( referenceLuminance, rgb_linear), 0.0, 10000. ));
     } else if (eotf_enum == 2) {
         // HLG
-        float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear) );
+        float PQ[3] = Y_to_ST2084_f3( clamp_f3( mult_f_f3( referenceLuminance, rgb_linear), 0.0, 10000. ));
         return ST2084_to_HLG_1000nits_f3( PQ );
     } else if (eotf_enum == 3) {
         // gamma 2.6
