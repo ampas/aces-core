@@ -4,19 +4,21 @@
 
 The Academy Color Encoding System (ACES) is a set of components that facilitates a wide range of motion picture and television workflows while eliminating the ambiguity of legacy file formats.  The system is designed to support both all-digital and hybrid film-digital motion picture workflows.
 
-The basic ACES components are:
+In ACES 2.0, the basic ACES components are divided across a few individual repositories:
 
-* Color encoding and metric specifications, file format specifications, color
-transformations, and an open source reference implementation 
-    * This repository (`aces-dev`) will be renamed (`aces-core`) and houses the main rendering algorithms for ACES.
-    * A set of preset Output Transforms to common outputs are tracked at [aces-output](https://github.com/ampas/aces-output)
-    * Input Transforms are tracked at  [aces-input-and-colorspaces](https://github.com/ampas/aces-input-and-colorspaces)
-    * Look Transforms are collected in [aces-look](https://github.com/ampas/aces-look)
-    * AMF schema and example files can be found at [aces-amf](https://github.com/ampas/aces-amf)
-    * Documentation is written in markdown and tracked at [aces-docs](https://github.com/ampas/aces-docs). It is published using mkdocs to [ACEScentral](docs.acescentral.com).
+* This repository (`aces-core`) houses the core transforms for ACES.
+* A set of preset Output Transforms to common outputs are tracked at [aces-output](https://github.com/ampas/aces-output), along with reference images that can be used to verify the output of each transform
+* Input Transforms are tracked at  [aces-input-and-colorspaces](https://github.com/ampas/aces-input-and-colorspaces)
+* Look Transforms are collected in [aces-look](https://github.com/ampas/aces-look)
+* AMF schema and example files can be found at [aces-amf](https://github.com/ampas/aces-amf)
+* Documentation is written in markdown and tracked at [aces-docs](https://github.com/ampas/aces-docs). It is published using mkdocs to [ACEScentral](docs.acescentral.com).
 
-* Corresponding reference images
-* Documentation on the system and software tools can be found in ['aces-docs'](https://github.com/ampas/aces-docs)
+Regular snapshots of the entire system bundled, tagged and can be downloaded from [aces](https://github.com/ampas/aces).
+
+## Previous Versions
+The full code history of the ACES pre-2.0 remains in the commit history of this repository and can be accessed by checking out the relevant branch and/or tagged commit to view the transforms at that previous version.
+
+Tagged versions of ACES can be browsed in the [tag history](https://github.com/ampas/aces-dev/tags), including [ACES version 1.3](https://github.com/ampas/aces-dev/releases/tag/v1.3)
 
 ## Prerequisites ##
 

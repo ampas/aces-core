@@ -1,3 +1,11 @@
+**Version 2.0 Developer Release 3 (Sept 2, 2024):**
+* Bugs
+  * Change lower hull gamma approximation from a constant value to a value determined using the log of the peak luminance. For SDR outputs, the value reduces to the former value but this change minimimizes some clipping artifacts that could occur at edge values at higher luminance outputs.s
+* Enhancements / simplifications
+  * Replace calculation method for Mnorm used in the chroma compress function and remove REACH_GAMUT_TABLE
+  * Make clamp to peak luminance active on forward and inverse direction (previously only active in forward direction) - helps avoid errors on inverse when users send in values outside the invertible range
+  * Add extra clamp to PQ and HLG (derived from PQ 1000) EOTF options to protect against rare reintroduction of negative values. Though data is clamped from [0-peakLuminance] in a prior step, occasionally very small negative components can be reintroduced from precision errors during the XYZ to display primary matrix. Therefore, negative values are clamped as an extra protective step to avoid NaN errors from negative values which are undefined in the base PQ encoding.
+
 **Version 2.0 Developer Release 2 (August 19, 2024):**
 * Bugs
   * Correct a mistyped value used in pre-calculation of r_hit in the tone scale function init
