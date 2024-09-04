@@ -1,3 +1,69 @@
+**Version 2.0 Developer Release 3 (Sept 2, 2024):**
+* Bugs
+  * Change lower hull gamma approximation from a constant value to a value determined using the log of the peak luminance. For SDR outputs, the value reduces to the former value but this change minimimizes some clipping artifacts that could occur at edge values at higher luminance outputs.s
+* Enhancements / simplifications
+  * Replace calculation method for Mnorm used in the chroma compress function and remove REACH_GAMUT_TABLE
+  * Make clamp to peak luminance active on forward and inverse direction (previously only active in forward direction) - helps avoid errors on inverse when users send in values outside the invertible range
+  * Add extra clamp to PQ and HLG (derived from PQ 1000) EOTF options to protect against rare reintroduction of negative values. Though data is clamped from [0-peakLuminance] in a prior step, occasionally very small negative components can be reintroduced from precision errors during the XYZ to display primary matrix. Therefore, negative values are clamped as an extra protective step to avoid NaN errors from negative values which are undefined in the base PQ encoding.
+
+**Version 2.0 Developer Release 2 (August 19, 2024):**
+* Bugs
+  * Correct a mistyped value used in pre-calculation of r_hit in the tone scale function init
+  * Add a clamp to range [0 - peakLuminance] and remove explicit clamp in inverse EOTF function
+* Enhancements / simplifications
+  * Set upper limit clamp value in AP1 clamping step to a value equal to 3 stops (8x) the minimum value required to reach maximum output from the tone scale function
+  * Update table generation and lookup code to assure that hue values falling in the "wrap-around" hue region are handled correctly
+    * Add two extra table entries in gamut cusp and upper gamma hull approximation tables that are duplicates of the first and last entries
+    * Update indexing and lookup functions to expect a baseIndex offset to maintain proper indexing where 360 entries are assumed
+  * Add a bool to determine whether white scaling should be applied - This allows the user to control when the white is or isn't applied, and is clearer and more robust than relying on a mismatch in the white point chromaticities. For example, a DCDM P3D65 ODT already has white point fitting handled by a 48/52.37 scale factor, so wouldn't need that additional white scaling that would otherwise be applied because the encoding white and limiting white would differ.
+  * Remove unused smoothJ value
+  * Simply compressFuncParams and compressPowerP function 
+    * Unused values in the 4-element compressionFuncParams were removed, retaining the one value that is used and renaming it to compressionThreshold to better describe what it controls
+    * The compressionFuncParams related to power equaled 1, so the compressPowerP function was simplified where many of the pow() functions could be solved out when power=1
+  * Rename REACH_CUSP_TABLE as REACHM_TABLE, because it represents the M value for the reach gamut at limitJmax. Also reduce REACHM_TABLE to only 1 column (M) since M is the only value that needs pre-computation (i.e. J is constant and always equal to limitJmax and hue is uniformly spaced and corresponds to row index)
+  * Refactor the white scaling step as a discrete operator before display encoding on forward (plus a clamp) and immediately after display decoding on inverse
+  * Reorder the enum values for EOTF encoding/decoding to be less haphazard
+  * Remove unused parameters from display encoding/decoding function
+  * Remove unused functions for applying surround parameter - The implementation was unvalidated and would need to be changed anyway if implemented in a future release, so the inactive code and supporting functions were removed to avoid any confusion for implementers.
+  * Other minor refactorings of code for improved readability
+* Other ACES repos
+  * Output Transforms
+    * Update all TransformIDs to be more verbosely defined from transform parameter settings
+    * Change default list of transforms
+      * Add:
+        * HLG 1000 nit
+        * DCDM 48 nit and 300 nit
+        * Rec2020 500 nit
+        * D60 limited / sim versions of all provided transforms, organized in a separate d60 directory
+      * Remove: 
+        * Rec2020 100 nit
+        * P3-DCI
+  * Input and Color Space Conversion Transforms
+    * Set name space in Panasonic IDT to Panasonic
+    * Update Sony Venice TransformIDs to be more consistent
+    * Add a few missing transforms to provide to/from conversion to provided inputs 
+    * Add "Unity" transform
+
+
+
+**Version 2.0 Developer Release 1 (April 19, 2024):**
+* Reorganization of code:
+    * This repository (`aces-dev`) will be renamed (`aces-core`) and houses the main rendering algorithms for ACES.
+    * Output Transforms moved to [aces-output](https://github.com/ampas/aces-output)
+    * Input Transforms moved to [aces-input-and-colorspaces](https://github.com/ampas/aces-input-and-colorspaces)
+    * Look Transforms moved to [aces-look](https://github.com/ampas/aces-look)
+    * AMF schema and example files moved to [aces-amf](https://github.com/ampas/aces-amf)
+    * Documentation tracked at [aces-docs](https://github.com/ampas/aces-docs) and published using mkdocs to [ACEScentral](docs.acescentral.com)
+* All TransformIDs have been conformed to the v2 TransformID specification
+* New core rendering algorithm:
+    * New tonescale function with a lower default contrast and adaptability to produce output for any peak luminance between 100-10000 nits.
+    * A hue-preserving rendering transform, applying luminance mapping mostly independent of color adjustments.
+    * Gamut mapping to mostly avoid undesirable clipping but still allow for reaching the edges of the display gamut volume.
+    * Invertibility up to at least P3 gamut
+* Reference images have been moved to be tied to their respective transform repositories
+
+
+
 **Version 1.3 (April 30, 2021):**
 
 * New Features: 
