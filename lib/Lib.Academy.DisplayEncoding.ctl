@@ -348,18 +348,26 @@ float[3] HLG_to_ST2084_1000nits_f3( float HLG[3])
 //  5 - gamma 2.2
 //  6 - sRGB IEC 61966-2-1:1999
 
-float[3] eotf_inv( float rgb_linear[3],
+float[3] eotf_inv( float rgb_linear_in[3],
                    int eotf_enum )
 {
+    // Extra clamp of negatives protect against edge case negative values. Data
+    // is clamped from 0-peakLuminance in the white limiting step but sometimes
+    // a very small negative value can be reintroduced from precision errors. 
+    float rgb_linear[3] = rgb_linear_in;
+    rgb_linear[0] = max( 0.0, rgb_linear_in[0]);
+    rgb_linear[1] = max( 0.0, rgb_linear_in[1]);
+    rgb_linear[2] = max( 0.0, rgb_linear_in[2]);
+
     if (eotf_enum == 0) {
         // display linear
         return rgb_linear;
     } else if (eotf_enum == 1) {
         // ST. 2084
-        return Y_to_ST2084_f3( clamp_f3( mult_f_f3( referenceLuminance, rgb_linear), 0.0, 10000. ));
+        return Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear));
     } else if (eotf_enum == 2) {
         // HLG
-        float PQ[3] = Y_to_ST2084_f3( clamp_f3( mult_f_f3( referenceLuminance, rgb_linear), 0.0, 10000. ));
+        float PQ[3] = Y_to_ST2084_f3( mult_f_f3( referenceLuminance, rgb_linear));
         return ST2084_to_HLG_1000nits_f3( PQ );
     } else if (eotf_enum == 3) {
         // gamma 2.6
