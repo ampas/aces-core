@@ -4,6 +4,6 @@
 
 from aces_common.constants import INPUT_TRANSFORM_TYPES, OUTPUT_TRANSFORM_TYPES
 from aces_common.protocols import TransformRegistry
-from aces_common.types import TransformInfo
+from aces_common.types import TransformInfo, TransformURN
 
-__all__ = ["INPUT_TRANSFORM_TYPES", "OUTPUT_TRANSFORM_TYPES", "TransformRegistry", "TransformInfo"]
+__all__ = ["INPUT_TRANSFORM_TYPES", "OUTPUT_TRANSFORM_TYPES", "TransformRegistry", "TransformInfo", "TransformURN"]
