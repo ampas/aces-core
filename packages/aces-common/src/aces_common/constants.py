@@ -19,31 +19,6 @@ LOOK_TRANSFORM_TYPES: frozenset[str] = frozenset({"LMT", "Look"})
 
 
 # ──────────────────────────────────────────────────────────────────────
-# AMF v1 XSD — allowed transform ID URN prefixes (v1.5 URNs only)
-# Source: packages/aces-amf-lib/src/aces_amf_lib/data/amf-schema/v1/acesMetadataFile.xsd
-# ──────────────────────────────────────────────────────────────────────
-
-# tnInputTransform (v1 XSD line 68): IDT only
-V1_INPUT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"IDT"})
-# tnOutputTransform (v1 XSD line 86): RRTODT only
-V1_OUTPUT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"RRTODT"})
-# tnLookTransform (v1 XSD line 62): LMT only
-V1_LOOK_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"LMT"})
-# tnColorSpaceConversionTransform (v1 XSD line 110): ACEScsc only
-V1_CSC_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"ACEScsc"})
-# tnReferenceRenderingTransform (v1 XSD line 98): RRT only
-V1_RRT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"RRT"})
-# tnInverseReferenceRenderingTransform (v1 XSD line 104): InvRRT only
-V1_INVERSE_RRT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvRRT"})
-# tnOutputDeviceTransform (v1 XSD line 74): ODT only
-V1_ODT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"ODT"})
-# tnInverseOutputDeviceTransform (v1 XSD line 80): InvODT only
-V1_INVERSE_ODT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvODT"})
-# tnInverseOutputTransform (v1 XSD line 92): InvRRTODT only
-V1_INVERSE_OUTPUT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvRRTODT"})
-
-
-# ──────────────────────────────────────────────────────────────────────
 # AMF v2 XSD — allowed transform ID URN prefixes (v1.5 + v2.0 URNs)
 # Source: packages/aces-amf-lib/src/aces_amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
 # ──────────────────────────────────────────────────────────────────────
