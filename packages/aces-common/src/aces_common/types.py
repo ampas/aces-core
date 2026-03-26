@@ -22,7 +22,6 @@ _VERSION_SUFFIX_RE = re.compile(
     r"^(.+)\.(a\d+(?:\.(?:v?\d+))+)$"
 )
 
-
 @dataclass(frozen=True)
 class TransformURN:
     """Parsed ACES transform URN per the Transform ID specification.
