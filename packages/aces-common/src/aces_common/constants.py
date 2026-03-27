@@ -42,3 +42,71 @@ V2_INVERSE_RRT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvRRT"})
 V2_ODT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"ODT"})
 # tnInverseOutputDeviceTransform (v2 XSD line 118): InvODT only
 V2_INVERSE_ODT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvODT"})
+
+
+# ──────────────────────────────────────────────────────────────────────
+# XSD regex patterns for transform IDs, keyed by transform type.
+# Source: packages/aces-amf-lib/src/aces_amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
+#
+# Each transform type maps to a list of regex patterns (from xs:pattern).
+# A transform ID is valid if it matches ANY pattern for its type.
+# The v2 XSD accepts both v1.5 and v2.0 URN forms.
+# ──────────────────────────────────────────────────────────────────────
+
+# Transform types that have no XSD pattern (library/utility transforms,
+# not placed in AMF pipeline slots).
+# TODO: Define patterns for these types.
+TRANSFORM_TYPES_WITHOUT_PATTERN: frozenset[str] = frozenset({
+    "ACESlib", "ACESutil", "Lib", "InvLMT", "InvLook",
+})
+
+TRANSFORM_ID_PATTERNS: dict[str, list[str]] = {
+    # tnInputTransform
+    "IDT": [
+        r"urn:ampas:aces:transformId:v1\.5:IDT\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+    "ACEScsc": [
+        r"urn:ampas:aces:transformId:v1\.5:(ACEScsc\.\S+\.\S+\.a\d+\.v\d+|ACEScsc\.Academy\.\S+\.a\d+\.\d+\.\d+)",
+    ],
+    "Input": [
+        r"urn:ampas:aces:transformId:v2\.0:Input\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+    "CSC": [
+        r"urn:ampas:aces:transformId:v2\.0:CSC\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+    # tnOutputTransform
+    "RRTODT": [
+        r"urn:ampas:aces:transformId:v1\.5:(RRTODT\.\S+\.\S+\.a\d+\.v\d+|RRTODT\.Academy\.\S+\.a\d+\.\d+\.\d+)",
+    ],
+    "Output": [
+        r"urn:ampas:aces:transformId:v2\.0:Output\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+    # tnLookTransform
+    "LMT": [
+        r"urn:ampas:aces:transformId:v1\.5:(LMT\.\S+\.\S+\.a\d+\.v\d+|LMT\.Academy\.\S+\.a\d+\.v?\d+\.\d+)",
+    ],
+    "Look": [
+        r"urn:ampas:aces:transformId:v2\.0:Look\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+    # tnReferenceRenderingTransform / tnInverseReferenceRenderingTransform
+    "RRT": [
+        r"urn:ampas:aces:transformId:v1\.5:RRT\.a\d+\.\d+\.\d+",
+    ],
+    "InvRRT": [
+        r"urn:ampas:aces:transformId:v1\.5:InvRRT\.a\d+\.\d+\.\d+",
+    ],
+    # tnOutputDeviceTransform / tnInverseOutputDeviceTransform
+    "ODT": [
+        r"urn:ampas:aces:transformId:v1\.5:(ODT\.\S+\.\S+\.a\d+\.v\d+|ODT\.Academy\.\S+\.a\d+\.\d+\.\d+)",
+    ],
+    "InvODT": [
+        r"urn:ampas:aces:transformId:v1\.5:(InvODT\.\S+\.\S+\.a\d+\.v\d+|InvODT\.Academy\.\S+\.a\d+\.\d+\.\d+)",
+    ],
+    # tnInverseOutputTransform
+    "InvRRTODT": [
+        r"urn:ampas:aces:transformId:v1\.5:(InvRRTODT\.\S+\.\S+\.a\d+\.v\d+|InvRRTODT\.Academy\.\S+\.a\d+\.\d+\.\d+)",
+    ],
+    "InvOutput": [
+        r"urn:ampas:aces:transformId:v2\.0:InvOutput\.\S+\.\S+\.a\d+\.v\d+",
+    ],
+}
