@@ -3,7 +3,7 @@
 
 import pytest
 
-from aces_common.types import TransformURN
+from aces.common.types import TransformURN
 
 
 class TestTransformURNParse:

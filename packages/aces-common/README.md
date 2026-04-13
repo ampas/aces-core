@@ -17,7 +17,7 @@ pip install aces-common
 Interface for transform ID registries. Implemented by `ACESTransformRegistry` in [aces-transforms](../aces-transforms/).
 
 ```python
-from aces_common import TransformRegistry
+from aces.common import TransformRegistry
 
 class MyRegistry:
     def is_valid_transform_id(self, transform_id: str, *, version: str | None = None) -> bool: ...
@@ -37,7 +37,7 @@ urn:ampas:aces:transformId:v{specVersion}:{TransformType}.{Namespace}.{Name}.a{A
 ```
 
 ```python
-from aces_common import TransformURN
+from aces.common import TransformURN
 
 urn = TransformURN.parse("urn:ampas:aces:transformId:v2.0:CSC.Academy.ACES_to_ACEScct.a2.v1")
 
@@ -84,7 +84,7 @@ urn.transform_version     # None
 Metadata for a single ACES transform:
 
 ```python
-from aces_common import TransformInfo
+from aces.common import TransformInfo
 
 # Fields: transform_id, user_name, transform_type, aces_version,
 #         inverse_transform_id, previous_equivalent_ids
@@ -93,7 +93,7 @@ from aces_common import TransformInfo
 ### Constants
 
 ```python
-from aces_common import INPUT_TRANSFORM_TYPES, OUTPUT_TRANSFORM_TYPES
+from aces.common import INPUT_TRANSFORM_TYPES, OUTPUT_TRANSFORM_TYPES
 
 INPUT_TRANSFORM_TYPES   # frozenset{"IDT", "CSC", "Input"}
 OUTPUT_TRANSFORM_TYPES  # frozenset{"ODT", "Output"}

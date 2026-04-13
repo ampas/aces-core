@@ -20,7 +20,7 @@ LOOK_TRANSFORM_TYPES: frozenset[str] = frozenset({"LMT", "Look"})
 
 # ──────────────────────────────────────────────────────────────────────
 # AMF v2 XSD — allowed transform ID URN prefixes (v1.5 + v2.0 URNs)
-# Source: packages/aces-amf-lib/src/aces_amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
+# Source: packages/aces-amf-lib/src/aces.amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
 # ──────────────────────────────────────────────────────────────────────
 
 # tnInputTransform (v2 XSD line 71): IDT, ACEScsc (v1.5) | Input, CSC (v2.0)
@@ -46,7 +46,7 @@ V2_INVERSE_ODT_TRANSFORM_PREFIXES: frozenset[str] = frozenset({"InvODT"})
 
 # ──────────────────────────────────────────────────────────────────────
 # XSD regex patterns for transform IDs, keyed by transform type.
-# Source: packages/aces-amf-lib/src/aces_amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
+# Source: packages/aces-amf-lib/src/aces.amf_lib/data/amf-schema/v2/acesMetadataFile.xsd
 #
 # Each transform type maps to a list of regex patterns (from xs:pattern).
 # A transform ID is valid if it matches ANY pattern for its type.
