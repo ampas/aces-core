@@ -1036,7 +1036,7 @@ void build_limiting_cusp_corners_tables(output float RGB_corners[totalCornerCoun
         temp_RGB_corners[i] = mult_f_f3(peakLuminance / ref_luminance, generate_unit_cube_cusp_corners(i));
         temp_JMh_corners[i] = RGB_to_JMh(temp_RGB_corners[i], params);
         if (temp_JMh_corners[i][2] < temp_JMh_corners[min_index][2])
-            min_index = 1;
+            min_index = i;
     }
 
     // Rotate entries placing lowest at [1] (not [0])
