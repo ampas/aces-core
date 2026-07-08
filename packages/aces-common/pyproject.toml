@@ -16,5 +16,10 @@ dependencies = []
 where = ["src"]
 include = ["aces.common*"]
 
+[[tool.uv.index]]
+name = "pypi"
+url = "https://pypi.org/simple"
+default = true
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
