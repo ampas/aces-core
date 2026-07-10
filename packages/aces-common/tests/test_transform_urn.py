@@ -3,7 +3,7 @@
 
 import pytest
 
-from aces.common.types import TransformURN
+from aswf.aces.common.types import TransformURN
 
 
 class TestTransformURNParse:
