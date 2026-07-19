@@ -27,31 +27,32 @@ ACES versions from before v2.0.
 
 ## Contributing
 
-ACES depends on community participation. Developers, manufacturers, and end
-users are encouraged to contribute code, bug fixes, documentation, and other
-technical artifacts.
+Before the project can accept any code submissions through GitHub, you must fulfill these prerequisites:
 
-All contributors must have a signed Contributor License Agreement (CLA) on file
-to ensure that the project can freely use your contributions. 
+1. **Contributor License Agreement (CLA):** All contributors **must** have a signed CLA on file to ensure the project can freely use your contributions.
 
-See [CONTRIBUTING](https://github.com/aces-aswf/.github/blob/main/CONTRIBUTING.md) for more details.
+2. **Developer Certificate of Origin (DCO):** All commits **must** be signed off (e.g., `git commit -s`) to verify that you have the right to submit the code.
 
-## Governance
+3. **AI Assistance Disclosure:** While not currently blocked by CI checks, any commits or PRs built with AI assistance are expected to include an `Assisted-by: TOOL/MODEL` line to maintain transparency and human accountability.
 
-This repository is a submodule of the ACES project, which is itself governed by the
-Academy Software Foundation.
-
-For details about how the ACES project operates, please see
-[GOVERNANCE](https://github.com/aces-aswf/.github/blob/main/GOVERNANCE.md).
+Please see [Contributing Guidelines](https://github.com/aces-aswf/.github/blob/main/CONTRIBUTING.md) for more details.
 
 ## Reporting Issues
 
-To report a problem with any Core Transforms, please open an
-[issue](https://github.com/aces-aswf/aces-core/issues).
+### General Issues
+To report a problem with any transforms in ACES core, please open an
+[issue](https://github.com/aces-aswf/aces-core/issues) in this repository.
 
+### Security
 If the issue is sensitive in nature or a security related issue, please do not
-report in the issue tracker. Instead refer to [SECURITY](https://github.com/aces-aswf/.github/blob/main/SECURITY.md)
-for more information about the project security policy.
+report in the issue tracker. Instead refer to [SECURITY](https://github.com/aces-aswf/.github/blob/main/SECURITY.md) for more information about the project security policy.
+
+## Governance
+
+This repository is part of ACES, a project governed by the Academy Software Foundation.
+
+For details about how the ACES project operates, please see
+[GOVERNANCE](https://github.com/aces-aswf/.github/blob/main/GOVERNANCE.md).
 
 ## License
 
