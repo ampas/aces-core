@@ -89,7 +89,7 @@ float tonescale_inv(float Y,		// luminance in cd/m^2
 					TSParams params // struct of type TSParams
 )
 {
-	float Z = max(0., min(params.n / (params.u_2 * params.n_r), Y));
+	float Z = max(0., min(params.n / (params.u_2 * params.n_r), Y / params.n_r));
 	float h = (Z + sqrt(Z * (4. * params.t_1 + Z))) / 2.;
 	float f = params.s_2 / (pow((params.m_2 / h), (1. / params.g)) - 1.);
 

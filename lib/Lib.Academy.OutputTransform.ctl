@@ -549,7 +549,7 @@ float[3] tonemap_and_compress_inv(float JMh_tc[3],
     // Un-tonemap
     float luminance = J_to_Y(JMh_tc[0], p.input_params);
 
-    float linear = tonescale_inv(luminance / ref_luminance, p.ts);
+    float linear = tonescale_inv(luminance, p.ts);
 
     float J = Y_to_J(linear * ref_luminance, p.input_params);
 
